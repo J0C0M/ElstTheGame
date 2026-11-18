@@ -14,3 +14,7 @@ signal player_health_changed(current: int, maximum: int)
 signal player_stamina_changed(current: float, maximum: float)
 ## The player tried something without enough stamina.
 signal player_stamina_insufficient
+## The player parried an attack.
+signal player_parried
+signal player_died
+signal player_respawned

@@ -18,6 +18,8 @@ func handle_input(event: InputEvent) -> void:
 		player.velocity.y = player.stats.jump_velocity
 	elif event.is_action_pressed(&"attack") and player.is_on_floor():
 		state_machine.transition_to(&"Attack")
+	elif event.is_action_pressed(&"block_aim") and player.is_on_floor():
+		state_machine.transition_to(&"Block", {"fresh_press": true})
 	elif event.is_action_pressed(&"dodge"):
 		player.try_dodge(player.get_move_direction())
 	else:
@@ -27,6 +29,10 @@ func handle_input(event: InputEvent) -> void:
 
 
 func physics_update(delta: float) -> void:
+	if Input.is_action_pressed(&"block_aim") and player.is_on_floor():
+		# Still holding block after an attack, roll or stagger.
+		state_machine.transition_to(&"Block")
+		return
 	var stats: PlayerStats = player.stats
 	var direction: Vector3 = player.get_move_direction()
 	if not Input.is_action_pressed(&"sprint"):

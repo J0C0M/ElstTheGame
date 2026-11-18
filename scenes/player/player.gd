@@ -6,6 +6,9 @@ extends CharacterBody3D
 
 ## Move actions that dodge when tapped twice, with their direction relative
 ## to the camera.
+## Speed an unblocked hit pushes the player back with.
+const KNOCKBACK_SPEED: float = 3.0
+
 const TAP_DIRECTIONS: Dictionary = {
 	&"move_forward": Vector3(0, 0, -1), &"move_back": Vector3(0, 0, 1),
 	&"move_left": Vector3(-1, 0, 0), &"move_right": Vector3(1, 0, 0),
@@ -19,6 +22,10 @@ const TAP_DIRECTIONS: Dictionary = {
 var is_sprinting: bool = false
 ## True during the first part of a dodge roll.
 var is_invulnerable: bool = false
+## True while the block state is active.
+var is_blocking: bool = false
+## Clock time the current block was pressed, for the parry window.
+var block_started_at: float = -INF
 ## Seconds of physics time since the player spawned. Used for input timing,
 ## so it follows the game clock rather than the wall clock.
 var clock: float = 0.0
@@ -31,6 +38,7 @@ var _last_tap_time: Dictionary[StringName, float] = {}
 @onready var health: HealthComponent = $Health
 @onready var stamina: StaminaComponent = $Stamina
 @onready var sword_hitbox: Hitbox = $SwordHitbox
+@onready var hurtbox: Hurtbox = $Hurtbox
 @onready var state_machine: StateMachine = $StateMachine
 
 
@@ -39,6 +47,8 @@ func _ready() -> void:
 	health.health_changed.connect(EventBus.player_health_changed.emit)
 	stamina.stamina_changed.connect(EventBus.player_stamina_changed.emit)
 	stamina.insufficient.connect(EventBus.player_stamina_insufficient.emit)
+	health.died.connect(_on_died)
+	hurtbox.hit_received.connect(_on_hit_received)
 	health.reset(stats.max_health)
 	stamina.reset(stats.max_stamina, stats.stamina_regen_per_second, stats.stamina_regen_delay)
 
@@ -122,3 +132,60 @@ func get_tap_direction(action: StringName) -> Vector3:
 
 func get_forward() -> Vector3:
 	return -global_basis.z
+
+
+## True when [param point] lies within the block angle in front of the player.
+func is_facing_point(point: Vector3) -> bool:
+	var to_point: Vector3 = point - global_position
+	to_point.y = 0.0
+	if to_point.length_squared() < 0.0001:
+		return true
+	return get_forward().angle_to(to_point.normalized()) <= deg_to_rad(stats.block_angle_degrees)
+
+
+## Brings the player back to life at [param at], with full health and stamina.
+func respawn(at: Transform3D) -> void:
+	global_transform = at
+	velocity = Vector3.ZERO
+	is_invulnerable = false
+	health.reset(stats.max_health)
+	stamina.refill()
+	model.reset_pose()
+	camera.snap_behind_target()
+	reset_physics_interpolation()
+	state_machine.transition_to(&"Move")
+	EventBus.player_respawned.emit()
+
+
+func _on_hit_received(hit: HitData) -> void:
+	if health.is_dead() or is_invulnerable:
+		return
+	var damage: float = hit.damage
+	var guarded: bool = false
+	var guard_broken: bool = false
+	if is_blocking and is_facing_point(hit.source.global_position):
+		if clock - block_started_at <= stats.parry_window:
+			hit.hitbox.parried.emit()
+			model.play_action(&"parry", 0.3)
+			EventBus.player_parried.emit()
+			return
+		if stamina.try_spend(stats.block_stamina_cost):
+			guarded = true
+			damage *= 1.0 - stats.block_damage_reduction
+			model.play_action(&"block_impact", 0.25)
+		else:
+			guard_broken = true
+	damage *= 1.0 - armor.damage_reduction
+	health.take_damage(maxi(roundi(damage), 1))
+	if health.is_dead() or guarded:
+		return
+	var away: Vector3 = global_position - hit.source.global_position
+	away.y = 0.0
+	velocity += away.normalized() * KNOCKBACK_SPEED
+	var duration: float = stats.guard_break_duration if guard_broken else stats.hurt_duration
+	state_machine.transition_to(&"Hurt", {"duration": duration})
+
+
+func _on_died() -> void:
+	state_machine.transition_to(&"Dead")
+	EventBus.player_died.emit()

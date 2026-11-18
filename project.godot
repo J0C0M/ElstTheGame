@@ -23,6 +23,7 @@ GameState="*res://autoload/game_state.gd"
 SaveManager="*res://autoload/save_manager.gd"
 QuestManager="*res://autoload/quest_manager.gd"
 AudioManager="*res://autoload/audio_manager.gd"
+Settings="*res://autoload/settings.gd"
 
 [debug]
 

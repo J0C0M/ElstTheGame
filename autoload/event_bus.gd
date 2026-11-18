@@ -7,3 +7,10 @@ extends Node
 
 ## Emitted by Settings after a setting changed and was written to disk.
 signal settings_changed
+
+## Player health after every change.
+signal player_health_changed(current: int, maximum: int)
+## Player stamina after every change.
+signal player_stamina_changed(current: float, maximum: float)
+## The player tried something without enough stamina.
+signal player_stamina_insufficient

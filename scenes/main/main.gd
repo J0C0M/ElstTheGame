@@ -1,6 +1,7 @@
 extends Node
-## Root scene. Holds the retro screen (with the 3D world inside) and the HUD.
-## Scene changes and transitions follow in Phase 2.
+## Root scene. Holds the retro screen (with the 3D world inside) and the HUD,
+## and catches the mouse for the camera. Scene changes and transitions follow
+## in Phase 2.
 
 ## World that is loaded into the retro screen at startup.
 @export var start_scene: PackedScene
@@ -15,6 +16,23 @@ func _ready() -> void:
 	if start_scene != null:
 		_retro_screen.set_world(start_scene.instantiate())
 	_update_filter_info()
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("pause"):
+		# Until the pause menu exists (Phase 3), Esc only frees the mouse.
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		get_viewport().set_input_as_handled()
+	elif Input.mouse_mode != Input.MOUSE_MODE_CAPTURED and event is InputEventMouseButton and event.is_pressed():
+		# A click on the game catches the mouse again; it does not attack.
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		get_viewport().set_input_as_handled()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
 func _on_render_size_changed(_render_size: Vector2i) -> void:

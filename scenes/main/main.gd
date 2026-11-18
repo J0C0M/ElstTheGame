@@ -7,7 +7,7 @@ extends Node
 @export var start_scene: PackedScene
 
 @onready var _retro_screen: RetroScreen = $RetroScreen
-@onready var _filter_info: Label = $HUD/FilterInfo
+@onready var _filter_info: Label = $UI/FilterInfo
 
 
 func _ready() -> void:

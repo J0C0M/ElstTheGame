@@ -1,1 +1,59 @@
-# ElstTheGame
+# Elst
+
+Een kleine, komische open-world actie-RPG in de stijl van Skyrim, die zich afspeelt in het dorp Elst (Gelderland). Bevrijd Elst van Amber de Draak: sloop haar aanvoerlijn bij Station Elst, versla de drie facties die het dorp bezetten en neem het daarna samen met Klaas tegen Amber op in de kerk.
+
+- **Engine:** Godot 4.7, GDScript
+- **Stijl:** low poly met platte kleuren en een lichte retrofilter
+- **Platform:** pc (Windows en Linux), muis en toetsenbord
+
+De game wordt in 13 fases gebouwd. Zie [`docs/GDD.md`](docs/GDD.md) voor het ontwerp en [`docs/PROGRESS.md`](docs/PROGRESS.md) voor de stand van zaken.
+
+## Openen in Godot
+
+1. Installeer [Godot 4.7](https://godotengine.org/download) (de standaardversie, niet .NET).
+2. Start Godot, kies **Importeren** en selecteer `project.godot` in deze map.
+3. Druk op **F5** (of de afspeelknop) om de hoofdscene `res://scenes/main/Main.tscn` te starten.
+
+Vanaf de commandoregel:
+
+```bash
+godot --path .
+```
+
+## Besturing
+
+| Actie | Toets |
+| --- | --- |
+| Lopen / sprinten | WASD / Shift |
+| Camera | Muis |
+| Springen | Spatie |
+| Ontwijken | Alt (of dubbel tikken op een richting) |
+| Lichte / zware aanval | Linkermuisknop (tik / ingedrukt) |
+| Blokkeren / richten | Rechtermuisknop |
+| Interactie (praten, deur, kist) | E |
+| Wapen wisselen | 1 = zwaard, 2 = kruisboog |
+| Healing potion | Q |
+| Inventaris / questlog | Tab / J |
+| Quicksave / quickload | F5 / F9 |
+| Pauzemenu | Esc |
+| Retrofilter aan/uit | F1 |
+| Pixelgrootte wisselen (laag, midden, uit) | F2 |
+
+De toetsen zitten in de InputMap van het project. Niet alles werkt al: dat hangt af van de fase waarin het project zit.
+
+## Mappen
+
+```
+autoload/   EventBus, GameState, SaveManager, QuestManager, AudioManager, Settings
+scenes/     main, world, dungeons, player, npcs, enemies, bosses, ui
+scripts/    components (HealthComponent, Hitbox, ...) en data (Resource-klassen)
+data/       .tres-bestanden voor items, vijanden, quests en dialogen
+shaders/    retro_post.gdshader
+assets/     modellen, audio, fonts
+docs/       GDD, voortgang en referentiebeelden
+tests/      headless tests
+```
+
+## Credits
+
+Zie [`CREDITS.md`](CREDITS.md).

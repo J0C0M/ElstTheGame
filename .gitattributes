@@ -1,0 +1,16 @@
+# Normalize line endings for all text files
+* text=auto eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.wav binary
+*.ogg binary
+*.mp3 binary
+*.glb binary
+*.ttf binary
+*.otf binary
+*.res binary
+*.scn binary

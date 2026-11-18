@@ -148,3 +148,8 @@ cycle_pixel_size={
 3d_physics/layer_5="vijand_hitbox"
 3d_physics/layer_6="interactie"
 3d_physics/layer_7="tornado_grens"
+
+[physics]
+
+common/physics_jitter_fix=0.0
+common/physics_interpolation=true

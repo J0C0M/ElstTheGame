@@ -30,6 +30,7 @@ var _last_tap_time: Dictionary[StringName, float] = {}
 @onready var camera: PlayerCamera = $Camera
 @onready var health: HealthComponent = $Health
 @onready var stamina: StaminaComponent = $Stamina
+@onready var sword_hitbox: Hitbox = $SwordHitbox
 @onready var state_machine: StateMachine = $StateMachine
 
 
@@ -78,6 +79,16 @@ func face_direction_now(direction: Vector3) -> void:
 	if direction.length_squared() < 0.0001:
 		return
 	rotation.y = atan2(-direction.x, -direction.z)
+
+
+## Faces where the camera looks, straight away. Used for attacks and blocking.
+func face_camera_direction() -> void:
+	rotation.y = camera.yaw
+
+
+## Damage of one sword hit with the equipped sword.
+func get_sword_damage(multiplier: float) -> int:
+	return roundi(sword.damage * multiplier)
 
 
 ## Starts a dodge roll if the player stands on the ground and has the stamina.

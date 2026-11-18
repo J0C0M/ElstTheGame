@@ -11,10 +11,15 @@
 [ext_resource type="Script" path="res://scripts/components/state_machine.gd" id="9_machine"]
 [ext_resource type="Script" path="res://scenes/player/states/player_move_state.gd" id="10_move"]
 [ext_resource type="Script" path="res://scenes/player/states/player_dodge_state.gd" id="11_dodge"]
+[ext_resource type="Script" path="res://scenes/player/states/player_attack_state.gd" id="12_attack"]
+[ext_resource type="Script" path="res://scripts/components/hitbox.gd" id="13_hitbox"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.35
 height = 1.8
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sword"]
+size = Vector3(1.8, 1.4, 1.8)
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_layer = 2
@@ -38,6 +43,15 @@ script = ExtResource("7_health")
 [node name="Stamina" type="Node" parent="."]
 script = ExtResource("8_stamina")
 
+[node name="SwordHitbox" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 4
+script = ExtResource("13_hitbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SwordHitbox"]
+position = Vector3(0, 1, -1.1)
+shape = SubResource("BoxShape3D_sword")
+
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("9_machine")
 initial_state = NodePath("Move")
@@ -47,3 +61,6 @@ script = ExtResource("10_move")
 
 [node name="Dodge" type="Node" parent="StateMachine"]
 script = ExtResource("11_dodge")
+
+[node name="Attack" type="Node" parent="StateMachine"]
+script = ExtResource("12_attack")

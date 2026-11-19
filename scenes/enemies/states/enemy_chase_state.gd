@@ -1,6 +1,7 @@
 extends EnemyState
 ## Runs at the player and attacks when close. Flankers circle round to the
-## player's side first. Gives up when the player gets away or the chase leads
+## player's side first; ranged enemies keep their distance. Gives up when
+## the player gets away or the chase leads
 ## too far from home.
 
 ## Seconds without noticing the player before the enemy gives up.
@@ -22,6 +23,14 @@ func physics_update(delta: float) -> void:
 		state_machine.transition_to(&"Retreat")
 		return
 	var distance: float = enemy.distance_to_player()
+	if enemy.data.is_ranged() and distance < enemy.data.keep_distance:
+		# Too close for a ranged enemy: step back while facing the player.
+		var away: Vector3 = (enemy.global_position - player.global_position).normalized()
+		enemy.move_towards(enemy.global_position + away * 3.0, enemy.data.walk_speed, delta)
+		enemy.face_player(delta)
+		if enemy.attack_cooldown_left <= 0.0:
+			state_machine.transition_to(&"Attack")
+		return
 	if distance <= enemy.data.attack_range:
 		enemy.stop_moving(delta)
 		enemy.face_player(delta)

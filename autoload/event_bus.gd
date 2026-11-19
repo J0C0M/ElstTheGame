@@ -58,3 +58,8 @@ signal area_entered(area_id: StringName)
 ## A quest started, moved on or ended. Empty id: everything changed (load, new game).
 signal quest_updated(quest_id: StringName)
 signal quest_completed(quest_id: StringName)
+## A boss fight started: the HUD shows a big health bar with [param boss_name].
+signal boss_started(boss_name: String, max_health: int)
+signal boss_health_changed(current: int, maximum: int)
+## The boss fight is over: the boss is beaten or the player left.
+signal boss_ended

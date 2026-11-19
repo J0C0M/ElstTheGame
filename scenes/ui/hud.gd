@@ -1,6 +1,7 @@
 extends Control
-## Player HUD: health and stamina bars, and short messages for a parry and for
-## dying. It listens to the EventBus, so it does not need the player.
+## Player HUD: health and stamina bars, short messages for a parry and for
+## dying, and the big health bar of a boss. It listens to the EventBus, so it
+## does not need the player.
 
 const FLASH_COLOR: Color = Color(1.0, 0.4, 0.35)
 
@@ -21,6 +22,9 @@ var _banner_tween: Tween
 @onready var _potion_label: Label = $Purse/PotionLabel
 @onready var _loot_feed: VBoxContainer = $LootFeed
 @onready var _objective_label: Label = $ObjectiveLabel
+@onready var _boss_bar: VBoxContainer = $BossBar
+@onready var _boss_name: Label = $BossBar/BossName
+@onready var _boss_health: ProgressBar = $BossBar/BossHealth
 
 
 func _ready() -> void:
@@ -37,6 +41,9 @@ func _ready() -> void:
 	EventBus.inventory_changed.connect(_on_inventory_changed)
 	EventBus.loot_collected.connect(_on_loot_collected)
 	EventBus.quest_updated.connect(_on_quest_updated.unbind(1))
+	EventBus.boss_started.connect(_on_boss_started)
+	EventBus.boss_health_changed.connect(_on_boss_health_changed)
+	EventBus.boss_ended.connect(func() -> void: _boss_bar.visible = false)
 	_on_quest_updated()
 	_on_gold_changed(GameState.gold)
 	_on_inventory_changed()
@@ -48,6 +55,9 @@ func _ready() -> void:
 
 
 func _on_health_changed(current: int, maximum: int) -> void:
+	# A living player again, respawned or loaded from a save, ends the death message.
+	if current > 0:
+		_death_label.visible = false
 	_health_bar.max_value = maximum
 	if _health_tween != null:
 		_health_tween.kill()
@@ -146,3 +156,15 @@ func _on_quest_updated() -> void:
 		return
 	var progress: String = QuestManager.get_step_progress(quest.id)
 	_objective_label.text = "%s: %s%s" % [quest.title, step.description, "  (%s)" % progress if not progress.is_empty() else ""]
+
+
+func _on_boss_started(boss_name: String, max_health: int) -> void:
+	_boss_name.text = boss_name
+	_boss_health.max_value = max_health
+	_boss_health.value = max_health
+	_boss_bar.visible = true
+
+
+func _on_boss_health_changed(current: int, maximum: int) -> void:
+	_boss_health.max_value = maximum
+	_boss_health.value = current

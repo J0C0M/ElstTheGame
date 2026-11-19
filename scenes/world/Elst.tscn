@@ -14,6 +14,8 @@
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="12_res"]
 [ext_resource type="Script" path="res://scripts/world/ground_map.gd" id="13_res"]
 [ext_resource type="Image" path="res://data/world/elst_ground.png" id="14_res"]
+[ext_resource type="Script" path="res://scripts/world/liberated_area.gd" id="15_res"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/Villager.tscn" id="16_res"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/LowDriller.tscn" id="90_low_driller"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/Driller.tscn" id="91_driller"]
 
@@ -5890,24 +5892,116 @@ script = ExtResource("11_res")
 [node name="Player" parent="." instance=ExtResource("12_res")]
 position = Vector3(35, 0, -8)
 
-[node name="Enemies" type="Node3D" parent="."]
+[node name="Areas" type="Node3D" parent="."]
 
-[node name="LowDriller1" parent="Enemies" instance=ExtResource("90_low_driller")]
+[node name="KlaasArea" type="Node3D" parent="Areas"]
+script = ExtResource("15_res")
+liberated_by_flag = &"q1_reported"
+
+[node name="Occupied" type="Node3D" parent="Areas/KlaasArea"]
+
+[node name="Liberated" type="Node3D" parent="Areas/KlaasArea"]
+
+[node name="Villager1" parent="Areas/KlaasArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(30, 0, -22)
+lines = PackedStringArray("Klaas is weer terug!", "Heb je Klaas al zien flexen?", "Dank je wel!", "Het is weer gezellig in de straat.")
+look_seed = 1
+
+[node name="Villager2" parent="Areas/KlaasArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(40, 0, -22)
+lines = PackedStringArray("Klaas is weer terug!", "Heb je Klaas al zien flexen?", "Dank je wel!", "Het is weer gezellig in de straat.")
+look_seed = 2
+
+[node name="Villager3" parent="Areas/KlaasArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(35, 0, -27)
+lines = PackedStringArray("Klaas is weer terug!", "Heb je Klaas al zien flexen?", "Dank je wel!", "Het is weer gezellig in de straat.")
+look_seed = 3
+
+[node name="WarmLight" type="OmniLight3D" parent="Areas/KlaasArea/Liberated"]
+position = Vector3(35, 9, -22)
+light_color = Color(1, 0.74, 0.45, 1)
+light_energy = 0.9
+omni_range = 28.0
+
+[node name="StationArea" type="Node3D" parent="Areas"]
+script = ExtResource("15_res")
+liberated_by_flag = &"station_cleared"
+
+[node name="Occupied" type="Node3D" parent="Areas/StationArea"]
+
+[node name="LowDriller1" parent="Areas/StationArea/Occupied" instance=ExtResource("90_low_driller")]
 position = Vector3(76, 0, -68)
 rotation = Vector3(0, 2.2, 0)
 
-[node name="LowDriller2" parent="Enemies" instance=ExtResource("90_low_driller")]
+[node name="LowDriller2" parent="Areas/StationArea/Occupied" instance=ExtResource("90_low_driller")]
 position = Vector3(80, 0, -62)
 rotation = Vector3(0, 2.6, 0)
 
-[node name="LowDriller3" parent="Enemies" instance=ExtResource("90_low_driller")]
+[node name="LowDriller3" parent="Areas/StationArea/Occupied" instance=ExtResource("90_low_driller")]
 position = Vector3(72, 0, -61)
 rotation = Vector3(0, 1.9, 0)
 
-[node name="Driller1" parent="Enemies" instance=ExtResource("91_driller")]
+[node name="Liberated" type="Node3D" parent="Areas/StationArea"]
+
+[node name="Villager1" parent="Areas/StationArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(104, 0, -60)
+lines = PackedStringArray("De treinen rijden weer!", "Eindelijk weer een trein naar Nijmegen.", "Geen eiwitshakes meer voor Amber!", "Dank je wel!")
+look_seed = 4
+
+[node name="Villager2" parent="Areas/StationArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(112, 0, -57)
+lines = PackedStringArray("De treinen rijden weer!", "Eindelijk weer een trein naar Nijmegen.", "Geen eiwitshakes meer voor Amber!", "Dank je wel!")
+look_seed = 5
+
+[node name="Villager3" parent="Areas/StationArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(118, 0, -62)
+lines = PackedStringArray("De treinen rijden weer!", "Eindelijk weer een trein naar Nijmegen.", "Geen eiwitshakes meer voor Amber!", "Dank je wel!")
+look_seed = 6
+
+[node name="WarmLight" type="OmniLight3D" parent="Areas/StationArea/Liberated"]
+position = Vector3(110, 9, -60)
+light_color = Color(1, 0.74, 0.45, 1)
+light_energy = 0.9
+omni_range = 28.0
+
+[node name="WesteraamArea" type="Node3D" parent="Areas"]
+script = ExtResource("15_res")
+liberated_by_flag = &"boss_vape_koning"
+
+[node name="Occupied" type="Node3D" parent="Areas/WesteraamArea"]
+
+[node name="Driller1" parent="Areas/WesteraamArea/Occupied" instance=ExtResource("91_driller")]
 position = Vector3(146, 0, -28)
 rotation = Vector3(0, 3.4, 0)
 
-[node name="Driller2" parent="Enemies" instance=ExtResource("91_driller")]
+[node name="Driller2" parent="Areas/WesteraamArea/Occupied" instance=ExtResource("91_driller")]
 position = Vector3(152, 0, -24)
 rotation = Vector3(0, 3.1, 0)
+
+[node name="Liberated" type="Node3D" parent="Areas/WesteraamArea"]
+
+[node name="Villager1" parent="Areas/WesteraamArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(152, 0, -66)
+lines = PackedStringArray("Geen vapewolken meer in de portiek!", "De Vape-koning is weg. Ik kan weer ademen.", "Westeraam is weer van ons!", "Dank je wel!")
+look_seed = 7
+
+[node name="Villager2" parent="Areas/WesteraamArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(160, 0, -64)
+lines = PackedStringArray("Geen vapewolken meer in de portiek!", "De Vape-koning is weg. Ik kan weer ademen.", "Westeraam is weer van ons!", "Dank je wel!")
+look_seed = 8
+
+[node name="Villager3" parent="Areas/WesteraamArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(156, 0, -60)
+lines = PackedStringArray("Geen vapewolken meer in de portiek!", "De Vape-koning is weg. Ik kan weer ademen.", "Westeraam is weer van ons!", "Dank je wel!")
+look_seed = 9
+
+[node name="Villager4" parent="Areas/WesteraamArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(162, 0, -70)
+lines = PackedStringArray("Geen vapewolken meer in de portiek!", "De Vape-koning is weg. Ik kan weer ademen.", "Westeraam is weer van ons!", "Dank je wel!")
+look_seed = 10
+
+[node name="WarmLight" type="OmniLight3D" parent="Areas/WesteraamArea/Liberated"]
+position = Vector3(157, 9, -66)
+light_color = Color(1, 0.74, 0.45, 1)
+light_energy = 0.9
+omni_range = 28.0

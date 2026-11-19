@@ -17,6 +17,9 @@ bg_color = Color(0.78, 0.16, 0.14, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stamina"]
 bg_color = Color(0.38, 0.72, 0.28, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boss"]
+bg_color = Color(0.85, 0.55, 0.12, 1)
+
 [node name="HUD" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -222,3 +225,37 @@ theme_override_font_sizes/font_size = 17
 horizontal_alignment = 1
 autowrap_mode = 3
 
+[node name="BossBar" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_top = -92.0
+offset_right = 280.0
+offset_bottom = -46.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="BossName" type="Label" parent="BossBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.36, 1)
+theme_override_colors/font_outline_color = Color(0.12, 0.08, 0.04, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+text = "Baas"
+horizontal_alignment = 1
+
+[node name="BossHealth" type="ProgressBar" parent="BossBar"]
+custom_minimum_size = Vector2(560, 18)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_back")
+theme_override_styles/fill = SubResource("StyleBoxFlat_boss")
+value = 100.0
+show_percentage = false

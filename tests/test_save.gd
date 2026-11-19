@@ -106,6 +106,7 @@ func _test_death_loads_last_save() -> void:
 	_check(_main.get_world().location_name == "Station Elst", "after dying the last save loads")
 	_check(_player().health.current_health == 50, "the last save's health is back")
 	_check(not _player().health.is_dead(), "the player lives again")
+	_check(not _main.get_node("UI/HUD/DeathLabel").visible, "the death message goes away once the save is loaded")
 
 
 func _test_autosave_slots() -> void:

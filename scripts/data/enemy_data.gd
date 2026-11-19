@@ -54,6 +54,18 @@ extends Resource
 @export var flanks: bool = false
 
 
+@export_group("Ranged")
+## Projectile the enemy fires instead of a melee swing, such as a vape puff.
+## Ranged enemies attack from attack_range and back off when the player
+## comes closer than keep_distance.
+@export var projectile_scene: PackedScene
+@export var keep_distance: float = 0.0
+
+
+func is_ranged() -> bool:
+	return projectile_scene != null
+
+
 ## Health the enemy starts with right now: lower once it is weakened.
 func get_max_health() -> int:
 	if not weakened_by_flag.is_empty() and GameState.has_flag(weakened_by_flag):

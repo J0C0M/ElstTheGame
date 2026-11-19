@@ -138,7 +138,7 @@ func _test_reward() -> void:
 	_check(_state.inwijding == 2, "the reward includes Inwijding 2")
 	box.choose(0)
 	box.choose(1)
-	_check(box.get_current_line().id == &"next_job", "after Quest 2 Klaas has nothing new yet")
+	_check(box.get_current_line().id == &"q3_offer", "after Quest 2 Klaas has the next job")
 	await _press(&"pause")
 	await _frames(5)
 

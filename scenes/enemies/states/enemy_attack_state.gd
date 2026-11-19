@@ -1,6 +1,6 @@
 extends EnemyState
 ## One telegraphed attack: a windup the player can read, a short swing that
-## can hit, then a moment to recover.
+## can hit (or a projectile for ranged enemies), then a moment to recover.
 
 const STRIKE_DURATION: float = 0.45
 const RECOVER_TIME: float = 0.35
@@ -28,11 +28,14 @@ func physics_update(delta: float) -> void:
 		enemy.face_player(delta, 6.0)
 		if _time >= data.attack_windup:
 			_swung = true
-			enemy.attack_hitbox.activate(data.damage)
+			if data.is_ranged():
+				enemy.fire_projectile()
+			else:
+				enemy.attack_hitbox.activate(data.damage)
 			enemy.model.play_action(data.attack_action, STRIKE_DURATION)
 		return
 	var swing_time: float = _time - data.attack_windup
-	if swing_time < data.strike_time:
+	if swing_time < data.strike_time and not data.is_ranged():
 		var forward: Vector3 = enemy.get_forward() * LUNGE_SPEED
 		enemy.velocity.x = forward.x
 		enemy.velocity.z = forward.z

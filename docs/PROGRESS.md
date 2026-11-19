@@ -13,8 +13,8 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 4 | `Add-Enemy-AI-And-Loot` | Af, gemerged naar `Development` |
 | 5 | `Add-Klaas-Dialogue-And-Shop` | Af, gemerged naar `Development` |
 | 6 | `Add-Quest-System-And-Tutorial` | Af, gemerged naar `Development` |
-| 7 | `Add-Station-Dungeon` | Gebouwd, wacht op akkoord |
-| 8 | `Add-Westeraam-Dungeon` | Nog niet begonnen |
+| 7 | `Add-Station-Dungeon` | Af, gemerged naar `Development` |
+| 8 | `Add-Westeraam-Dungeon` | Gebouwd, wacht op akkoord |
 | 9 | `Add-OBC-Fort-Dungeon` | Nog niet begonnen |
 | 10 | `Add-Bingo-Cave-Dungeon` | Nog niet begonnen |
 | 11 | `Add-Amber-Final-Battle` | Nog niet begonnen |
@@ -371,9 +371,54 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 
 ### Aandachtspunten voor de volgende fases
 
-- Fase 8: `station_cleared` kan meetellen als bevrijding van het station. Geef de vape-drillers `weakened_by_flag = &"station_cleared"` en `weakened_health_factor = 0.8`.
+- Fase 8: `station_cleared` kan meetellen als bevrijding van het station. Geef de vape-drillers `weakened_by_flag = &"station_cleared"` en `weakened_health_factor = 0.8`. (Gedaan in Fase 8.)
 - Fase 9: hetzelfde voor de voetbaljongens en de fatbikers. Of de bazen ook zwakker worden, beslissen we in hun eigen fase.
 - Fase 10: de kruisboog komt van Klaas zodra Quest 2 t/m 5 af zijn.
+
+## Fase 8 – Quest 3: Westeraam Getho
+
+### Wat is af
+
+- **Westeraam-dungeon** (`scenes/dungeons/Westeraam.tscn`, gebouwd door `tools/dungeons/gen_westeraam.py`). Vijf ruimtes, van de ingang naar achteren:
+  - het portiek van de flats;
+  - een lange galerij (2 drillers);
+  - een vape shop (2 vape-drillers en een kist);
+  - de binnenplaats met scooters en een uitgebrand autowrak (2 drillers, 2 vape-drillers en een kist);
+  - het Vape-paleis met een gouden troon, een rode loper en vier vapewolken.
+- **Vape-drillers** (30 HP, 10 schade): een hoodie met capuchon, geen gezicht te zien en een vape in de hand. Ze houden afstand, lopen achteruit als je te dichtbij komt en blazen langzame vapewolkjes die even blijven hangen. Blokkeren en parry werken ertegen. Na het station hebben ze 24 HP.
+- **Afstandsaanvallen voor vijanden:** `projectile_scene` en `keep_distance` in `EnemyData`. Vijanden zonder projectiel blijven gewoon slaan.
+- **De Vape-koning** (400 HP, 15 schade per wolkje, `scenes/bosses/VapeKing.tscn`):
+  - hij verstopt zich in een van de vier wolken en schiet van daaruit; in zijn wolk flikkert een gouden glinstering;
+  - loop je zijn wolk in, dan staat hij 4 s te hoesten en kun je hem raken; daarna vlucht hij naar een andere wolk;
+  - terwijl hij vlucht, loopt het hele paleis vol dichte vape, zodat je niet goed ziet waar hij heen gaat; zodra hij in zijn nieuwe wolk zit, trekt die weer op (op verzoek van de eigenaar);
+  - onder 50% blaast hij drie wolkjes tegelijk;
+  - hij laat 100 goud vallen en heeft 35% kans op uitrusting.
+- **Baasgevecht:** een grote levensbalk onderin beeld. Opslaan is geblokkeerd zolang het gevecht loopt. Een verslagen baas blijft verslagen na laden (vlag `boss_vape_koning`).
+- **Bevrijde gebieden** (`LiberatedArea`): zodra zijn vlag gezet is, ruilt een gebied in Elst zijn patrouilles in voor dorpelingen en een warm licht. Er zijn drie gebieden:
+  - de straat van Klaas, na Quest 1 (`q1_reported`);
+  - het stationsplein, zodra de generators kapot zijn (`station_cleared`);
+  - Westeraam, zodra de Vape-koning valt (`boss_vape_koning`).
+- **Dorpelingen** (`scenes/npcs/Villager.tscn`): vrolijke figuren, elk met een eigen kleur shirt, broek en huid, en soms een muts. Ze wandelen rond. Kom je dichtbij, dan zwaaien ze en zeggen ze iets, zoals "De treinen rijden weer!".
+- **Quest 3 "Westeraam Getho"** (`data/quests/q3_westeraam.tres`): Klaas geeft hem na Quest 2. Doelen: versla de Vape-koning en ga terug naar Klaas. Beloning: 150 goud en Inwijding +1 (dat is dan 3). Versla je hem eerder, dan is Klaas trots en krijg je de beloning alsnog.
+- **Gedeelde dungeonbouwer** (`tools/dungeons/dungeon_builder.py`): het station en Westeraam gebruiken dezelfde code. De stationsdungeon kwam er hetzelfde uit, op één regel na: `default_spawn = &"Entrance"`, die sinds Fase 7 ontbrak.
+- **Bugfix:** na doodgaan bleef "Je bent dood" in beeld staan, omdat de geladen save een nieuwe speler maakt. De HUD haalt het bericht nu weg zodra er weer een levende speler is; `test_save` controleert dat.
+- **Tests:** `tests/test_westeraam.gd` (41 checks, allemaal geslaagd). Die speelt de bevrijde gebieden, de vape-drillers, het hele baasgevecht met opslaan en laden, de beloning en het geval dat je eerder klaar bent. De andere acht tests slagen ook.
+
+### Keuzes en afwijkingen
+
+- **Een warmere kleur** voor een bevrijd gebied is een warm licht boven dat gebied. Andere muziek per gebied komt met de audio in Fase 12.
+- **Wanneer een gebied bevrijd is,** volgt uit zijn vlag. Het veld `GameState.liberated_areas` uit Fase 3 wordt daarom niet gebruikt; het blijft wel in de saves staan.
+- **De bazen worden niet zwakker na het station**, alleen de gewone vijanden. Het GDD zegt "vijanden van Westeraam en OBC krijgen 20% minder HP"; ik lees bazen daar niet in, zodat het gevecht zijn uitdaging houdt.
+- **De Vape-koning** heeft geen state machine, maar een eenvoudig script met vijf toestanden (wachten, verstopt, kwetsbaar, vluchten, dood). Hij gebruikt wel `HealthComponent`, `Hurtbox` en `LootDropper`.
+- **"Kans op loot"** als beloning van Quest 3 is de 35% kans op uitrusting die de baas laat vallen.
+- **Na Quest 3** zegt Klaas "Nog niet" als je om een klus vraagt, tot Fase 9.
+
+### Aandachtspunten voor de volgende fases
+
+- Fase 9: OBC wordt een vierde `LiberatedArea` in `tools/map/gen_elst.py` (AREAS), met de vlag van het fatbike-kindje. Voetbaljongens kunnen schieten met een eigen `projectile_scene`. Het fatbike-kindje kan het patroon van de Vape-koning volgen: opslaan blokkeren, de `boss_*`-signalen en een vlag.
+- Fase 10: hetzelfde voor de Bingo Club.
+- Fase 11: de kerk gaat open als de vlaggen van de drie bazen gezet zijn.
+- Fase 12: muziek per gebied, bezet of bevrijd.
 
 ## Kaart verwerken (`Align-Elst-With-Map`)
 
@@ -415,7 +460,7 @@ Status: af, gemerged naar `Development`.
 
 - [ ] **Bron van de kaart** (Google Maps of OpenStreetMap). Tot dat duidelijk is, staat `kaart_elst.png` niet in de repo en kan het script alleen draaien als de kaart lokaal in `docs/reference/` staat. Ook het raster `elst_ground.png` is van de kaart afgeleid.
 - [ ] **Ligging van het spoor** bevestigen.
-- [x] **`test_enemies` faalde af en toe** in de stationsdungeon, omdat de vijanden willekeurig patrouilleren. Sinds Fase 7 speelt de test in een eigen, langere testkamer; daarna slaagde hij 10 keer op rij.
+- [x] **`test_enemies` faalde af en toe** in de stationsdungeon, omdat de vijanden willekeurig patrouilleren. Sinds Fase 7 speelt de test in een eigen, langere testkamer. In Fase 8 faalde de groepscheck nog één keer, omdat een patrouille te ver weg liep; nu staan de vijanden voor die check eerst op hun beginplek.
 
 ## Kaartindeling
 

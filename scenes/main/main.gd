@@ -14,6 +14,8 @@ const DEATH_DELAY: float = 3.0
 ## World and spawn point of a new game.
 @export var new_game_scene: PackedScene
 @export var new_game_spawn: StringName = &"Start"
+## Quest that starts with a new game: the tutorial.
+@export var first_quest: StringName = &"q1_tutorial"
 ## Shown behind the main menu.
 @export var menu_backdrop: PackedScene
 ## Skips the main menu and starts a new game straight away (for tests).
@@ -122,6 +124,7 @@ func start_new_game() -> void:
 	GameState.reset()
 	QuestManager.reset()
 	await _enter_world(new_game_scene.instantiate() as GameWorld, new_game_spawn, {}, {})
+	QuestManager.start_quest(first_quest)
 
 
 ## Switches to the world in [param scene_path] behind a fade and puts the
@@ -200,6 +203,8 @@ func _enter_world(world: GameWorld, spawn_id: StringName, vitals: Dictionary, sa
 	_controls_help.show()
 	_update_mouse()
 	EventBus.location_entered.emit(world.location_name)
+	if not world.location_id.is_empty():
+		EventBus.area_entered.emit(world.location_id)
 	await _fade_to(0.0)
 	GameState.unblock_saving(&"world_change")
 	_changing_world = false

@@ -328,6 +328,36 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 - Fase 7: Quest 2 eindigt na 4 generators (`KILL` of `FLAG` per generator) en zet het verzwakkingseffect aan.
 - Fase 8–10: zet bij de dood van de baas de `completion_flag` van de quest, zodat de dungeon ook telt als Klaas hem nog niet gegeven heeft.
 
+## Kaart verwerken (`Align-Elst-With-Map`)
+
+Status: plan klaar, nog niet gebouwd. De wereld volgt nog de voorlopige indeling hieronder.
+
+### Plan
+
+- **Bron:** `docs/reference/kaart_elst.png` (520 × 419 px). `tools/map/layout.py` bevat alles wat van de kaart is overgetrokken: schaal, midden, locaties, hoofdwegen en spoor. `tools/map/render_plan.py` tekent het plan over de kaart heen.
+- **Schaal en midden:** 1,05 m per kaartpixel. Het midden van de tornado ligt op kaartpixel (220, 242), tussen alle zes de locaties in. De tornado blijft even groot (wind vanaf 222 m, muur op 240 m).
+- **Locaties** (wereldpositie x, z in meters, deur = lokale −z):
+
+| Locatie | Positie | Deur naar | Opmerking |
+|---|---|---|---|
+| Kerk | (25, −109) | oostzuidoost, naar de doorgaande weg | gedraaid (yaw −2,146); plein van 64 naar 46 m |
+| Bingo Club | (−27, −104) | zuid | iets ten westen van de blauwe vlek, naast de kerk |
+| Huis van Klaas | (35, 3) | noord, naar de kerk | bijna in het midden van de ring |
+| Station | (112, −97) | zuid, naar de weg langs het station | omgedraaid: perron en spoor aan de oostkant |
+| Westeraam | (157, −69) | zuid | aan de oostkant van het spoor |
+| OBC Fort | (−172, 78) | oost, naar de weg in het zuidwesten | |
+
+- **Spoor:** staat niet op de kaart. Het komt van noord naar zuid op x = 127, in de lege strook tussen het station en Westeraam, met drie overwegen.
+- **Hoofdwegen:** overgetrokken van de brede wegen op de kaart (doorgaande weg noord-zuid langs de kerk, weg naar het westen, lus in het zuidwesten, zuidelijke ring, weg langs Westeraam, Stationsstraat).
+- **De rest:** bebouwd gebied op de kaart krijgt straten met huizen, open land wordt weiland, de groene vlakken worden parken en sportvelden, en het water komt terug (de Aamsche Plas valt grotendeels buiten de tornado).
+- **Generator:** deze keer komt het script dat `Elst.tscn` bouwt in `tools/map/`, zodat de wereld opnieuw te maken is.
+- **Nog te doen na het bouwen:** vijanden in Elst meeverplaatsen, de tests die vaste plekken gebruiken aanpassen (`test_save`), navmesh en lopen controleren, en screenshots.
+
+### Open punten
+
+- [ ] Bron van de kaart (Google Maps of OpenStreetMap), om te bepalen of hij in de openbare repo mag.
+- [ ] Ligging van het spoor bevestigen.
+
 ## Voorlopige kaartindeling
 
 `kaart_elst.png` is er nu, maar de wereld volgt nog deze voorlopige indeling: de kerk in het midden, de andere vijf locaties eromheen. De richtingen volgen ruwweg het echte Elst (de kerk in het centrum, het station en het spoor aan de oostkant, Westeraam ten noordoosten van het station, de Over Betuwe College-kant ver in het zuidwesten). Het huis van Klaas staat op een korte loopafstand van alles, zodat het een goede hub is.

@@ -12,7 +12,7 @@ De game wordt in 13 fases gebouwd. Zie [`docs/GDD.md`](docs/GDD.md) voor het ont
 
 1. Installeer [Godot 4.7](https://godotengine.org/download) (de standaardversie, niet .NET).
 2. Start Godot, kies **Importeren** en selecteer `project.godot` in deze map.
-3. Druk op **F5** (of de afspeelknop) om de hoofdscene `res://scenes/main/Main.tscn` te starten. Je komt in het hoofdmenu; met **Nieuw spel** begin je in Elst, in de tuin van Klaas.
+3. Druk op **F5** (of de afspeelknop) om de hoofdscene `res://scenes/main/Main.tscn` te starten. Je komt in het hoofdmenu; met **Nieuw spel** begin je in Elst, in de tuin van Klaas. Het kompas bovenin wijst je de weg naar Klaas, die je de eerste quest geeft.
 
 Vanaf de commandoregel:
 
@@ -43,7 +43,7 @@ De toetsen zitten in de InputMap van het project. Niet alles werkt al: dat hangt
 
 ## Opslaan
 
-Opslaan werkt zoals in Skyrim: via het pauzemenu (Esc) met een eigen naam, met een quicksave (F5, laden met F9) en automatisch bij het binnengaan van een dungeon. Ga je dood, dan laadt de nieuwste save. De saves staan in de gebruikersmap van Godot, in `saves/`.
+Opslaan werkt zoals in Skyrim: via het pauzemenu (Esc) met een eigen naam, met een quicksave (F5, laden met F9) en automatisch bij het binnengaan van een dungeon, bij slapen en na elk questdoel. Ga je dood, dan laadt de nieuwste save. De saves staan in de gebruikersmap van Godot, in `saves/`.
 
 ## Testen
 
@@ -54,9 +54,10 @@ godot --headless --path . --fixed-fps 60 -s res://tests/test_world.gd
 godot --headless --path . --fixed-fps 60 -s res://tests/test_save.gd
 godot --headless --path . --fixed-fps 60 -s res://tests/test_enemies.gd
 godot --headless --path . --fixed-fps 60 -s res://tests/test_klaas.gd
+godot --headless --path . --fixed-fps 60 -s res://tests/test_quests.gd
 ```
 
-De eerste laadt alle scenes, scripts en resources. De tweede speelt de testarena met gesimuleerde input en controleert lopen, stamina, ontwijken, aanvallen, blokkeren, parry, doodgaan en terugkomen. De derde start het spel in Elst en controleert het startpunt, de navmesh, de kerk die op slot zit, de tornado en de weg in en uit elke dungeon. De vierde test opslaan en laden, de vijfde de vijanden, de buit en de kisten, de zesde Klaas, zijn winkel en de uitrusting.
+De eerste laadt alle scenes, scripts en resources. De tweede speelt de testarena met gesimuleerde input en controleert lopen, stamina, ontwijken, aanvallen, blokkeren, parry, doodgaan en terugkomen. De derde start het spel in Elst en controleert het startpunt, de navmesh, de kerk die op slot zit, de tornado en de weg in en uit elke dungeon. De vierde test opslaan en laden, de vijfde de vijanden, de buit en de kisten, de zesde Klaas, zijn winkel en de uitrusting. De zevende speelt Quest 1 (de tutorial) van begin tot eind en controleert het kompas, het questlog en opslaan halverwege.
 
 ## Mappen
 

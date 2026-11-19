@@ -188,14 +188,34 @@ func respawn(at: Transform3D) -> void:
 	EventBus.player_respawned.emit()
 
 
-## Values that a scene change keeps. The save system (Phase 3) adds more.
-func save_data() -> Dictionary:
+## Health and stamina, which carry over when the player changes world.
+func get_vitals() -> Dictionary:
 	return {"health": health.current_health, "stamina": stamina.current_stamina}
 
 
-func load_data(data: Dictionary) -> void:
+func set_vitals(data: Dictionary) -> void:
 	health.set_health(int(data.get("health", health.current_health)))
 	stamina.set_stamina(float(data.get("stamina", stamina.current_stamina)))
+
+
+## Everything a save file keeps about the player (persist group).
+func save_data() -> Dictionary:
+	var data: Dictionary = get_vitals()
+	data["position"] = [global_position.x, global_position.y, global_position.z]
+	data["rotation_y"] = rotation.y
+	data["camera_yaw"] = camera.yaw
+	data["camera_pitch"] = camera.pitch
+	return data
+
+
+func load_data(data: Dictionary) -> void:
+	var position_data: Array = data.get("position", [])
+	if position_data.size() == 3:
+		var saved_position: Vector3 = Vector3(float(position_data[0]), float(position_data[1]), float(position_data[2]))
+		teleport(Transform3D(Basis(Vector3.UP, float(data.get("rotation_y", 0.0))), saved_position))
+		camera.yaw = float(data.get("camera_yaw", camera.yaw))
+		camera.pitch = float(data.get("camera_pitch", camera.pitch))
+	set_vitals(data)
 
 
 func _on_hit_received(hit: HitData) -> void:

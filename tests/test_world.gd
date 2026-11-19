@@ -26,16 +26,21 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	# Entering a dungeon autosaves; keep that away from the player's own saves.
+	_use_test_save_dir()
 	root.get_node("EventBus").connect("message_requested", func(text: String) -> void: _messages.append(text))
 	_main = (load("res://scenes/main/Main.tscn") as PackedScene).instantiate()
+	_main.skip_main_menu = true
 	root.add_child(_main)
-	await _frames(10)
+	await _frames(40)
 	await _test_start()
 	await _test_navigation()
 	await _test_locked_church()
 	await _test_tornado()
 	for dungeon: Array in DUNGEONS:
 		await _test_dungeon(dungeon[0], dungeon[1], dungeon[2])
+	_use_test_save_dir()
+	DirAccess.remove_absolute("user://test_saves/")
 	print("test_world: %d failed" % _failures)
 	quit(1 if _failures > 0 else 0)
 
@@ -110,6 +115,16 @@ func _test_dungeon(door_name: String, dungeon_name: String, exit_spawn: String) 
 	_check(world.location_name == ELST, "the exit of %s leads back to Elst" % dungeon_name)
 	_check(_player().global_position.distance_to(world.get_spawn(StringName(exit_spawn)).global_position) < 0.5,
 		"the player comes out at %s" % exit_spawn)
+
+
+## Points SaveManager at an empty test folder.
+func _use_test_save_dir() -> void:
+	var save_dir: String = "user://test_saves/"
+	root.get_node("SaveManager").save_dir = save_dir
+	var dir: DirAccess = DirAccess.open(save_dir)
+	if dir != null:
+		for file_name: String in dir.get_files():
+			dir.remove(file_name)
 
 
 func _stand_at_door(door_name: String) -> void:

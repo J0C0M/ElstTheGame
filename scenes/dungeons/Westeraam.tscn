@@ -62,6 +62,7 @@ size = Vector3(1, 5, 1)
 script = ExtResource("1_world")
 location_name = "Westeraam Getho"
 default_spawn = &"Entrance"
+autosave_on_enter = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_dungeon")

@@ -67,6 +67,8 @@ func _on_parried() -> void:
 
 
 func _on_died() -> void:
+	var next_step: String = "De laatste save wordt geladen." if SaveManager.has_saves() else "Je begint zo opnieuw."
+	_death_label.text = "Je bent dood\n" + next_step
 	_death_label.visible = true
 
 

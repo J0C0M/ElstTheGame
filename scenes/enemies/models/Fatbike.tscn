@@ -1,0 +1,67 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Mat_frame"]
+albedo_color = Color(0.8, 0.12, 0.12, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_navy"]
+albedo_color = Color(0.1, 0.14, 0.32, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_tyre"]
+albedo_color = Color(0.07, 0.07, 0.08, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_chrome"]
+albedo_color = Color(0.75, 0.75, 0.78, 1)
+metallic = 0.8
+roughness = 0.25
+
+[sub_resource type="BoxMesh" id="Mesh_frame"]
+material = SubResource("Mat_frame")
+size = Vector3(0.22, 0.22, 1.5)
+
+[sub_resource type="BoxMesh" id="Mesh_seat"]
+material = SubResource("Mat_navy")
+size = Vector3(0.3, 0.1, 0.5)
+
+[sub_resource type="BoxMesh" id="Mesh_bar"]
+material = SubResource("Mat_chrome")
+size = Vector3(0.8, 0.06, 0.06)
+
+[sub_resource type="CylinderMesh" id="Mesh_wheel"]
+material = SubResource("Mat_tyre")
+top_radius = 0.42
+bottom_radius = 0.42
+height = 0.34
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="Mesh_exhaust"]
+material = SubResource("Mat_chrome")
+top_radius = 0.07
+bottom_radius = 0.07
+height = 0.7
+radial_segments = 6
+
+[node name="Fatbike" type="Node3D"]
+
+[node name="Frame" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.62, 0)
+mesh = SubResource("Mesh_frame")
+
+[node name="Seat" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.78, 0.25)
+mesh = SubResource("Mesh_seat")
+
+[node name="Handlebar" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.0, -0.6)
+mesh = SubResource("Mesh_bar")
+
+[node name="WheelFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.42, -0.68)
+mesh = SubResource("Mesh_wheel")
+
+[node name="WheelBack" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0.42, 0.68)
+mesh = SubResource("Mesh_wheel")
+
+[node name="Exhaust" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.2, 0.5, 0.85)
+mesh = SubResource("Mesh_exhaust")

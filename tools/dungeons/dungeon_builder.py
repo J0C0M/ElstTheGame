@@ -23,7 +23,8 @@ def vec(*v):
 
 
 def col(c):
-    return f"Color({f(c[0])}, {f(c[1])}, {f(c[2])}, 1)"
+    """A colour (r, g, b), or (r, g, b, a) for see-through glass."""
+    return f"Color({f(c[0])}, {f(c[1])}, {f(c[2])}, {f(c[3]) if len(c) > 3 else 1})"
 
 
 def wall_segments(a0, a1, doors):
@@ -51,7 +52,10 @@ class Dungeon:
         if c not in self._materials:
             mid = f"Mat_{len(self._materials) + 1}"
             self._materials[c] = mid
-            self.subs.append([f'[sub_resource type="StandardMaterial3D" id="{mid}"]', f"albedo_color = {col(c)}", "roughness = 0.9"])
+            lines = [f'[sub_resource type="StandardMaterial3D" id="{mid}"]']
+            if len(c) > 3:
+                lines.append("transparency = 1")
+            self.subs.append(lines + [f"albedo_color = {col(c)}", "roughness = 0.9"])
         return self._materials[c]
 
     def box_mesh(self, size, c):

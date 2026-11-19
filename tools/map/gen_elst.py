@@ -65,6 +65,10 @@ ENEMIES = [
     ("Voetballer1", "92_voetballer", -164.0, 72.0, 1.6),
     ("Voetballer2", "92_voetballer", -162.0, 84.0, 1.4),
     ("Fatbiker1", "93_fatbiker", -168.0, 78.0, 1.5),
+    # Grandmas on the car park of the Bingo Club, well inside its footprint.
+    ("BingoOma1", "94_oma", -32.0, -86.0, 3.1),
+    ("BingoOma2", "94_oma", -22.0, -88.0, 3.0),
+    ("BingoOpa1", "95_opa", -27.0, -82.0, 3.1),
 ]
 # Areas that change once liberated: node name, flag, the enemies (from ENEMIES)
 # that patrol it until then, and the villagers (x, z) that come after, with
@@ -81,6 +85,9 @@ AREAS = [
     ("OBCArea", "boss_fatbike_kindje", ["Voetballer1", "Voetballer2", "Fatbiker1"],
      [(-166.0, 72.0), (-160.0, 80.0), (-168.0, 85.0), (-158.0, 74.0)], (-164.0, 78.0),
      ["Het OBC is weer van ons!", "Eindelijk kan ik weer naar school. Geloof ik.", "Geen voetballen meer tegen mijn hoofd!", "Dank je wel!"]),
+    ("BingoArea", "boss_grumpy_oma", ["BingoOma1", "BingoOma2", "BingoOpa1"],
+     [(-30.0, -84.0), (-24.0, -86.0), (-27.0, -90.0)], (-27.0, -86.0),
+     ["BINGO! Echt waar deze keer!", "Eindelijk weer een gezellige bingoavond.", "Oma is weer lief.", "Dank je wel!"]),
 ]
 LOCATION_SCENES = {"Kerk": "5_res", "KlaasHouse": "6_res", "BingoClub": "7_res", "Station": "8_res",
                    "Westeraam": "9_res", "OBCFort": "10_res"}
@@ -474,6 +481,8 @@ def write_scene(houses, trees, boxes):
         ("PackedScene", "res://scenes/enemies/Driller.tscn", "91_driller"),
         ("PackedScene", "res://scenes/enemies/Voetballer.tscn", "92_voetballer"),
         ("PackedScene", "res://scenes/enemies/Fatbiker.tscn", "93_fatbiker"),
+        ("PackedScene", "res://scenes/enemies/BozeOma.tscn", "94_oma"),
+        ("PackedScene", "res://scenes/enemies/BingoOpa.tscn", "95_opa"),
     ]
     for kind, path, rid in ext:
         out.append(f'[ext_resource type="{kind}" path="{path}" id="{rid}"]')

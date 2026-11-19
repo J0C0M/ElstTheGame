@@ -58,9 +58,10 @@ godot --headless --path . --fixed-fps 60 -s res://tests/test_quests.gd
 godot --headless --path . --fixed-fps 60 -s res://tests/test_station.gd
 godot --headless --path . --fixed-fps 60 -s res://tests/test_westeraam.gd
 godot --headless --path . --fixed-fps 60 -s res://tests/test_obc.gd
+godot --headless --path . --fixed-fps 60 -s res://tests/test_bingo.gd
 ```
 
-De eerste laadt alle scenes, scripts en resources. De tweede speelt de testarena met gesimuleerde input en controleert lopen, stamina, ontwijken, aanvallen, blokkeren, parry, doodgaan en terugkomen. De derde start het spel in Elst en controleert het startpunt, de navmesh, de kerk die op slot zit, de tornado en de weg in en uit elke dungeon. De vierde test opslaan en laden, de vijfde de vijanden, de buit en de kisten, de zesde Klaas, zijn winkel en de uitrusting. De zevende speelt Quest 1 (de tutorial) van begin tot eind en controleert het kompas, het questlog en opslaan halverwege. De achtste speelt Quest 2: de station-dungeon, de vier generators, het verzwakkingseffect en de beloning. De negende speelt Quest 3: de vape-drillers, het gevecht met de Vape-koning en de bevrijde gebieden met dorpelingen. De tiende speelt Quest 4: de voetballers, de fatbikers en het gevecht met het fatbike-kindje.
+De eerste laadt alle scenes, scripts en resources. De tweede speelt de testarena met gesimuleerde input en controleert lopen, stamina, ontwijken, aanvallen, blokkeren, parry, doodgaan en terugkomen. De derde start het spel in Elst en controleert het startpunt, de navmesh, de kerk die op slot zit, de tornado en de weg in en uit elke dungeon. De vierde test opslaan en laden, de vijfde de vijanden, de buit en de kisten, de zesde Klaas, zijn winkel en de uitrusting. De zevende speelt Quest 1 (de tutorial) van begin tot eind en controleert het kompas, het questlog en opslaan halverwege. De achtste speelt Quest 2: de station-dungeon, de vier generators, het verzwakkingseffect en de beloning. De negende speelt Quest 3: de vape-drillers, het gevecht met de Vape-koning en de bevrijde gebieden met dorpelingen. De tiende speelt Quest 4: de voetballers, de fatbikers en het gevecht met het fatbike-kindje. De elfde speelt Quest 5: de bingo-opa's, de springende oma's, de rolstoel-oma's, het checkpoint, het gevecht met Grumpy Oma en de kruisboog.
 
 ## Mappen
 

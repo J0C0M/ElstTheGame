@@ -31,6 +31,8 @@ Amber de Draak heeft Elst overgenomen en Klaas moet de speler helpen haar macht 
 
 **Tijdens de game.** De speler is een niemand die in Elst terechtkomt. Klaas neemt de speler onder zijn hoede. Om Amber te verzwakken moet de speler eerst haar aanvoerlijn kapotmaken (Station Elst) en daarna de drie facties verslaan die Elst voor haar bezetten. Elke bevrijde wijk loopt weer vol met blije dorpelingen.
 
+**De Bingo Club.** Grumpy Oma is de nummer 1 bingowinnaar van Elst en een trouwe volger van Amber. Omdat niemand vaker BINGO riep dan zij, zien de oma's en opa's van de Bingo Club haar als hun leider, bijna als een messias. Onder haar is de gezellige bingoclub een grot geworden, de Boomer Cave.
+
 **Einde.** Als de drie facties verslagen zijn, gaan de deuren van de kerk open. Daar vechten de speler en Klaas tegen Amber. Halverwege offert Klaas zich op om de speler te redden van een fatale aanval. Als Amber verslagen is, laat ze de gouden Tren-spuit vallen. Daarmee wekt de speler Klaas weer tot leven. De tornado verdwijnt en Elst is gered.
 
 ## Personages
@@ -59,7 +61,7 @@ De wereld is één compacte kaart van Elst. De kerk staat in het midden en vijf 
 | Groen | Elst Station + gebouw ernaast | Dungeon Quest 2 (geen baas) | Driller army | Station werkt weer, dorpelingen op het perron |
 | Geel | Westeraam Getho | Dungeon Quest 3 | Driller army, vape-drillers | Dorpelingen in de wijk |
 | Rood | OBC Elst Fort | Dungeon Quest 4 | Kakker-voetbaljongens, fatbikers | Dorpelingen op het plein |
-| Blauw | Bingo Club Boomer Cave | Dungeon Quest 5 | Boze oma's, bingo-opa's | Een vrolijke bingoavond |
+| Blauw | Bingo Club Boomer Cave | Dungeon Quest 5 | Bingo-opa's, boze oma's, rolstoel-oma's | Een vrolijke bingoavond |
 | Roze | De Kerk van Amber (centrum) | Eindgevecht Quest 6 | Amber (binnen) | Kerk wordt een feestplek |
 
 **Opbouw van de wereld**
@@ -131,8 +133,9 @@ Elke factie heeft eigen vijanden, een eigen dungeon en een eindbaas met één du
 | Vape-driller (mage) | Westeraam Getho | 30 | 10 | Puffer jacket met capuchon, geen gezicht te zien. Houdt afstand en schiet langzame vape-wolkjes die even blijven hangen |
 | Kakker-voetbaljongen | OBC Elst Fort | 35 | 8 | Schiet voetballen, 60% kans om raak te schieten. Houdt afstand |
 | Fatbiker | OBC Elst Fort | 60 | 15 | Rijdt op een fatbike alsof het een paard is. Cirkelt rond en chargeert |
-| Boze oma | Bingo Club Boomer Cave | 45 | 10 | Agressieve melee met een handtas |
-| Bingo-opa | Bingo Club Boomer Cave | 35 | 6 | Roept bingonummers. Bij “BINGO!” krijgen oma's in de buurt 5 s lang +25% schade |
+| Bingo-opa | Bingo Club Boomer Cave | 35 | 6 | De simpele vijand: een oude, wijze opa die bingofeitjes en bingonummers roept, op je af rent en je met zijn wandelstok slaat |
+| Boze oma | Bingo Club Boomer Cave | 45 | 10 | Springt van ver met een lange sprong op je af en slaat je dan met haar paarse leren tasje. Sla je haar te lang niet, dan springt ze weer weg en wacht ze even voordat ze opnieuw aanvalt |
+| Rolstoel-oma | Bingo Club Boomer Cave | 50 | 7 per kaart | Heel sloom in haar rolstoel. Schiet als een kanon salvo's van 3 bingokaarten op je af en rolt bij elk schot een stukje achteruit |
 
 **Bazen**
 
@@ -140,7 +143,7 @@ Elke factie heeft eigen vijanden, een eigen dungeon en een eindbaas met één du
 | --- | --- | --- | --- | --- |
 | De Vape-koning (rijkste vapeverkoper van Westeraam) | Westeraam Getho | 400 | Verstopt zich in één van 4 vape-wolken en schiet daaruit dodelijke vape-wolkjes (15 schade). Onder 50% schiet hij er 3 tegelijk | Ren naar zijn wolk. Hij is dan 4 s kwetsbaar en vlucht daarna naar een andere wolk |
 | Het fatbike-kindje (erg klein, wit, met blauwe ogen, op een veel te grote opgevoerde fatbike) | OBC Elst Fort | 450 | Chargeert in een rechte lijn. Je ziet het aankomen aan een gierende motor en een lijn op de grond. Onder 50% chargeert hij 2 keer achter elkaar | Ontwijk de charge. Knalt hij tegen een muur, dan staat hij 3 s versuft |
-| Grumpy Oma (groot, dik, als een soort Hulk) | Bingo Club Boomer Cave | 500 | Springt en ground slamt (schokgolf, spring eroverheen), draait als een tornado door de arena en slaat van dichtbij. Erg agressief, onder 30% wordt ze nog sneller | Na een ground slam en na de tornado staat ze 2 s uitgeput |
+| Grumpy Oma (nummer 1 bingowinnaar, trouwe volger van Amber, de messias van de Bingo Club; een enorme, gespierde oma die eruitziet als een woest beest) | Bingo Club Boomer Cave | 550 | Sjokt op je af en geeft een trage, goed zichtbare klap met haar handtas, daarna moet ze even op adem komen. Springt en ground slamt (schokgolf, spring eroverheen) en draait als een tornado door de arena (dan kun je haar niet raken). Op 2/3 en 1/3 van haar HP roept ze “BINGO!” en komen haar volgelingen helpen; die worden woest. Onder 30% wordt ze sneller | Na een ground slam en na de tornado staat ze 2,5 s uitgeput en krijgt ze 50% extra schade. Pareer je haar klap, dan raakt ze ook uitgeput |
 | Amber de Draak | De Kerk van Amber | 2 × 800 | Fase 1: vuuradem in een kegel, staartzwiep, vleugelwind die je wegduwt, opvliegen met een regen van vuurballen. Fase 2: woedend en sneller, laat brandende plekken achter en roept 2–3 drillers op | Raak haar met de kruisboog als ze vliegt, dan stort ze neer. Op de grond is haar kop kwetsbaar na een vuuradem |
 
 **Amber, het verloop**
@@ -349,7 +352,7 @@ Het project wordt in 13 fases gebouwd. Na elke fase moet de game speelbaar zijn.
 9. **Quest 4: OBC Elst Fort** — `Add-OBC-Fort-Dungeon`
    - Dungeon, voetbaljongens, fatbikers en het fatbike-kindje.
 10. **Quest 5: Bingo Club Boomer Cave** — `Add-Bingo-Cave-Dungeon`
-    - Dungeon, oma's, bingo-opa's, Grumpy Oma en de kruisboog als beloning.
+    - Dungeon, bingo-opa's, boze oma's, rolstoel-oma's, Grumpy Oma en de kruisboog als beloning.
     - Klaar als: alle drie de dungeons na Station Elst in elke volgorde te doen zijn, ook voordat Klaas ze geeft.
 11. **Quest 6: Amber de Draak** — `Add-Amber-Final-Battle`
     - Kerkdeuren, Klaas als bondgenoot, Amber met 2 levensbalken, de scène met Klaas, de gouden Tren-spuit, de tornado die verdwijnt, de eindscène en credits.

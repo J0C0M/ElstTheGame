@@ -1,4 +1,4 @@
-"""Writes data/dialogue/klaas.tres: Klaas' conversation, with Quest 1 to 4.
+"""Writes data/dialogue/klaas.tres: Klaas' conversation, with Quest 1 to 5.
 
 Run from the project root: python3 tools/data/gen_klaas_dialogue.py
 """
@@ -85,6 +85,12 @@ q4_early = cond(min_inwijding=3, quest_id=Q4, quest_status=0, required_flag="bos
 q4_active = cond(quest_id=Q4, quest_status=1)
 q4_report = cond(quest_id=Q4, quest_status=1, quest_step="report")
 q4_done = cond(quest_id=Q4, quest_status=2)
+Q5 = "q5_bingo"
+q5_offer = cond(min_inwijding=4, quest_id=Q5, quest_status=0, forbidden_flag="boss_grumpy_oma")
+q5_early = cond(min_inwijding=4, quest_id=Q5, quest_status=0, required_flag="boss_grumpy_oma")
+q5_active = cond(quest_id=Q5, quest_status=1)
+q5_report = cond(quest_id=Q5, quest_status=1, quest_step="report")
+q5_done = cond(quest_id=Q5, quest_status=2)
 shop_open = cond(min_inwijding=1)
 strong = cond(min_inwijding=3)
 
@@ -112,6 +118,10 @@ line("q3_reward", "De mensen lopen alweer over straat. Hier, 150 goud. Die heb j
      action="set_flag", value="q3_reported")
 line("q4_report", "Het fatbike-kindje van zijn fiets geduwd? Dat had ik graag gezien.", "q4_reward", condition=q4_report, model_action="flex")
 line("q4_reward", "Het OBC is weer van de leerlingen. Hier, 150 goud.", "hub", action="set_flag", value="q4_reported")
+line("q5_report", "Grumpy Oma verslagen? Dan wordt het vanavond eindelijk weer een gezellige bingoavond.", "q5_reward", condition=q5_report, model_action="flex")
+line("q5_reward", "Hier, 150 goud. En er is meer.", "q5_crossbow", action="set_flag", value="q5_reported")
+line("q5_crossbow", "Je hebt al mijn klussen gedaan. Daarom krijg je mijn oude kruisboog. Druk op 2 om hem te pakken en houd de rechtermuisknop vast om te richten.", "hub",
+     action="give_item", value="crossbow")
 line("greeting_strong", "Kijk eens wie er spieren krijgt. Bijna zoveel als ik. Bijna.", "hub", condition=strong, model_action="flex")
 line("greeting", "Daar is mijn favoriete niemand.", "hub")
 line("hub", "Wat wil je?", choices=[
@@ -125,7 +135,10 @@ line("hub", "Wat wil je?", choices=[
     choice("Heb je nog een klus?", "q4_offer", q4_offer),
     choice("Heb je nog een klus?", "q4_early", q4_early),
     choice("Heb je nog een klus?", "q4_busy", q4_active),
-    choice("Heb je nog een klus?", "next_job", q4_done),
+    choice("Heb je nog een klus?", "q5_offer", q5_offer),
+    choice("Heb je nog een klus?", "q5_early", q5_early),
+    choice("Heb je nog een klus?", "q5_busy", q5_active),
+    choice("Heb je nog een klus?", "next_job", q5_done),
     choice("Vertel over Amber.", "lore_1"),
     choice("Waarom die zonnebril?", "glasses"),
     choice("Mag ik hier slapen?", "sleep_offer"),
@@ -159,6 +172,15 @@ line("q4_go", "Het OBC ligt helemaal in het zuidwesten. Pas op voor de ballen.",
 line("q4_busy", "Ik hoor die opgevoerde fatbike nog steeds gieren. Je bent nog niet klaar.", "hub")
 line("q4_early", "Dat gegier is gestopt. Heb jij het fatbike-kindje al van zijn fiets geduwd?", "q4_early_2", model_action="flex")
 line("q4_early_2", "Eerder klaar dan gevraagd. Ik ben trots op je. Hier, je beloning.", "hub", action="start_quest", value=Q4)
+line("q5_offer", "De Bingo Club is een grot geworden. Opa's slaan met hun wandelstok, oma's springen je met hun tasje te lijf en de rolstoel-oma's schieten bingokaarten.", "q5_offer_2")
+line("q5_offer_2", "Hun leider is Grumpy Oma: de nummer 1 van de bingo en een trouwe volger van Amber. Voor die oudjes is ze een messias. Ontwijk haar klap, spring over haar schokgolf en sla hard als ze uitgeput is.", choices=[
+    choice("Ik pak Grumpy Oma.", "q5_go", action="start_quest", value=Q5),
+    choice("Nog even niet.", "hub"),
+])
+line("q5_go", "De Bingo Club ligt vlak bij de kerk. Neem veel drankjes mee, en vergeet je bingokaart niet.", "hub")
+line("q5_busy", "Ik hoor ze nog steeds BINGO roepen. Grumpy Oma zit nog in haar grot.", "hub")
+line("q5_early", "Het is stil in de Bingo Club. Heb jij Grumpy Oma al verslagen?", "q5_early_2", model_action="flex")
+line("q5_early_2", "Eerder klaar dan gevraagd. Ik ben trots op je. Hier, je beloning.", "q5_crossbow", action="start_quest", value=Q5)
 line("next_job", "Nog niet. Rust uit. Ik roep je als Amber weer iets flikt.", "hub")
 line("lore_1", "Amber kwam uit Arnhem-Zuid. Groot, oranje, slecht humeur. Ze nam Elst over en zette overal haar drillers neer.", "lore_2")
 line("lore_2", "Sinds die dag draait er een tornado om het dorp. Niemand erin, niemand eruit. Station Elst is haar aanvoerlijn. Die moet kapot.", "hub")
@@ -177,6 +199,6 @@ out = ['[gd_resource type="Resource" script_class="DialogueData" format=3]', '',
 for block in subs:
     out += block + [""]
 out += ['[resource]', 'script = ExtResource("1_data")', 'speaker = "Klaas"',
-        'starts = Array[StringName]([&"first_meeting", &"tutorial_report", &"tutorial_busy", &"q2_report", &"q3_report", &"q4_report", &"greeting_strong", &"greeting"])',
+        'starts = Array[StringName]([&"first_meeting", &"tutorial_report", &"tutorial_busy", &"q2_report", &"q3_report", &"q4_report", &"q5_report", &"greeting_strong", &"greeting"])',
         'lines = Array[ExtResource("4_line")]([' + ", ".join(f'SubResource("{l}")' for l in line_ids) + "])"]
 pathlib.Path("data/dialogue/klaas.tres").write_text("\n".join(out) + "\n")

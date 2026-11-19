@@ -26,6 +26,10 @@ var player_detected: bool = false
 var time_since_seen: float = INF
 ## Side (1 or -1) this enemy circles round to when it flanks.
 var flank_side: float = 1.0
+## Seconds until a leaping enemy may leap again.
+var leap_cooldown_left: float = 0.0
+## Seconds a patient enemy keeps fighting up close without being hit.
+var patience_left: float = INF
 var model: HumanoidModel
 
 var _gravity: float = 0.0
@@ -34,6 +38,11 @@ var _repath_wait: float = 0.0
 var _safe_velocity: Vector3 = Vector3.ZERO
 var _has_safe_velocity: bool = false
 var _knockback: Vector3 = Vector3.ZERO
+
+## Multiplies the damage of attacks while a buff lasts.
+var damage_multiplier: float = 1.0
+var _buff_left: float = 0.0
+var _buff_label: Label3D
 
 @onready var health: HealthComponent = $Health
 @onready var hurtbox: Hurtbox = $Hurtbox
@@ -66,6 +75,8 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	attack_cooldown_left = maxf(attack_cooldown_left - delta, 0.0)
+	leap_cooldown_left = maxf(leap_cooldown_left - delta, 0.0)
+	_update_buff(delta)
 	_update_perception(delta)
 	state_machine.physics_update(delta)
 	if health.is_dead():
@@ -157,8 +168,45 @@ func fire_projectile(spread_degrees: float = 0.0) -> Node3D:
 	if randf() > data.accuracy:
 		spread_degrees += data.miss_angle * (1.0 if randf() < 0.5 else -1.0)
 	var direction: Vector3 = (target - origin).rotated(Vector3.UP, deg_to_rad(spread_degrees))
-	projectile.call(&"launch", origin, direction, data.damage, self)
+	projectile.call(&"launch", origin, direction, get_damage(), self)
 	return projectile
+
+
+## Pushes the enemy away, such as the recoil of a shot.
+func apply_knockback(push: Vector3) -> void:
+	_knockback = push
+
+
+## Damage of the next attack, with any buff.
+func get_damage() -> int:
+	return roundi(data.damage * damage_multiplier)
+
+
+## Lets the enemy hit harder for [param seconds], such as after a bingo-opa's
+## Grumpy Oma's BINGO!. A red word above its head shows it.
+func buff_damage(factor: float, seconds: float, word: String) -> void:
+	damage_multiplier = factor
+	_buff_left = seconds
+	if _buff_label == null:
+		_buff_label = Label3D.new()
+		_buff_label.position = Vector3(0, 2.6, 0)
+		_buff_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		_buff_label.pixel_size = 0.008
+		_buff_label.font_size = 48
+		_buff_label.outline_size = 10
+		_buff_label.modulate = Color(1, 0.25, 0.2)
+		add_child(_buff_label)
+	_buff_label.text = word
+	_buff_label.visible = true
+
+
+func _update_buff(delta: float) -> void:
+	if _buff_left <= 0.0:
+		return
+	_buff_left -= delta
+	if _buff_left <= 0.0:
+		damage_multiplier = 1.0
+		_buff_label.visible = false
 
 
 ## Warns nearby enemies of the same faction that the player is here.
@@ -231,6 +279,8 @@ func _on_hit_received(hit: HitData) -> void:
 	health.take_damage(hit.damage)
 	if health.is_dead():
 		return
+	if data.patience > 0.0:
+		patience_left = data.patience
 	var away: Vector3 = global_position - hit.source.global_position
 	away.y = 0.0
 	_knockback = away.normalized() * KNOCKBACK_SPEED

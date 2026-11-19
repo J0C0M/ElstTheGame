@@ -10,7 +10,8 @@ extends SceneTree
 
 const ELST: String = "Elst"
 ## Node deepest in each dungeon that a walkable route from the entrance must reach.
-const DEEPEST: Dictionary = {"Station Elst": "Generator4", "Westeraam Getho": "MarkerBoss", "OBC Elst Fort": "MarkerBoss"}
+const DEEPEST: Dictionary = {"Station Elst": "Generator4", "Westeraam Getho": "MarkerBoss", "OBC Elst Fort": "MarkerBoss",
+		"Bingo Club Boomer Cave": "MarkerBoss"}
 ## Door node in Elst, dungeon name, and the spawn point you come back out at.
 const DUNGEONS: Array = [
 	["SupplyDoor", "Station Elst", "StationExit"],

@@ -23,6 +23,8 @@ func physics_update(delta: float) -> void:
 		state_machine.transition_to(&"Retreat")
 		return
 	var distance: float = enemy.distance_to_player()
+	if enemy.data.can_leap() and _should_leap(distance):
+		return
 	if enemy.data.is_ranged() and distance < enemy.data.keep_distance:
 		# Too close for a ranged enemy: step back while facing the player.
 		var away: Vector3 = (enemy.global_position - player.global_position).normalized()
@@ -42,3 +44,20 @@ func physics_update(delta: float) -> void:
 		var from_player: Vector3 = (enemy.global_position - player.global_position).normalized()
 		target = player.global_position + from_player.rotated(Vector3.UP, enemy.flank_side * deg_to_rad(65.0)) * 2.5
 	enemy.move_towards(target, enemy.data.run_speed, delta)
+
+
+## A leaping enemy jumps at the player from a distance, and hops away again
+## when the player has not hit it for a while. Returns true when it leaps.
+func _should_leap(distance: float) -> bool:
+	var data: EnemyData = enemy.data
+	if data.patience > 0.0 and distance <= data.attack_range + 1.0:
+		enemy.patience_left = minf(enemy.patience_left, data.patience) - get_physics_process_delta_time()
+		if enemy.patience_left <= 0.0:
+			state_machine.transition_to(&"Leap", {"away": true})
+			return true
+		return false
+	if enemy.leap_cooldown_left > 0.0 or distance <= data.attack_range + 2.0 or distance > data.leap_range \
+			or not enemy.player_detected:
+		return false
+	state_machine.transition_to(&"Leap", {"away": false})
+	return true

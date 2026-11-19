@@ -11,6 +11,7 @@ func enter(_data: Dictionary) -> void:
 
 func exit() -> void:
 	player.is_sprinting = false
+	player.set_aiming(false)
 
 
 func handle_input(event: InputEvent) -> void:
@@ -21,10 +22,16 @@ func handle_input(event: InputEvent) -> void:
 		player.interact()
 	elif event.is_action_pressed(&"use_potion") and player.is_on_floor():
 		player.try_drink()
+	elif event.is_action_pressed(&"weapon_sword"):
+		player.select_weapon(&"sword")
+	elif event.is_action_pressed(&"weapon_crossbow"):
+		player.select_weapon(&"crossbow")
+	elif event.is_action_pressed(&"attack") and player.weapon == &"crossbow":
+		player.try_shoot()
 	elif event.is_action_pressed(&"attack") and player.is_on_floor():
 		if player.check_sword():
 			state_machine.transition_to(&"Attack")
-	elif event.is_action_pressed(&"block_aim") and player.is_on_floor():
+	elif event.is_action_pressed(&"block_aim") and player.is_on_floor() and player.weapon == &"sword":
 		if player.check_sword():
 			state_machine.transition_to(&"Block", {"fresh_press": true})
 	elif event.is_action_pressed(&"dodge"):
@@ -36,7 +43,10 @@ func handle_input(event: InputEvent) -> void:
 
 
 func physics_update(delta: float) -> void:
-	if Input.is_action_pressed(&"block_aim") and player.is_on_floor() and player.has_sword():
+	player.set_aiming(player.weapon == &"crossbow" and Input.is_action_pressed(&"block_aim"))
+	if player.aiming:
+		player.face_camera_direction()
+	elif Input.is_action_pressed(&"block_aim") and player.is_on_floor() and player.has_sword() and player.weapon == &"sword":
 		# Still holding block after an attack, roll or stagger.
 		state_machine.transition_to(&"Block")
 		return

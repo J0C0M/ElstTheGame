@@ -114,9 +114,39 @@ quest_status = 2
 
 [sub_resource type="Resource" id="Condition_19"]
 script = ExtResource("2_condition")
-min_inwijding = 1
+min_inwijding = 4
+quest_id = &"q5_bingo"
+quest_status = 0
+forbidden_flag = &"boss_grumpy_oma"
 
 [sub_resource type="Resource" id="Condition_20"]
+script = ExtResource("2_condition")
+min_inwijding = 4
+quest_id = &"q5_bingo"
+quest_status = 0
+required_flag = &"boss_grumpy_oma"
+
+[sub_resource type="Resource" id="Condition_21"]
+script = ExtResource("2_condition")
+quest_id = &"q5_bingo"
+quest_status = 1
+
+[sub_resource type="Resource" id="Condition_22"]
+script = ExtResource("2_condition")
+quest_id = &"q5_bingo"
+quest_status = 1
+quest_step = &"report"
+
+[sub_resource type="Resource" id="Condition_23"]
+script = ExtResource("2_condition")
+quest_id = &"q5_bingo"
+quest_status = 2
+
+[sub_resource type="Resource" id="Condition_24"]
+script = ExtResource("2_condition")
+min_inwijding = 1
+
+[sub_resource type="Resource" id="Condition_25"]
 script = ExtResource("2_condition")
 min_inwijding = 3
 
@@ -252,12 +282,36 @@ next = &"hub"
 action = &"set_flag"
 action_value = "q4_reported"
 
+[sub_resource type="Resource" id="Line_q5_report"]
+script = ExtResource("4_line")
+id = &"q5_report"
+text = "Grumpy Oma verslagen? Dan wordt het vanavond eindelijk weer een gezellige bingoavond."
+next = &"q5_reward"
+condition = SubResource("Condition_22")
+model_action = &"flex"
+
+[sub_resource type="Resource" id="Line_q5_reward"]
+script = ExtResource("4_line")
+id = &"q5_reward"
+text = "Hier, 150 goud. En er is meer."
+next = &"q5_crossbow"
+action = &"set_flag"
+action_value = "q5_reported"
+
+[sub_resource type="Resource" id="Line_q5_crossbow"]
+script = ExtResource("4_line")
+id = &"q5_crossbow"
+text = "Je hebt al mijn klussen gedaan. Daarom krijg je mijn oude kruisboog. Druk op 2 om hem te pakken en houd de rechtermuisknop vast om te richten."
+next = &"hub"
+action = &"give_item"
+action_value = "crossbow"
+
 [sub_resource type="Resource" id="Line_greeting_strong"]
 script = ExtResource("4_line")
 id = &"greeting_strong"
 text = "Kijk eens wie er spieren krijgt. Bijna zoveel als ik. Bijna."
 next = &"hub"
-condition = SubResource("Condition_20")
+condition = SubResource("Condition_25")
 model_action = &"flex"
 
 [sub_resource type="Resource" id="Line_greeting"]
@@ -269,7 +323,7 @@ next = &"hub"
 [sub_resource type="Resource" id="Choice_4"]
 script = ExtResource("3_choice")
 text = "Laat je winkel zien."
-condition = SubResource("Condition_19")
+condition = SubResource("Condition_24")
 action = &"open_shop"
 
 [sub_resource type="Resource" id="Choice_5"]
@@ -329,25 +383,43 @@ condition = SubResource("Condition_16")
 [sub_resource type="Resource" id="Choice_14"]
 script = ExtResource("3_choice")
 text = "Heb je nog een klus?"
-next = &"next_job"
-condition = SubResource("Condition_18")
+next = &"q5_offer"
+condition = SubResource("Condition_19")
 
 [sub_resource type="Resource" id="Choice_15"]
+script = ExtResource("3_choice")
+text = "Heb je nog een klus?"
+next = &"q5_early"
+condition = SubResource("Condition_20")
+
+[sub_resource type="Resource" id="Choice_16"]
+script = ExtResource("3_choice")
+text = "Heb je nog een klus?"
+next = &"q5_busy"
+condition = SubResource("Condition_21")
+
+[sub_resource type="Resource" id="Choice_17"]
+script = ExtResource("3_choice")
+text = "Heb je nog een klus?"
+next = &"next_job"
+condition = SubResource("Condition_23")
+
+[sub_resource type="Resource" id="Choice_18"]
 script = ExtResource("3_choice")
 text = "Vertel over Amber."
 next = &"lore_1"
 
-[sub_resource type="Resource" id="Choice_16"]
+[sub_resource type="Resource" id="Choice_19"]
 script = ExtResource("3_choice")
 text = "Waarom die zonnebril?"
 next = &"glasses"
 
-[sub_resource type="Resource" id="Choice_17"]
+[sub_resource type="Resource" id="Choice_20"]
 script = ExtResource("3_choice")
 text = "Mag ik hier slapen?"
 next = &"sleep_offer"
 
-[sub_resource type="Resource" id="Choice_18"]
+[sub_resource type="Resource" id="Choice_21"]
 script = ExtResource("3_choice")
 text = "Tot later."
 next = &"bye"
@@ -356,7 +428,7 @@ next = &"bye"
 script = ExtResource("4_line")
 id = &"hub"
 text = "Wat wil je?"
-choices = Array[ExtResource("3_choice")]([SubResource("Choice_4"), SubResource("Choice_5"), SubResource("Choice_6"), SubResource("Choice_7"), SubResource("Choice_8"), SubResource("Choice_9"), SubResource("Choice_10"), SubResource("Choice_11"), SubResource("Choice_12"), SubResource("Choice_13"), SubResource("Choice_14"), SubResource("Choice_15"), SubResource("Choice_16"), SubResource("Choice_17"), SubResource("Choice_18")])
+choices = Array[ExtResource("3_choice")]([SubResource("Choice_4"), SubResource("Choice_5"), SubResource("Choice_6"), SubResource("Choice_7"), SubResource("Choice_8"), SubResource("Choice_9"), SubResource("Choice_10"), SubResource("Choice_11"), SubResource("Choice_12"), SubResource("Choice_13"), SubResource("Choice_14"), SubResource("Choice_15"), SubResource("Choice_16"), SubResource("Choice_17"), SubResource("Choice_18"), SubResource("Choice_19"), SubResource("Choice_20"), SubResource("Choice_21")])
 
 [sub_resource type="Resource" id="Line_q2_offer"]
 script = ExtResource("4_line")
@@ -370,14 +442,14 @@ id = &"q2_offer_2"
 text = "Vier generators houden trein en spoor draaiende. Sla ze alle vier kapot. Pas op: achterin ligt haar depot, en dat bewaken ze goed."
 next = &"q2_offer_3"
 
-[sub_resource type="Resource" id="Choice_19"]
+[sub_resource type="Resource" id="Choice_22"]
 script = ExtResource("3_choice")
 text = "Ik sloop dat station."
 next = &"q2_go"
 action = &"start_quest"
 action_value = "q2_station"
 
-[sub_resource type="Resource" id="Choice_20"]
+[sub_resource type="Resource" id="Choice_23"]
 script = ExtResource("3_choice")
 text = "Nog even niet."
 next = &"hub"
@@ -386,7 +458,7 @@ next = &"hub"
 script = ExtResource("4_line")
 id = &"q2_offer_3"
 text = "En zolang dat station draait, houdt Amber Westeraam, het OBC en de Bingo Club op slot. Eerst het station, dan pas de rest."
-choices = Array[ExtResource("3_choice")]([SubResource("Choice_19"), SubResource("Choice_20")])
+choices = Array[ExtResource("3_choice")]([SubResource("Choice_22"), SubResource("Choice_23")])
 
 [sub_resource type="Resource" id="Line_q2_go"]
 script = ExtResource("4_line")
@@ -421,14 +493,14 @@ id = &"q3_offer"
 text = "Nu het station plat ligt, zijn de deuren van de wijken open. Westeraam Getho is van de drillers. Hun baas noemt zichzelf de Vape-koning: de rijkste vapeverkoper van het dorp."
 next = &"q3_offer_2"
 
-[sub_resource type="Resource" id="Choice_21"]
+[sub_resource type="Resource" id="Choice_24"]
 script = ExtResource("3_choice")
 text = "Ik pak die Vape-koning."
 next = &"q3_go"
 action = &"start_quest"
 action_value = "q3_westeraam"
 
-[sub_resource type="Resource" id="Choice_22"]
+[sub_resource type="Resource" id="Choice_25"]
 script = ExtResource("3_choice")
 text = "Nog even niet."
 next = &"hub"
@@ -437,7 +509,7 @@ next = &"hub"
 script = ExtResource("4_line")
 id = &"q3_offer_2"
 text = "Hij verstopt zich in zijn eigen vapewolken en schiet van daaruit. Loop recht op zijn wolk af, dan staat hij even te hoesten. Dat is je kans."
-choices = Array[ExtResource("3_choice")]([SubResource("Choice_21"), SubResource("Choice_22")])
+choices = Array[ExtResource("3_choice")]([SubResource("Choice_24"), SubResource("Choice_25")])
 
 [sub_resource type="Resource" id="Line_q3_go"]
 script = ExtResource("4_line")
@@ -472,14 +544,14 @@ id = &"q4_offer"
 text = "Bij het OBC hebben een stel kakkers de school ingenomen. Ze schieten met voetballen en rijden op fatbikes alsof het paarden zijn."
 next = &"q4_offer_2"
 
-[sub_resource type="Resource" id="Choice_23"]
+[sub_resource type="Resource" id="Choice_26"]
 script = ExtResource("3_choice")
 text = "Ik pak dat fatbike-kindje."
 next = &"q4_go"
 action = &"start_quest"
 action_value = "q4_obc"
 
-[sub_resource type="Resource" id="Choice_24"]
+[sub_resource type="Resource" id="Choice_27"]
 script = ExtResource("3_choice")
 text = "Nog even niet."
 next = &"hub"
@@ -488,7 +560,7 @@ next = &"hub"
 script = ExtResource("4_line")
 id = &"q4_offer_2"
 text = "Hun baas is een klein kindje op een veel te grote, opgevoerde fatbike. Hoor je de motor gieren, spring dan opzij. Knalt hij tegen een muur, dan is hij even versuft."
-choices = Array[ExtResource("3_choice")]([SubResource("Choice_23"), SubResource("Choice_24")])
+choices = Array[ExtResource("3_choice")]([SubResource("Choice_26"), SubResource("Choice_27")])
 
 [sub_resource type="Resource" id="Line_q4_go"]
 script = ExtResource("4_line")
@@ -517,6 +589,57 @@ next = &"hub"
 action = &"start_quest"
 action_value = "q4_obc"
 
+[sub_resource type="Resource" id="Line_q5_offer"]
+script = ExtResource("4_line")
+id = &"q5_offer"
+text = "De Bingo Club is een grot geworden. Opa's slaan met hun wandelstok, oma's springen je met hun tasje te lijf en de rolstoel-oma's schieten bingokaarten."
+next = &"q5_offer_2"
+
+[sub_resource type="Resource" id="Choice_28"]
+script = ExtResource("3_choice")
+text = "Ik pak Grumpy Oma."
+next = &"q5_go"
+action = &"start_quest"
+action_value = "q5_bingo"
+
+[sub_resource type="Resource" id="Choice_29"]
+script = ExtResource("3_choice")
+text = "Nog even niet."
+next = &"hub"
+
+[sub_resource type="Resource" id="Line_q5_offer_2"]
+script = ExtResource("4_line")
+id = &"q5_offer_2"
+text = "Hun leider is Grumpy Oma: de nummer 1 van de bingo en een trouwe volger van Amber. Voor die oudjes is ze een messias. Ontwijk haar klap, spring over haar schokgolf en sla hard als ze uitgeput is."
+choices = Array[ExtResource("3_choice")]([SubResource("Choice_28"), SubResource("Choice_29")])
+
+[sub_resource type="Resource" id="Line_q5_go"]
+script = ExtResource("4_line")
+id = &"q5_go"
+text = "De Bingo Club ligt vlak bij de kerk. Neem veel drankjes mee, en vergeet je bingokaart niet."
+next = &"hub"
+
+[sub_resource type="Resource" id="Line_q5_busy"]
+script = ExtResource("4_line")
+id = &"q5_busy"
+text = "Ik hoor ze nog steeds BINGO roepen. Grumpy Oma zit nog in haar grot."
+next = &"hub"
+
+[sub_resource type="Resource" id="Line_q5_early"]
+script = ExtResource("4_line")
+id = &"q5_early"
+text = "Het is stil in de Bingo Club. Heb jij Grumpy Oma al verslagen?"
+next = &"q5_early_2"
+model_action = &"flex"
+
+[sub_resource type="Resource" id="Line_q5_early_2"]
+script = ExtResource("4_line")
+id = &"q5_early_2"
+text = "Eerder klaar dan gevraagd. Ik ben trots op je. Hier, je beloning."
+next = &"q5_crossbow"
+action = &"start_quest"
+action_value = "q5_bingo"
+
 [sub_resource type="Resource" id="Line_next_job"]
 script = ExtResource("4_line")
 id = &"next_job"
@@ -541,12 +664,12 @@ id = &"glasses"
 text = "Deze bril gaat nooit af. Nooit. Volgende vraag."
 next = &"hub"
 
-[sub_resource type="Resource" id="Choice_25"]
+[sub_resource type="Resource" id="Choice_30"]
 script = ExtResource("3_choice")
 text = "Ik ga slapen."
 action = &"sleep"
 
-[sub_resource type="Resource" id="Choice_26"]
+[sub_resource type="Resource" id="Choice_31"]
 script = ExtResource("3_choice")
 text = "Nog even niet."
 next = &"hub"
@@ -555,7 +678,7 @@ next = &"hub"
 script = ExtResource("4_line")
 id = &"sleep_offer"
 text = "Het bed staat achterin. Schoenen uit. Slapen is ook trainen."
-choices = Array[ExtResource("3_choice")]([SubResource("Choice_25"), SubResource("Choice_26")])
+choices = Array[ExtResource("3_choice")]([SubResource("Choice_30"), SubResource("Choice_31")])
 
 [sub_resource type="Resource" id="Line_bye"]
 script = ExtResource("4_line")
@@ -565,5 +688,5 @@ text = "Train hard. Of in elk geval een beetje."
 [resource]
 script = ExtResource("1_data")
 speaker = "Klaas"
-starts = Array[StringName]([&"first_meeting", &"tutorial_report", &"tutorial_busy", &"q2_report", &"q3_report", &"q4_report", &"greeting_strong", &"greeting"])
-lines = Array[ExtResource("4_line")]([SubResource("Line_first_meeting"), SubResource("Line_first_2"), SubResource("Line_first_3"), SubResource("Line_first_glasses"), SubResource("Line_tutorial_1"), SubResource("Line_tutorial_2"), SubResource("Line_tutorial_3"), SubResource("Line_tutorial_report"), SubResource("Line_tutorial_reward"), SubResource("Line_tutorial_busy"), SubResource("Line_q2_report"), SubResource("Line_q2_reward"), SubResource("Line_q3_report"), SubResource("Line_q3_reward"), SubResource("Line_q4_report"), SubResource("Line_q4_reward"), SubResource("Line_greeting_strong"), SubResource("Line_greeting"), SubResource("Line_hub"), SubResource("Line_q2_offer"), SubResource("Line_q2_offer_2"), SubResource("Line_q2_offer_3"), SubResource("Line_q2_go"), SubResource("Line_q2_busy"), SubResource("Line_q2_early"), SubResource("Line_q2_early_2"), SubResource("Line_q3_offer"), SubResource("Line_q3_offer_2"), SubResource("Line_q3_go"), SubResource("Line_q3_busy"), SubResource("Line_q3_early"), SubResource("Line_q3_early_2"), SubResource("Line_q4_offer"), SubResource("Line_q4_offer_2"), SubResource("Line_q4_go"), SubResource("Line_q4_busy"), SubResource("Line_q4_early"), SubResource("Line_q4_early_2"), SubResource("Line_next_job"), SubResource("Line_lore_1"), SubResource("Line_lore_2"), SubResource("Line_glasses"), SubResource("Line_sleep_offer"), SubResource("Line_bye")])
+starts = Array[StringName]([&"first_meeting", &"tutorial_report", &"tutorial_busy", &"q2_report", &"q3_report", &"q4_report", &"q5_report", &"greeting_strong", &"greeting"])
+lines = Array[ExtResource("4_line")]([SubResource("Line_first_meeting"), SubResource("Line_first_2"), SubResource("Line_first_3"), SubResource("Line_first_glasses"), SubResource("Line_tutorial_1"), SubResource("Line_tutorial_2"), SubResource("Line_tutorial_3"), SubResource("Line_tutorial_report"), SubResource("Line_tutorial_reward"), SubResource("Line_tutorial_busy"), SubResource("Line_q2_report"), SubResource("Line_q2_reward"), SubResource("Line_q3_report"), SubResource("Line_q3_reward"), SubResource("Line_q4_report"), SubResource("Line_q4_reward"), SubResource("Line_q5_report"), SubResource("Line_q5_reward"), SubResource("Line_q5_crossbow"), SubResource("Line_greeting_strong"), SubResource("Line_greeting"), SubResource("Line_hub"), SubResource("Line_q2_offer"), SubResource("Line_q2_offer_2"), SubResource("Line_q2_offer_3"), SubResource("Line_q2_go"), SubResource("Line_q2_busy"), SubResource("Line_q2_early"), SubResource("Line_q2_early_2"), SubResource("Line_q3_offer"), SubResource("Line_q3_offer_2"), SubResource("Line_q3_go"), SubResource("Line_q3_busy"), SubResource("Line_q3_early"), SubResource("Line_q3_early_2"), SubResource("Line_q4_offer"), SubResource("Line_q4_offer_2"), SubResource("Line_q4_go"), SubResource("Line_q4_busy"), SubResource("Line_q4_early"), SubResource("Line_q4_early_2"), SubResource("Line_q5_offer"), SubResource("Line_q5_offer_2"), SubResource("Line_q5_go"), SubResource("Line_q5_busy"), SubResource("Line_q5_early"), SubResource("Line_q5_early_2"), SubResource("Line_next_job"), SubResource("Line_lore_1"), SubResource("Line_lore_2"), SubResource("Line_glasses"), SubResource("Line_sleep_offer"), SubResource("Line_bye")])

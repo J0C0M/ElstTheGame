@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/models/OmaModel.tscn" id="2_model"]
+[ext_resource type="Resource" path="res://data/loot/enemy_common.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_enemy")
+id = &"boze_oma"
+display_name = "Boze oma"
+faction = &"bingo"
+model_scene = ExtResource("2_model")
+loot = ExtResource("3_loot")
+max_health = 45
+damage = 10
+attack_range = 1.7
+attack_windup = 0.35
+strike_time = 0.18
+attack_cooldown = 0.9
+parry_stagger_duration = 1.2
+attack_action = &"punch"
+walk_speed = 1.8
+run_speed = 3.2
+sight_range = 16.0
+sight_angle_degrees = 120.0
+hearing_range = 4.0
+alert_radius = 12.0
+leash_range = 30.0
+patrol_radius = 10.0
+flanks = false
+leap_range = 11.0
+leap_time = 1.0
+patience = 3.5
+hop_away_distance = 8.0
+hop_away_wait = 2.0

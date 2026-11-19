@@ -20,6 +20,8 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/Driller.tscn" id="91_driller"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/Voetballer.tscn" id="92_voetballer"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/Fatbiker.tscn" id="93_fatbiker"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/BozeOma.tscn" id="94_oma"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/BingoOpa.tscn" id="95_opa"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.34, 0.44, 0.6, 1)
@@ -6050,6 +6052,47 @@ look_seed = 14
 
 [node name="WarmLight" type="OmniLight3D" parent="Areas/OBCArea/Liberated"]
 position = Vector3(-164, 9, 78)
+light_color = Color(1, 0.74, 0.45, 1)
+light_energy = 0.9
+omni_range = 28.0
+
+[node name="BingoArea" type="Node3D" parent="Areas"]
+script = ExtResource("15_res")
+liberated_by_flag = &"boss_grumpy_oma"
+
+[node name="Occupied" type="Node3D" parent="Areas/BingoArea"]
+
+[node name="BingoOma1" parent="Areas/BingoArea/Occupied" instance=ExtResource("94_oma")]
+position = Vector3(-32, 0, -86)
+rotation = Vector3(0, 3.1, 0)
+
+[node name="BingoOma2" parent="Areas/BingoArea/Occupied" instance=ExtResource("94_oma")]
+position = Vector3(-22, 0, -88)
+rotation = Vector3(0, 3, 0)
+
+[node name="BingoOpa1" parent="Areas/BingoArea/Occupied" instance=ExtResource("95_opa")]
+position = Vector3(-27, 0, -82)
+rotation = Vector3(0, 3.1, 0)
+
+[node name="Liberated" type="Node3D" parent="Areas/BingoArea"]
+
+[node name="Villager1" parent="Areas/BingoArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(-30, 0, -84)
+lines = PackedStringArray("BINGO! Echt waar deze keer!", "Eindelijk weer een gezellige bingoavond.", "Oma is weer lief.", "Dank je wel!")
+look_seed = 15
+
+[node name="Villager2" parent="Areas/BingoArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(-24, 0, -86)
+lines = PackedStringArray("BINGO! Echt waar deze keer!", "Eindelijk weer een gezellige bingoavond.", "Oma is weer lief.", "Dank je wel!")
+look_seed = 16
+
+[node name="Villager3" parent="Areas/BingoArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(-27, 0, -90)
+lines = PackedStringArray("BINGO! Echt waar deze keer!", "Eindelijk weer een gezellige bingoavond.", "Oma is weer lief.", "Dank je wel!")
+look_seed = 17
+
+[node name="WarmLight" type="OmniLight3D" parent="Areas/BingoArea/Liberated"]
+position = Vector3(-27, 9, -86)
 light_color = Color(1, 0.74, 0.45, 1)
 light_energy = 0.9
 omni_range = 28.0

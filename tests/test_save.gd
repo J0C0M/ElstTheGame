@@ -70,7 +70,9 @@ func _test_dungeon_autosave_and_named_save() -> void:
 	await _frames(60)
 	_check(_main.get_world().location_name == "Station Elst", "the door leads into the station dungeon")
 	_check(_count_saves("auto") == 1, "entering a dungeon makes an autosave")
-	_place(Vector3(3, 0, -5), PI)
+	var entrance: Vector3 = _main.get_world().get_spawn(&"Entrance").global_position
+	var dungeon_spot: Vector3 = entrance + Vector3(3, 0, -4)
+	_place(dungeon_spot, PI)
 	_player().health.set_health(50)
 	await _frames(5)
 	OS.delay_msec(5)
@@ -81,7 +83,7 @@ func _test_dungeon_autosave_and_named_save() -> void:
 	_check(_saves.load_save(_find_save("Test dungeon")), "the named save loads")
 	await _frames(60)
 	_check(_main.get_world().location_name == "Station Elst", "loading brings back the dungeon scene")
-	_check(_player().global_position.distance_to(Vector3(3, 0, -5)) < 0.1, "loading brings back the dungeon position")
+	_check(_player().global_position.distance_to(dungeon_spot) < 0.1, "loading brings back the dungeon position")
 	_check(_player().health.current_health == 50, "loading brings back the health")
 
 
@@ -96,7 +98,7 @@ func _test_no_saving_in_the_air() -> void:
 
 
 func _test_death_loads_last_save() -> void:
-	_place(Vector3(-4, 0, 6), 0.0)
+	_place(_main.get_world().get_spawn(&"Entrance").global_position + Vector3(-4, 0, -2), 0.0)
 	_player().health.set_health(90)
 	await _frames(5)
 	_player().health.take_damage(90)

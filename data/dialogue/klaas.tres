@@ -300,6 +300,12 @@ id = &"q2_offer"
 text = "Station Elst is Ambers aanvoerlijn. Elke nacht rijden er treinen vol eiwitshakes en ander spul naar haar leger."
 next = &"q2_offer_2"
 
+[sub_resource type="Resource" id="Line_q2_offer_2"]
+script = ExtResource("4_line")
+id = &"q2_offer_2"
+text = "Vier generators houden trein en spoor draaiende. Sla ze alle vier kapot. Pas op: achterin ligt haar depot, en dat bewaken ze goed."
+next = &"q2_offer_3"
+
 [sub_resource type="Resource" id="Choice_16"]
 script = ExtResource("3_choice")
 text = "Ik sloop dat station."
@@ -312,10 +318,10 @@ script = ExtResource("3_choice")
 text = "Nog even niet."
 next = &"hub"
 
-[sub_resource type="Resource" id="Line_q2_offer_2"]
+[sub_resource type="Resource" id="Line_q2_offer_3"]
 script = ExtResource("4_line")
-id = &"q2_offer_2"
-text = "Vier generators houden trein en spoor draaiende. Sla ze alle vier kapot. Pas op: achterin ligt haar depot, en dat bewaken ze goed."
+id = &"q2_offer_3"
+text = "En zolang dat station draait, houdt Amber Westeraam, het OBC en de Bingo Club op slot. Eerst het station, dan pas de rest."
 choices = Array[ExtResource("3_choice")]([SubResource("Choice_16"), SubResource("Choice_17")])
 
 [sub_resource type="Resource" id="Line_q2_go"]
@@ -348,7 +354,7 @@ action_value = "q2_station"
 [sub_resource type="Resource" id="Line_q3_offer"]
 script = ExtResource("4_line")
 id = &"q3_offer"
-text = "Westeraam Getho is van de drillers. Hun baas noemt zichzelf de Vape-koning: de rijkste vapeverkoper van het dorp."
+text = "Nu het station plat ligt, zijn de deuren van de wijken open. Westeraam Getho is van de drillers. Hun baas noemt zichzelf de Vape-koning: de rijkste vapeverkoper van het dorp."
 next = &"q3_offer_2"
 
 [sub_resource type="Resource" id="Choice_18"]
@@ -445,4 +451,4 @@ text = "Train hard. Of in elk geval een beetje."
 script = ExtResource("1_data")
 speaker = "Klaas"
 starts = Array[StringName]([&"first_meeting", &"tutorial_report", &"tutorial_busy", &"q2_report", &"q3_report", &"greeting_strong", &"greeting"])
-lines = Array[ExtResource("4_line")]([SubResource("Line_first_meeting"), SubResource("Line_first_2"), SubResource("Line_first_3"), SubResource("Line_first_glasses"), SubResource("Line_tutorial_1"), SubResource("Line_tutorial_2"), SubResource("Line_tutorial_3"), SubResource("Line_tutorial_report"), SubResource("Line_tutorial_reward"), SubResource("Line_tutorial_busy"), SubResource("Line_q2_report"), SubResource("Line_q2_reward"), SubResource("Line_q3_report"), SubResource("Line_q3_reward"), SubResource("Line_greeting_strong"), SubResource("Line_greeting"), SubResource("Line_hub"), SubResource("Line_q2_offer"), SubResource("Line_q2_offer_2"), SubResource("Line_q2_go"), SubResource("Line_q2_busy"), SubResource("Line_q2_early"), SubResource("Line_q2_early_2"), SubResource("Line_q3_offer"), SubResource("Line_q3_offer_2"), SubResource("Line_q3_go"), SubResource("Line_q3_busy"), SubResource("Line_q3_early"), SubResource("Line_q3_early_2"), SubResource("Line_next_job"), SubResource("Line_lore_1"), SubResource("Line_lore_2"), SubResource("Line_glasses"), SubResource("Line_sleep_offer"), SubResource("Line_bye")])
+lines = Array[ExtResource("4_line")]([SubResource("Line_first_meeting"), SubResource("Line_first_2"), SubResource("Line_first_3"), SubResource("Line_first_glasses"), SubResource("Line_tutorial_1"), SubResource("Line_tutorial_2"), SubResource("Line_tutorial_3"), SubResource("Line_tutorial_report"), SubResource("Line_tutorial_reward"), SubResource("Line_tutorial_busy"), SubResource("Line_q2_report"), SubResource("Line_q2_reward"), SubResource("Line_q3_report"), SubResource("Line_q3_reward"), SubResource("Line_greeting_strong"), SubResource("Line_greeting"), SubResource("Line_hub"), SubResource("Line_q2_offer"), SubResource("Line_q2_offer_2"), SubResource("Line_q2_offer_3"), SubResource("Line_q2_go"), SubResource("Line_q2_busy"), SubResource("Line_q2_early"), SubResource("Line_q2_early_2"), SubResource("Line_q3_offer"), SubResource("Line_q3_offer_2"), SubResource("Line_q3_go"), SubResource("Line_q3_busy"), SubResource("Line_q3_early"), SubResource("Line_q3_early_2"), SubResource("Line_next_job"), SubResource("Line_lore_1"), SubResource("Line_lore_2"), SubResource("Line_glasses"), SubResource("Line_sleep_offer"), SubResource("Line_bye")])

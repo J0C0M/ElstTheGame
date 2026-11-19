@@ -321,5 +321,5 @@ ids = Array[StringName]([&"klaas"])
 [node name="MarkerOutside" type="Marker3D" parent="."]
 position = Vector3(0, 0, 5.5)
 script = ExtResource("6_marker")
-ids = Array[StringName]([&"klaas_garden", &"training_dummy", &"sparring_dummy", &"practice_fight"])
+ids = Array[StringName]([&"klaas_garden", &"training_dummy", &"sparring_dummy", &"practice_fight", &"generator"])
 

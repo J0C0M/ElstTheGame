@@ -155,8 +155,9 @@ func _enter_step(id: StringName, index: int) -> void:
 	if step.give_item != null:
 		GameState.add_item(step.give_item)
 	EventBus.quest_updated.emit(id)
-	# A flag that is already set finishes the step straight away.
-	if step.kind == QuestStep.Kind.FLAG and GameState.has_flag(step.flag):
+	# Flags that are already set finish the step straight away.
+	if step.kind == QuestStep.Kind.FLAG and GameState.has_flag(step.flag) \
+			or step.kind == QuestStep.Kind.FLAGS and _count_flags(step) == step.flags.size():
 		_advance.call_deferred(id)
 
 
@@ -182,12 +183,17 @@ func _check_steps(check: Callable) -> void:
 
 
 func _on_flag_set(flag: StringName) -> void:
-	for id: StringName in _quests:
-		var quest: QuestData = _quests[id]
-		if flag == quest.completion_flag and get_status(id) == Status.ACTIVE:
-			complete_quest(id)
-	_check_steps(func(_id: StringName, step: QuestStep) -> bool:
-		return step.kind == QuestStep.Kind.FLAG and step.flag == flag)
+	_check_steps(func(id: StringName, step: QuestStep) -> bool:
+		if step.kind == QuestStep.Kind.FLAG:
+			return step.flag == flag
+		if step.kind != QuestStep.Kind.FLAGS or flag not in step.flags:
+			return false
+		EventBus.quest_updated.emit(id)
+		return _count_flags(step) == step.flags.size())
+
+
+func _count_flags(step: QuestStep) -> int:
+	return step.flags.filter(func(flag: StringName) -> bool: return GameState.has_flag(flag)).size()
 
 
 func _on_player_action(action: StringName) -> void:
@@ -230,5 +236,7 @@ func get_step_progress(id: StringName) -> String:
 			return "%d/%d" % [_kills.get(id, 0), step.count]
 		QuestStep.Kind.ACTIONS:
 			return "%d/%d" % [Array(_actions_done.get(id, [])).size(), step.actions.size()]
+		QuestStep.Kind.FLAGS:
+			return "%d/%d" % [_count_flags(step), step.flags.size()]
 		_:
 			return ""

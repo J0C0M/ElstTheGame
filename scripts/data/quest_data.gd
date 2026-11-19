@@ -9,8 +9,9 @@ extends Resource
 @export var title: String = ""
 @export_multiline var description: String = ""
 @export var steps: Array[QuestStep] = []
-## A GameState flag (such as a defeated boss) that finishes the whole quest,
-## even when the player does it before Klaas gives the quest.
+## A GameState flag (such as a defeated boss). When it is already set as
+## Klaas gives the quest, the quest is finished at once, with the reward.
+## While the quest is active its steps decide, so the player still reports back.
 @export var completion_flag: StringName
 
 @export_group("Reward")

@@ -12,6 +12,9 @@ enum Kind {
 	KILL,
 	## The player reaches the place with id [member area_id].
 	REACH,
+	## Every flag in [member flags] gets set, in any order. Flags that were
+	## already set before the step started count too.
+	FLAGS,
 }
 
 @export var id: StringName
@@ -19,6 +22,7 @@ enum Kind {
 @export_multiline var description: String = ""
 @export var kind: Kind = Kind.FLAG
 @export var flag: StringName
+@export var flags: Array[StringName] = []
 @export var actions: Array[StringName] = []
 @export var enemy_id: StringName
 @export var count: int = 1

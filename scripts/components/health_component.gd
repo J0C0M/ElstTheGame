@@ -34,6 +34,12 @@ func heal(amount: int) -> void:
 	health_changed.emit(current_health, max_health)
 
 
+## Sets the current health directly, for example when loading. Does not kill.
+func set_health(value: int) -> void:
+	current_health = clampi(value, 0, max_health)
+	health_changed.emit(current_health, max_health)
+
+
 ## Sets a new maximum (or keeps the current one) and fills up to it.
 func reset(new_max_health: int = max_health) -> void:
 	max_health = new_max_health

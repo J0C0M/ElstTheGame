@@ -23,3 +23,5 @@ signal player_respawned
 signal interaction_prompt_changed(prompt: String)
 ## Short message on screen, such as a locked door.
 signal message_requested(text: String)
+## The player arrived in a named place: a world, a dungeon or a part of Elst.
+signal location_entered(display_name: String)

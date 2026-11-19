@@ -8,6 +8,7 @@ var _health_tween: Tween
 var _flash_tween: Tween
 var _parry_tween: Tween
 var _message_tween: Tween
+var _banner_tween: Tween
 
 @onready var _health_bar: ProgressBar = $Bars/HealthBar
 @onready var _stamina_bar: ProgressBar = $Bars/StaminaBar
@@ -15,6 +16,7 @@ var _message_tween: Tween
 @onready var _death_label: Label = $DeathLabel
 @onready var _prompt_label: Label = $PromptLabel
 @onready var _message_label: Label = $MessageLabel
+@onready var _location_banner: Label = $LocationBanner
 
 
 func _ready() -> void:
@@ -26,10 +28,12 @@ func _ready() -> void:
 	EventBus.player_respawned.connect(_on_respawned)
 	EventBus.interaction_prompt_changed.connect(_on_interaction_prompt_changed)
 	EventBus.message_requested.connect(_on_message_requested)
+	EventBus.location_entered.connect(_on_location_entered)
 	_parry_label.modulate.a = 0.0
 	_death_label.visible = false
 	_prompt_label.visible = false
 	_message_label.modulate.a = 0.0
+	_location_banner.modulate.a = 0.0
 
 
 func _on_health_changed(current: int, maximum: int) -> void:
@@ -83,3 +87,15 @@ func _on_message_requested(text: String) -> void:
 	_message_tween = create_tween()
 	_message_tween.tween_interval(2.5)
 	_message_tween.tween_property(_message_label, "modulate:a", 0.0, 0.6)
+
+
+func _on_location_entered(display_name: String) -> void:
+	if display_name.is_empty():
+		return
+	_location_banner.text = display_name
+	if _banner_tween != null:
+		_banner_tween.kill()
+	_banner_tween = create_tween()
+	_banner_tween.tween_property(_location_banner, "modulate:a", 1.0, 0.4)
+	_banner_tween.tween_interval(2.2)
+	_banner_tween.tween_property(_location_banner, "modulate:a", 0.0, 0.8)

@@ -156,18 +156,33 @@ func is_facing_point(point: Vector3) -> bool:
 	return get_forward().angle_to(to_point.normalized()) <= deg_to_rad(stats.block_angle_degrees)
 
 
-## Brings the player back to life at [param at], with full health and stamina.
-func respawn(at: Transform3D) -> void:
+## Moves the player to [param at] at once, without sliding there.
+func teleport(at: Transform3D) -> void:
 	global_transform = at
 	velocity = Vector3.ZERO
+	camera.snap_behind_target()
+	reset_physics_interpolation()
+
+
+## Brings the player back to life at [param at], with full health and stamina.
+func respawn(at: Transform3D) -> void:
+	teleport(at)
 	is_invulnerable = false
 	health.reset(stats.max_health)
 	stamina.refill()
 	model.reset_pose()
-	camera.snap_behind_target()
-	reset_physics_interpolation()
 	state_machine.transition_to(&"Move")
 	EventBus.player_respawned.emit()
+
+
+## Values that a scene change keeps. The save system (Phase 3) adds more.
+func save_data() -> Dictionary:
+	return {"health": health.current_health, "stamina": stamina.current_stamina}
+
+
+func load_data(data: Dictionary) -> void:
+	health.set_health(int(data.get("health", health.current_health)))
+	stamina.set_stamina(float(data.get("stamina", stamina.current_stamina)))
 
 
 func _on_hit_received(hit: HitData) -> void:

@@ -55,6 +55,12 @@ func reset(new_max: float, new_regen_per_second: float, new_regen_delay: float) 
 	refill()
 
 
+## Sets the current stamina directly, for example when loading.
+func set_stamina(value: float) -> void:
+	current_stamina = clampf(value, 0.0, max_stamina)
+	stamina_changed.emit(current_stamina, max_stamina)
+
+
 func refill() -> void:
 	current_stamina = max_stamina
 	_regen_wait = 0.0

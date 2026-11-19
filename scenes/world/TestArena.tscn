@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scenes/world/test_arena.gd" id="1_arena"]
+[ext_resource type="Script" path="res://scenes/world/game_world.gd" id="1_arena"]
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/TrainingDummy.tscn" id="3_dummy"]
 [ext_resource type="Resource" path="res://data/enemies/sparring_dummy.tres" id="4_sparring"]
@@ -112,6 +112,7 @@ radius = 0.6
 
 [node name="TestArena" type="Node3D"]
 script = ExtResource("1_arena")
+location_name = "Testarena"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_main")
@@ -239,7 +240,7 @@ shape = SubResource("Shape_pillar")
 [node name="Mesh" type="MeshInstance3D" parent="Obstacles/PillarB"]
 mesh = SubResource("Mesh_pillar")
 
-[node name="PlayerSpawn" type="Marker3D" parent="."]
+[node name="Start" type="Marker3D" parent="." groups=["spawn_points"]]
 position = Vector3(0, 0, 9)
 
 [node name="Player" parent="." instance=ExtResource("2_player")]

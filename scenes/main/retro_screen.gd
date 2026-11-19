@@ -34,9 +34,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
-## Replaces the world shown on screen with [param world].
+## Replaces the world shown on screen with [param world]. The old world
+## leaves the tree at once, so its player is gone from the player group.
 func set_world(world: Node) -> void:
 	for child: Node in world_viewport.get_children():
+		world_viewport.remove_child(child)
 		child.queue_free()
 	world_viewport.add_child(world)
 

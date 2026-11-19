@@ -1,0 +1,199 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/world/game_world.gd" id="1_world"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="3_door"]
+
+[sub_resource type="Environment" id="Environment_dungeon"]
+background_mode = 1
+background_color = Color(0.03, 0.03, 0.04, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.3, 0.45, 0.35, 1)
+ambient_light_energy = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_floor"]
+albedo_color = Color(0.45, 0.45, 0.47, 1)
+specular_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="Mat_wall"]
+albedo_color = Color(0.3, 0.45, 0.35, 1)
+specular_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="Mat_accent"]
+albedo_color = Color(0.3, 0.7, 0.4, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+material = SubResource("Mat_floor")
+size = Vector3(20, 1, 30)
+
+[sub_resource type="BoxShape3D" id="Shape_floor"]
+size = Vector3(20, 1, 30)
+
+[sub_resource type="BoxMesh" id="Mesh_ceiling"]
+material = SubResource("Mat_wall")
+size = Vector3(20, 1, 30)
+
+[sub_resource type="BoxShape3D" id="Shape_ceiling"]
+size = Vector3(20, 1, 30)
+
+[sub_resource type="BoxMesh" id="Mesh_wall_ns"]
+material = SubResource("Mat_wall")
+size = Vector3(22, 6, 1)
+
+[sub_resource type="BoxShape3D" id="Shape_wall_ns"]
+size = Vector3(22, 6, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_wall_ew"]
+material = SubResource("Mat_wall")
+size = Vector3(1, 6, 30)
+
+[sub_resource type="BoxShape3D" id="Shape_wall_ew"]
+size = Vector3(1, 6, 30)
+
+[sub_resource type="BoxMesh" id="Mesh_pillar"]
+material = SubResource("Mat_accent")
+size = Vector3(1, 5, 1)
+
+[sub_resource type="BoxShape3D" id="Shape_pillar"]
+size = Vector3(1, 5, 1)
+
+[node name="StationDungeon" type="Node3D"]
+script = ExtResource("1_world")
+location_name = "Station Elst"
+default_spawn = &"Entrance"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dungeon")
+
+[node name="Room" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Room"]
+position = Vector3(0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Floor"]
+shape = SubResource("Shape_floor")
+
+[node name="Mesh" type="MeshInstance3D" parent="Room/Floor"]
+mesh = SubResource("Mesh_floor")
+
+[node name="Ceiling" type="StaticBody3D" parent="Room"]
+position = Vector3(0, 5.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Ceiling"]
+shape = SubResource("Shape_ceiling")
+
+[node name="Mesh" type="MeshInstance3D" parent="Room/Ceiling"]
+mesh = SubResource("Mesh_ceiling")
+
+[node name="WallNorth" type="StaticBody3D" parent="Room"]
+position = Vector3(0, 2.5, -15.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/WallNorth"]
+shape = SubResource("Shape_wall_ns")
+
+[node name="Mesh" type="MeshInstance3D" parent="Room/WallNorth"]
+mesh = SubResource("Mesh_wall_ns")
+
+[node name="WallSouth" type="StaticBody3D" parent="Room"]
+position = Vector3(0, 2.5, 15.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/WallSouth"]
+shape = SubResource("Shape_wall_ns")
+
+[node name="Mesh" type="MeshInstance3D" parent="Room/WallSouth"]
+mesh = SubResource("Mesh_wall_ns")
+
+[node name="WallEast" type="StaticBody3D" parent="Room"]
+position = Vector3(10.5, 2.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/WallEast"]
+shape = SubResource("Shape_wall_ew")
+
+[node name="Mesh" type="MeshInstance3D" parent="Room/WallEast"]
+mesh = SubResource("Mesh_wall_ew")
+
+[node name="WallWest" type="StaticBody3D" parent="Room"]
+position = Vector3(-10.5, 2.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/WallWest"]
+shape = SubResource("Shape_wall_ew")
+
+[node name="Mesh" type="MeshInstance3D" parent="Room/WallWest"]
+mesh = SubResource("Mesh_wall_ew")
+
+[node name="Pillar1" type="StaticBody3D" parent="Room"]
+position = Vector3(-5, 2.5, -6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Pillar1"]
+shape = SubResource("Shape_pillar")
+
+[node name="Mesh" type="MeshInstance3D" parent="Room/Pillar1"]
+mesh = SubResource("Mesh_pillar")
+
+[node name="Pillar2" type="StaticBody3D" parent="Room"]
+position = Vector3(5, 2.5, -6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Pillar2"]
+shape = SubResource("Shape_pillar")
+
+[node name="Mesh" type="MeshInstance3D" parent="Room/Pillar2"]
+mesh = SubResource("Mesh_pillar")
+
+[node name="Pillar3" type="StaticBody3D" parent="Room"]
+position = Vector3(-5, 2.5, 4)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Pillar3"]
+shape = SubResource("Shape_pillar")
+
+[node name="Mesh" type="MeshInstance3D" parent="Room/Pillar3"]
+mesh = SubResource("Mesh_pillar")
+
+[node name="Pillar4" type="StaticBody3D" parent="Room"]
+position = Vector3(5, 2.5, 4)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Pillar4"]
+shape = SubResource("Shape_pillar")
+
+[node name="Mesh" type="MeshInstance3D" parent="Room/Pillar4"]
+mesh = SubResource("Mesh_pillar")
+
+[node name="Light1" type="OmniLight3D" parent="."]
+position = Vector3(0, 4.2, 8)
+light_color = Color(0.72, 0.8799999999999999, 0.76, 1)
+light_energy = 1.6
+omni_range = 13.0
+
+[node name="Light2" type="OmniLight3D" parent="."]
+position = Vector3(0, 4.2, -2)
+light_color = Color(0.72, 0.8799999999999999, 0.76, 1)
+light_energy = 1.6
+omni_range = 13.0
+
+[node name="Light3" type="OmniLight3D" parent="."]
+position = Vector3(0, 4.2, -11)
+light_color = Color(0.72, 0.8799999999999999, 0.76, 1)
+light_energy = 1.6
+omni_range = 13.0
+
+[node name="Sign" type="Label3D" parent="."]
+position = Vector3(0, 3, -14.9)
+pixel_size = 0.01
+modulate = Color(0.3, 0.7, 0.4, 1)
+outline_modulate = Color(0, 0, 0, 1)
+text = "Station Elst\nDe aanvoer van Amber\n(dungeon volgt in fase 7)"
+font_size = 64
+outline_size = 12
+
+[node name="ExitDoor" parent="." instance=ExtResource("3_door")]
+position = Vector3(0, 0, 14.75)
+target_scene = "res://scenes/world/Elst.tscn"
+target_spawn = &"StationExit"
+prompt = "Terug naar Elst"
+door_color = Color(0.3, 0.7, 0.4, 1)
+
+[node name="Entrance" type="Marker3D" parent="." groups=["spawn_points"]]
+position = Vector3(0, 0, 11)
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector3(0, 0, 11)

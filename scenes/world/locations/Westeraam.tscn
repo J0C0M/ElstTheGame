@@ -1,0 +1,100 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/props/House.tscn" id="1_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="2_res"]
+[ext_resource type="Script" path="res://scenes/world/location_area.gd" id="3_res"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_color = Color(0.3, 0.3, 0.31, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+material = SubResource("StandardMaterial3D_1")
+size = Vector3(38, 0.05, 32)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3"]
+albedo_color = Color(0.1, 0.1, 0.11, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
+material = SubResource("StandardMaterial3D_3")
+size = Vector3(4, 2.5, 0.05)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5"]
+size = Vector3(50, 30, 46)
+
+[node name="Westeraam" type="Node3D"]
+
+[node name="Courtyard" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.02, 2)
+mesh = SubResource("BoxMesh_2")
+
+[node name="FlatBack" parent="." instance=ExtResource("1_res")]
+position = Vector3(0, 0, 14)
+size = Vector3(16, 21, 10)
+roof_height = 0
+wall_color = Color(0.88, 0.72, 0.2, 1)
+roof_color = Color(0.1, 0.1, 0.11, 1)
+has_door = false
+
+[node name="FlatLeft" parent="." instance=ExtResource("1_res")]
+position = Vector3(-17, 0, 2)
+rotation = Vector3(0, -1.571, 0)
+size = Vector3(16, 18, 10)
+roof_height = 0
+wall_color = Color(0.88, 0.72, 0.2, 1)
+roof_color = Color(0.1, 0.1, 0.11, 1)
+
+[node name="FlatRight" parent="." instance=ExtResource("1_res")]
+position = Vector3(17, 0, 2)
+rotation = Vector3(0, 1.571, 0)
+size = Vector3(16, 18, 10)
+roof_height = 0
+wall_color = Color(0.88, 0.72, 0.2, 1)
+roof_color = Color(0.1, 0.1, 0.11, 1)
+
+[node name="BlockBlack" parent="." instance=ExtResource("1_res")]
+position = Vector3(-12, 0, 22)
+size = Vector3(10, 9, 8)
+roof_height = 0
+wall_color = Color(0.1, 0.1, 0.11, 1)
+roof_color = Color(0.88, 0.72, 0.2, 1)
+has_door = false
+
+[node name="Graffiti1" type="MeshInstance3D" parent="."]
+position = Vector3(-5, 3.5, 8.94)
+mesh = SubResource("BoxMesh_4")
+
+[node name="Graffiti2" type="MeshInstance3D" parent="."]
+position = Vector3(5, 3.5, 8.94)
+mesh = SubResource("BoxMesh_4")
+
+[node name="FlatDoor" parent="." instance=ExtResource("2_res")]
+position = Vector3(0, 0, 8.85)
+prompt = "Westeraam Getho binnengaan"
+door_color = Color(0.1, 0.1, 0.11, 1)
+target_scene = "res://scenes/dungeons/Westeraam.tscn"
+target_spawn = &"Entrance"
+
+[node name="Sign" type="Label3D" parent="."]
+position = Vector3(0, 23, 8.9)
+rotation = Vector3(0, 3.142, 0)
+pixel_size = 0.02
+double_sided = false
+modulate = Color(0.88, 0.72, 0.2, 1)
+outline_modulate = Color(0.05, 0.04, 0.05, 1)
+text = "WESTERAAM"
+font_size = 160
+outline_size = 14
+
+[node name="WesteraamExit" type="Marker3D" parent="." groups=["spawn_points"]]
+position = Vector3(0, 0, 5)
+
+[node name="LocationArea" type="Area3D" parent="."]
+script = ExtResource("3_res")
+id = &"westeraam"
+display_name = "Westeraam Getho"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LocationArea"]
+position = Vector3(0, 15, 4)
+shape = SubResource("BoxShape3D_5")

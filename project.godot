@@ -149,6 +149,11 @@ cycle_pixel_size={
 3d_physics/layer_6="interactie"
 3d_physics/layer_7="tornado_grens"
 
+[navigation]
+
+3d/default_cell_size=0.5
+3d/default_cell_height=0.25
+
 [physics]
 
 common/physics_jitter_fix=0.0

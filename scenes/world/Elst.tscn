@@ -1,0 +1,2922 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/world/game_world.gd" id="1_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/Tornado.tscn" id="2_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/House.tscn" id="3_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/TreeProp.tscn" id="4_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/locations/Kerk.tscn" id="5_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/locations/KlaasHouse.tscn" id="6_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/locations/BingoClub.tscn" id="7_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/locations/Station.tscn" id="8_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/locations/Westeraam.tscn" id="9_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/locations/OBCFort.tscn" id="10_res"]
+[ext_resource type="Script" path="res://scenes/world/runtime_navigation_region.gd" id="11_res"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="12_res"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
+sky_top_color = Color(0.34, 0.44, 0.6, 1)
+sky_horizon_color = Color(0.74, 0.65, 0.55, 1)
+ground_bottom_color = Color(0.3, 0.28, 0.25, 1)
+ground_horizon_color = Color(0.74, 0.65, 0.55, 1)
+
+[sub_resource type="Sky" id="Sky_2"]
+sky_material = SubResource("ProceduralSkyMaterial_1")
+
+[sub_resource type="Environment" id="Environment_3"]
+background_mode = 2
+sky = SubResource("Sky_2")
+ambient_light_source = 3
+ambient_light_energy = 0.85
+fog_enabled = true
+fog_light_color = Color(0.68, 0.6, 0.52, 1)
+fog_density = 0.004
+fog_sky_affect = 0.35
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4"]
+size = Vector3(560, 1, 560)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5"]
+albedo_color = Color(0.4, 0.56, 0.3, 1)
+specular_mode = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_6"]
+material = SubResource("StandardMaterial3D_5")
+size = Vector2(560, 560)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7"]
+albedo_color = Color(0.78, 0.7, 0.38, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_8"]
+material = SubResource("StandardMaterial3D_7")
+size = Vector3(49.045, 0.02, 31.118)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_9"]
+albedo_color = Color(0.46, 0.62, 0.32, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_10"]
+material = SubResource("StandardMaterial3D_9")
+size = Vector3(41.847, 0.02, 28.233)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_11"]
+albedo_color = Color(0.5, 0.37, 0.25, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_12"]
+material = SubResource("StandardMaterial3D_11")
+size = Vector3(50.018, 0.02, 33.834)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_13"]
+albedo_color = Color(0.5, 0.68, 0.3, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_14"]
+material = SubResource("StandardMaterial3D_13")
+size = Vector3(53.15, 0.02, 33.681)
+
+[sub_resource type="BoxMesh" id="BoxMesh_15"]
+material = SubResource("StandardMaterial3D_7")
+size = Vector3(50.557, 0.02, 28.399)
+
+[sub_resource type="BoxMesh" id="BoxMesh_16"]
+material = SubResource("StandardMaterial3D_9")
+size = Vector3(41.993, 0.02, 34.168)
+
+[sub_resource type="BoxMesh" id="BoxMesh_17"]
+material = SubResource("StandardMaterial3D_13")
+size = Vector3(54.666, 0.02, 32.852)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_18"]
+albedo_color = Color(0.3, 0.3, 0.32, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_19"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 72.511)
+
+[sub_resource type="BoxMesh" id="BoxMesh_20"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 86.012)
+
+[sub_resource type="BoxMesh" id="BoxMesh_21"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 82.431)
+
+[sub_resource type="BoxMesh" id="BoxMesh_22"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 29)
+
+[sub_resource type="BoxMesh" id="BoxMesh_23"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 103.692)
+
+[sub_resource type="BoxMesh" id="BoxMesh_24"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 51.337)
+
+[sub_resource type="BoxMesh" id="BoxMesh_25"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 87.981)
+
+[sub_resource type="BoxMesh" id="BoxMesh_26"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 56.376)
+
+[sub_resource type="BoxMesh" id="BoxMesh_27"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 90.333)
+
+[sub_resource type="BoxMesh" id="BoxMesh_28"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 98.355)
+
+[sub_resource type="BoxMesh" id="BoxMesh_29"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 77.814)
+
+[sub_resource type="BoxMesh" id="BoxMesh_30"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 65.871)
+
+[sub_resource type="BoxMesh" id="BoxMesh_31"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 18.63)
+
+[sub_resource type="BoxMesh" id="BoxMesh_32"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 97.364)
+
+[sub_resource type="BoxMesh" id="BoxMesh_33"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 106.489)
+
+[sub_resource type="BoxMesh" id="BoxMesh_34"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 108.125)
+
+[sub_resource type="BoxMesh" id="BoxMesh_35"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(8, 0.04, 73.873)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_36"]
+albedo_color = Color(0.36, 0.36, 0.38, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_37"]
+material = SubResource("StandardMaterial3D_36")
+size = Vector3(6, 0.04, 71)
+
+[sub_resource type="BoxMesh" id="BoxMesh_38"]
+material = SubResource("StandardMaterial3D_36")
+size = Vector3(6, 0.04, 76.178)
+
+[sub_resource type="BoxMesh" id="BoxMesh_39"]
+material = SubResource("StandardMaterial3D_36")
+size = Vector3(6, 0.04, 101)
+
+[sub_resource type="BoxMesh" id="BoxMesh_40"]
+material = SubResource("StandardMaterial3D_36")
+size = Vector3(6, 0.04, 106.125)
+
+[sub_resource type="BoxMesh" id="BoxMesh_41"]
+material = SubResource("StandardMaterial3D_36")
+size = Vector3(6, 0.04, 106.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_42"]
+material = SubResource("StandardMaterial3D_36")
+size = Vector3(6, 0.04, 81.107)
+
+[sub_resource type="BoxMesh" id="BoxMesh_43"]
+material = SubResource("StandardMaterial3D_36")
+size = Vector3(6, 0.04, 81)
+
+[sub_resource type="BoxMesh" id="BoxMesh_44"]
+material = SubResource("StandardMaterial3D_36")
+size = Vector3(6, 0.04, 60.626)
+
+[sub_resource type="BoxMesh" id="BoxMesh_45"]
+material = SubResource("StandardMaterial3D_36")
+size = Vector3(6, 0.04, 58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_46"]
+material = SubResource("StandardMaterial3D_36")
+size = Vector3(6, 0.04, 131.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_47"]
+material = SubResource("StandardMaterial3D_36")
+size = Vector3(6, 0.04, 84)
+
+[sub_resource type="BoxMesh" id="BoxMesh_48"]
+material = SubResource("StandardMaterial3D_36")
+size = Vector3(6, 0.04, 73.186)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_49"]
+albedo_color = Color(0.47, 0.44, 0.41, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_50"]
+material = SubResource("StandardMaterial3D_49")
+size = Vector3(5, 0.24, 500)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_51"]
+albedo_color = Color(0.33, 0.3, 0.29, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_52"]
+material = SubResource("StandardMaterial3D_51")
+size = Vector3(0.14, 0.16, 500)
+
+[sub_resource type="BoxMesh" id="BoxMesh_53"]
+material = SubResource("StandardMaterial3D_18")
+size = Vector3(5.4, 0.2, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_54"]
+albedo_color = Color(0.24, 0.42, 0.58, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_55"]
+material = SubResource("StandardMaterial3D_54")
+size = Vector3(56, 0.06, 38)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_56"]
+size = Vector3(58, 2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_57"]
+albedo_color = Color(0.4, 0.5, 0.25, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_58"]
+material = SubResource("StandardMaterial3D_57")
+size = Vector3(58, 0.9, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_59"]
+size = Vector3(1, 2, 38)
+
+[sub_resource type="BoxMesh" id="BoxMesh_60"]
+material = SubResource("StandardMaterial3D_57")
+size = Vector3(1, 0.9, 38)
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_61"]
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+geometry_source_geometry_mode = 1
+geometry_source_group_name = &"navigation_source"
+cell_size = 0.5
+cell_height = 0.25
+agent_height = 1.75
+agent_radius = 0.5
+agent_max_climb = 0.5
+agent_max_slope = 40.0
+filter_baking_aabb = AABB(-230, -2, -230, 460, 30, 460)
+
+[node name="Elst" type="Node3D"]
+script = ExtResource("1_res")
+location_name = "Elst"
+default_spawn = &"Start"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_3")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.87, -0.7, 0)
+light_color = Color(1, 0.9, 0.76, 1)
+shadow_enabled = true
+directional_shadow_max_distance = 140.0
+
+[node name="Tornado" parent="." instance=ExtResource("2_res")]
+
+[node name="Ground" type="StaticBody3D" parent="." groups=["navigation_source"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+position = Vector3(0, -0.5, 0)
+shape = SubResource("BoxShape3D_4")
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_6")
+
+[node name="Fields" type="Node3D" parent="."]
+
+[node name="Field1" type="MeshInstance3D" parent="Fields"]
+position = Vector3(96.715, 0.012, 167.515)
+rotation = Vector3(0, 0.524, 0)
+mesh = SubResource("BoxMesh_8")
+
+[node name="Field2" type="MeshInstance3D" parent="Fields"]
+position = Vector3(-190.119, 0.012, 69.198)
+rotation = Vector3(0, -1.222, 0)
+mesh = SubResource("BoxMesh_10")
+
+[node name="Field3" type="MeshInstance3D" parent="Fields"]
+position = Vector3(-172.523, 0.012, -99.606)
+rotation = Vector3(0, -2.094, 0)
+mesh = SubResource("BoxMesh_12")
+
+[node name="Field4" type="MeshInstance3D" parent="Fields"]
+position = Vector3(-83.921, 0.012, -179.969)
+rotation = Vector3(0, -2.705, 0)
+mesh = SubResource("BoxMesh_14")
+
+[node name="Field5" type="MeshInstance3D" parent="Fields"]
+position = Vector3(17.519, 0.012, -200.247)
+rotation = Vector3(0, -3.229, 0)
+mesh = SubResource("BoxMesh_15")
+
+[node name="Field6" type="MeshInstance3D" parent="Fields"]
+position = Vector3(114.354, 0.012, -163.315)
+rotation = Vector3(0, -3.752, 0)
+mesh = SubResource("BoxMesh_16")
+
+[node name="Field7" type="MeshInstance3D" parent="Fields"]
+position = Vector3(34.277, 0.012, 194.397)
+rotation = Vector3(0, 0.175, 0)
+mesh = SubResource("BoxMesh_17")
+
+[node name="Roads" type="Node3D" parent="."]
+
+[node name="Main1" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-8.39, 0.035, 61.145)
+rotation = Vector3(0, -0.263, 0)
+mesh = SubResource("BoxMesh_19")
+
+[node name="Main2" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-68.14, 0.035, -8.175)
+rotation = Vector3(0, -1.782, 0)
+mesh = SubResource("BoxMesh_20")
+
+[node name="Main3" type="MeshInstance3D" parent="Roads"]
+position = Vector3(67, 0.035, -4)
+rotation = Vector3(0, 1.678, 0)
+mesh = SubResource("BoxMesh_21")
+
+[node name="Main4" type="MeshInstance3D" parent="Roads"]
+position = Vector3(114.5, 0.035, -8)
+rotation = Vector3(0, 1.571, 0)
+mesh = SubResource("BoxMesh_22")
+
+[node name="Main5" type="MeshInstance3D" parent="Roads"]
+position = Vector3(60.5, 0.035, -48)
+rotation = Vector3(0, 2.17, 0)
+mesh = SubResource("BoxMesh_23")
+
+[node name="Main6" type="MeshInstance3D" parent="Roads"]
+position = Vector3(119.967, 0.035, -83.416)
+rotation = Vector3(0, 1.97, 0)
+mesh = SubResource("BoxMesh_24")
+
+[node name="Main7" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-48, 0.035, 50.5)
+rotation = Vector3(0, -0.741, 0)
+mesh = SubResource("BoxMesh_25")
+
+[node name="Main8" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-93.308, 0.035, 95.808)
+rotation = Vector3(0, -0.859, 0)
+mesh = SubResource("BoxMesh_26")
+
+[node name="Main9" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-78.308, 0.035, 135.808)
+rotation = Vector3(0, 0.943, 0)
+mesh = SubResource("BoxMesh_27")
+
+[node name="Main10" type="MeshInstance3D" parent="Roads"]
+position = Vector3(0, 0.035, 164)
+rotation = Vector3(0, 1.482, 0)
+mesh = SubResource("BoxMesh_28")
+
+[node name="Main11" type="MeshInstance3D" parent="Roads"]
+position = Vector3(72.5, 0.035, 146.5)
+rotation = Vector3(0, 2.234, 0)
+mesh = SubResource("BoxMesh_29")
+
+[node name="Main12" type="MeshInstance3D" parent="Roads"]
+position = Vector3(109, 0.035, 97.5)
+rotation = Vector3(0, 2.825, 0)
+mesh = SubResource("BoxMesh_30")
+
+[node name="Main13" type="MeshInstance3D" parent="Roads"]
+position = Vector3(121.5, 0.035, 66)
+rotation = Vector3(0, 2.423, 0)
+mesh = SubResource("BoxMesh_31")
+
+[node name="Main14" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-100.64, 0.035, -60.675)
+rotation = Vector3(0, 3.015, 0)
+mesh = SubResource("BoxMesh_32")
+
+[node name="Main15" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-50, 0.035, -125)
+rotation = Vector3(0, 1.989, 0)
+mesh = SubResource("BoxMesh_33")
+
+[node name="Main16" type="MeshInstance3D" parent="Roads"]
+position = Vector3(45, 0.035, -142.5)
+rotation = Vector3(0, 1.521, 0)
+mesh = SubResource("BoxMesh_34")
+
+[node name="Main17" type="MeshInstance3D" parent="Roads"]
+position = Vector3(117.467, 0.035, -115.916)
+rotation = Vector3(0, 0.751, 0)
+mesh = SubResource("BoxMesh_35")
+
+[node name="Street1" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-67.5, 0.02, -45)
+rotation = Vector3(0, 1.571, 0)
+mesh = SubResource("BoxMesh_37")
+
+[node name="Street2" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-60, 0.02, -77.5)
+rotation = Vector3(0, 1.642, 0)
+mesh = SubResource("BoxMesh_38")
+
+[node name="Street3" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-65, 0.02, -67.5)
+rotation = Vector3(0, 3.142, 0)
+mesh = SubResource("BoxMesh_39")
+
+[node name="Street4" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-37.5, 0.02, -75)
+rotation = Vector3(0, -3.092, 0)
+mesh = SubResource("BoxMesh_40")
+
+[node name="Street5" type="MeshInstance3D" parent="Roads"]
+position = Vector3(35, 0.02, -82.5)
+rotation = Vector3(0, 3.142, 0)
+mesh = SubResource("BoxMesh_39")
+
+[node name="Street6" type="MeshInstance3D" parent="Roads"]
+position = Vector3(64, 0.02, -75)
+rotation = Vector3(0, 3.102, 0)
+mesh = SubResource("BoxMesh_41")
+
+[node name="Street7" type="MeshInstance3D" parent="Roads"]
+position = Vector3(62.5, 0.02, -104)
+rotation = Vector3(0, 1.624, 0)
+mesh = SubResource("BoxMesh_42")
+
+[node name="Street8" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-67.5, 0.02, 45)
+rotation = Vector3(0, 1.571, 0)
+mesh = SubResource("BoxMesh_43")
+
+[node name="Street9" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-70, 0.02, 89)
+rotation = Vector3(0, 1.156, 0)
+mesh = SubResource("BoxMesh_44")
+
+[node name="Street10" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-65, 0.02, 34)
+mesh = SubResource("BoxMesh_45")
+
+[node name="Street11" type="MeshInstance3D" parent="Roads"]
+position = Vector3(62.5, 0.02, 55)
+rotation = Vector3(0, 1.571, 0)
+mesh = SubResource("BoxMesh_43")
+
+[node name="Street12" type="MeshInstance3D" parent="Roads"]
+position = Vector3(57.5, 0.02, 87.5)
+rotation = Vector3(0, 0.04, 0)
+mesh = SubResource("BoxMesh_46")
+
+[node name="Street13" type="MeshInstance3D" parent="Roads"]
+position = Vector3(59, 0.02, 100)
+rotation = Vector3(0, 1.571, 0)
+mesh = SubResource("BoxMesh_47")
+
+[node name="Street14" type="MeshInstance3D" parent="Roads"]
+position = Vector3(58.5, 0.02, 137.5)
+rotation = Vector3(0, 1.496, 0)
+mesh = SubResource("BoxMesh_48")
+
+[node name="Railway" type="Node3D" parent="."]
+
+[node name="Ballast" type="MeshInstance3D" parent="Railway"]
+position = Vector3(110, 0.12, 0)
+mesh = SubResource("BoxMesh_50")
+
+[node name="RailLeft" type="MeshInstance3D" parent="Railway"]
+position = Vector3(109.28, 0.32, 0)
+mesh = SubResource("BoxMesh_52")
+
+[node name="RailRight" type="MeshInstance3D" parent="Railway"]
+position = Vector3(110.72, 0.32, 0)
+mesh = SubResource("BoxMesh_52")
+
+[node name="Crossing1" type="MeshInstance3D" parent="Railway"]
+position = Vector3(110, 0.26, -8)
+mesh = SubResource("BoxMesh_53")
+
+[node name="Crossing2" type="MeshInstance3D" parent="Railway"]
+position = Vector3(110, 0.26, -79.215)
+mesh = SubResource("BoxMesh_53")
+
+[node name="Crossing3" type="MeshInstance3D" parent="Railway"]
+position = Vector3(110, 0.26, 94.444)
+mesh = SubResource("BoxMesh_53")
+
+[node name="Crossing4" type="MeshInstance3D" parent="Railway"]
+position = Vector3(110, 0.26, -123.921)
+mesh = SubResource("BoxMesh_53")
+
+[node name="Lake" type="Node3D" parent="."]
+
+[node name="Water" type="MeshInstance3D" parent="Lake"]
+position = Vector3(165, 0.05, 128)
+mesh = SubResource("BoxMesh_55")
+
+[node name="Shore" type="StaticBody3D" parent="Lake"]
+
+[node name="North" type="CollisionShape3D" parent="Lake/Shore"]
+position = Vector3(165, 1, 108.5)
+shape = SubResource("BoxShape3D_56")
+
+[node name="ReedsNorth" type="MeshInstance3D" parent="Lake"]
+position = Vector3(165, 0.45, 108.5)
+mesh = SubResource("BoxMesh_58")
+
+[node name="South" type="CollisionShape3D" parent="Lake/Shore"]
+position = Vector3(165, 1, 147.5)
+shape = SubResource("BoxShape3D_56")
+
+[node name="ReedsSouth" type="MeshInstance3D" parent="Lake"]
+position = Vector3(165, 0.45, 147.5)
+mesh = SubResource("BoxMesh_58")
+
+[node name="West" type="CollisionShape3D" parent="Lake/Shore"]
+position = Vector3(136.5, 1, 128)
+shape = SubResource("BoxShape3D_59")
+
+[node name="ReedsWest" type="MeshInstance3D" parent="Lake"]
+position = Vector3(136.5, 0.45, 128)
+mesh = SubResource("BoxMesh_60")
+
+[node name="East" type="CollisionShape3D" parent="Lake/Shore"]
+position = Vector3(193.5, 1, 128)
+shape = SubResource("BoxShape3D_59")
+
+[node name="ReedsEast" type="MeshInstance3D" parent="Lake"]
+position = Vector3(193.5, 0.45, 128)
+mesh = SubResource("BoxMesh_60")
+
+[node name="Sign" type="Label3D" parent="Lake"]
+position = Vector3(135, 2.5, 128)
+rotation = Vector3(0, -1.571, 0)
+pixel_size = 0.02
+double_sided = false
+modulate = Color(0.9, 0.95, 1, 1)
+outline_modulate = Color(0.05, 0.04, 0.05, 1)
+text = "Aamsche Plas"
+font_size = 64
+outline_size = 14
+
+[node name="Industry" type="Node3D" parent="." groups=["navigation_source"]]
+
+[node name="Hall1" parent="Industry" instance=ExtResource("3_res")]
+position = Vector3(150, 0, -25)
+rotation = Vector3(0, -1.571, 0)
+size = Vector3(30, 10, 20)
+roof_height = 0
+wall_color = Color(0.52, 0.54, 0.56, 1)
+roof_color = Color(0.3, 0.31, 0.33, 1)
+
+[node name="Hall2" parent="Industry" instance=ExtResource("3_res")]
+position = Vector3(168, 0, 30)
+rotation = Vector3(0, -1.571, 0)
+size = Vector3(24, 9, 30)
+roof_height = 0
+wall_color = Color(0.52, 0.54, 0.56, 1)
+roof_color = Color(0.3, 0.31, 0.33, 1)
+
+[node name="Hall3" parent="Industry" instance=ExtResource("3_res")]
+position = Vector3(162, 0, 86)
+rotation = Vector3(0, -1.571, 0)
+size = Vector3(26, 8, 18)
+roof_height = 0
+wall_color = Color(0.52, 0.54, 0.56, 1)
+roof_color = Color(0.3, 0.31, 0.33, 1)
+
+[node name="Houses" type="Node3D" parent="." groups=["navigation_source"]]
+
+[node name="House001" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(7.646, 0, 53.101)
+rotation = Vector3(0, 1.308, 0)
+size = Vector3(11, 5.5, 8.8)
+roof_height = 3.8
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House002" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(3.907, 0, 66.711)
+rotation = Vector3(0, 1.308, 0)
+size = Vector3(8.9, 6.5, 8.6)
+roof_height = 2.6
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House003" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(1.362, 0, 78.244)
+rotation = Vector3(0, 1.308, 0)
+size = Vector3(8.3, 9, 9.7)
+roof_height = 2.6
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House004" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-21.237, 0, 57.305)
+rotation = Vector3(0, -1.834, 0)
+size = Vector3(10.9, 5.5, 8.8)
+roof_height = 3.8
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House005" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-25.058, 0, 69.919)
+rotation = Vector3(0, -1.834, 0)
+size = Vector3(10.7, 5.5, 9.6)
+roof_height = 3.8
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House006" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-52.82, 0, 8.407)
+rotation = Vector3(0, -0.211, 0)
+size = Vector3(9.2, 6.5, 8)
+roof_height = 2.6
+wall_color = Color(0.62, 0.32, 0.24, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House007" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-77.421, 0, 3.76)
+rotation = Vector3(0, -0.211, 0)
+size = Vector3(8.6, 9, 9.2)
+roof_height = 3.8
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House008" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-88.913, 0, 1.474)
+rotation = Vector3(0, -0.211, 0)
+size = Vector3(10.7, 6.5, 9.6)
+roof_height = 3.2
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House009" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-81.925, 0, -24.324)
+rotation = Vector3(0, 2.93, 0)
+size = Vector3(8.6, 5.5, 7.8)
+roof_height = 3.8
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House010" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(51.607, 0, -15.795)
+rotation = Vector3(0, -3.034, 0)
+size = Vector3(10.6, 5.5, 8.8)
+roof_height = 3.2
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House011" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(79.126, 0, -19.15)
+rotation = Vector3(0, -3.034, 0)
+size = Vector3(8.4, 9, 9.5)
+roof_height = 2.6
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House012" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(51.965, 0, 11.075)
+rotation = Vector3(0, 0.108, 0)
+size = Vector3(10.7, 9, 8.7)
+roof_height = 3.8
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House013" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(65.826, 0, 9.735)
+rotation = Vector3(0, 0.108, 0)
+size = Vector3(8.6, 9, 9.1)
+roof_height = 3.8
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House014" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(77.477, 0, 8.505)
+rotation = Vector3(0, 0.108, 0)
+size = Vector3(8.1, 6, 9.1)
+roof_height = 2.6
+wall_color = Color(0.62, 0.32, 0.24, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House015" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(89.225, 0, 7.03)
+rotation = Vector3(0, 0.108, 0)
+size = Vector3(9.9, 5.5, 8.7)
+roof_height = 2.6
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House016" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(51.123, 0, -58.479)
+rotation = Vector3(0, -2.542, 0)
+size = Vector3(8.7, 9, 9.9)
+roof_height = 3.8
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House017" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(82.348, 0, -79.22)
+rotation = Vector3(0, -2.542, 0)
+size = Vector3(10.1, 6, 8.9)
+roof_height = 3.8
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House018" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(83.269, 0, -47.973)
+rotation = Vector3(0, 0.6, 0)
+size = Vector3(8, 5.5, 7.7)
+roof_height = 3.2
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House019" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-38.001, 0, 59.788)
+rotation = Vector3(0, 0.83, 0)
+size = Vector3(8.1, 9, 9.3)
+roof_height = 3.2
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House020" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-45.062, 0, 67.061)
+rotation = Vector3(0, 0.83, 0)
+size = Vector3(8.8, 6.5, 8.7)
+roof_height = 3.2
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House021" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-52.901, 0, 74.81)
+rotation = Vector3(0, 0.83, 0)
+size = Vector3(8.5, 6.5, 7.6)
+roof_height = 3.2
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House022" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-51.017, 0, 34.247)
+rotation = Vector3(0, -2.312, 0)
+size = Vector3(8.6, 9, 8.4)
+roof_height = 3.8
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House023" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-76.374, 0, 62.461)
+rotation = Vector3(0, -2.312, 0)
+size = Vector3(9.9, 6.5, 7.7)
+roof_height = 3.8
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House024" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-80.329, 0, 102.075)
+rotation = Vector3(0, 0.712, 0)
+size = Vector3(10.9, 6, 8.5)
+roof_height = 3.8
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House025" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-85.653, 0, 114.246)
+rotation = Vector3(0, 2.513, 0)
+size = Vector3(8.2, 6, 8.3)
+roof_height = 3.8
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House026" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-77.379, 0, 120.558)
+rotation = Vector3(0, 2.513, 0)
+size = Vector3(9, 5.5, 7.8)
+roof_height = 3.2
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House027" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-67.739, 0, 126.993)
+rotation = Vector3(0, 2.513, 0)
+size = Vector3(8.4, 9, 8.7)
+roof_height = 2.6
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House028" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-58.175, 0, 133.768)
+rotation = Vector3(0, 2.513, 0)
+size = Vector3(9.4, 5.5, 9)
+roof_height = 2.6
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House029" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-47.662, 0, 141.285)
+rotation = Vector3(0, 2.513, 0)
+size = Vector3(8.8, 6, 9.2)
+roof_height = 3.2
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House030" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-82.755, 0, 148.925)
+rotation = Vector3(0, -0.628, 0)
+size = Vector3(10.4, 6, 8.5)
+roof_height = 3.2
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House031" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-72.236, 0, 156.47)
+rotation = Vector3(0, -0.628, 0)
+size = Vector3(10.5, 9, 8.3)
+roof_height = 3.2
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House032" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-61.582, 0, 165.216)
+rotation = Vector3(0, -0.628, 0)
+size = Vector3(8.7, 5.5, 9.9)
+roof_height = 3.2
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House033" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-37.41, 0, 146.975)
+rotation = Vector3(0, 3.053, 0)
+size = Vector3(8.1, 9, 9.3)
+roof_height = 3.2
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House034" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-25.548, 0, 147.733)
+rotation = Vector3(0, 3.053, 0)
+size = Vector3(10.5, 6, 9.9)
+roof_height = 3.2
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House035" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-13.022, 0, 149.825)
+rotation = Vector3(0, 3.053, 0)
+size = Vector3(9.2, 6.5, 7.9)
+roof_height = 3.8
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House036" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-1.174, 0, 150.575)
+rotation = Vector3(0, 3.053, 0)
+size = Vector3(9.9, 9, 8.5)
+roof_height = 3.2
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House037" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(10.754, 0, 152.004)
+rotation = Vector3(0, 3.053, 0)
+size = Vector3(8.7, 6.5, 7.8)
+roof_height = 3.2
+wall_color = Color(0.62, 0.32, 0.24, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House038" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(23.003, 0, 152.463)
+rotation = Vector3(0, 3.053, 0)
+size = Vector3(9.5, 6.5, 9.1)
+roof_height = 2.6
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House039" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(35.982, 0, 154.203)
+rotation = Vector3(0, 3.053, 0)
+size = Vector3(10.9, 6, 7.9)
+roof_height = 3.2
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House040" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-27.547, 0, 174.878)
+rotation = Vector3(0, -0.089, 0)
+size = Vector3(8.8, 6, 8.5)
+roof_height = 3.8
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House041" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-15.458, 0, 175.862)
+rotation = Vector3(0, -0.089, 0)
+size = Vector3(9, 9, 8.4)
+roof_height = 3.2
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House042" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-2.822, 0, 177.164)
+rotation = Vector3(0, -0.089, 0)
+size = Vector3(8.1, 5.5, 8.7)
+roof_height = 3.2
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House043" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(75.905, 0, 126.816)
+rotation = Vector3(0, -2.478, 0)
+size = Vector3(10.9, 9, 8.8)
+roof_height = 3.8
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House044" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(87.818, 0, 117.958)
+rotation = Vector3(0, -2.478, 0)
+size = Vector3(8.1, 9, 8.1)
+roof_height = 3.8
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House045" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(81.517, 0, 155.934)
+rotation = Vector3(0, 0.664, 0)
+size = Vector3(10.2, 6, 8)
+roof_height = 3.8
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House046" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-113.813, 0, -62.446)
+rotation = Vector3(0, -1.697, 0)
+size = Vector3(8.6, 9, 8.6)
+roof_height = 2.6
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House047" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-111.876, 0, -73.475)
+rotation = Vector3(0, -1.697, 0)
+size = Vector3(9.1, 9, 7.5)
+roof_height = 3.2
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House048" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-110.394, 0, -86.457)
+rotation = Vector3(0, -1.697, 0)
+size = Vector3(8.3, 6, 7.9)
+roof_height = 3.2
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House049" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-109.913, 0, -98.028)
+rotation = Vector3(0, -1.697, 0)
+size = Vector3(9.8, 6.5, 9.8)
+roof_height = 3.2
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House050" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-86.548, 0, -60.906)
+rotation = Vector3(0, 1.444, 0)
+size = Vector3(10.4, 9, 9.9)
+roof_height = 3.8
+wall_color = Color(0.62, 0.32, 0.24, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House051" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-84.568, 0, -85.792)
+rotation = Vector3(0, 1.444, 0)
+size = Vector3(10.6, 5.5, 7.5)
+roof_height = 3.8
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House052" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-95.003, 0, -119.392)
+rotation = Vector3(0, -2.723, 0)
+size = Vector3(9.4, 9, 8.3)
+roof_height = 3.8
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House053" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-84.134, 0, -124.21)
+rotation = Vector3(0, -2.723, 0)
+size = Vector3(10.6, 5.5, 8.3)
+roof_height = 3.2
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House054" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-72.197, 0, -129.243)
+rotation = Vector3(0, -2.723, 0)
+size = Vector3(8.6, 9, 7.8)
+roof_height = 3.8
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House055" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-61.627, 0, -134.084)
+rotation = Vector3(0, -2.723, 0)
+size = Vector3(9.5, 5.5, 8)
+roof_height = 3.8
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House056" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-50.63, 0, -139.102)
+rotation = Vector3(0, -2.723, 0)
+size = Vector3(10.6, 9, 8.3)
+roof_height = 3.8
+wall_color = Color(0.62, 0.32, 0.24, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House057" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-38.357, 0, -145.431)
+rotation = Vector3(0, -2.723, 0)
+size = Vector3(9.6, 5.5, 9.9)
+roof_height = 3.8
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House058" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-26.47, 0, -150.036)
+rotation = Vector3(0, -2.723, 0)
+size = Vector3(9.7, 5.5, 8.6)
+roof_height = 2.6
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House059" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-50.339, 0, -110.848)
+rotation = Vector3(0, 0.418, 0)
+size = Vector3(9.6, 9, 7.6)
+roof_height = 3.8
+wall_color = Color(0.62, 0.32, 0.24, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House060" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-26.312, 0, -121.296)
+rotation = Vector3(0, 0.418, 0)
+size = Vector3(8.2, 6.5, 8)
+roof_height = 3.8
+wall_color = Color(0.62, 0.32, 0.24, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House061" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-15.052, 0, -125.621)
+rotation = Vector3(0, 0.418, 0)
+size = Vector3(8.2, 6, 9.3)
+roof_height = 3.8
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House062" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-4.459, 0, -130.975)
+rotation = Vector3(0, 0.418, 0)
+size = Vector3(9.6, 9, 8.1)
+roof_height = 3.2
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House063" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(2.137, 0, -157.961)
+rotation = Vector3(0, 3.092, 0)
+size = Vector3(9.7, 6, 8.6)
+roof_height = 2.6
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House064" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(14.901, 0, -157.193)
+rotation = Vector3(0, 3.092, 0)
+size = Vector3(9.5, 6.5, 8.3)
+roof_height = 3.8
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House065" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(26.611, 0, -157.121)
+rotation = Vector3(0, 3.092, 0)
+size = Vector3(9, 6, 9.4)
+roof_height = 3.8
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House066" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(39.373, 0, -156.547)
+rotation = Vector3(0, 3.092, 0)
+size = Vector3(8.4, 6, 9.5)
+roof_height = 3.2
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House067" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(62.162, 0, -154.832)
+rotation = Vector3(0, 3.092, 0)
+size = Vector3(10, 6.5, 8.3)
+roof_height = 2.6
+wall_color = Color(0.62, 0.32, 0.24, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House068" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(74.629, 0, -154.091)
+rotation = Vector3(0, 3.092, 0)
+size = Vector3(9.1, 6.5, 8.1)
+roof_height = 3.8
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House069" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(87.225, 0, -153.19)
+rotation = Vector3(0, 3.092, 0)
+size = Vector3(8, 6, 7.6)
+roof_height = 3.8
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House070" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(14.764, 0, -130.479)
+rotation = Vector3(0, -0.05, 0)
+size = Vector3(8.4, 6.5, 9)
+roof_height = 2.6
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House071" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(48.694, 0, -128.536)
+rotation = Vector3(0, -0.05, 0)
+size = Vector3(9, 9, 9.5)
+roof_height = 3.2
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House072" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(88.348, 0, -127.3)
+rotation = Vector3(0, -0.05, 0)
+size = Vector3(8.1, 6.5, 8)
+roof_height = 3.8
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House073" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-75.615, 0, -64.393)
+rotation = Vector3(0, 0.071, 0)
+size = Vector3(9.1, 6, 7.9)
+roof_height = 3.8
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House074" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-51.021, 0, -65.847)
+rotation = Vector3(0, 0.071, 0)
+size = Vector3(10.3, 5.5, 8.5)
+roof_height = 3.8
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House075" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-52.163, 0, -28.054)
+rotation = Vector3(0, 1.571, 0)
+size = Vector3(10.9, 9, 9.7)
+roof_height = 3.8
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House076" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-52.923, 0, -88.688)
+rotation = Vector3(0, 1.571, 0)
+size = Vector3(9, 6.5, 8.2)
+roof_height = 3.8
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House077" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-52.964, 0, -100.093)
+rotation = Vector3(0, 1.571, 0)
+size = Vector3(8.2, 5.5, 8.1)
+roof_height = 3.8
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House078" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-23.871, 0, -57.638)
+rotation = Vector3(0, 1.621, 0)
+size = Vector3(10.3, 9, 9.5)
+roof_height = 2.6
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House079" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-25.539, 0, -92.531)
+rotation = Vector3(0, 1.621, 0)
+size = Vector3(10.9, 5.5, 9.6)
+roof_height = 3.2
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House080" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-26.989, 0, -106.482)
+rotation = Vector3(0, 1.621, 0)
+size = Vector3(8.6, 6.5, 8.1)
+roof_height = 3.8
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House081" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(23.011, 0, -52.097)
+rotation = Vector3(0, -1.571, 0)
+size = Vector3(9.4, 6, 8)
+roof_height = 3.2
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House082" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(22.471, 0, -65.329)
+rotation = Vector3(0, -1.571, 0)
+size = Vector3(9.8, 6.5, 9.1)
+roof_height = 3.8
+wall_color = Color(0.62, 0.32, 0.24, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House083" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(22.352, 0, -77.805)
+rotation = Vector3(0, -1.571, 0)
+size = Vector3(10.8, 9, 9.3)
+roof_height = 3.8
+wall_color = Color(0.62, 0.32, 0.24, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House084" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(22.138, 0, -90.915)
+rotation = Vector3(0, -1.571, 0)
+size = Vector3(9.4, 5.5, 9.7)
+roof_height = 2.6
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House085" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(22.036, 0, -115.461)
+rotation = Vector3(0, -1.571, 0)
+size = Vector3(8.9, 5.5, 9.9)
+roof_height = 2.6
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House086" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(47.519, 0, -76.442)
+rotation = Vector3(0, 1.571, 0)
+size = Vector3(9.6, 5.5, 9)
+roof_height = 3.2
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House087" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(47.564, 0, -89.444)
+rotation = Vector3(0, 1.571, 0)
+size = Vector3(8.2, 6.5, 9.1)
+roof_height = 2.6
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House088" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(74.664, 0, -30.215)
+rotation = Vector3(0, 1.531, 0)
+size = Vector3(10.5, 6, 8.9)
+roof_height = 2.6
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House089" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(77.129, 0, -94.642)
+rotation = Vector3(0, 1.531, 0)
+size = Vector3(9.9, 9, 8.7)
+roof_height = 2.6
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House090" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(78.528, 0, -120.426)
+rotation = Vector3(0, 1.531, 0)
+size = Vector3(10.4, 9, 9.4)
+roof_height = 3.8
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House091" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(89.791, 0, -92.747)
+rotation = Vector3(0, 0.053, 0)
+size = Vector3(8.2, 6, 9.4)
+roof_height = 3.2
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House092" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-98.282, 0, 32.86)
+rotation = Vector3(0, 3.142, 0)
+size = Vector3(8.6, 9, 8.3)
+roof_height = 3.2
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House093" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-85.751, 0, 33.153)
+rotation = Vector3(0, 3.142, 0)
+size = Vector3(9.2, 5.5, 7.7)
+roof_height = 3.2
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House094" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-98.045, 0, 57.189)
+size = Vector3(9, 6, 8.4)
+roof_height = 2.6
+wall_color = Color(0.55, 0.28, 0.22, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House095" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-86.196, 0, 57.631)
+size = Vector3(8.1, 6, 9.3)
+roof_height = 3.8
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House096" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-85.871, 0, 69.016)
+rotation = Vector3(0, 2.727, 0)
+size = Vector3(9.7, 5.5, 7.8)
+roof_height = 3.2
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House097" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-60.348, 0, 107.193)
+rotation = Vector3(0, -0.415, 0)
+size = Vector3(8.5, 5.5, 9.5)
+roof_height = 3.8
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House098" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(-76.901, 0, 25.38)
+rotation = Vector3(0, -1.571, 0)
+size = Vector3(8.4, 5.5, 7.8)
+roof_height = 2.6
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House099" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(45.439, 0, 42.611)
+rotation = Vector3(0, 3.142, 0)
+size = Vector3(8.1, 5.5, 8.8)
+roof_height = 3.8
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House100" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(66.58, 0, 43.042)
+rotation = Vector3(0, 3.142, 0)
+size = Vector3(8.1, 6, 7.9)
+roof_height = 3.8
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.35, 0.3, 0.28, 1)
+
+[node name="House101" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(77.49, 0, 42.994)
+rotation = Vector3(0, 3.142, 0)
+size = Vector3(10.7, 6, 8)
+roof_height = 2.6
+wall_color = Color(0.58, 0.44, 0.36, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House102" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(34.214, 0, 66.899)
+size = Vector3(10.2, 5.5, 7.8)
+roof_height = 3.2
+wall_color = Color(0.82, 0.76, 0.64, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House103" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(73.091, 0, 66.841)
+size = Vector3(9.9, 6.5, 7.7)
+roof_height = 3.8
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House104" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(86.17, 0, 67.258)
+size = Vector3(9.7, 5.5, 8.5)
+roof_height = 2.6
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House105" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(68.14, 0, 30.801)
+rotation = Vector3(0, 1.611, 0)
+size = Vector3(8.1, 5.5, 9.8)
+roof_height = 2.6
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House106" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(70.679, 0, 117.529)
+rotation = Vector3(0, 1.611, 0)
+size = Vector3(8.4, 6, 7.9)
+roof_height = 3.8
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House107" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(44.962, 0, 81.943)
+rotation = Vector3(0, -1.531, 0)
+size = Vector3(10.2, 9, 8.6)
+roof_height = 2.6
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.46, 0.2, 0.16, 1)
+
+[node name="House108" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(46.295, 0, 119.205)
+rotation = Vector3(0, -1.531, 0)
+size = Vector3(9.4, 5.5, 8.9)
+roof_height = 3.2
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House109" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(29.532, 0, 87.932)
+rotation = Vector3(0, 3.142, 0)
+size = Vector3(9.2, 9, 8.1)
+roof_height = 3.8
+wall_color = Color(0.48, 0.3, 0.26, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House110" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(68.185, 0, 88.245)
+rotation = Vector3(0, 3.142, 0)
+size = Vector3(10, 6.5, 7.5)
+roof_height = 3.2
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.22, 0.22, 0.24, 1)
+
+[node name="House111" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(80.379, 0, 87.567)
+rotation = Vector3(0, 3.142, 0)
+size = Vector3(10.2, 9, 8.9)
+roof_height = 3.8
+wall_color = Color(0.74, 0.6, 0.46, 1)
+roof_color = Color(0.3, 0.28, 0.3, 1)
+
+[node name="House112" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(24.203, 0, 112.857)
+size = Vector3(9.9, 9, 9.7)
+roof_height = 3.8
+wall_color = Color(0.66, 0.5, 0.38, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="House113" parent="Houses" instance=ExtResource("3_res")]
+position = Vector3(33.075, 0, 122.58)
+rotation = Vector3(0, 3.067, 0)
+size = Vector3(8.9, 6, 10)
+roof_height = 2.6
+wall_color = Color(0.86, 0.84, 0.8, 1)
+roof_color = Color(0.58, 0.24, 0.17, 1)
+
+[node name="Trees" type="Node3D" parent="." groups=["navigation_source"]]
+
+[node name="Tree001" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-0.776, 0, 56.718)
+rotation = Vector3(0, 0.99, 0)
+scale = Vector3(1.32, 1.32, 1.32)
+
+[node name="Tree002" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-12.749, 0, 53.492)
+rotation = Vector3(0, 2.92, 0)
+scale = Vector3(1.29, 1.29, 1.29)
+
+[node name="Tree003" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-5.979, 0, 76.029)
+rotation = Vector3(0, 3.31, 0)
+scale = Vector3(0.89, 0.89, 0.89)
+
+[node name="Tree004" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-56.722, 0, 0.613)
+rotation = Vector3(0, 0.75, 0)
+scale = Vector3(1.33, 1.33, 1.33)
+
+[node name="Tree005" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-54.123, 0, -11.512)
+rotation = Vector3(0, 1.72, 0)
+scale = Vector3(1.29, 1.29, 1.29)
+
+[node name="Tree006" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-76.278, 0, -3.579)
+rotation = Vector3(0, 0.57, 0)
+scale = Vector3(1.31, 1.31, 1.31)
+
+[node name="Tree007" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-73.679, 0, -15.704)
+rotation = Vector3(0, 5.61, 0)
+scale = Vector3(1.18, 1.18, 1.18)
+
+[node name="Tree008" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-95.834, 0, -7.771)
+rotation = Vector3(0, 4.01, 0)
+scale = Vector3(1.19, 1.19, 1.19)
+
+[node name="Tree009" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-93.235, 0, -19.895)
+rotation = Vector3(0, 2.35, 0)
+scale = Vector3(1.23, 1.23, 1.23)
+
+[node name="Tree010" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(56.516, 0, 3.37)
+rotation = Vector3(0, 0.35, 0)
+scale = Vector3(1.16, 1.16, 1.16)
+
+[node name="Tree011" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(75.067, 0, -11.108)
+rotation = Vector3(0, 2.11, 0)
+scale = Vector3(1, 1, 1)
+
+[node name="Tree012" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(76.4, 0, 1.22)
+rotation = Vector3(0, 3.12, 0)
+scale = Vector3(1.33, 1.33, 1.33)
+
+[node name="Tree013" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(45.963, 0, -30.554)
+rotation = Vector3(0, 2.95, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+
+[node name="Tree014" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(55.477, 0, -52.077)
+rotation = Vector3(0, 2.54, 0)
+scale = Vector3(1.09, 1.09, 1.09)
+
+[node name="Tree015" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(71.988, 0, -63.363)
+rotation = Vector3(0, 0.95, 0)
+scale = Vector3(1, 1, 1)
+
+[node name="Tree016" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(78.986, 0, -53.126)
+rotation = Vector3(0, 0.22, 0)
+scale = Vector3(1.28, 1.28, 1.28)
+
+[node name="Tree017" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(88.5, 0, -74.649)
+rotation = Vector3(0, 4.52, 0)
+scale = Vector3(1.06, 1.06, 1.06)
+
+[node name="Tree018" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(95.497, 0, -64.412)
+rotation = Vector3(0, 6.26, 0)
+scale = Vector3(1.01, 1.01, 1.01)
+
+[node name="Tree019" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(103.121, 0, -83.044)
+rotation = Vector3(0, 1.84, 0)
+scale = Vector3(0.89, 0.89, 0.89)
+
+[node name="Tree020" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(121.551, 0, -90.812)
+rotation = Vector3(0, 4.75, 0)
+scale = Vector3(1.16, 1.16, 1.16)
+
+[node name="Tree021" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(126.367, 0, -79.385)
+rotation = Vector3(0, 5.2, 0)
+scale = Vector3(1.06, 1.06, 1.06)
+
+[node name="Tree022" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-43.128, 0, 35.994)
+rotation = Vector3(0, 6.02, 0)
+scale = Vector3(1.14, 1.14, 1.14)
+
+[node name="Tree023" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-47.484, 0, 59.119)
+rotation = Vector3(0, 3.35, 0)
+scale = Vector3(1.27, 1.27, 1.27)
+
+[node name="Tree024" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-56.631, 0, 50.747)
+rotation = Vector3(0, 4.79, 0)
+scale = Vector3(1.01, 1.01, 1.01)
+
+[node name="Tree025" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-60.987, 0, 73.872)
+rotation = Vector3(0, 2.88, 0)
+scale = Vector3(0.87, 0.87, 0.87)
+
+[node name="Tree026" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-90.627, 0, 101.685)
+rotation = Vector3(0, 3.28, 0)
+scale = Vector3(0.98, 0.98, 0.98)
+
+[node name="Tree027" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-98.731, 0, 92.299)
+rotation = Vector3(0, 1.79, 0)
+scale = Vector3(0.91, 0.91, 0.91)
+
+[node name="Tree028" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-86.935, 0, 121.878)
+scale = Vector3(0.91, 0.91, 0.91)
+
+[node name="Tree029" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-70.753, 0, 133.632)
+rotation = Vector3(0, 1.5, 0)
+scale = Vector3(0.95, 0.95, 0.95)
+
+[node name="Tree030" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-54.571, 0, 145.385)
+rotation = Vector3(0, 2.34, 0)
+scale = Vector3(1.25, 1.25, 1.25)
+
+[node name="Tree031" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-61.858, 0, 155.418)
+rotation = Vector3(0, 4.81, 0)
+scale = Vector3(0.87, 0.87, 0.87)
+
+[node name="Tree032" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-38.475, 0, 154.356)
+rotation = Vector3(0, 4.47, 0)
+scale = Vector3(0.86, 0.86, 0.86)
+
+[node name="Tree033" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-39.573, 0, 166.707)
+rotation = Vector3(0, 2.92, 0)
+scale = Vector3(0.95, 0.95, 0.95)
+
+[node name="Tree034" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-18.553, 0, 156.126)
+rotation = Vector3(0, 0.45, 0)
+scale = Vector3(1.21, 1.21, 1.21)
+
+[node name="Tree035" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-19.651, 0, 168.478)
+rotation = Vector3(0, 4.04, 0)
+scale = Vector3(1.02, 1.02, 1.02)
+
+[node name="Tree036" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(1.368, 0, 157.897)
+rotation = Vector3(0, 3.91, 0)
+scale = Vector3(1.2, 1.2, 1.2)
+
+[node name="Tree037" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(0.27, 0, 170.248)
+rotation = Vector3(0, 6.21, 0)
+scale = Vector3(0.88, 0.88, 0.88)
+
+[node name="Tree038" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(21.29, 0, 159.668)
+rotation = Vector3(0, 0.72, 0)
+scale = Vector3(0.89, 0.89, 0.89)
+
+[node name="Tree039" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(20.192, 0, 172.019)
+rotation = Vector3(0, 5.71, 0)
+scale = Vector3(1.2, 1.2, 1.2)
+
+[node name="Tree040" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(45.908, 0, 159.42)
+rotation = Vector3(0, 5.67, 0)
+scale = Vector3(1.02, 1.02, 1.02)
+
+[node name="Tree041" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(53.546, 0, 169.189)
+rotation = Vector3(0, 1.65, 0)
+scale = Vector3(0.99, 0.99, 0.99)
+
+[node name="Tree042" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(69.302, 0, 156.87)
+rotation = Vector3(0, 2.3, 0)
+scale = Vector3(1.04, 1.04, 1.04)
+
+[node name="Tree043" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(85.058, 0, 144.552)
+rotation = Vector3(0, 5.89, 0)
+scale = Vector3(1.35, 1.35, 1.35)
+
+[node name="Tree044" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(95.974, 0, 117.369)
+rotation = Vector3(0, 4.2, 0)
+scale = Vector3(1.02, 1.02, 1.02)
+
+[node name="Tree045" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-99.371, 0, -21.52)
+rotation = Vector3(0, 3.99, 0)
+scale = Vector3(1.16, 1.16, 1.16)
+
+[node name="Tree046" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-109.148, 0, -42.925)
+rotation = Vector3(0, 0.31, 0)
+scale = Vector3(1.23, 1.23, 1.23)
+
+[node name="Tree047" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-106.624, 0, -62.765)
+rotation = Vector3(0, 1.83, 0)
+scale = Vector3(0.94, 0.94, 0.94)
+
+[node name="Tree048" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-94.323, 0, -61.2)
+rotation = Vector3(0, 0.25, 0)
+scale = Vector3(1.28, 1.28, 1.28)
+
+[node name="Tree049" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-104.099, 0, -82.605)
+rotation = Vector3(0, 5.06, 0)
+scale = Vector3(1.16, 1.16, 1.16)
+
+[node name="Tree050" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-91.798, 0, -81.04)
+rotation = Vector3(0, 4.09, 0)
+scale = Vector3(0.93, 0.93, 0.93)
+
+[node name="Tree051" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-86.999, 0, -101.771)
+rotation = Vector3(0, 4.03, 0)
+scale = Vector3(0.88, 0.88, 0.88)
+
+[node name="Tree052" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-73.759, 0, -121.225)
+rotation = Vector3(0, 5.65, 0)
+scale = Vector3(1.16, 1.16, 1.16)
+
+[node name="Tree053" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-55.483, 0, -129.348)
+rotation = Vector3(0, 3.68, 0)
+scale = Vector3(0.88, 0.88, 0.88)
+
+[node name="Tree054" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-37.206, 0, -137.471)
+rotation = Vector3(0, 5.54, 0)
+scale = Vector3(1.02, 1.02, 1.02)
+
+[node name="Tree055" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-32.17, 0, -126.14)
+rotation = Vector3(0, 1.12, 0)
+scale = Vector3(1.24, 1.24, 1.24)
+
+[node name="Tree056" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-18.93, 0, -145.594)
+rotation = Vector3(0, 1.45, 0)
+scale = Vector3(1.09, 1.09, 1.09)
+
+[node name="Tree057" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-13.894, 0, -134.262)
+rotation = Vector3(0, 4.06, 0)
+scale = Vector3(1.17, 1.17, 1.17)
+
+[node name="Tree058" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(0.683, 0, -138.508)
+rotation = Vector3(0, 3.56, 0)
+scale = Vector3(1.23, 1.23, 1.23)
+
+[node name="Tree059" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(21.277, 0, -149.894)
+rotation = Vector3(0, 0.6, 0)
+scale = Vector3(1.28, 1.28, 1.28)
+
+[node name="Tree060" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(20.658, 0, -137.509)
+rotation = Vector3(0, 5.62, 0)
+scale = Vector3(1.11, 1.11, 1.11)
+
+[node name="Tree061" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(41.252, 0, -148.895)
+rotation = Vector3(0, 1.69, 0)
+scale = Vector3(0.99, 0.99, 0.99)
+
+[node name="Tree062" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(40.633, 0, -136.511)
+rotation = Vector3(0, 5.66, 0)
+scale = Vector3(1, 1, 1)
+
+[node name="Tree063" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(60.608, 0, -135.512)
+rotation = Vector3(0, 2.09, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+
+[node name="Tree064" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(81.202, 0, -146.898)
+rotation = Vector3(0, 3.81, 0)
+scale = Vector3(0.98, 0.98, 0.98)
+
+[node name="Tree065" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(80.583, 0, -134.513)
+rotation = Vector3(0, 2.38, 0)
+scale = Vector3(0.87, 0.87, 0.87)
+
+[node name="Tree066" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(103.626, 0, -139.842)
+rotation = Vector3(0, 5.34, 0)
+scale = Vector3(1.03, 1.03, 1.03)
+
+[node name="Tree067" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(94.559, 0, -131.383)
+rotation = Vector3(0, 4.71, 0)
+scale = Vector3(1.31, 1.31, 1.31)
+
+[node name="Tree068" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(117.269, 0, -125.218)
+rotation = Vector3(0, 4.74, 0)
+scale = Vector3(1.24, 1.24, 1.24)
+
+[node name="Tree069" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(121.845, 0, -102.135)
+rotation = Vector3(0, 1.71, 0)
+scale = Vector3(0.94, 0.94, 0.94)
+
+[node name="Tree070" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-107.633, 0, 57.841)
+rotation = Vector3(0, 2.51, 0)
+scale = Vector3(1.17, 1.17, 1.17)
+kind = 0
+
+[node name="Tree071" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-34.386, 0, -107.62)
+rotation = Vector3(0, 3.4, 0)
+scale = Vector3(1.17, 1.17, 1.17)
+
+[node name="Tree072" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(24.91, 0, 94.691)
+rotation = Vector3(0, 1.39, 0)
+scale = Vector3(1.31, 1.31, 1.31)
+kind = 0
+
+[node name="Tree073" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-139.715, 0, 44.306)
+rotation = Vector3(0, 0.45, 0)
+scale = Vector3(1.18, 1.18, 1.18)
+
+[node name="Tree074" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-194.229, 0, -24.09)
+rotation = Vector3(0, 4.09, 0)
+scale = Vector3(1.18, 1.18, 1.18)
+kind = 0
+
+[node name="Tree075" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-157.356, 0, 78.888)
+rotation = Vector3(0, 0.66, 0)
+scale = Vector3(1.32, 1.32, 1.32)
+
+[node name="Tree076" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-25.06, 0, 193.529)
+rotation = Vector3(0, 4.59, 0)
+scale = Vector3(1.33, 1.33, 1.33)
+
+[node name="Tree077" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-200.577, 0, -40.185)
+rotation = Vector3(0, 1.76, 0)
+scale = Vector3(1.33, 1.33, 1.33)
+kind = 0
+
+[node name="Tree078" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-102.37, 0, 87.02)
+rotation = Vector3(0, 6.24, 0)
+scale = Vector3(1.28, 1.28, 1.28)
+kind = 0
+
+[node name="Tree079" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-93.395, 0, 153.557)
+rotation = Vector3(0, 0.14, 0)
+scale = Vector3(1.26, 1.26, 1.26)
+
+[node name="Tree080" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-133.743, 0, -134.208)
+rotation = Vector3(0, 5.22, 0)
+scale = Vector3(1.12, 1.12, 1.12)
+
+[node name="Tree081" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-168.592, 0, -12.377)
+rotation = Vector3(0, 0.75, 0)
+scale = Vector3(1.24, 1.24, 1.24)
+
+[node name="Tree082" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-137.568, 0, -92.111)
+rotation = Vector3(0, 2.13, 0)
+scale = Vector3(1.01, 1.01, 1.01)
+
+[node name="Tree083" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-169.495, 0, 81.182)
+rotation = Vector3(0, 1.83, 0)
+scale = Vector3(1.33, 1.33, 1.33)
+
+[node name="Tree084" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-26.528, 0, -177.274)
+rotation = Vector3(0, 3.4, 0)
+scale = Vector3(1.09, 1.09, 1.09)
+
+[node name="Tree085" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-26.656, 0, -158.8)
+rotation = Vector3(0, 5.61, 0)
+scale = Vector3(0.88, 0.88, 0.88)
+kind = 0
+
+[node name="Tree086" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-9.634, 0, 135.148)
+rotation = Vector3(0, 2.84, 0)
+scale = Vector3(0.88, 0.88, 0.88)
+
+[node name="Tree087" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-203.966, 0, -26.752)
+rotation = Vector3(0, 0.26, 0)
+scale = Vector3(1.17, 1.17, 1.17)
+
+[node name="Tree088" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(26.373, 0, 80.905)
+rotation = Vector3(0, 5.24, 0)
+scale = Vector3(1.07, 1.07, 1.07)
+kind = 0
+
+[node name="Tree089" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-35.16, 0, 84.42)
+rotation = Vector3(0, 6.14, 0)
+scale = Vector3(1.08, 1.08, 1.08)
+
+[node name="Tree090" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(54.865, 0, -173.898)
+rotation = Vector3(0, 0.55, 0)
+scale = Vector3(1.09, 1.09, 1.09)
+
+[node name="Tree091" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-13.724, 0, -211.458)
+rotation = Vector3(0, 0.56, 0)
+scale = Vector3(0.92, 0.92, 0.92)
+kind = 0
+
+[node name="Tree092" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-202.775, 0, 23.031)
+rotation = Vector3(0, 6.19, 0)
+scale = Vector3(1.23, 1.23, 1.23)
+
+[node name="Tree093" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-21.475, 0, 135.967)
+rotation = Vector3(0, 3.61, 0)
+scale = Vector3(0.91, 0.91, 0.91)
+kind = 0
+
+[node name="Tree094" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-162.453, 0, 1.096)
+rotation = Vector3(0, 3.02, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+kind = 0
+
+[node name="Tree095" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-105.211, 0, 7.963)
+rotation = Vector3(0, 1.7, 0)
+scale = Vector3(1.21, 1.21, 1.21)
+kind = 0
+
+[node name="Tree096" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(135.76, 0, -136.555)
+rotation = Vector3(0, 0.25, 0)
+scale = Vector3(0.96, 0.96, 0.96)
+
+[node name="Tree097" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(24.138, 0, -129.647)
+rotation = Vector3(0, 5.85, 0)
+scale = Vector3(1, 1, 1)
+kind = 0
+
+[node name="Tree098" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(91.709, 0, -173.318)
+rotation = Vector3(0, 1.24, 0)
+scale = Vector3(1.26, 1.26, 1.26)
+
+[node name="Tree099" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-178.261, 0, -92.877)
+rotation = Vector3(0, 0.64, 0)
+scale = Vector3(1.31, 1.31, 1.31)
+kind = 0
+
+[node name="Tree100" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-43.248, 0, 168.597)
+rotation = Vector3(0, 1.77, 0)
+scale = Vector3(1.25, 1.25, 1.25)
+
+[node name="Tree101" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(2.985, 0, -133.771)
+rotation = Vector3(0, 2.4, 0)
+scale = Vector3(1.32, 1.32, 1.32)
+
+[node name="Tree102" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(63.735, 0, -172.577)
+rotation = Vector3(0, 5.59, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+kind = 0
+
+[node name="Tree103" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(44.093, 0, -179.056)
+rotation = Vector3(0, 5.15, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+kind = 0
+
+[node name="Tree104" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(18.689, 0, 201.809)
+rotation = Vector3(0, 5.09, 0)
+scale = Vector3(0.94, 0.94, 0.94)
+kind = 0
+
+[node name="Tree105" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(119.692, 0, 156.738)
+rotation = Vector3(0, 3.65, 0)
+scale = Vector3(1.03, 1.03, 1.03)
+
+[node name="Tree106" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-124.865, 0, 59.229)
+rotation = Vector3(0, 3.96, 0)
+scale = Vector3(1.34, 1.34, 1.34)
+kind = 0
+
+[node name="Tree107" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(14.808, 0, 84.831)
+rotation = Vector3(0, 1.96, 0)
+scale = Vector3(1.08, 1.08, 1.08)
+kind = 0
+
+[node name="Tree108" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-113.954, 0, 82.822)
+rotation = Vector3(0, 3.28, 0)
+scale = Vector3(1.11, 1.11, 1.11)
+kind = 0
+
+[node name="Tree109" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-160.198, 0, -104.83)
+rotation = Vector3(0, 3.88, 0)
+scale = Vector3(0.91, 0.91, 0.91)
+
+[node name="Tree110" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-90.976, 0, 178.426)
+rotation = Vector3(0, 1.5, 0)
+scale = Vector3(1.13, 1.13, 1.13)
+
+[node name="Tree111" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-50.641, 0, 132.462)
+rotation = Vector3(0, 5.06, 0)
+scale = Vector3(1.3, 1.3, 1.3)
+
+[node name="Tree112" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(122.074, 0, -124.716)
+rotation = Vector3(0, 5.37, 0)
+scale = Vector3(1.22, 1.22, 1.22)
+kind = 0
+
+[node name="Tree113" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-170.049, 0, -118.183)
+rotation = Vector3(0, 4.77, 0)
+scale = Vector3(1.08, 1.08, 1.08)
+kind = 0
+
+[node name="Tree114" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-122.685, 0, -134.411)
+rotation = Vector3(0, 4.11, 0)
+scale = Vector3(0.96, 0.96, 0.96)
+
+[node name="Tree115" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-104.583, 0, 35.683)
+rotation = Vector3(0, 1.98, 0)
+scale = Vector3(1.11, 1.11, 1.11)
+
+[node name="Tree116" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-88.797, 0, 166.5)
+rotation = Vector3(0, 5.41, 0)
+scale = Vector3(1.24, 1.24, 1.24)
+kind = 0
+
+[node name="Tree117" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-103.873, 0, 17.563)
+rotation = Vector3(0, 5.07, 0)
+scale = Vector3(0.97, 0.97, 0.97)
+
+[node name="Tree118" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(46.16, 0, -150.614)
+rotation = Vector3(0, 4.57, 0)
+scale = Vector3(1.08, 1.08, 1.08)
+kind = 0
+
+[node name="Tree119" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-86.593, 0, 16.096)
+rotation = Vector3(0, 3.38, 0)
+scale = Vector3(1.13, 1.13, 1.13)
+kind = 0
+
+[node name="Tree120" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(59.284, 0, -125.401)
+rotation = Vector3(0, 1.42, 0)
+scale = Vector3(1, 1, 1)
+
+[node name="Tree121" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-125.897, 0, -143.024)
+rotation = Vector3(0, 0.29, 0)
+scale = Vector3(0.95, 0.95, 0.95)
+
+[node name="Tree122" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-107.859, 0, 180.832)
+rotation = Vector3(0, 0.48, 0)
+scale = Vector3(0.93, 0.93, 0.93)
+
+[node name="Tree123" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-39.382, 0, -158.877)
+rotation = Vector3(0, 3.62, 0)
+scale = Vector3(1.12, 1.12, 1.12)
+
+[node name="Tree124" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(94.192, 0, 143.681)
+rotation = Vector3(0, 2.81, 0)
+scale = Vector3(1.34, 1.34, 1.34)
+kind = 0
+
+[node name="Tree125" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-206.561, 0, 1.455)
+rotation = Vector3(0, 2.48, 0)
+scale = Vector3(0.87, 0.87, 0.87)
+
+[node name="Tree126" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-154.384, 0, 71.392)
+rotation = Vector3(0, 2.85, 0)
+scale = Vector3(1.08, 1.08, 1.08)
+kind = 0
+
+[node name="Tree127" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(49.441, 0, 127.632)
+rotation = Vector3(0, 2.38, 0)
+scale = Vector3(1.33, 1.33, 1.33)
+
+[node name="Tree128" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(76.055, 0, 163.242)
+rotation = Vector3(0, 2.1, 0)
+scale = Vector3(1.32, 1.32, 1.32)
+kind = 0
+
+[node name="Tree129" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-63.28, 0, 116.255)
+rotation = Vector3(0, 1.37, 0)
+scale = Vector3(1.18, 1.18, 1.18)
+
+[node name="Tree130" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(40.189, 0, -75.189)
+rotation = Vector3(0, 0.6, 0)
+scale = Vector3(0.98, 0.98, 0.98)
+
+[node name="Tree131" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-195.594, 0, -7.575)
+rotation = Vector3(0, 3.37, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+kind = 0
+
+[node name="Tree132" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-107.767, 0, -130.899)
+rotation = Vector3(0, 0.65, 0)
+scale = Vector3(0.96, 0.96, 0.96)
+
+[node name="Tree133" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-78.892, 0, -137.49)
+rotation = Vector3(0, 4.75, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+
+[node name="Tree134" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-15.846, 0, 206.923)
+rotation = Vector3(0, 4.06, 0)
+scale = Vector3(1.34, 1.34, 1.34)
+kind = 0
+
+[node name="Tree135" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(61.545, 0, -191.835)
+rotation = Vector3(0, 2.35, 0)
+scale = Vector3(1.19, 1.19, 1.19)
+
+[node name="Tree136" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-128.012, 0, -134.486)
+rotation = Vector3(0, 2.76, 0)
+scale = Vector3(1.01, 1.01, 1.01)
+
+[node name="Tree137" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(1.743, 0, -107.967)
+rotation = Vector3(0, 0.33, 0)
+scale = Vector3(1.27, 1.27, 1.27)
+
+[node name="Tree138" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-146.532, 0, 35.45)
+rotation = Vector3(0, 2.68, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+
+[node name="Tree139" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-132.145, 0, -88.018)
+rotation = Vector3(0, 1.71, 0)
+scale = Vector3(0.89, 0.89, 0.89)
+kind = 0
+
+[node name="Tree140" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-159.131, 0, -111.226)
+rotation = Vector3(0, 5.94, 0)
+scale = Vector3(1.13, 1.13, 1.13)
+
+[node name="Tree141" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(61.049, 0, -118.626)
+rotation = Vector3(0, 0.86, 0)
+scale = Vector3(1.29, 1.29, 1.29)
+
+[node name="Tree142" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-73.687, 0, 183.564)
+rotation = Vector3(0, 3.46, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+kind = 0
+
+[node name="Tree143" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-178.144, 0, 111)
+rotation = Vector3(0, 6.09, 0)
+scale = Vector3(1.32, 1.32, 1.32)
+
+[node name="Tree144" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(89.487, 0, -100.444)
+rotation = Vector3(0, 0.63, 0)
+scale = Vector3(1.02, 1.02, 1.02)
+kind = 0
+
+[node name="Tree145" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-140.317, 0, 72.898)
+rotation = Vector3(0, 2.66, 0)
+scale = Vector3(1.12, 1.12, 1.12)
+kind = 0
+
+[node name="Tree146" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-76.534, 0, -51.551)
+rotation = Vector3(0, 4.97, 0)
+scale = Vector3(0.87, 0.87, 0.87)
+
+[node name="Tree147" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(15.195, 0, -179.012)
+rotation = Vector3(0, 3.71, 0)
+scale = Vector3(1.2, 1.2, 1.2)
+
+[node name="Tree148" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(97.534, 0, 110.028)
+rotation = Vector3(0, 1.15, 0)
+scale = Vector3(0.99, 0.99, 0.99)
+kind = 0
+
+[node name="Tree149" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-100.778, 0, -162.785)
+rotation = Vector3(0, 5.59, 0)
+scale = Vector3(1.08, 1.08, 1.08)
+kind = 0
+
+[node name="Tree150" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-18.171, 0, -133.322)
+rotation = Vector3(0, 5.3, 0)
+scale = Vector3(1.14, 1.14, 1.14)
+
+[node name="Tree151" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-179.485, 0, -54.453)
+rotation = Vector3(0, 0.8, 0)
+scale = Vector3(1.2, 1.2, 1.2)
+
+[node name="Tree152" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(90.632, 0, 152.328)
+rotation = Vector3(0, 6.12, 0)
+scale = Vector3(1.16, 1.16, 1.16)
+kind = 0
+
+[node name="Tree153" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(0.662, 0, -99.823)
+rotation = Vector3(0, 0.27, 0)
+scale = Vector3(1.06, 1.06, 1.06)
+
+[node name="Tree154" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(40.072, 0, 114.323)
+rotation = Vector3(0, 0.98, 0)
+scale = Vector3(1.26, 1.26, 1.26)
+kind = 0
+
+[node name="Tree155" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(61.885, 0, 163.463)
+rotation = Vector3(0, 5.83, 0)
+scale = Vector3(1.04, 1.04, 1.04)
+
+[node name="Tree156" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-53.491, 0, 104.75)
+rotation = Vector3(0, 2.3, 0)
+scale = Vector3(1.11, 1.11, 1.11)
+
+[node name="Tree157" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-174.983, 0, 9.893)
+rotation = Vector3(0, 2.34, 0)
+scale = Vector3(1.31, 1.31, 1.31)
+
+[node name="Tree158" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(115.968, 0, 129.083)
+rotation = Vector3(0, 2.35, 0)
+scale = Vector3(0.88, 0.88, 0.88)
+kind = 0
+
+[node name="Tree159" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-22.823, 0, 204.172)
+rotation = Vector3(0, 5.6, 0)
+scale = Vector3(0.89, 0.89, 0.89)
+
+[node name="Tree160" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-151.999, 0, 3.044)
+rotation = Vector3(0, 5.82, 0)
+scale = Vector3(1.27, 1.27, 1.27)
+
+[node name="Tree161" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(61.6, 0, 195.901)
+rotation = Vector3(0, 3.48, 0)
+scale = Vector3(0.91, 0.91, 0.91)
+
+[node name="Tree162" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-15.182, 0, 188.848)
+rotation = Vector3(0, 2.5, 0)
+scale = Vector3(0.94, 0.94, 0.94)
+kind = 0
+
+[node name="Tree163" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(54.827, 0, -70.393)
+rotation = Vector3(0, 0.52, 0)
+scale = Vector3(1.3, 1.3, 1.3)
+kind = 0
+
+[node name="Tree164" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(88.485, 0, -28.647)
+rotation = Vector3(0, 2.69, 0)
+scale = Vector3(1.04, 1.04, 1.04)
+
+[node name="Tree165" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(50.745, 0, 67.509)
+rotation = Vector3(0, 5.76, 0)
+scale = Vector3(1.35, 1.35, 1.35)
+
+[node name="Tree166" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-131.638, 0, -145.384)
+rotation = Vector3(0, 2.08, 0)
+scale = Vector3(1.12, 1.12, 1.12)
+kind = 0
+
+[node name="Tree167" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-1.566, 0, -92.557)
+rotation = Vector3(0, 2.8, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+
+[node name="Tree168" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-163.206, 0, 82.568)
+rotation = Vector3(0, 1.27, 0)
+scale = Vector3(1.14, 1.14, 1.14)
+
+[node name="Tree169" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-59.511, 0, -83.745)
+rotation = Vector3(0, 4.42, 0)
+scale = Vector3(1.21, 1.21, 1.21)
+
+[node name="Tree170" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-107.335, 0, -166.363)
+rotation = Vector3(0, 1.06, 0)
+scale = Vector3(0.87, 0.87, 0.87)
+kind = 0
+
+[node name="Tree171" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(3.973, 0, 109.286)
+rotation = Vector3(0, 4.97, 0)
+scale = Vector3(1.04, 1.04, 1.04)
+kind = 0
+
+[node name="Tree172" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-145.157, 0, -78.65)
+rotation = Vector3(0, 0.3, 0)
+scale = Vector3(0.87, 0.87, 0.87)
+kind = 0
+
+[node name="Tree173" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-170.445, 0, -78.908)
+rotation = Vector3(0, 1.89, 0)
+scale = Vector3(1.35, 1.35, 1.35)
+kind = 0
+
+[node name="Tree174" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(3.733, 0, 192.258)
+rotation = Vector3(0, 4.59, 0)
+scale = Vector3(1.32, 1.32, 1.32)
+
+[node name="Tree175" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(51.15, 0, -201.145)
+rotation = Vector3(0, 4.94, 0)
+scale = Vector3(1.3, 1.3, 1.3)
+kind = 0
+
+[node name="Tree176" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-179.452, 0, 57.761)
+rotation = Vector3(0, 3.84, 0)
+scale = Vector3(0.91, 0.91, 0.91)
+
+[node name="Tree177" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-107.584, 0, -156.879)
+rotation = Vector3(0, 3.06, 0)
+scale = Vector3(1.06, 1.06, 1.06)
+kind = 0
+
+[node name="Tree178" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(81.346, 0, 183.026)
+rotation = Vector3(0, 1.16, 0)
+scale = Vector3(0.89, 0.89, 0.89)
+kind = 0
+
+[node name="Tree179" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-102.204, 0, 80.249)
+rotation = Vector3(0, 3.93, 0)
+scale = Vector3(1.02, 1.02, 1.02)
+
+[node name="Tree180" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-183.19, 0, -41.675)
+rotation = Vector3(0, 6.24, 0)
+scale = Vector3(0.96, 0.96, 0.96)
+
+[node name="Tree181" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(122.228, 0, -162.647)
+rotation = Vector3(0, 0.42, 0)
+scale = Vector3(1.09, 1.09, 1.09)
+kind = 0
+
+[node name="Tree182" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-144.6, 0, -89.159)
+rotation = Vector3(0, 5.45, 0)
+scale = Vector3(0.87, 0.87, 0.87)
+kind = 0
+
+[node name="Tree183" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-39.178, 0, 180.68)
+rotation = Vector3(0, 0.14, 0)
+scale = Vector3(1.34, 1.34, 1.34)
+kind = 0
+
+[node name="Tree184" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-179.974, 0, -79.675)
+rotation = Vector3(0, 0.37, 0)
+scale = Vector3(1.01, 1.01, 1.01)
+
+[node name="Tree185" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(2.369, 0, 134.116)
+rotation = Vector3(0, 5.75, 0)
+scale = Vector3(0.93, 0.93, 0.93)
+
+[node name="Tree186" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-70.485, 0, 174.431)
+rotation = Vector3(0, 2.29, 0)
+scale = Vector3(0.99, 0.99, 0.99)
+
+[node name="Tree187" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-47.922, 0, 150.172)
+rotation = Vector3(0, 1.45, 0)
+scale = Vector3(0.86, 0.86, 0.86)
+
+[node name="Tree188" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-108.114, 0, 97.442)
+rotation = Vector3(0, 6.25, 0)
+scale = Vector3(0.88, 0.88, 0.88)
+kind = 0
+
+[node name="Tree189" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-59.548, 0, -148.953)
+rotation = Vector3(0, 2.84, 0)
+scale = Vector3(0.86, 0.86, 0.86)
+kind = 0
+
+[node name="Tree190" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-106.334, 0, 21.491)
+rotation = Vector3(0, 5.09, 0)
+scale = Vector3(1.26, 1.26, 1.26)
+
+[node name="Tree191" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-41.783, 0, 195.857)
+rotation = Vector3(0, 0.89, 0)
+scale = Vector3(0.99, 0.99, 0.99)
+kind = 0
+
+[node name="Tree192" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-39.848, 0, -173.483)
+rotation = Vector3(0, 3.61, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+kind = 0
+
+[node name="Tree193" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-9.098, 0, -89.954)
+rotation = Vector3(0, 3.78, 0)
+scale = Vector3(1.11, 1.11, 1.11)
+kind = 0
+
+[node name="Tree194" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-99.312, 0, -109.238)
+rotation = Vector3(0, 4.83, 0)
+scale = Vector3(1.28, 1.28, 1.28)
+
+[node name="Tree195" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(85.895, 0, 78.092)
+rotation = Vector3(0, 5.92, 0)
+scale = Vector3(1.15, 1.15, 1.15)
+
+[node name="Tree196" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-103.835, 0, 97.93)
+rotation = Vector3(0, 4.41, 0)
+scale = Vector3(1.18, 1.18, 1.18)
+
+[node name="Tree197" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-128.038, 0, -63.893)
+rotation = Vector3(0, 1.72, 0)
+scale = Vector3(1.08, 1.08, 1.08)
+kind = 0
+
+[node name="Tree198" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-56.843, 0, 196.853)
+rotation = Vector3(0, 3.13, 0)
+scale = Vector3(1.21, 1.21, 1.21)
+kind = 0
+
+[node name="Tree199" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-207.427, 0, 42.312)
+rotation = Vector3(0, 2.03, 0)
+scale = Vector3(1.26, 1.26, 1.26)
+
+[node name="Tree200" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(5.942, 0, -127.158)
+rotation = Vector3(0, 1.72, 0)
+scale = Vector3(0.99, 0.99, 0.99)
+kind = 0
+
+[node name="Tree201" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-195.034, 0, 70.007)
+rotation = Vector3(0, 0.11, 0)
+scale = Vector3(0.99, 0.99, 0.99)
+
+[node name="Tree202" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-170.698, 0, 117.445)
+rotation = Vector3(0, 4.59, 0)
+scale = Vector3(0.87, 0.87, 0.87)
+kind = 0
+
+[node name="Tree203" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(89.11, 0, -12.689)
+rotation = Vector3(0, 0.96, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+
+[node name="Tree204" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(126.455, 0, -153.821)
+rotation = Vector3(0, 1.83, 0)
+scale = Vector3(1.27, 1.27, 1.27)
+
+[node name="Tree205" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-209.507, 0, -1.497)
+rotation = Vector3(0, 1.31, 0)
+scale = Vector3(0.91, 0.91, 0.91)
+
+[node name="Tree206" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-121.452, 0, 80.283)
+rotation = Vector3(0, 4.45, 0)
+scale = Vector3(0.85, 0.85, 0.85)
+
+[node name="Tree207" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-171.378, 0, 111.961)
+rotation = Vector3(0, 1.51, 0)
+scale = Vector3(0.88, 0.88, 0.88)
+
+[node name="Tree208" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-113.264, 0, -125.909)
+rotation = Vector3(0, 3.26, 0)
+scale = Vector3(1.03, 1.03, 1.03)
+
+[node name="Tree209" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-149.591, 0, 24.005)
+rotation = Vector3(0, 4.65, 0)
+scale = Vector3(1.26, 1.26, 1.26)
+
+[node name="Tree210" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(42.996, 0, 193.036)
+rotation = Vector3(0, 5.26, 0)
+scale = Vector3(1.02, 1.02, 1.02)
+
+[node name="Tree211" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(52.386, 0, 191.653)
+rotation = Vector3(0, 4.42, 0)
+scale = Vector3(1.28, 1.28, 1.28)
+
+[node name="Tree212" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-111.802, 0, 5.899)
+rotation = Vector3(0, 0.47, 0)
+scale = Vector3(1.28, 1.28, 1.28)
+
+[node name="Tree213" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(69.311, 0, -194.733)
+rotation = Vector3(0, 2.09, 0)
+scale = Vector3(1.24, 1.24, 1.24)
+kind = 0
+
+[node name="Tree214" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(208.197, 0, -27.488)
+rotation = Vector3(0, 1.13, 0)
+scale = Vector3(1.31, 1.31, 1.31)
+kind = 0
+
+[node name="Tree215" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(20.604, 0, 91.218)
+rotation = Vector3(0, 0.44, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+
+[node name="Tree216" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-183.617, 0, -104.407)
+rotation = Vector3(0, 5.38, 0)
+scale = Vector3(1.08, 1.08, 1.08)
+kind = 0
+
+[node name="Tree217" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-16.531, 0, -100.994)
+rotation = Vector3(0, 1.37, 0)
+scale = Vector3(1.27, 1.27, 1.27)
+
+[node name="Tree218" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(64.025, 0, -186.129)
+rotation = Vector3(0, 2.4, 0)
+scale = Vector3(1.2, 1.2, 1.2)
+
+[node name="Tree219" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-179.133, 0, 99.596)
+rotation = Vector3(0, 5.61, 0)
+scale = Vector3(1.03, 1.03, 1.03)
+kind = 0
+
+[node name="Tree220" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(6.679, 0, -150.498)
+rotation = Vector3(0, 3.99, 0)
+scale = Vector3(0.92, 0.92, 0.92)
+kind = 0
+
+[node name="Tree221" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-96.169, 0, -36.171)
+rotation = Vector3(0, 3.6, 0)
+scale = Vector3(1.02, 1.02, 1.02)
+kind = 0
+
+[node name="Tree222" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-32.64, 0, -201.726)
+rotation = Vector3(0, 5.84, 0)
+scale = Vector3(1.23, 1.23, 1.23)
+
+[node name="Tree223" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-11.892, 0, -183.356)
+rotation = Vector3(0, 1.95, 0)
+scale = Vector3(0.88, 0.88, 0.88)
+kind = 0
+
+[node name="Tree224" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-172.635, 0, 38.937)
+rotation = Vector3(0, 1.95, 0)
+scale = Vector3(1.13, 1.13, 1.13)
+
+[node name="Tree225" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-93.102, 0, 113.953)
+rotation = Vector3(0, 3.46, 0)
+scale = Vector3(1.19, 1.19, 1.19)
+kind = 0
+
+[node name="Tree226" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-117.267, 0, 56.801)
+rotation = Vector3(0, 6.15, 0)
+scale = Vector3(0.89, 0.89, 0.89)
+
+[node name="Tree227" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-83.054, 0, -38.573)
+rotation = Vector3(0, 1.64, 0)
+scale = Vector3(1.23, 1.23, 1.23)
+
+[node name="Tree228" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-126.019, 0, -51.917)
+rotation = Vector3(0, 1.78, 0)
+scale = Vector3(1.09, 1.09, 1.09)
+
+[node name="Tree229" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-38.338, 0, 175.517)
+rotation = Vector3(0, 5.94, 0)
+scale = Vector3(0.86, 0.86, 0.86)
+
+[node name="Tree230" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(22.045, 0, -188.943)
+rotation = Vector3(0, 1.74, 0)
+scale = Vector3(1.11, 1.11, 1.11)
+kind = 0
+
+[node name="Tree231" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(3.23, 0, 182.089)
+rotation = Vector3(0, 1.43, 0)
+scale = Vector3(0.99, 0.99, 0.99)
+kind = 0
+
+[node name="Tree232" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-53.638, 0, 166.95)
+rotation = Vector3(0, 2.95, 0)
+scale = Vector3(1.25, 1.25, 1.25)
+kind = 0
+
+[node name="Tree233" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(2.801, 0, -84.813)
+rotation = Vector3(0, 3.34, 0)
+scale = Vector3(0.99, 0.99, 0.99)
+
+[node name="Tree234" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(47.048, 0, 69.612)
+rotation = Vector3(0, 1.7, 0)
+scale = Vector3(1.19, 1.19, 1.19)
+kind = 0
+
+[node name="Tree235" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-204.204, 0, -43.293)
+rotation = Vector3(0, 0.76, 0)
+scale = Vector3(0.89, 0.89, 0.89)
+kind = 0
+
+[node name="Tree236" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-72.112, 0, 166.714)
+rotation = Vector3(0, 5.4, 0)
+scale = Vector3(1.09, 1.09, 1.09)
+
+[node name="Tree237" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-127.304, 0, -122.456)
+rotation = Vector3(0, 4.72, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+
+[node name="Tree238" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-165.159, 0, 26.834)
+rotation = Vector3(0, 1.63, 0)
+scale = Vector3(1.35, 1.35, 1.35)
+
+[node name="Tree239" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-133.914, 0, -105.482)
+rotation = Vector3(0, 6, 0)
+scale = Vector3(0.96, 0.96, 0.96)
+kind = 0
+
+[node name="Tree240" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-33.926, 0, 171.616)
+rotation = Vector3(0, 3.68, 0)
+scale = Vector3(1.15, 1.15, 1.15)
+kind = 0
+
+[node name="Tree241" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-134.459, 0, -99.221)
+rotation = Vector3(0, 6.17, 0)
+scale = Vector3(1.31, 1.31, 1.31)
+
+[node name="Tree242" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-192.862, 0, 0.255)
+rotation = Vector3(0, 2.9, 0)
+scale = Vector3(0.95, 0.95, 0.95)
+kind = 0
+
+[node name="Tree243" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-104.76, 0, 70.478)
+rotation = Vector3(0, 3.91, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+
+[node name="Tree244" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-98.32, 0, 86.276)
+rotation = Vector3(0, 5.07, 0)
+scale = Vector3(1.26, 1.26, 1.26)
+kind = 0
+
+[node name="Tree245" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(56.159, 0, -164.777)
+rotation = Vector3(0, 5.3, 0)
+scale = Vector3(1.22, 1.22, 1.22)
+kind = 0
+
+[node name="Tree246" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-99.575, 0, 0.635)
+rotation = Vector3(0, 5.76, 0)
+scale = Vector3(1.09, 1.09, 1.09)
+kind = 0
+
+[node name="Tree247" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-110.604, 0, -173.382)
+rotation = Vector3(0, 4.02, 0)
+scale = Vector3(1.26, 1.26, 1.26)
+
+[node name="Tree248" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(17.769, 0, 191.545)
+rotation = Vector3(0, 3.01, 0)
+scale = Vector3(0.92, 0.92, 0.92)
+
+[node name="Tree249" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-38.973, 0, 77.317)
+rotation = Vector3(0, 3.84, 0)
+scale = Vector3(1.34, 1.34, 1.34)
+kind = 0
+
+[node name="Tree250" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-174.31, 0, 4.473)
+rotation = Vector3(0, 5.94, 0)
+scale = Vector3(1.13, 1.13, 1.13)
+kind = 0
+
+[node name="Tree251" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(12.969, 0, 106.281)
+rotation = Vector3(0, 3.14, 0)
+scale = Vector3(1.3, 1.3, 1.3)
+kind = 0
+
+[node name="Tree252" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-207.318, 0, 20.173)
+rotation = Vector3(0, 3.61, 0)
+scale = Vector3(1.28, 1.28, 1.28)
+
+[node name="Tree253" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-86.117, 0, -142.526)
+rotation = Vector3(0, 4, 0)
+scale = Vector3(0.98, 0.98, 0.98)
+kind = 0
+
+[node name="Tree254" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-90.338, 0, -179.237)
+rotation = Vector3(0, 5.52, 0)
+scale = Vector3(0.99, 0.99, 0.99)
+kind = 0
+
+[node name="Tree255" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-57.643, 0, -109.851)
+rotation = Vector3(0, 4.52, 0)
+scale = Vector3(1.12, 1.12, 1.12)
+kind = 0
+
+[node name="Tree256" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-74.408, 0, -140.079)
+rotation = Vector3(0, 3.03, 0)
+scale = Vector3(1.06, 1.06, 1.06)
+kind = 0
+
+[node name="Tree257" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-66.073, 0, -183.384)
+rotation = Vector3(0, 4.86, 0)
+scale = Vector3(0.98, 0.98, 0.98)
+
+[node name="Tree258" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(23.467, 0, -207.572)
+rotation = Vector3(0, 2.03, 0)
+scale = Vector3(1.26, 1.26, 1.26)
+
+[node name="Tree259" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-183.627, 0, -17.921)
+rotation = Vector3(0, 0.18, 0)
+scale = Vector3(1.22, 1.22, 1.22)
+kind = 0
+
+[node name="Tree260" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(38.347, 0, -182.246)
+rotation = Vector3(0, 5.81, 0)
+scale = Vector3(0.95, 0.95, 0.95)
+kind = 0
+
+[node name="Tree261" parent="Trees" instance=ExtResource("4_res")]
+position = Vector3(-25.645, 0, 199.341)
+rotation = Vector3(0, 1.98, 0)
+scale = Vector3(1.35, 1.35, 1.35)
+
+[node name="Locations" type="Node3D" parent="." groups=["navigation_source"]]
+
+[node name="Kerk" parent="Locations" instance=ExtResource("5_res")]
+position = Vector3(0, 0, 0)
+rotation = Vector3(0, 3.142, 0)
+
+[node name="KlaasHouse" parent="Locations" instance=ExtResource("6_res")]
+position = Vector3(-20, 0, 110)
+rotation = Vector3(0, -0.18, 0)
+
+[node name="BingoClub" parent="Locations" instance=ExtResource("7_res")]
+position = Vector3(-130, 0, -20)
+rotation = Vector3(0, -1.723, 0)
+
+[node name="Station" parent="Locations" instance=ExtResource("8_res")]
+position = Vector3(125, 0, 30)
+
+[node name="Westeraam" parent="Locations" instance=ExtResource("9_res")]
+position = Vector3(160, 0, -105)
+rotation = Vector3(0, 2.152, 0)
+
+[node name="OBCFort" parent="Locations" instance=ExtResource("10_res")]
+position = Vector3(-130, 0, 130)
+rotation = Vector3(0, -0.785, 0)
+
+[node name="Navigation" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_61")
+script = ExtResource("11_res")
+
+[node name="Player" parent="." instance=ExtResource("12_res")]
+position = Vector3(-18, 0, 99)

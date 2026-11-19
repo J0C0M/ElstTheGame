@@ -32,6 +32,10 @@ var clock: float = 0.0
 
 var _gravity: float = 0.0
 var _last_tap_time: Dictionary[StringName, float] = {}
+var _interactables: Array[Interactable] = []
+## Outside push for this physics frame, such as the tornado's wind.
+var _wind_velocity: Vector3 = Vector3.ZERO
+var _focused_interactable: Interactable
 
 @onready var model: PlayerModel = $Model
 @onready var camera: PlayerCamera = $Camera
@@ -39,6 +43,7 @@ var _last_tap_time: Dictionary[StringName, float] = {}
 @onready var stamina: StaminaComponent = $Stamina
 @onready var sword_hitbox: Hitbox = $SwordHitbox
 @onready var hurtbox: Hurtbox = $Hurtbox
+@onready var _interaction_area: Area3D = $InteractionArea
 @onready var state_machine: StateMachine = $StateMachine
 
 
@@ -49,6 +54,9 @@ func _ready() -> void:
 	stamina.insufficient.connect(EventBus.player_stamina_insufficient.emit)
 	health.died.connect(_on_died)
 	hurtbox.hit_received.connect(_on_hit_received)
+	_interaction_area.area_entered.connect(_on_interaction_area_entered)
+	_interaction_area.area_exited.connect(_on_interaction_area_exited)
+	EventBus.interaction_prompt_changed.emit("")
 	health.reset(stats.max_health)
 	stamina.reset(stats.max_stamina, stats.stamina_regen_per_second, stats.stamina_regen_delay)
 
@@ -58,8 +66,14 @@ func _physics_process(delta: float) -> void:
 	state_machine.physics_update(delta)
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
+	# The wind moves the body but is not kept in the velocity, so it stops
+	# as soon as nothing pushes any more.
+	velocity += _wind_velocity
 	move_and_slide()
+	velocity -= _wind_velocity
+	_wind_velocity = Vector3.ZERO
 	model.set_locomotion(Vector2(velocity.x, velocity.z).length(), is_sprinting, is_on_floor())
+	_update_interaction_focus()
 
 
 ## Move input turned to match the camera, on the ground plane. Length 0 to 1.
@@ -134,6 +148,12 @@ func get_forward() -> Vector3:
 	return -global_basis.z
 
 
+## Uses the interactable closest to the player, if there is one.
+func interact() -> void:
+	if _focused_interactable != null:
+		_focused_interactable.interact(self)
+
+
 ## True when [param point] lies within the block angle in front of the player.
 func is_facing_point(point: Vector3) -> bool:
 	var to_point: Vector3 = point - global_position
@@ -143,18 +163,39 @@ func is_facing_point(point: Vector3) -> bool:
 	return get_forward().angle_to(to_point.normalized()) <= deg_to_rad(stats.block_angle_degrees)
 
 
-## Brings the player back to life at [param at], with full health and stamina.
-func respawn(at: Transform3D) -> void:
+## Pushes the player with [param wind_velocity] (metres per second) during
+## this physics frame. Call it every frame the push should last.
+func apply_wind(wind_velocity: Vector3) -> void:
+	_wind_velocity = wind_velocity
+
+
+## Moves the player to [param at] at once, without sliding there.
+func teleport(at: Transform3D) -> void:
 	global_transform = at
 	velocity = Vector3.ZERO
+	camera.snap_behind_target()
+	reset_physics_interpolation()
+
+
+## Brings the player back to life at [param at], with full health and stamina.
+func respawn(at: Transform3D) -> void:
+	teleport(at)
 	is_invulnerable = false
 	health.reset(stats.max_health)
 	stamina.refill()
 	model.reset_pose()
-	camera.snap_behind_target()
-	reset_physics_interpolation()
 	state_machine.transition_to(&"Move")
 	EventBus.player_respawned.emit()
+
+
+## Values that a scene change keeps. The save system (Phase 3) adds more.
+func save_data() -> Dictionary:
+	return {"health": health.current_health, "stamina": stamina.current_stamina}
+
+
+func load_data(data: Dictionary) -> void:
+	health.set_health(int(data.get("health", health.current_health)))
+	stamina.set_stamina(float(data.get("stamina", stamina.current_stamina)))
 
 
 func _on_hit_received(hit: HitData) -> void:
@@ -184,6 +225,34 @@ func _on_hit_received(hit: HitData) -> void:
 	velocity += away.normalized() * KNOCKBACK_SPEED
 	var duration: float = stats.guard_break_duration if guard_broken else stats.hurt_duration
 	state_machine.transition_to(&"Hurt", {"duration": duration})
+
+
+func _update_interaction_focus() -> void:
+	var best: Interactable = null
+	if not health.is_dead():
+		var best_distance: float = INF
+		for interactable: Interactable in _interactables:
+			if not is_instance_valid(interactable) or not interactable.enabled:
+				continue
+			var distance: float = global_position.distance_squared_to(interactable.global_position)
+			if distance < best_distance:
+				best = interactable
+				best_distance = distance
+	if best != _focused_interactable:
+		_focused_interactable = best
+		EventBus.interaction_prompt_changed.emit(best.prompt if best != null else "")
+
+
+func _on_interaction_area_entered(area: Area3D) -> void:
+	var interactable: Interactable = area as Interactable
+	if interactable != null and interactable not in _interactables:
+		_interactables.append(interactable)
+
+
+func _on_interaction_area_exited(area: Area3D) -> void:
+	var interactable: Interactable = area as Interactable
+	if interactable != null:
+		_interactables.erase(interactable)
 
 
 func _on_died() -> void:

@@ -16,6 +16,8 @@ func exit() -> void:
 func handle_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"jump") and player.is_on_floor():
 		player.velocity.y = player.stats.jump_velocity
+	elif event.is_action_pressed(&"interact"):
+		player.interact()
 	elif event.is_action_pressed(&"attack") and player.is_on_floor():
 		state_machine.transition_to(&"Attack")
 	elif event.is_action_pressed(&"block_aim") and player.is_on_floor():

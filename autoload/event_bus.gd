@@ -18,3 +18,12 @@ signal player_stamina_insufficient
 signal player_parried
 signal player_died
 signal player_respawned
+
+## Prompt of the interactable the player faces, or "" when there is none.
+signal interaction_prompt_changed(prompt: String)
+## Short message on screen, such as a locked door.
+signal message_requested(text: String)
+## The player arrived in a named place: a world, a dungeon or a part of Elst.
+signal location_entered(display_name: String)
+## Asks Main to switch to another world scene and put the player at a spawn point.
+signal world_change_requested(scene_path: String, spawn_id: StringName)

@@ -30,7 +30,7 @@ func physics_update(delta: float) -> void:
 			if data.is_ranged():
 				enemy.fire_projectile()
 			else:
-				enemy.attack_hitbox.activate(data.damage)
+				enemy.attack_hitbox.activate(enemy.get_damage())
 			enemy.model.play_action(data.attack_action, STRIKE_DURATION)
 		return
 	var swing_time: float = _time - data.attack_windup

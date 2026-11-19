@@ -62,7 +62,14 @@ func get_current_step(id: StringName) -> QuestStep:
 	return _quests[id].steps[_step.get(id, 0)]
 
 
-## Active quests first, then by quest number.
+## Index of the current step; all steps count as done once the quest is completed.
+func get_step_index(id: StringName) -> int:
+	if get_status(id) == Status.COMPLETED:
+		return _quests[id].steps.size()
+	return _step.get(id, 0)
+
+
+## Quests with [param status], by quest number.
 func get_quests_by_status(status: Status) -> Array[QuestData]:
 	var found: Array[QuestData] = []
 	for id: StringName in _quests:

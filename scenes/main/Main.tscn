@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/DialogueBox.tscn" id="11_dialogue_box"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ShopMenu.tscn" id="12_shop_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/InventoryMenu.tscn" id="13_inventory_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/QuestLog.tscn" id="14_quest_log"]
 
 [node name="Main" type="Node"]
 process_mode = 3
@@ -40,7 +41,7 @@ theme_override_colors/font_outline_color = Color(0.08, 0.06, 0.12, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 14
 text = "WASD lopen · Shift sprinten · Spatie springen
-E: gebruiken · Q: drankje · Tab: inventaris
+E: gebruiken · Q: drankje · Tab: inventaris · J: quests
 Alt of dubbel tikken: ontwijken
 Klik: aanval · nog een klik: combo
 Klik vasthouden: zware aanval
@@ -71,6 +72,8 @@ theme = ExtResource("6_theme")
 [node name="ShopMenu" parent="UI/Menus" instance=ExtResource("12_shop_menu")]
 
 [node name="InventoryMenu" parent="UI/Menus" instance=ExtResource("13_inventory_menu")]
+
+[node name="QuestLog" parent="UI/Menus" instance=ExtResource("14_quest_log")]
 
 [node name="Fade" type="ColorRect" parent="UI"]
 anchors_preset = 15

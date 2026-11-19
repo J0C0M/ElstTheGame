@@ -1,0 +1,43 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/items/gold_pickup.gd" id="1_gold"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_gold"]
+albedo_color = Color(1, 0.78, 0.2, 1)
+metallic = 0.6
+roughness = 0.35
+emission_enabled = true
+emission = Color(0.45, 0.3, 0.05, 1)
+
+[sub_resource type="CylinderMesh" id="Mesh_coin"]
+material = SubResource("Mat_gold")
+top_radius = 0.16
+bottom_radius = 0.16
+height = 0.05
+radial_segments = 10
+rings = 1
+
+[sub_resource type="SphereShape3D" id="Shape_pickup"]
+radius = 0.5
+
+[node name="GoldPickup" type="Area3D"]
+script = ExtResource("1_gold")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.3, 0)
+shape = SubResource("Shape_pickup")
+
+[node name="Visual" type="Node3D" parent="."]
+position = Vector3(0, 0.25, 0)
+
+[node name="Coin1" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Mesh_coin")
+
+[node name="Coin2" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0.05, 0.06, 0.03)
+mesh = SubResource("Mesh_coin")
+
+[node name="Coin3" type="MeshInstance3D" parent="Visual"]
+position = Vector3(-0.03, 0.12, -0.02)
+rotation = Vector3(0.35, 0, 0.2)
+mesh = SubResource("Mesh_coin")

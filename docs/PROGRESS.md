@@ -15,8 +15,8 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 6 | `Add-Quest-System-And-Tutorial` | Af, gemerged naar `Development` |
 | 7 | `Add-Station-Dungeon` | Af, gemerged naar `Development` |
 | 8 | `Add-Westeraam-Dungeon` | Af, gemerged naar `Development` |
-| 9 | `Add-OBC-Fort-Dungeon` | Gebouwd, wacht op akkoord |
-| 10 | `Add-Bingo-Cave-Dungeon` | Nog niet begonnen |
+| 9 | `Add-OBC-Fort-Dungeon` | Af, gemerged naar `Development` |
+| 10 | `Add-Bingo-Cave-Dungeon` | Gebouwd, wacht op akkoord |
 | 11 | `Add-Amber-Final-Battle` | Nog niet begonnen |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
@@ -34,6 +34,8 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 - Paden en wegen zijn erg blokkerig en visueel slecht uitgewerkt: de grond is een raster van 1 m (eigenaar, 19-11-2026).
 - Straten zijn op deze schaal maar 2 tot 3 m breed; daardoor zijn de huizen laag gehouden (zie *Kaart verwerken*).
 - Fatbikers en het fatbike-kindje zitten op hun fiets met lopende benen; een echte rijhouding en draaiende wielen ontbreken nog.
+- Oma's, opa's en Grumpy Oma zijn aangepaste kopieën van het driller-model. Een eigen model (handtas, rollator, krulletjes) maakt ze beter herkenbaar.
+- De kruisboog is twee blokjes in de hand; een echt model en een zichtbare pijl op de boog ontbreken nog.
 
 ## Fase 0 – Fundament
 
@@ -415,6 +417,41 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 ### Aandachtspunten voor de volgende fases
 
 - Fase 10: de Bingo Club Boomer Cave wordt de zwaarste factie-dungeon (meer vijanden dan het OBC, Grumpy Oma sterker dan het fatbike-kindje), op dezelfde manier opgebouwd: groter dan het station, twee delen met een checkpoint, een `LiberatedArea` in `tools/map/gen_elst.py` en Quest 5 in `tools/data/gen_klaas_dialogue.py`. Daarna geeft Klaas de kruisboog (Quest 2 t/m 5 af).
+
+## Fase 10 – Quest 5: Bingo Club Boomer Cave
+
+### Wat is af
+
+- **Bingo-dungeon** (`scenes/dungeons/BingoCave.tscn`, gebouwd door `tools/dungeons/gen_bingo.py`): ongeveer 70 × 190 m met 24 vijanden (OBC 20, Westeraam 18), de zwaarste factie-dungeon, in twee delen met een checkpoint ertussen.
+  - Deel 1, de bingoclub: de entree, een grote bingozaal met lange tafels en een podium met de bingomolen, de keuken (kist) en een gang.
+  - Checkpoint: de koffiekamer, met een autosave en een rustbank.
+  - Deel 2, de Boomer Cave: een grote grot met stalagmieten (kist), een grotgang en het hol van Grumpy Oma.
+- **Boze oma's** (45 HP, 10 schade): slaan snel met hun handtas en rennen hard.
+- **Bingo-opa's** (35 HP, 6 schade): roepen tijdens het gevecht bingonummers ("B-12!"). Elke vierde roep is "BINGO!": oma's binnen 10 m worden dan 5 s woest ("WOEST!" boven hun hoofd) en doen 25% meer schade. Pak dus eerst de opa's.
+- **Nieuw in `Enemy`:** `buff_damage(factor, seconden, woord)` en `get_damage()`; aanvallen en projectielen gebruiken die.
+- **Grumpy Oma** (550 HP, 18 schade, `scenes/bosses/GrumpyOma.tscn`): een enorme, dikke oma die vecht als een hulk.
+  - Dichtbij geeft ze een klap.
+  - Om de 3,5 s doet ze afwisselend een **grondslag** (ze springt naar je toe en bij de landing loopt er een schokgolf over de vloer: spring eroverheen) of een **tornado** (3 s ronddraaien door het hol, elke 0,7 s schade).
+  - Na een grondslag of tornado is ze 2 s **uitgeput** ("* uitgeput *"): alleen dan krijgt ze volle schade. Anders vangt haar handtas 75% op.
+  - Onder 30% HP wordt ze 35% sneller.
+  - Tijdens het gevecht gaat het hek van het hol dicht en kun je niet opslaan. Ze laat 100 goud vallen en heeft kans op uitrusting.
+- **Bingo Club bevrijd:** in Elst staan twee boze oma's en een bingo-opa bij de Bingo Club. Na Grumpy Oma (`boss_grumpy_oma`) lopen er dorpelingen ("BINGO! Echt waar deze keer!").
+- **Quest 5 "Bingo Club Boomer Cave"** (`data/quests/q5_bingo.tres`): Klaas geeft hem na Quest 4 (Inwijding 4). Doelen: versla Grumpy Oma en ga terug naar Klaas. Beloning: 150 goud en Inwijding 5. Ook eerder verslagen telt.
+- **De kruisboog:** na Quest 5 geeft Klaas zijn oude kruisboog (30 schade). Toets 2 pakt de kruisboog, toets 1 het zwaard. Met de rechtermuisknop richt je: de camera zoomt in, de speler kijkt mee met de camera en er verschijnt een vizier. Met de linkermuisknop schiet je een pijl (`scenes/player/Bolt.tscn`) naar het midden van het vizier; herladen duurt 0,9 s. Met de kruisboog kun je niet blokkeren.
+- **Tests:** `tests/test_bingo.gd` (29 checks, allemaal geslaagd). `test_world` loopt ook in de Bingo-dungeon een route van de ingang naar Grumpy Oma. De andere tests slagen ook.
+
+### Keuzes en afwijkingen
+
+- **Grumpy Oma heeft 550 HP** in plaats van de 500 uit het GDD, zodat ze sterker is dan het fatbike-kindje (450), volgens de moeilijkheidsopbouw van de eigenaar.
+- **Buiten haar uitputting komt 25% van de schade door**, zodat het gevecht niet vastloopt als je het patroon nog niet doorhebt, maar wachten op haar uitputting wel veel sneller gaat.
+- **De Bingo Club wordt niet zwakker na het station**, net als de bazen. Het GDD noemt verzwakking alleen voor Westeraam en OBC.
+- **De kruisboog** komt van Klaas na Quest 5, ook als je Grumpy Oma al eerder versloeg. Er zijn nog geen pijlen om te tellen; de kruisboog schiet onbeperkt met een herlaadtijd.
+- **Na Quest 5** zegt Klaas "Nog niet" als je om een klus vraagt, tot Fase 11.
+
+### Aandachtspunten voor de volgende fases
+
+- Fase 11: de kerk gaat open als `boss_vape_koning`, `boss_fatbike_kindje` en `boss_grumpy_oma` gezet zijn. Klaas vecht mee; de kruisboog is handig tegen Amber in de lucht.
+- Fase 12: geluid voor de bingonummers, de schokgolf en de kruisboog.
 
 ## Factie-dungeons op slot en een groter Westeraam (`Lock-Faction-Dungeons-And-Expand-Westeraam`)
 

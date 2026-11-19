@@ -121,7 +121,8 @@ line("hub", "Wat wil je?", choices=[
     choice("Tot later.", "bye"),
 ])
 line("q2_offer", "Station Elst is Ambers aanvoerlijn. Elke nacht rijden er treinen vol eiwitshakes en ander spul naar haar leger.", "q2_offer_2")
-line("q2_offer_2", "Vier generators houden trein en spoor draaiende. Sla ze alle vier kapot. Pas op: achterin ligt haar depot, en dat bewaken ze goed.", choices=[
+line("q2_offer_2", "Vier generators houden trein en spoor draaiende. Sla ze alle vier kapot. Pas op: achterin ligt haar depot, en dat bewaken ze goed.", "q2_offer_3")
+line("q2_offer_3", "En zolang dat station draait, houdt Amber Westeraam, het OBC en de Bingo Club op slot. Eerst het station, dan pas de rest.", choices=[
     choice("Ik sloop dat station.", "q2_go", action="start_quest", value=Q2),
     choice("Nog even niet.", "hub"),
 ])
@@ -129,7 +130,7 @@ line("q2_go", "Zo mag ik het horen. De ingang zit in het gebouw naast het statio
 line("q2_busy", "Die generators draaien nog. Ik hoor het gezoem tot hier.", "hub")
 line("q2_early", "Wacht even. Het station ligt al plat? Ik had het je nog niet eens gevraagd.", "q2_early_2", model_action="flex")
 line("q2_early_2", "Eerder klaar dan gevraagd. Dat noem ik inzet. Hier, je beloning.", "hub", action="start_quest", value=Q2)
-line("q3_offer", "Westeraam Getho is van de drillers. Hun baas noemt zichzelf de Vape-koning: de rijkste vapeverkoper van het dorp.", "q3_offer_2")
+line("q3_offer", "Nu het station plat ligt, zijn de deuren van de wijken open. Westeraam Getho is van de drillers. Hun baas noemt zichzelf de Vape-koning: de rijkste vapeverkoper van het dorp.", "q3_offer_2")
 line("q3_offer_2", "Hij verstopt zich in zijn eigen vapewolken en schiet van daaruit. Loop recht op zijn wolk af, dan staat hij even te hoesten. Dat is je kans.", choices=[
     choice("Ik pak die Vape-koning.", "q3_go", action="start_quest", value=Q3),
     choice("Nog even niet.", "hub"),

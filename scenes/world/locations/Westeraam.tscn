@@ -71,6 +71,8 @@ position = Vector3(5, 3.5, 8.94)
 mesh = SubResource("BoxMesh_4")
 
 [node name="FlatDoor" parent="." instance=ExtResource("2_res")]
+unlocked_by_flag = &"station_cleared"
+locked_message = "De deur zit op slot. Zolang Station Elst Amber bevoorraadt, houdt ze deze plek dicht. Sloop eerst het station."
 position = Vector3(0, 0, 8.85)
 prompt = "Westeraam Getho binnengaan"
 door_color = Color(0.1, 0.1, 0.11, 1)

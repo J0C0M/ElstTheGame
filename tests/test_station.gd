@@ -55,6 +55,8 @@ func _test_klaas_gives_quest() -> void:
 	_check(box.get_current_line().id == &"q2_offer", "after the tutorial Klaas has a new job")
 	box.choose(0)
 	box.choose(0)
+	_check(box.get_current_line().id == &"q2_offer_3", "Klaas says the other dungeons stay locked until the station is down")
+	box.choose(0)
 	_check(_quests.get_status(QUEST) == 1, "taking the job starts Quest 2")
 	_check(_step() == &"generators", "the first objective is the four generators")
 	box.choose(0)

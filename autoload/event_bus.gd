@@ -63,3 +63,6 @@ signal boss_started(boss_name: String, max_health: int)
 signal boss_health_changed(current: int, maximum: int)
 ## The boss fight is over: the boss is beaten or the player left.
 signal boss_ended
+## The player rests on a bed or a bench: Main heals and autosaves, then shows
+## [param message].
+signal rest_requested(message: String)

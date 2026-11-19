@@ -1,6 +1,7 @@
 extends SceneTree
 ## Headless test for the open world: starts the game, checks the start spot,
-## the navigation mesh, the locked church, the tornado border and the way in
+## the navigation mesh, the locked church, the faction dungeons that stay
+## locked until the station is down, the tornado border and the way in
 ## and out of every dungeon.
 ## Run: godot --headless --path . --fixed-fps 60 -s res://tests/test_world.gd
 ##
@@ -36,9 +37,12 @@ func _run() -> void:
 	await _test_start()
 	await _test_navigation()
 	await _test_locked_church()
+	await _test_locked_factions()
 	await _test_tornado()
 	for dungeon: Array in DUNGEONS:
 		await _test_dungeon(dungeon[0], dungeon[1], dungeon[2])
+		# The faction dungeons open once the station is down.
+		root.get_node("GameState").set_flag(&"station_cleared")
 	_use_test_save_dir()
 	DirAccess.remove_absolute("user://test_saves/")
 	print("test_world: %d failed" % _failures)
@@ -78,6 +82,16 @@ func _test_locked_church() -> void:
 	await _frames(5)
 	_check(_messages.size() == 1 and "op slot" in _messages[0], "the church door is locked")
 	_check(_main.get_world().location_name == ELST, "a locked door does not change the world")
+
+
+func _test_locked_factions() -> void:
+	for door_name: String in ["FlatDoor", "SchoolDoor", "CaveDoor"]:
+		_messages.clear()
+		await _stand_at_door(door_name)
+		await _press(&"interact")
+		await _frames(5)
+		_check(_main.get_world().location_name == ELST and _messages.size() == 1 and "Station Elst" in _messages[0],
+			"%s stays locked until the station is down" % door_name)
 
 
 func _test_tornado() -> void:

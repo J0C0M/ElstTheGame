@@ -66,6 +66,7 @@ De wereld is één compacte kaart van Elst. De kerk staat in het midden en vijf 
 
 - **Buiten:** straten, huizen, weilanden, de spoorlijn en wat herkenbare Elster details. Alles bestaat uit low-poly blokken.
 - **Dungeons:** elke dungeon is een aparte scene (een interieur). Je gaat erin via een deur of ingang in de open wereld. Laden gebeurt met een korte overgang.
+- **Factie-dungeons** (Westeraam Getho, OBC Elst Fort, Bingo Club Boomer Cave) zijn groter dan Station Elst en hebben twee delen: eerst het eerste gedeelte, dan een checkpoint binnen in de dungeon (een rustige ruimte met een autosave en een bank om uit te rusten), en daarna het tweede gedeelte met de baas.
 - **Vijanden buiten:** rond elke factielocatie zwerven patrouilles van die factie. Na het verslaan van de dungeon spawnen ze daar niet meer.
 - **Wereldstaat:** per gebied wordt bijgehouden of het bezet of bevrijd is. Een bevrijd gebied krijgt dorpelingen, andere muziek en een warmere kleur.
 
@@ -164,7 +165,7 @@ De game heeft 6 hoofdquests die Klaas één voor één geeft. De drie factie-dun
 
 **Regels voor de volgorde**
 
-- Klaas geeft de quests in volgorde 1 t/m 6. Toch zijn alle dungeons vanaf het begin open. Alleen de kerk zit op slot.
+- Klaas geeft de quests in volgorde 1 t/m 6. Station Elst is vanaf het begin open. De drie factie-dungeons gaan pas open als Station Elst gesloopt is; Klaas zegt dat als hij Quest 2 geeft. De kerk zit op slot tot de drie factiebazen verslagen zijn.
 - Maak je een factie-dungeon af voordat Klaas die quest gegeven heeft, dan telt hij toch. Bij je volgende bezoek is Klaas trots op je (eigen tekstregel) en wordt de quest afgestreept. Je krijgt de beloning dan alsnog.
 - **Kruisboog:** krijg je van Klaas zodra Quest 2 t/m 5 allemaal af zijn.
 - **Kerkdeuren:** gaan open zodra de drie factiebazen verslagen zijn. Quest 6 wordt dan actief.
@@ -348,7 +349,7 @@ Het project wordt in 13 fases gebouwd. Na elke fase moet de game speelbaar zijn.
    - Dungeon, voetbaljongens, fatbikers en het fatbike-kindje.
 10. **Quest 5: Bingo Club Boomer Cave** — `Add-Bingo-Cave-Dungeon`
     - Dungeon, oma's, bingo-opa's, Grumpy Oma en de kruisboog als beloning.
-    - Klaar als: alle drie de dungeons in elke volgorde te doen zijn, ook voordat Klaas ze geeft.
+    - Klaar als: alle drie de dungeons na Station Elst in elke volgorde te doen zijn, ook voordat Klaas ze geeft.
 11. **Quest 6: Amber de Draak** — `Add-Amber-Final-Battle`
     - Kerkdeuren, Klaas als bondgenoot, Amber met 2 levensbalken, de scène met Klaas, de gouden Tren-spuit, de tornado die verdwijnt, de eindscène en credits.
 12. **Afwerking & build** — `Polish-And-Release-Build`
@@ -362,7 +363,7 @@ Deze keuzes heb ik zelf gemaakt waar de idee-notitie niets zei of zichzelf tegen
 **Aannames**
 
 - Quest 5 in de notitie zegt “Je valt OBC Elst Fort Dungeon aan”. Ik ga ervan uit dat dit Bingo Club Boomer Cave moet zijn.
-- De kerk gaat open na de drie factiebazen. Station Elst is daarvoor niet nodig, maar wel voor de kruisboog.
+- De kerk gaat open na de drie factiebazen. Daarvoor is Station Elst ook nodig, want zonder het station gaan de factie-dungeons niet open.
 - Station Elst slopen maakt de vijanden van Westeraam en OBC zwakker (20% minder HP). Zo heeft Quest 2 ook een effect in het spel.
 - Alle dungeons zijn vanaf het begin toegankelijk. Alleen de kerk zit op slot.
 - Na de eindscène mag de speler vrij door het bevrijde Elst blijven lopen.

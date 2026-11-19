@@ -64,6 +64,7 @@ func _ready() -> void:
 	_settings_menu.closed.connect(_on_submenu_closed)
 	EventBus.dialogue_requested.connect(_on_dialogue_requested)
 	EventBus.sleep_requested.connect(sleep)
+	EventBus.rest_requested.connect(rest)
 	_dialogue_box.action_chosen.connect(_on_dialogue_action)
 	for overlay: Control in [_dialogue_box, _shop_menu, _inventory_menu, _quest_log]:
 		overlay.connect(&"closed", _on_overlay_closed.bind(overlay))
@@ -141,8 +142,14 @@ func change_world(scene_path: String, spawn_id: StringName) -> void:
 	await _enter_world(scene.instantiate() as GameWorld, spawn_id, vitals, {})
 
 
-## Sleeps behind a fade: full health and stamina, then an autosave.
+## Sleeps in a bed, or through Klaas: rest() with the message for sleeping.
 func sleep() -> void:
+	rest("Je hebt goed geslapen.")
+
+
+## Fades out, heals the player fully, fades back in with [param message] and
+## makes an autosave: sleeping in a bed or resting on a bench.
+func rest(message: String) -> void:
 	if _changing_world or _app_state != AppState.PLAYING:
 		return
 	_changing_world = true
@@ -151,7 +158,7 @@ func sleep() -> void:
 	if player != null:
 		player.health.reset()
 		player.stamina.refill()
-	EventBus.message_requested.emit("Je hebt goed geslapen.")
+	EventBus.message_requested.emit(message)
 	await _fade_to(0.0)
 	_changing_world = false
 	SaveManager.autosave()

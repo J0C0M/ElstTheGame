@@ -1,7 +1,8 @@
 extends SceneTree
 ## Headless test for Quest 3 and the liberated areas: liberated areas in Elst
 ## swap patrols for villagers, Klaas gives the quest, vape-drillers shoot vape
-## puffs and keep their distance, the Vape-koning hides in his clouds, is only
+## puffs and keep their distance, the checkpoint halfway autosaves and its
+## bench heals, the Vape-koning hides in his clouds, is only
 ## hurt while exposed, fills the palace with vape while he flees, fires three
 ## puffs below half health, blocks saving
 ## during the fight and stays beaten after loading. Westeraam is liberated,
@@ -39,6 +40,7 @@ func _run() -> void:
 	await _test_liberated_areas()
 	await _test_klaas_gives_quest()
 	await _test_vape_drillers()
+	await _test_checkpoint()
 	await _test_boss_fight()
 	await _test_boss_stays_beaten()
 	await _test_westeraam_liberated()
@@ -107,9 +109,35 @@ func _test_vape_drillers() -> void:
 	_check(_player().global_position.distance_to(vaper.global_position) > start + 0.5, "a vape-driller backs off when the player comes close")
 
 
+func _test_checkpoint() -> void:
+	var checkpoint: Variant = _main.get_world().get_node("Checkpoint")
+	var autosaves: int = _count_saves("auto")
+	_place(Vector3(-20, 0, -48), -PI / 2)
+	await _frames(5)
+	_place(checkpoint.global_position, -PI / 2)
+	await _frames(60)
+	_check(checkpoint.is_reached(), "the bike cellar halfway is a checkpoint")
+	_check(_count_saves("auto") == autosaves + 1, "reaching the checkpoint makes an autosave")
+	_player().health.set_health(40)
+	var bench: Variant = _main.get_world().get_node("RestBench")
+	_place(bench.global_position + bench.global_basis.z * -1.2, bench.global_rotation.y + PI)
+	await _frames(5)
+	await _press(&"interact")
+	await _frames(90)
+	_check(_player().health.current_health == _player().health.max_health, "resting on the bench heals")
+
+
+func _count_saves(save_type: String) -> int:
+	var count: int = 0
+	for meta: Dictionary in root.get_node("SaveManager").list_saves():
+		if meta.get("type") == save_type:
+			count += 1
+	return count
+
+
 func _test_boss_fight() -> void:
 	var king: Variant = _main.get_world().find_child("VapeKing", true, false)
-	_place(Vector3(0, 0, -56), PI)
+	_place(Vector3(-27, 0, -116), PI)
 	for i: int in 30:
 		await physics_frame
 		if king.mode != 0:

@@ -9,5 +9,5 @@ id = &"fatbike_kindje"
 display_name = "Het fatbike-kindje"
 faction = &"obc"
 loot = ExtResource("2_loot")
-max_health = 350
+max_health = 450
 damage = 20

@@ -80,7 +80,7 @@ func _test_enemies() -> void:
 	var kicker: Variant = _main.get_world().find_child("Voetballer1", true, false)
 	var biker: Variant = _main.get_world().find_child("Fatbiker1", true, false)
 	_check(kicker.data.is_ranged() and is_equal_approx(kicker.data.accuracy, 0.6), "voetballers shoot, and hit 60% of the time")
-	_check(kicker.health.max_health == 28 and biker.health.max_health == 48, "the destroyed station weakens OBC's enemies")
+	_check(kicker.health.max_health == 30 and biker.health.max_health == 52, "the destroyed station weakens OBC's enemies")
 	_place(kicker.global_position + Vector3(0, 0, 9), 0.0)
 	var shot: bool = false
 	for i: int in 600:
@@ -107,7 +107,7 @@ func _test_enemies() -> void:
 
 func _test_checkpoint() -> void:
 	var autosaves: int = _count_saves("auto")
-	_place(Vector3(-20, 0, -60), -PI / 2)
+	_place(Vector3(-10, 0, -84), -PI / 2)
 	await _frames(5)
 	_place(_main.get_world().get_node("Checkpoint").global_position, -PI / 2)
 	await _frames(60)
@@ -117,19 +117,19 @@ func _test_checkpoint() -> void:
 func _test_boss_fight() -> void:
 	var kid: Variant = _main.get_world().find_child("FatbikeKid", true, false)
 	var gate: Variant = _main.get_world().get_node("ArenaGate")
-	_place(Vector3(-30, 0, -140), 0.0)
+	_place(Vector3(-16, 0, -164), 0.0)
 	await _frames(5)
 	_check(kid.mode == AIMING, "walking onto the sports field starts the fight")
 	_check(_state.is_saving_blocked() and _main.get_node("UI/HUD/BossBar").visible, "saving is blocked and the boss bar shows")
 	_check(gate.visible and not gate.get_node("CollisionShape3D").disabled, "the gate of the sports field closes")
 	_check(kid.get_node("AimLine").visible and kid.get_node("RevLabel").visible, "he revs up and a line shows where he will go")
 	kid.get_node("Hurtbox").receive_hit(load("res://scripts/components/hit_data.gd").new(50, _player(), null))
-	_check(kid.health.current_health == 350, "on his bike he cannot be hurt")
+	_check(kid.health.current_health == 450, "on his bike he cannot be hurt")
 	await _wait_for_mode(kid, DAZED)
 	_check(kid.mode == DAZED, "he crashes into a wall and is dazed")
 	kid.get_node("Hurtbox").receive_hit(load("res://scripts/components/hit_data.gd").new(100, _player(), null))
-	_check(kid.health.current_health == 250, "a dazed fatbike-kindje takes damage")
-	kid.health.take_damage(100)
+	_check(kid.health.current_health == 350, "a dazed fatbike-kindje takes damage")
+	kid.health.take_damage(150)
 	await _wait_for_mode(kid, AIMING)
 	var charges: int = kid.charge_count
 	await _wait_for_mode(kid, DAZED)

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="QuestData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_quest"]
+[ext_resource type="Script" path="res://scripts/data/quest_step.gd" id="2_step"]
+
+[sub_resource type="Resource" id="Step_boss"]
+script = ExtResource("2_step")
+id = &"boss"
+description = "Ga naar de Bingo Club Boomer Cave bij de kerk en versla Grumpy Oma."
+flag = &"boss_grumpy_oma"
+target = &"grumpy_oma"
+
+[sub_resource type="Resource" id="Step_report"]
+script = ExtResource("2_step")
+id = &"report"
+description = "Ga terug naar Klaas."
+flag = &"q5_reported"
+target = &"klaas"
+
+[resource]
+script = ExtResource("1_quest")
+id = &"q5_bingo"
+number = 5
+title = "Bingo Club Boomer Cave"
+description = "Boze oma's en bingo-opa's hebben de Bingo Club in een grot veranderd. Hun baas is Grumpy Oma. Vecht je door de club en de grot en versla haar."
+steps = Array[ExtResource("2_step")]([SubResource("Step_boss"), SubResource("Step_report")])
+completion_flag = &"boss_grumpy_oma"
+reward_gold = 150

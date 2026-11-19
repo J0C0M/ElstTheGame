@@ -30,12 +30,15 @@ process_mode = 1
 
 [node name="ControlsHelp" type="Label" parent="UI"]
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = -420.0
-offset_top = 12.0
+offset_top = -190.0
 offset_right = -16.0
-offset_bottom = 190.0
+offset_bottom = -12.0
 grow_horizontal = 0
+grow_vertical = 0
 theme_override_colors/font_color = Color(1, 1, 1, 0.9)
 theme_override_colors/font_outline_color = Color(0.08, 0.06, 0.12, 1)
 theme_override_constants/outline_size = 5
@@ -49,6 +52,7 @@ Rechtermuis: blokkeren (op tijd = parry)
 Esc: pauzemenu · F5/F9: snel opslaan/laden
 F1 filter · F2 pixelgrootte"
 horizontal_alignment = 2
+vertical_alignment = 2
 
 [node name="Menus" type="Control" parent="UI"]
 anchors_preset = 15

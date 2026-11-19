@@ -1,0 +1,43 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/bosses/vape_hideout.gd" id="1_hideout"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_cloud"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.82, 0.78, 0.95, 0.45)
+
+[sub_resource type="SphereMesh" id="Mesh_cloud"]
+material = SubResource("Mat_cloud")
+radius = 1.6
+height = 2.6
+radial_segments = 10
+rings = 5
+
+[node name="VapeHideout" type="Node3D"]
+script = ExtResource("1_hideout")
+
+[node name="Cloud" type="Node3D" parent="."]
+
+[node name="Puff1" type="MeshInstance3D" parent="Cloud"]
+position = Vector3(0, 1.3, 0)
+mesh = SubResource("Mesh_cloud")
+
+[node name="Puff2" type="MeshInstance3D" parent="Cloud"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 1.1, 1.1, 0.4)
+mesh = SubResource("Mesh_cloud")
+
+[node name="Puff3" type="MeshInstance3D" parent="Cloud"]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -1.0, 1.0, -0.5)
+mesh = SubResource("Mesh_cloud")
+
+[node name="Puff4" type="MeshInstance3D" parent="Cloud"]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.2, 2.3, -0.3)
+mesh = SubResource("Mesh_cloud")
+
+[node name="Glint" type="OmniLight3D" parent="."]
+position = Vector3(0, 1.8, 0)
+light_color = Color(1, 0.8, 0.3, 1)
+light_energy = 1.2
+omni_range = 3.5

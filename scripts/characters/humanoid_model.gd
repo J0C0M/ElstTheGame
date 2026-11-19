@@ -95,6 +95,23 @@ const ACTIONS: Dictionary = {
 		[0.75, {&"arm_l": Vector3(25, 0, -130), &"arm_r": Vector3(25, 0, 130), &"torso": Vector3(-8, 0, 0), &"head": Vector3(-12, 0, 0)}],
 		[1.0, {&"arm_l": Vector3(0, 0, 0), &"arm_r": Vector3(10, 0, 5), &"torso": Vector3(0, 0, 0), &"head": Vector3(0, 0, 0)}],
 	],
+	&"wave": [
+		[0.0, {&"arm_r": Vector3(10, 0, 5), &"hand": Vector3(0, 0, 0)}],
+		[0.2, {&"arm_r": Vector3(0, 0, 155), &"hand": Vector3(0, 0, 20)}],
+		[0.4, {&"arm_r": Vector3(0, 0, 130), &"hand": Vector3(0, 0, -20)}],
+		[0.6, {&"arm_r": Vector3(0, 0, 155), &"hand": Vector3(0, 0, 20)}],
+		[0.8, {&"arm_r": Vector3(0, 0, 130), &"hand": Vector3(0, 0, -20)}],
+		[1.0, {&"arm_r": Vector3(10, 0, 5), &"hand": Vector3(0, 0, 0)}],
+	],
+	&"cough": [
+		[0.0, {&"torso": Vector3(0, 0, 0), &"head": Vector3(0, 0, 0), &"arm_r": Vector3(10, 0, 5)}],
+		[0.2, {&"torso": Vector3(28, 0, 0), &"head": Vector3(25, 0, 0), &"arm_r": Vector3(110, 30, 0)}],
+		[0.35, {&"torso": Vector3(18, 0, 0), &"head": Vector3(10, 0, 0), &"arm_r": Vector3(100, 30, 0)}],
+		[0.5, {&"torso": Vector3(30, 0, 0), &"head": Vector3(28, 0, 0), &"arm_r": Vector3(110, 30, 0)}],
+		[0.7, {&"torso": Vector3(18, 0, 0), &"head": Vector3(10, 0, 0), &"arm_r": Vector3(100, 30, 0)}],
+		[0.85, {&"torso": Vector3(30, 0, 0), &"head": Vector3(28, 0, 0), &"arm_r": Vector3(110, 30, 0)}],
+		[1.0, {&"torso": Vector3(0, 0, 0), &"head": Vector3(0, 0, 0), &"arm_r": Vector3(10, 0, 5)}],
+	],
 	&"death": [
 		[0.0, {&"body": Vector3(0, 0, 0), &"body_offset": Vector3.ZERO, &"arm_l": Vector3(0, 0, 0), &"arm_r": Vector3(10, 0, 5), &"hand": Vector3(0, 0, 0), &"head": Vector3(0, 0, 0)}],
 		[0.35, {&"body": Vector3(25, 0, 0), &"body_offset": Vector3(0, -0.2, 0), &"arm_l": Vector3(-30, 0, -40), &"arm_r": Vector3(-30, 0, 40), &"hand": Vector3(-60, 0, 0), &"head": Vector3(20, 0, 0)}],

@@ -21,6 +21,8 @@ extends Resource
 ## is set.
 @export_range(0.1, 1.0) var weakened_health_factor: float = 1.0
 @export var damage: int = 0
+## Speed of the lunge during a strike; a fatbiker charges with it.
+@export var lunge_speed: float = 2.0
 ## Distance at which the enemy starts an attack.
 @export var attack_range: float = 0.0
 ## Seconds an attack is telegraphed before it hits.
@@ -60,6 +62,10 @@ extends Resource
 ## comes closer than keep_distance.
 @export var projectile_scene: PackedScene
 @export var keep_distance: float = 0.0
+## Chance that a shot flies straight at the player; the others miss by
+## miss_angle degrees to one side.
+@export_range(0.0, 1.0) var accuracy: float = 1.0
+@export var miss_angle: float = 15.0
 
 
 func is_ranged() -> bool:

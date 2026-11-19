@@ -1,0 +1,60 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/world/props/bed.gd" id="1_bed"]
+[ext_resource type="Script" path="res://scripts/components/interactable.gd" id="2_interactable"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_wood"]
+albedo_color = Color(0.55, 0.38, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_metal"]
+albedo_color = Color(0.3, 0.3, 0.32, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_seat"]
+material = SubResource("Mat_wood")
+size = Vector3(2.2, 0.1, 0.6)
+
+[sub_resource type="BoxMesh" id="Mesh_back"]
+material = SubResource("Mat_wood")
+size = Vector3(2.2, 0.5, 0.08)
+
+[sub_resource type="BoxMesh" id="Mesh_leg"]
+material = SubResource("Mat_metal")
+size = Vector3(0.08, 0.45, 0.55)
+
+[sub_resource type="BoxShape3D" id="Shape_body"]
+size = Vector3(2.2, 0.9, 0.6)
+
+[sub_resource type="BoxShape3D" id="Shape_use"]
+size = Vector3(2.8, 1.6, 2.0)
+
+[node name="RestBench" type="StaticBody3D"]
+script = ExtResource("1_bed")
+rest_message = "Je hebt even uitgerust. Het spel is opgeslagen."
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.45, 0)
+shape = SubResource("Shape_body")
+
+[node name="Seat" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.47, 0)
+mesh = SubResource("Mesh_seat")
+
+[node name="Back" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.8, 0.27)
+mesh = SubResource("Mesh_back")
+
+[node name="LegLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.95, 0.22, 0)
+mesh = SubResource("Mesh_leg")
+
+[node name="LegRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.95, 0.22, 0)
+mesh = SubResource("Mesh_leg")
+
+[node name="Interactable" type="Area3D" parent="."]
+script = ExtResource("2_interactable")
+prompt = "Even uitrusten"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable"]
+position = Vector3(0, 0.8, -0.6)
+shape = SubResource("Shape_use")

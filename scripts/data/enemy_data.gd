@@ -15,6 +15,11 @@ extends Resource
 
 @export_group("Combat")
 @export var max_health: int = 0
+## A GameState flag that weakens this enemy, such as the destroyed station.
+@export var weakened_by_flag: StringName
+## Share of [member max_health] the enemy keeps once [member weakened_by_flag]
+## is set.
+@export_range(0.1, 1.0) var weakened_health_factor: float = 1.0
 @export var damage: int = 0
 ## Distance at which the enemy starts an attack.
 @export var attack_range: float = 0.0
@@ -47,3 +52,10 @@ extends Resource
 @export var patrol_radius: float = 0.0
 ## Circle round to the player's side instead of walking straight at them.
 @export var flanks: bool = false
+
+
+## Health the enemy starts with right now: lower once it is weakened.
+func get_max_health() -> int:
+	if not weakened_by_flag.is_empty() and GameState.has_flag(weakened_by_flag):
+		return maxi(roundi(max_health * weakened_health_factor), 1)
+	return max_health

@@ -67,6 +67,7 @@ theme_override_font_sizes/font_size = 22
 text = "Je spullen"
 
 [node name="Scroll" type="ScrollContainer" parent="Center/Panel/Content"]
+custom_minimum_size = Vector2(0, 170)
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0

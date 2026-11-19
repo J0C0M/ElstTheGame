@@ -307,7 +307,7 @@ prompt = "Naar buiten"
 door_color = Color(0.3, 0.18, 0.4, 1)
 
 [node name="Entrance" type="Marker3D" parent="." groups=["spawn_points"]]
-position = Vector3(0, 0, 4)
+position = Vector3(0, 0, 2.5)
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
-position = Vector3(0, 0, 4)
+position = Vector3(0, 0, 2.5)

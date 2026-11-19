@@ -29,7 +29,7 @@ def col(c):
 
 def wall_segments(a0, a1, doors):
     """Pieces of a wall from a0 to a1 along its axis, leaving the doors open."""
-    cuts = sorted((c - w / 2, c + w / 2) for c, w in doors)
+    cuts = sorted((door[0] - door[1] / 2, door[0] + door[1] / 2) for door in doors)
     pieces, start = [], a0
     for lo, hi in cuts:
         if lo > start:
@@ -84,18 +84,22 @@ class Dungeon:
         self.nodes.append([f'[node name="{name}" type="MeshInstance3D" parent="{parent}"]', f"position = {vec(*pos)}",
                            f'mesh = SubResource("{self.box_mesh(size, c)}")'])
 
-    def lintel(self, room, side, n, centre, width, height, colour, along_x):
-        """The wall above a door: 3.2 m high doors, 4.5 m for wide openings."""
-        if width > 8:
-            return
-        top = 3.2 if width <= 4 else 4.5
+    def lintel(self, room, side, n, centre, width, height, colour, along_x, top=None):
+        """The wall above a door: 3.2 m high doors, 4.5 m for wide openings.
+        An opening wider than 8 m is where a whole room joins; give it a top
+        (the neighbour's height) when that room is lower, to close the wall above it."""
+        if top is None:
+            if width > 8:
+                return
+            top = 3.2 if width <= 4 else 4.5
         if top >= height:
             return
         size = (width, height - top, 1) if along_x else (1, height - top, width)
         self.solid("Structure", f"{room}Lintel{side}{n}", (centre[0], (top + height) / 2, centre[1]), size, colour)
 
     def build_rooms(self, rooms, props):
-        """rooms: name -> ((x0, x1, z0, z1), wall colour, height, doors per side).
+        """rooms: name -> ((x0, x1, z0, z1), wall colour, height, doors per side);
+        a door is (centre, width) or (centre, width, top of the opening).
         props: (name, x, z, size, colour, solid)."""
         self.nodes.append(['[node name="Structure" type="Node3D" parent="." groups=["navigation_source"]]'])
         for name, ((x0, x1, z0, z1), wall_color, height, sides) in rooms.items():
@@ -110,14 +114,14 @@ class Dungeon:
                     a1 = x1 + 0.5 if sides["E"] is not None else x1 - 0.5
                     for n, (lo, hi) in enumerate(wall_segments(a0, a1, doors)):
                         self.solid("Structure", f"{name}Wall{side}{n}", ((lo + hi) / 2, height / 2, z), (hi - lo, height, 1), wall_color)
-                    for n, (centre, width) in enumerate(doors):
-                        self.lintel(name, side, n, (centre, z), width, height, wall_color, along_x=True)
+                    for n, door in enumerate(doors):
+                        self.lintel(name, side, n, (door[0], z), door[1], height, wall_color, True, *door[2:])
                 else:
                     x = x0 if side == "W" else x1
                     for n, (lo, hi) in enumerate(wall_segments(z0 + 0.5, z1 - 0.5, doors)):
                         self.solid("Structure", f"{name}Wall{side}{n}", (x, height / 2, (lo + hi) / 2), (1, height, hi - lo), wall_color)
-                    for n, (centre, width) in enumerate(doors):
-                        self.lintel(name, side, n, (x, centre), width, height, wall_color, along_x=False)
+                    for n, door in enumerate(doors):
+                        self.lintel(name, side, n, (x, door[0]), door[1], height, wall_color, False, *door[2:])
         for name, x, z, size, c, is_solid in props:
             pos = (x, size[1] / 2 + (0.01 if not is_solid else 0), z)
             (self.solid if is_solid else self.visual)("Structure", name, pos, size, c)

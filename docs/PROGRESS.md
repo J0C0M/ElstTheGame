@@ -399,6 +399,7 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 - **OBC bevrijd:** in Elst spelen twee voetballers en een fatbiker op het schoolplein. Na het fatbike-kindje (`boss_fatbike_kindje`) lopen er dorpelingen.
 - **Quest 4 "OBC Elst Fort"** (`data/quests/q4_obc.tres`): Klaas geeft hem na Quest 3. Doelen: versla het fatbike-kindje en ga terug naar Klaas. Beloning: 150 goud en Inwijding 4. Ook eerder verslagen telt.
 - **Bugfix na de eerste test van de eigenaar:** een rek in de docentenkamer stond voor de deur naar deel 2, zodat je er niet langs kon. De tests merkten dat niet, omdat ze de speler verplaatsen. `test_world` loopt nu voor elke dungeon een route over de navmesh van de ingang naar het einde (laatste generator of baas). Op de oude OBC-scene faalt die check, op de nieuwe slaagt hij.
+- **Bugfix:** boven de brede opening tussen het hoge binnenplein en de lage docentenkamer zat een gat in de muur (net als, kleiner, tussen de parkeergarage en de fietsenkelder in Westeraam). Een brede opening kan in `dungeon_builder.py` nu een bovenkant krijgen (`(midden, breedte, hoogte)`), en de muur daarboven wordt dichtgemaakt.
 - **Tests:** `tests/test_obc.gd` (29 checks, allemaal geslaagd). De andere negen tests slagen ook.
 
 ### Keuzes en afwijkingen

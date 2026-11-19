@@ -15,9 +15,11 @@ const TAP_DIRECTIONS: Dictionary = {
 }
 
 @export var stats: PlayerStats
-## Gear worn when GameState has none (for example in the test arena).
-@export var sword: ItemData
+## Armour worn when GameState has none.
 @export var armor: ItemData
+
+## The sword in hand, or null: a new game starts without one.
+var sword: ItemData
 
 ## True while sprinting. Set by the move state, read by the model.
 var is_sprinting: bool = false
@@ -36,6 +38,7 @@ var _last_tap_time: Dictionary[StringName, float] = {}
 var _interactables: Array[Interactable] = []
 ## Outside push for this physics frame, such as the tornado's wind.
 var _wind_velocity: Vector3 = Vector3.ZERO
+var _no_sword_message_wait: float = 0.0
 var _focused_interactable: Interactable
 
 @onready var model: HumanoidModel = $Model
@@ -66,6 +69,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	clock += delta
+	_no_sword_message_wait = maxf(_no_sword_message_wait - delta, 0.0)
 	state_machine.physics_update(delta)
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
@@ -108,11 +112,22 @@ func face_direction_now(direction: Vector3) -> void:
 	rotation.y = atan2(-direction.x, -direction.z)
 
 
+func has_sword() -> bool:
+	return sword != null
+
+
+## True when the player can fight; otherwise says why, now and then.
+func check_sword() -> bool:
+	if has_sword():
+		return true
+	if _no_sword_message_wait <= 0.0:
+		_no_sword_message_wait = 2.0
+		EventBus.message_requested.emit("Je hebt nog geen zwaard. Praat eerst met Klaas.")
+	return false
+
+
 ## Starts drinking the potion that suits the missing health best.
 func try_drink() -> void:
-	if health.current_health >= health.max_health:
-		EventBus.message_requested.emit("Je bent al helemaal fit.")
-		return
 	var potion: ItemData = _choose_potion()
 	if potion == null:
 		EventBus.message_requested.emit("Je hebt geen drankjes.")
@@ -139,6 +154,7 @@ func try_dodge(direction: Vector3) -> bool:
 	if backwards:
 		direction = -get_forward()
 	state_machine.transition_to(&"Dodge", {"direction": direction.normalized(), "backwards": backwards})
+	EventBus.player_action.emit(&"dodge")
 	return true
 
 
@@ -244,11 +260,14 @@ func _on_hit_received(hit: HitData) -> void:
 			hit.hitbox.parried.emit()
 			model.play_action(&"parry", 0.3)
 			EventBus.player_parried.emit()
+			EventBus.player_action.emit(&"block")
+			EventBus.player_action.emit(&"parry")
 			return
 		if stamina.try_spend(stats.block_stamina_cost):
 			guarded = true
 			damage *= 1.0 - stats.block_damage_reduction
 			model.play_action(&"block_impact", 0.25)
+			EventBus.player_action.emit(&"block")
 		else:
 			guard_broken = true
 	damage *= 1.0 - armor.damage_reduction
@@ -282,18 +301,19 @@ func _choose_potion() -> ItemData:
 
 ## Takes the worn gear from GameState and shows it on the model.
 func _apply_gear() -> void:
-	var worn_sword: ItemData = GameState.get_equipped(&"sword")
-	if worn_sword != null:
-		sword = worn_sword
+	sword = GameState.get_equipped(&"sword")
 	var worn_armor: ItemData = GameState.get_equipped(&"armor")
 	if worn_armor != null:
 		armor = worn_armor
-	var blade: MeshInstance3D = model.get_node("Body/Hips/Torso/ArmR/Hand/Sword/Blade")
-	var blade_mesh: BoxMesh = BoxMesh.new()
-	blade_mesh.size = Vector3(0.035, 0.08, sword.blade_length)
-	blade.mesh = blade_mesh
-	blade.position.z = -0.125 - sword.blade_length * 0.5
-	blade.material_override = _gear_material(sword.model_color, true)
+	var sword_node: Node3D = model.get_node("Body/Hips/Torso/ArmR/Hand/Sword")
+	sword_node.visible = sword != null
+	if sword != null:
+		var blade: MeshInstance3D = sword_node.get_node("Blade")
+		var blade_mesh: BoxMesh = BoxMesh.new()
+		blade_mesh.size = Vector3(0.035, 0.08, sword.blade_length)
+		blade.mesh = blade_mesh
+		blade.position.z = -0.125 - sword.blade_length * 0.5
+		blade.material_override = _gear_material(sword.model_color, true)
 	var armor_material: StandardMaterial3D = _gear_material(armor.model_color, armor.armor_tier >= 2)
 	var pieces: Dictionary[String, int] = {
 		"Body/Hips/Torso/ArmorChest": 1,

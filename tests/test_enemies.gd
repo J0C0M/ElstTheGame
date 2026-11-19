@@ -29,6 +29,8 @@ func _run() -> void:
 	_main.skip_main_menu = true
 	root.add_child(_main)
 	await _frames(40)
+	# A new game starts without a sword; Klaas hands it over in the tutorial.
+	root.get_node("GameState").add_gear(load("res://data/items/rusty_sword.tres"))
 	await _go_to("res://scenes/dungeons/Station.tscn", &"Entrance")
 	await _test_idle_and_patrol()
 	await _test_pack_notices_player()
@@ -107,6 +109,9 @@ func _test_sword_and_loot() -> void:
 	var piles: Array[Node] = _pickups("gold_pickup.gd")
 	_check(piles.size() == enemy_count, "every enemy drops a pile of gold")
 	for pile: Node in piles:
+		# Picking up one pile can pull in the next before the loop gets there.
+		if not is_instance_valid(pile):
+			continue
 		_place((pile as Node3D).global_position, 0.0)
 		await _frames(3)
 	var gained: int = root.get_node("GameState").gold - gold_before
@@ -117,6 +122,9 @@ func _test_chest() -> void:
 	var chest: Variant = _main.get_world().get_node("Chest")
 	# Pick up any coins the enemies left, so only the chest's gold is counted.
 	for pile: Node in _pickups("gold_pickup.gd"):
+		# Picking up one pile can pull in the next before the loop gets there.
+		if not is_instance_valid(pile):
+			continue
 		_place((pile as Node3D).global_position, 0.0)
 		await _frames(5)
 	await _frames(10)
@@ -127,6 +135,9 @@ func _test_chest() -> void:
 	await _frames(60)
 	_check(chest.is_opened(), "the chest opens with E")
 	for pile: Node in _pickups("gold_pickup.gd"):
+		# Picking up one pile can pull in the next before the loop gets there.
+		if not is_instance_valid(pile):
+			continue
 		_place((pile as Node3D).global_position, 0.0)
 		await _frames(3)
 	var gained: int = root.get_node("GameState").gold - gold_before

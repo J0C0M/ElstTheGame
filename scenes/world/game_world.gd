@@ -11,6 +11,11 @@ extends Node3D
 @export var respawn_delay: float = 3.0
 ## Save automatically when the player walks in, as for dungeons.
 @export var autosave_on_enter: bool = false
+## Id for quest steps that wait until the player reaches this world.
+@export var location_id: StringName
+## Gear handed over when this world loads and the player lacks it. Meant for
+## test scenes such as the arena, where you want a sword straight away.
+@export var test_gear: Array[ItemData] = []
 
 ## Main turns this off, because it loads the last save after dying.
 var respawn_on_death: bool = true
@@ -18,6 +23,9 @@ var respawn_on_death: bool = true
 
 func _ready() -> void:
 	EventBus.player_died.connect(_on_player_died)
+	for item: ItemData in test_gear:
+		if not GameState.has_gear(item.id):
+			GameState.add_gear(item)
 
 
 func get_player() -> Player:

@@ -44,7 +44,7 @@ func change_world(scene_path: String, spawn_id: StringName) -> void:
 		return
 	_changing_world = true
 	var player: Player = _world.get_player() if _world != null else null
-	var carried: Dictionary = player.save_data() if player != null else {}
+	var carried: Dictionary = player.get_vitals() if player != null else {}
 	await _fade_to(1.0)
 	_show_world(scene.instantiate() as GameWorld, spawn_id, carried)
 	await _fade_to(0.0)
@@ -80,7 +80,7 @@ func _show_world(world: GameWorld, spawn_id: StringName, carried: Dictionary) ->
 	world.place_player(spawn_id)
 	var player: Player = world.get_player()
 	if player != null and not carried.is_empty():
-		player.load_data(carried)
+		player.set_vitals(carried)
 	EventBus.location_entered.emit(world.location_name)
 
 

@@ -9,6 +9,8 @@ extends Node3D
 ## Spawn point (a Marker3D in the spawn_points group) for the start and after dying.
 @export var default_spawn: StringName = &"Start"
 @export var respawn_delay: float = 3.0
+## Save automatically when the player walks in, as for dungeons.
+@export var autosave_on_enter: bool = false
 
 
 func _ready() -> void:

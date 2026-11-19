@@ -27,3 +27,7 @@ signal message_requested(text: String)
 signal location_entered(display_name: String)
 ## Asks Main to switch to another world scene and put the player at a spawn point.
 signal world_change_requested(scene_path: String, spawn_id: StringName)
+## The list of save files changed: a save was written or deleted.
+signal saves_changed
+## SaveManager read a save; Main switches to its world and restores it.
+signal save_load_requested(data: Dictionary)

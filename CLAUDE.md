@@ -20,9 +20,11 @@ De Godot-binary staat niet in de `PATH`. Gebruik `godot` of `godot4` als die bes
 ```bash
 godot --headless --path . --import          # importeren
 godot --headless --path . --quit-after 120  # opstarten, kijk naar fouten in de output
+godot --headless --path . -s res://tests/check_resources.gd                    # alle scenes, scripts en resources laden
+godot --headless --path . --fixed-fps 60 -s res://tests/test_player_combat.gd  # gameplaytest van de testarena
 ```
 
-Controleer na elk onderdeel of het project nog laadt en start zonder fouten. Is Godot er niet, meld dat dan één keer en wees extra precies met `.tscn`- en `.tres`-syntax.
+Controleer na elk onderdeel of het project nog laadt en start zonder fouten. Headless worden shaders niet gecompileerd: controleer een nieuwe of gewijzigde shader met een run met venster. Is Godot er niet, meld dat dan één keer en wees extra precies met `.tscn`- en `.tres`-syntax.
 
 ## Git-regels (strikt, nooit van afwijken)
 
@@ -98,8 +100,10 @@ Werk alleen aan de fase waar de eigenaar om vraagt. Begin pas aan een volgende f
 
 - **GDScript met statische types** (`var hp: int = 100`, `func take_damage(amount: int) -> void`). De waarschuwing `untyped_declaration` staat in `project.godot` op *error*, dus code zonder types start niet.
 - **Autoloads** (`res://autoload/`): `EventBus`, `GameState`, `SaveManager`, `QuestManager`, `AudioManager` en `Settings`. Systemen praten met elkaar via signals op de `EventBus`. `Settings` bewaart spelerinstellingen buiten de saves, in `user://settings.cfg`.
-- **Data-gedreven:** HP, schade, prijzen, dropkansen, quests en dialogen staan in `Resource`-klassen (`ItemData`, `EnemyData`, `QuestData`, `DialogueData` in `res://scripts/data/`) en `.tres`-bestanden in `res://data/`. Niet hard in de code.
-- **Componenten** (`res://scripts/components/`): `HealthComponent`, `Hitbox`, `Hurtbox`, `StateMachine`, `LootDropper`. Vijanden en bazen hergebruiken deze.
+- **Data-gedreven:** HP, schade, prijzen, dropkansen, quests en dialogen staan in `Resource`-klassen (`PlayerStats`, `ItemData`, `EnemyData`, `QuestData`, `DialogueData` in `res://scripts/data/`) en `.tres`-bestanden in `res://data/`. Niet hard in de code. De scripts hebben neutrale standaardwaarden; de echte waarden staan in de `.tres`.
+- **Componenten** (`res://scripts/components/`): `HealthComponent`, `StaminaComponent`, `Hitbox`, `Hurtbox`, `StateMachine`, `State`, `LootDropper`. Vijanden en bazen hergebruiken deze. Een `Hitbox` raakt elke `Hurtbox` één keer per activatie; de eigenaar van de `Hurtbox` beslist via `hit_received` wat een treffer doet (blokkeren, pantser, schade).
+- **State machines:** de eigenaar roept `StateMachine.physics_update()` aan in zijn eigen `_physics_process`, zodat hij daarna het lichaam kan bewegen. Input gaat automatisch naar de huidige state. De states van de speler staan in `res://scenes/player/states/`.
+- **Physics interpolation** staat aan. Beweeg en animeer in `_physics_process`, niet in `_process`. Roep na een teleport `reset_physics_interpolation()` aan. De camera heeft zelf interpolation uit en volgt in `_process` de positie uit `get_global_transform_interpolated()`.
 - **InputMap:** gebruik altijd acties, nooit vaste toetsen in code. Acties: `move_forward/back/left/right` (WASD), `sprint` (Shift), `jump` (Spatie), `dodge` (Alt), `attack` (LMB), `block_aim` (RMB), `interact` (E), `weapon_sword` (1), `weapon_crossbow` (2), `use_potion` (Q), `inventory` (Tab), `quest_log` (J), `quicksave` (F5), `quickload` (F9), `pause` (Esc), `toggle_retro_filter` (F1), `cycle_pixel_size` (F2). Toetsen gebruiken de fysieke keycode.
 - **Collision layers met een naam:** 1 `wereld`, 2 `speler`, 3 `vijand`, 4 `speler_hitbox`, 5 `vijand_hitbox`, 6 `interactie`, 7 `tornado_grens`. Gebruik in code de constanten uit `PhysicsLayers` (`res://scripts/physics_layers.gd`).
 - **Low-poly placeholders:** bouw personages, gebouwen en props uit Godot-primitieven (`BoxMesh`, `CapsuleMesh`, `CylinderMesh`, `PrismMesh`, CSG voor gebouwen) met vlakke kleuren (`StandardMaterial3D`, geen texturen). Een personage bestaat uit losse delen voor hoofd, romp, armen en benen, en heeft simpele animaties. Klaas: lang, breed, gespierd, blond haar, strakke kaak, zwarte zonnebril. Houd modellen in aparte scenes, zodat ze later te vervangen zijn door Blender- of CC0-modellen. Factiekleuren: Westeraam geel/zwart, OBC rood/navy, Bingo blauw/pastel, Amber amber/oranje, Klaas paars/goud.
@@ -108,6 +112,7 @@ Werk alleen aan de fase waar de eigenaar om vraagt. Begin pas aan een volgende f
 - **Assets en audio:** alleen zelfgemaakt materiaal of CC0. Noteer bron en licentie in `CREDITS.md`. Download geen betaalde assets of assets met een onduidelijke licentie.
 - **`.gitignore`:** `.godot/`, `export/`, `build/`, `*.tmp`, `.claude/settings.local.json`. Commit `.import`- en `*.uid`-bestanden wel.
 - **`docs/`** heeft een `.gdignore`, zodat Godot de referentieplaatjes niet importeert of exporteert.
+- **Tests met `-s`:** het hoofdscript wordt gecompileerd voordat de autoloads bestaan. Gebruik daarin dus geen projectklassen die autoloads aanroepen (zoals `Player`) als type, maar `Variant`.
 
 ## Codeconventies
 

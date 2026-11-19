@@ -1,0 +1,85 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/world/props/chest.gd" id="1_chest"]
+[ext_resource type="Script" path="res://scripts/components/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" path="res://scripts/components/loot_dropper.gd" id="3_loot"]
+[ext_resource type="Resource" path="res://data/loot/dungeon_chest.tres" id="4_table"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_wood"]
+albedo_color = Color(0.48, 0.3, 0.16, 1)
+specular_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="Mat_metal"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+metallic = 0.5
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_gold"]
+albedo_color = Color(0.95, 0.75, 0.25, 1)
+metallic = 0.6
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="Mesh_base"]
+material = SubResource("Mat_wood")
+size = Vector3(1, 0.55, 0.6)
+
+[sub_resource type="BoxMesh" id="Mesh_band"]
+material = SubResource("Mat_metal")
+size = Vector3(0.08, 0.57, 0.62)
+
+[sub_resource type="BoxMesh" id="Mesh_lid"]
+material = SubResource("Mat_wood")
+size = Vector3(1.04, 0.16, 0.64)
+
+[sub_resource type="BoxMesh" id="Mesh_lock"]
+material = SubResource("Mat_gold")
+size = Vector3(0.14, 0.16, 0.04)
+
+[sub_resource type="BoxShape3D" id="Shape_body"]
+size = Vector3(1, 0.7, 0.6)
+
+[sub_resource type="BoxShape3D" id="Shape_use"]
+size = Vector3(1.6, 1.4, 1.4)
+
+[node name="Chest" type="StaticBody3D"]
+script = ExtResource("1_chest")
+loot = ExtResource("4_table")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.35, 0)
+shape = SubResource("Shape_body")
+
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.275, 0)
+mesh = SubResource("Mesh_base")
+
+[node name="BandLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.32, 0.275, 0)
+mesh = SubResource("Mesh_band")
+
+[node name="BandRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.32, 0.275, 0)
+mesh = SubResource("Mesh_band")
+
+[node name="LidPivot" type="Node3D" parent="."]
+position = Vector3(0, 0.55, 0.3)
+
+[node name="Lid" type="MeshInstance3D" parent="LidPivot"]
+position = Vector3(0, 0.08, -0.3)
+mesh = SubResource("Mesh_lid")
+
+[node name="Lock" type="MeshInstance3D" parent="LidPivot"]
+position = Vector3(0, 0.02, -0.63)
+mesh = SubResource("Mesh_lock")
+
+[node name="Interactable" type="Area3D" parent="."]
+script = ExtResource("2_interactable")
+prompt = "Kist openen"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable"]
+position = Vector3(0, 0.6, -0.8)
+shape = SubResource("Shape_use")
+
+[node name="LootDropper" type="Node3D" parent="."]
+position = Vector3(0, 0.6, -0.6)
+script = ExtResource("3_loot")

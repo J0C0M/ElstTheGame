@@ -70,6 +70,7 @@ shaders/    retro_post.gdshader
 assets/     modellen, audio, fonts
 docs/       GDD, voortgang en referentiebeelden
 tests/      headless tests
+tools/      Python-scripts, zoals de generator van Elst (tools/map)
 ```
 
 ## Credits

@@ -20,6 +20,8 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 11 | `Add-Amber-Final-Battle` | Nog niet begonnen |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
+Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is gebouwd en wacht op akkoord.
+
 ## Fase 0 – Fundament
 
 ### Wat is af
@@ -54,7 +56,7 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 ### Open punten
 
 - [x] **Git-identiteit en signing.** Waren niet ingesteld. Op verzoek van de eigenaar staan ze nu in de lokale config van deze repo: `J0C0M <caviagamer.2018@gmail.com>`, met SSH-signing via `~/.ssh/id_ed25519`. Voor het label "Verified" op GitHub moet die sleutel daar als *Signing Key* zijn toegevoegd.
-- [ ] **`docs/reference/kaart_elst.png`** is op 19-11-2026 aangeleverd, maar nog niet gecommit. De wereld volgt nog de voorlopige kaartindeling hieronder. Die zetten we in een eigen branch om naar de kaart.
+- [ ] **`docs/reference/kaart_elst.png`** is op 19-11-2026 aangeleverd en de wereld volgt hem nu (zie *Kaart verwerken*). De kaart zelf staat nog niet in de repo: eerst moet duidelijk zijn waar hij vandaan komt.
 - [ ] **`docs/reference/Klaas_sigma.png`** staat lokaal klaar, maar is nog niet gecommit. De repo is openbaar, dus de foto zou dan voor iedereen zichtbaar zijn. De eigenaar beslist.
 - [ ] Godot staat niet in de `PATH`. Controles draaien met `~/Downloads/Godot_v4.7.2-stable_linux.x86_64`.
 - [ ] `gh` is niet geïnstalleerd. Merges naar `Development` gaan dus met `git merge` in plaats van via een PR.
@@ -143,7 +145,7 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 - **Doodgaan** brengt je terug op het startpunt van de wereld waar je bent (in een dungeon de ingang). Fase 3 vervangt dat door "de laatste save laden".
 - **Navmesh:** wordt bij het laden gebakken in plaats van als bestand in de repo te staan. Zo blijft hij kloppen terwijl de blockout nog verandert. Het mesh-resource wordt gedeeld, dus terugkomen in Elst bakt niet opnieuw.
 - **Huizen en bomen** bouwen hun mesh in code met vertexkleuren. Zo is elk prop één draw call. In de editor blijven het gewone nodes die je kunt verplaatsen, met `size` en kleuren in de inspector.
-- **`Elst.tscn`** is één keer met een script gegenereerd (wegen, huizen, bomen en weilanden op basis van een vaste seed). Het script staat niet in de repo: de scene is nu de bron en wordt verder in de editor bewerkt.
+- **`Elst.tscn`** is één keer met een script gegenereerd (wegen, huizen, bomen en weilanden op basis van een vaste seed). Sinds *Kaart verwerken* staat de generator wel in de repo (`tools/map/gen_elst.py`).
 - **De testarena** is gebleven als losse scene om combat te testen (open hem in de editor en druk op F6). Het spel start nu in Elst.
 
 ### Aandachtspunten voor de volgende fases
@@ -330,12 +332,12 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 
 ## Kaart verwerken (`Align-Elst-With-Map`)
 
-Status: plan klaar, nog niet gebouwd. De wereld volgt nog de voorlopige indeling hieronder.
+Status: gebouwd, wacht op akkoord.
 
-### Plan
+### Wat is af
 
-- **Bron:** `docs/reference/kaart_elst.png` (520 × 419 px). `tools/map/layout.py` bevat alles wat van de kaart is overgetrokken: schaal, midden, locaties, hoofdwegen en spoor. `tools/map/render_plan.py` tekent het plan over de kaart heen.
-- **Schaal en midden:** 1,05 m per kaartpixel. Het midden van de tornado ligt op kaartpixel (220, 242), tussen alle zes de locaties in. De tornado blijft even groot (wind vanaf 222 m, muur op 240 m).
+- **Elst volgt nu `kaart_elst.png`.** `tools/map/gen_elst.py` bouwt `scenes/world/Elst.tscn` opnieuw op. Het gebruikt `tools/map/layout.py` (schaal, midden, locaties, hoofdwegen en spoor) en leest het landgebruik uit de kaart.
+- **Schaal en midden:** 1,05 m per kaartpixel. Het midden van de tornado ligt tussen de zes locaties in, op kaartpixel (220, 242). De tornado blijft even groot (wind vanaf 222 m, muur op 240 m).
 - **Locaties** (wereldpositie x, z in meters, deur = lokale −z):
 
 | Locatie | Positie | Deur naar | Opmerking |
@@ -347,33 +349,29 @@ Status: plan klaar, nog niet gebouwd. De wereld volgt nog de voorlopige indeling
 | Westeraam | (157, −69) | zuid | aan de oostkant van het spoor |
 | OBC Fort | (−172, 78) | oost, naar de weg in het zuidwesten | |
 
-- **Spoor:** staat niet op de kaart. Het komt van noord naar zuid op x = 127, in de lege strook tussen het station en Westeraam, met drie overwegen.
-- **Hoofdwegen:** overgetrokken van de brede wegen op de kaart (doorgaande weg noord-zuid langs de kerk, weg naar het westen, lus in het zuidwesten, zuidelijke ring, weg langs Westeraam, Stationsstraat).
-- **De rest:** bebouwd gebied op de kaart krijgt straten met huizen, open land wordt weiland, de groene vlakken worden parken en sportvelden, en het water komt terug (de Aamsche Plas valt grotendeels buiten de tornado).
-- **Generator:** deze keer komt het script dat `Elst.tscn` bouwt in `tools/map/`, zodat de wereld opnieuw te maken is.
-- **Nog te doen na het bouwen:** vijanden in Elst meeverplaatsen, de tests die vaste plekken gebruiken aanpassen (`test_save`), navmesh en lopen controleren, en screenshots.
+- **Grond:** één `GroundMap` (`scripts/world/ground_map.gd`), een mesh met een vlakke kleur per vierkante meter uit het raster `data/world/elst_ground.png`. Dat raster bevat per cel een kleurnummer en is geen textuur. Erin staan de straten van de kaart, tuinen, een lappendeken van weilanden, parken en sportvelden, water, het spoor en geplaveide grond onder de locaties. Alles samen is één draw call.
+- **Wegen:** de hoofdwegen (8 m breed) zijn overgetrokken van de kaart. De straten komen rechtstreeks uit de kaart.
+- **443 huizen** langs de straten, met de deur naar de straat, en **322 bomen** in parken, tuinen en weilanden.
+- **Spoor** van noord naar zuid op x = 127, tussen het station en Westeraam, met drie overwegen.
+- **Water:** de grotere vijvers en de westpunt van de Aamsche Plas liggen binnen de tornado. Onzichtbare randen houden je eruit.
+- **Vijanden buiten:** drie laag drillers op de Stationsstraat en twee drillers ten zuiden van Westeraam.
+- **Tests:** alle zeven slagen. `test_save` gebruikt nu plekken naast het startpunt in plaats van vaste coördinaten. `test_enemies` wacht tot de navmesh van Elst klaar is (ongeveer 0,2 s).
+
+### Keuzes en afwijkingen
+
+- **De tornado staat om het midden van de locaties, niet om de kerk.** Op de kaart ligt OBC zo ver naar het zuidwesten dat het anders buiten de ring valt. "Kerk in het midden" uit het GDD lees ik als het midden van het dorp.
+- **De kerk** staat met de voorkant naar de doorgaande weg, en het kerkplein is kleiner (46 in plaats van 64 m). **Het station** is omgedraaid: het perron ligt aan het spoor en het stationsplein aan de weg aan de zuidkant.
+- **De Bingo Club** staat zo'n 20 m ten westen van zijn blauwe vlek, omdat het kerkplein groter is dan de roze vlek.
+- **Straten zijn 2 tot 3 m breed**, zoals de kaart ze op deze schaal geeft. Een cel breder liet te weinig ruimte voor huizen. De huizen zijn daarom laag gehouden.
+- **Geen industrieterrein meer:** dat staat niet op de kaart. De Aamsche Plas ligt grotendeels buiten de tornado.
+- **`Elst.tscn` komt nu uit het script.** Verander de wereld via het script en draai het opnieuw. Huizen en bomen die je in de editor verplaatst, gaan bij de volgende run verloren. Lucht, tornado, grondcollider en navigatie-instellingen neemt het script over uit de bestaande scene.
 
 ### Open punten
 
-- [ ] Bron van de kaart (Google Maps of OpenStreetMap), om te bepalen of hij in de openbare repo mag.
-- [ ] Ligging van het spoor bevestigen.
+- [ ] **Bron van de kaart** (Google Maps of OpenStreetMap). Tot dat duidelijk is, staat `kaart_elst.png` niet in de repo en kan het script alleen draaien als de kaart lokaal in `docs/reference/` staat. Ook het raster `elst_ground.png` is van de kaart afgeleid.
+- [ ] **Ligging van het spoor** bevestigen.
+- [ ] **`test_enemies` faalt af en toe** (ongeveer 1 op de 10 keer) in de stationsdungeon. De vijanden patrouilleren willekeurig en komen soms toch bij de speler. Dat gebeurde ook al voor deze branch.
 
-## Voorlopige kaartindeling
+## Kaartindeling
 
-`kaart_elst.png` is er nu, maar de wereld volgt nog deze voorlopige indeling: de kerk in het midden, de andere vijf locaties eromheen. De richtingen volgen ruwweg het echte Elst (de kerk in het centrum, het station en het spoor aan de oostkant, Westeraam ten noordoosten van het station, de Over Betuwe College-kant ver in het zuidwesten). Het huis van Klaas staat op een korte loopafstand van alles, zodat het een goede hub is.
-
-Godot-coördinaten in meters: +X is oost, −Z is noord. De kaart is ca. 500 × 500 m. De tornado is een ring met een vaste muur op 240 m van het midden; vanaf 222 m duwt de wind je terug.
-
-| Kleur | Locatie | Plek | Positie (x, z) |
-|---|---|---|---|
-| Roze | De Kerk van Amber | Midden | (0, 0) |
-| Paars | Huis van Klaas | Zuid, vlak bij het centrum | (−20, 110) |
-| Blauw | Bingo Club Boomer Cave | West | (−130, −20) |
-| Groen | Elst Station + gebouw ernaast | Oost, aan het spoor | (125, 30) |
-| Geel | Westeraam Getho | Noordoost, voorbij het spoor | (160, −105) |
-| Rood | OBC Elst Fort | Zuidwest | (−130, 130) |
-
-- Het spoor loopt van noord naar zuid op ongeveer x = 110.
-- Hoofdwegen lopen van de kerk naar elke locatie. Daartussen staan woonstraten en weilanden.
-- De Aamsche Plas ligt in het zuidoosten rond (165, 128), het industrieterrein tussen het spoor en de plas.
-- Fase 2 heeft dit uitgewerkt in `Elst.tscn`. Komt `kaart_elst.png` er alsnog, dan schuiven we de locaties in de editor en passen we deze tabel aan.
+Zie *Kaart verwerken* hierboven. Godot-coördinaten in meters: +X is oost, −Z is noord. De wereld volgt `docs/reference/kaart_elst.png` op 1,05 m per kaartpixel.

@@ -212,6 +212,9 @@ func _read(id: String) -> Dictionary:
 
 
 func _save_thumbnail(id: String) -> void:
+	# Without a renderer (headless tests) there is no picture to take.
+	if DisplayServer.get_name() == "headless":
+		return
 	var image: Image = world.get_viewport().get_texture().get_image()
 	if image == null or image.is_empty():
 		return

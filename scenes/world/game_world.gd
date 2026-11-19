@@ -1,8 +1,8 @@
 class_name GameWorld
 extends Node3D
 ## Root of a playable world: the open world of Elst or a dungeon. Knows its
-## name and spawn points, and brings the player back after dying. Phase 3
-## replaces the respawn with loading the last save.
+## name and spawn points. On its own (in a test, or run with F6) it brings the
+## player back after dying; inside Main, dying loads the last save instead.
 
 ## Name shown when the player arrives, for example "Elst" or "Station Elst".
 @export var location_name: String = ""
@@ -11,6 +11,9 @@ extends Node3D
 @export var respawn_delay: float = 3.0
 ## Save automatically when the player walks in, as for dungeons.
 @export var autosave_on_enter: bool = false
+
+## Main turns this off, because it loads the last save after dying.
+var respawn_on_death: bool = true
 
 
 func _ready() -> void:
@@ -41,11 +44,17 @@ func place_player(spawn_id: StringName) -> void:
 		player.teleport(spawn.global_transform)
 
 
-func _on_player_died() -> void:
-	await get_tree().create_timer(respawn_delay).timeout
-	if not is_inside_tree():
-		return
+## Brings the player back to life at the default spawn point.
+func respawn_player() -> void:
 	var player: Player = get_player()
 	var spawn: Marker3D = get_spawn(default_spawn)
 	if player != null and spawn != null:
 		player.respawn(spawn.global_transform)
+
+
+func _on_player_died() -> void:
+	if not respawn_on_death:
+		return
+	await get_tree().create_timer(respawn_delay).timeout
+	if is_inside_tree():
+		respawn_player()

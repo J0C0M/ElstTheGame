@@ -1906,6 +1906,14 @@ rotation = Vector3(0, -1.5708, 0)
 
 [node name="BossArena" type="Node3D" parent="."]
 
+[node name="HelperSpawns" type="Node3D" parent="BossArena"]
+
+[node name="SpawnWest" type="Marker3D" parent="BossArena/HelperSpawns"]
+position = Vector3(-30, 0, -154)
+
+[node name="SpawnEast" type="Marker3D" parent="BossArena/HelperSpawns"]
+position = Vector3(-2, 0, -154)
+
 [node name="FatbikeKid" parent="BossArena" instance=ExtResource("24_kid")]
 position = Vector3(-16, 0, -176)
 gate_path = NodePath("../../ArenaGate")

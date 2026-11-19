@@ -1,8 +1,9 @@
 extends SceneTree
 ## Headless test for Quest 4 and OBC Elst Fort: Klaas gives the quest,
 ## voetballers shoot footballs, a fatbiker's charge hurts, the staff room is a
-## checkpoint, and the fatbike-kindje revs, charges, crashes into a wall and is
-## only hurt while dazed; below half health he charges twice in a row. The
+## checkpoint, and the fatbike-kindje on his huge bike revs, charges, leaves a
+## trail of fire, crashes into a wall and is only hurt while dazed; below half
+## health he calls two voetballers and charges twice in a row. The
 ## arena gate closes and saving is blocked during the fight, he stays beaten
 ## after loading, OBC is liberated, Klaas hands out the reward, and a boss
 ## beaten before Klaas asked still counts. Uses its own save folder.
@@ -123,13 +124,18 @@ func _test_boss_fight() -> void:
 	_check(_state.is_saving_blocked() and _main.get_node("UI/HUD/BossBar").visible, "saving is blocked and the boss bar shows")
 	_check(gate.visible and not gate.get_node("CollisionShape3D").disabled, "the gate of the sports field closes")
 	_check(kid.get_node("AimLine").visible and kid.get_node("RevLabel").visible, "he revs up and a line shows where he will go")
+	_check(kid.get_node("Model/Fatbike").scale.x >= 2.0, "his fatbike is huge, the kid on it is small")
 	kid.get_node("Hurtbox").receive_hit(load("res://scripts/components/hit_data.gd").new(50, _player(), null))
 	_check(kid.health.current_health == 450, "on his bike he cannot be hurt")
 	await _wait_for_mode(kid, DAZED)
 	_check(kid.mode == DAZED, "he crashes into a wall and is dazed")
+	_check(_count_with_script("fire_patch.gd") > 0, "his engine leaves a trail of fire")
 	kid.get_node("Hurtbox").receive_hit(load("res://scripts/components/hit_data.gd").new(100, _player(), null))
 	_check(kid.health.current_health == 350, "a dazed fatbike-kindje takes damage")
 	kid.health.take_damage(150)
+	await _frames(5)
+	var helpers: int = kid.get_parent().get_children().filter(func(node: Node) -> bool: return node.is_in_group(&"enemies")).size()
+	_check(kid.called_for_help and helpers == 2, "below half health he calls two voetballers for help")
 	await _wait_for_mode(kid, AIMING)
 	var charges: int = kid.charge_count
 	await _wait_for_mode(kid, DAZED)
@@ -195,6 +201,14 @@ func _wait_for_mode(kid: Variant, mode: int) -> void:
 		if kid.mode == mode:
 			return
 		await physics_frame
+
+
+func _count_with_script(script_file: String) -> int:
+	var count: int = 0
+	for node: Node in _main.get_world().find_children("*", "", true, false):
+		if node.get_script() != null and node.get_script().resource_path.ends_with(script_file) and not node.is_queued_for_deletion():
+			count += 1
+	return count
 
 
 func _projectiles() -> Array[Node]:

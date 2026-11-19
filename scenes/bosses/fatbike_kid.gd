@@ -226,7 +226,7 @@ func _spin_wheels(delta: float, speed: float, back_only: bool) -> void:
 	for wheel: Node3D in _wheels:
 		if back_only and wheel == _wheels[0]:
 			continue
-		wheel.rotate_object_local(Vector3.UP, -speed * delta / WHEEL_RADIUS)
+		wheel.rotate_object_local(Vector3.RIGHT, -speed * delta / WHEEL_RADIUS)
 
 
 func _face(target: Vector3, delta: float) -> void:

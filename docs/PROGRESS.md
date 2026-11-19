@@ -387,11 +387,13 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 - **Kakker-voetbaljongens** (38 HP, 10 schade): rode polo, witte kraag, een navy trui over de schouders en blond haar. Ze houden afstand en schieten voetballen; 60% gaat recht op je af, de rest mist.
 - **Fatbikers** (65 HP, 16 schade): rijden op een fatbike, cirkelen om je heen (flankeren) en chargeren dan met hoge snelheid.
 - **Nieuw in `EnemyData`:** `lunge_speed` (de charge van een fatbiker) en `accuracy` met `miss_angle` (hoe vaak een schot raak gaat).
-- **Het fatbike-kindje** (450 HP, 20 schade, `scenes/bosses/FatbikeKid.tscn`):
-  - een klein, bleek kindje met blauwe ogen op een veel te grote, opgevoerde fatbike;
-  - hij laat zijn motor brullen ("VRRRRMMM!") terwijl een rode lijn op de grond laat zien waar hij heen gaat, en chargeert dan in een rechte lijn;
+- **Het fatbike-kindje** (450 HP, 25 schade per charge, `scenes/bosses/FatbikeKid.tscn`), na feedback van de eigenaar uitgebreid:
+  - een klein, bleek jongetje met blauwe ogen bovenop een enorme, opgevoerde fatbike (wielen van zo'n 2 m);
+  - voor elke charge maakt hij een wheelie met een burn-out (rook van het achterwiel, vlammen uit de uitlaat) en roept hij iets kakkerigs ("Mijn vader is advocaat!", "Opzij, boomer!"), terwijl een rode lijn op de grond laat zien waar hij heen gaat; dan chargeert hij in een rechte lijn;
+  - zijn opgevoerde motor laat een spoor van brandende plekken achter (8 schade, 4 s), dus je moet echt opzij en niet in zijn lijn blijven staan;
+  - op de helft roept hij "JONGENS, HELP!" en komen er twee voetballers bij;
   - knalt hij tegen een muur, dan is hij 3 s versuft, en alleen dan kun je hem raken;
-  - onder 50% chargeert hij twee keer achter elkaar;
+  - onder 50% chargeert hij twee keer achter elkaar, de tweede keer sneller;
   - tijdens het gevecht gaat het hek van het sportveld dicht en kun je niet opslaan; hij laat 100 goud vallen en heeft 35% kans op uitrusting.
 - **OBC bevrijd:** in Elst spelen twee voetballers en een fatbiker op het schoolplein. Na het fatbike-kindje (`boss_fatbike_kindje`) lopen er dorpelingen.
 - **Quest 4 "OBC Elst Fort"** (`data/quests/q4_obc.tres`): Klaas geeft hem na Quest 3. Doelen: versla het fatbike-kindje en ga terug naar Klaas. Beloning: 150 goud en Inwijding 4. Ook eerder verslagen telt.

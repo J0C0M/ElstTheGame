@@ -2,7 +2,8 @@ extends SceneTree
 ## Headless test for Quest 3 and the liberated areas: liberated areas in Elst
 ## swap patrols for villagers, Klaas gives the quest, vape-drillers shoot vape
 ## puffs and keep their distance, the Vape-koning hides in his clouds, is only
-## hurt while exposed, fires three puffs below half health, blocks saving
+## hurt while exposed, fills the palace with vape while he flees, fires three
+## puffs below half health, blocks saving
 ## during the fight and stays beaten after loading. Westeraam is liberated,
 ## Klaas hands out the reward, and a boss beaten before Klaas asked still
 ## counts. Uses its own save folder.
@@ -126,11 +127,18 @@ func _test_boss_fight() -> void:
 	_check(king.mode == 2, "walking into his cloud exposes him")
 	king.get_node("Hurtbox").receive_hit(load("res://scripts/components/hit_data.gd").new(100, _player(), null))
 	_check(king.health.current_health == 300, "an exposed Vape-koning takes damage")
+	var environment: Environment = _main.get_world().get_node("WorldEnvironment").environment
+	var thickest_fog: float = 0.0
 	for i: int in 400:
 		await physics_frame
+		if king.mode == 3:
+			thickest_fog = maxf(thickest_fog, environment.fog_density)
 		if king.mode == 1:
 			break
 	_check(king.mode == 1 and king.get("_cloud_index") != cloud, "after a few seconds he flees to another cloud")
+	_check(thickest_fog > 0.15, "while he flees, thick vape fills the palace")
+	await _frames(90)
+	_check(environment.fog_density < 0.01, "the vape clears once he sits in his new cloud")
 	king.health.take_damage(150)
 	var before: int = _puffs().size()
 	king.call("_shoot", _player())

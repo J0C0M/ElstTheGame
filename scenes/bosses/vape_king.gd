@@ -3,7 +3,8 @@ extends Node3D
 ## The Vape-koning, boss of Westeraam. He hides in one of the vape clouds of
 ## his arena and blows vape puffs at the player from it, three at a time below
 ## half health. Walk into his cloud and he is exposed for a few seconds, then
-## he flees to another cloud. Saving is blocked during the fight. Once beaten
+## he flees to another cloud, and thick vape fills the palace until he sits in
+## it, so the player cannot see where he went. Saving is blocked during the fight. Once beaten
 ## a GameState flag keeps him beaten and Westeraam liberated.
 
 enum Mode { WAITING, HIDDEN, EXPOSED, FLEEING, DEAD }
@@ -27,6 +28,14 @@ enum Mode { WAITING, HIDDEN, EXPOSED, FLEEING, DEAD }
 @export var flee_speed: float = 11.0
 @export_multiline var defeat_message: String = "De Vape-koning is verslagen! Westeraam is bevrijd."
 
+@export_group("Vape fog")
+## Fog that fills the palace while he flees.
+@export var flee_fog_color: Color = Color(0.82, 0.78, 0.94)
+@export var flee_fog_density: float = 0.22
+## Seconds the fog takes to come up, and to clear once he is hidden again.
+@export var fog_fade_in: float = 0.25
+@export var fog_fade_out: float = 1.0
+
 const SAVE_BLOCK: StringName = &"boss"
 const CORPSE_TIME: float = 4.0
 
@@ -35,6 +44,8 @@ var hideouts: Node3D
 var _cloud_index: int = 0
 var _timer: float = 0.0
 var _arena_center: Vector3
+var _environment: Environment
+var _fog_tween: Tween
 
 @onready var model: HumanoidModel = $Model
 @onready var health: HealthComponent = $Health
@@ -56,6 +67,7 @@ func _ready() -> void:
 	_arena_center = Vector3.ZERO
 	for cloud: VapeHideout in get_hideouts():
 		_arena_center += cloud.global_position / get_hideouts().size()
+	_setup_fog()
 	_hide_in(0)
 
 
@@ -141,6 +153,7 @@ func _flee() -> void:
 	model.stop_action()
 	var count: int = get_hideouts().size()
 	_cloud_index = (_cloud_index + randi_range(1, count - 1)) % count
+	_set_fog(flee_fog_density, fog_fade_in)
 
 
 func _hide_in(index: int) -> void:
@@ -153,6 +166,32 @@ func _hide_in(index: int) -> void:
 	if mode != Mode.WAITING:
 		mode = Mode.HIDDEN
 		_timer = 0.8
+		_set_fog(0.0, fog_fade_out)
+
+
+## Gives the world its own copy of the environment, with fog that is off for now.
+func _setup_fog() -> void:
+	var node: Node = get_parent()
+	while node != null:
+		var world_environment: WorldEnvironment = node.get_node_or_null(^"WorldEnvironment") as WorldEnvironment
+		if world_environment != null:
+			_environment = world_environment.environment.duplicate() as Environment
+			_environment.fog_enabled = true
+			_environment.fog_density = 0.0
+			_environment.fog_light_color = flee_fog_color
+			_environment.fog_light_energy = 1.2
+			world_environment.environment = _environment
+			return
+		node = node.get_parent()
+
+
+func _set_fog(density: float, duration: float) -> void:
+	if _environment == null:
+		return
+	if _fog_tween != null:
+		_fog_tween.kill()
+	_fog_tween = create_tween()
+	_fog_tween.tween_property(_environment, "fog_density", density, duration)
 
 
 func _face(target: Vector3) -> void:
@@ -176,6 +215,7 @@ func _on_died() -> void:
 	model.visible = true
 	model.play_action(&"death", 1.0, true)
 	_loot_dropper.drop()
+	_set_fog(0.0, fog_fade_out)
 	GameState.set_flag(defeated_flag)
 	EventBus.enemy_killed.emit(data.id)
 	_end_fight()

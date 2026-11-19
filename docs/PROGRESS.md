@@ -15,12 +15,12 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 6 | `Add-Quest-System-And-Tutorial` | Af, gemerged naar `Development` |
 | 7 | `Add-Station-Dungeon` | Af, gemerged naar `Development` |
 | 8 | `Add-Westeraam-Dungeon` | Af, gemerged naar `Development` |
-| 9 | `Add-OBC-Fort-Dungeon` | Nog niet begonnen |
+| 9 | `Add-OBC-Fort-Dungeon` | Gebouwd, wacht op akkoord |
 | 10 | `Add-Bingo-Cave-Dungeon` | Nog niet begonnen |
 | 11 | `Add-Amber-Final-Battle` | Nog niet begonnen |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
-Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is gebouwd en wacht op akkoord.
+Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`.
 
 ## Prototypes
 
@@ -33,6 +33,7 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 - Modellen van objecten in de wereld (huizen, bomen, props) zijn nog niet mooi en kunnen veel beter (eigenaar, 19-11-2026).
 - Paden en wegen zijn erg blokkerig en visueel slecht uitgewerkt: de grond is een raster van 1 m (eigenaar, 19-11-2026).
 - Straten zijn op deze schaal maar 2 tot 3 m breed; daardoor zijn de huizen laag gehouden (zie *Kaart verwerken*).
+- Fatbikers en het fatbike-kindje zitten op hun fiets met lopende benen; een echte rijhouding en draaiende wielen ontbreken nog.
 
 ## Fase 0 – Fundament
 
@@ -374,6 +375,39 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 - Fase 8: `station_cleared` kan meetellen als bevrijding van het station. Geef de vape-drillers `weakened_by_flag = &"station_cleared"` en `weakened_health_factor = 0.8`. (Gedaan in Fase 8.)
 - Fase 9: hetzelfde voor de voetbaljongens en de fatbikers. Of de bazen ook zwakker worden, beslissen we in hun eigen fase.
 - Fase 10: de kruisboog komt van Klaas zodra Quest 2 t/m 5 af zijn.
+
+## Fase 9 – Quest 4: OBC Elst Fort
+
+### Wat is af
+
+- **OBC-dungeon** (`scenes/dungeons/OBC.tscn`, gebouwd door `tools/dungeons/gen_obc.py`): ongeveer 66 × 176 m met 16 vijanden, in twee delen met een checkpoint ertussen.
+  - Deel 1, de school: de aula, een gang met kluisjes, de kantine (kist) en een grote gymzaal.
+  - Checkpoint: de docentenkamer, met een autosave en een rustbank.
+  - Deel 2, achter de school: het binnenplein waar fatbikers rondrijden (kist), het fietsenhok en het sportveld met de baas.
+- **Kakker-voetbaljongens** (35 HP, 8 schade): rode polo, witte kraag, een navy trui over de schouders en blond haar. Ze houden afstand en schieten voetballen; 60% gaat recht op je af, de rest mist.
+- **Fatbikers** (60 HP, 15 schade): rijden op een fatbike, cirkelen om je heen (flankeren) en chargeren dan met hoge snelheid.
+- **Nieuw in `EnemyData`:** `lunge_speed` (de charge van een fatbiker) en `accuracy` met `miss_angle` (hoe vaak een schot raak gaat).
+- **Het fatbike-kindje** (350 HP, 20 schade, `scenes/bosses/FatbikeKid.tscn`):
+  - een klein, bleek kindje met blauwe ogen op een veel te grote, opgevoerde fatbike;
+  - hij laat zijn motor brullen ("VRRRRMMM!") terwijl een rode lijn op de grond laat zien waar hij heen gaat, en chargeert dan in een rechte lijn;
+  - knalt hij tegen een muur, dan is hij 3 s versuft, en alleen dan kun je hem raken;
+  - onder 50% chargeert hij twee keer achter elkaar;
+  - tijdens het gevecht gaat het hek van het sportveld dicht en kun je niet opslaan; hij laat 100 goud vallen en heeft 35% kans op uitrusting.
+- **OBC bevrijd:** in Elst spelen twee voetballers en een fatbiker op het schoolplein. Na het fatbike-kindje (`boss_fatbike_kindje`) lopen er dorpelingen.
+- **Quest 4 "OBC Elst Fort"** (`data/quests/q4_obc.tres`): Klaas geeft hem na Quest 3. Doelen: versla het fatbike-kindje en ga terug naar Klaas. Beloning: 150 goud en Inwijding 4. Ook eerder verslagen telt.
+- **Tests:** `tests/test_obc.gd` (29 checks, allemaal geslaagd). De andere negen tests slagen ook.
+
+### Keuzes en afwijkingen
+
+- **Het motorgeluid** uit het GDD is voorlopig de tekst "VRRRRMMM!" boven zijn hoofd, en de fiets trilt. Echt geluid komt in Fase 12.
+- **De voetballen** gebruiken hetzelfde script als de vapewolkjes, maar zijn sneller en verdwijnen meteen na een muur.
+- **De fatbikers** rijden op een fiets, maar hun benen lopen nog mee (placeholder; staat ook bij de punten voor Prototype 2).
+- **Het fatbike-kindje** is niet zwakker na het station, net als de Vape-koning.
+- **Na Quest 4** zegt Klaas "Nog niet" als je om een klus vraagt, tot Fase 10.
+
+### Aandachtspunten voor de volgende fases
+
+- Fase 10: de Bingo Club Boomer Cave op dezelfde manier: groter dan het station, twee delen met een checkpoint, een `LiberatedArea` in `tools/map/gen_elst.py` en Quest 5 in `tools/data/gen_klaas_dialogue.py`. Daarna geeft Klaas de kruisboog (Quest 2 t/m 5 af).
 
 ## Factie-dungeons op slot en een groter Westeraam (`Lock-Faction-Dungeons-And-Expand-Westeraam`)
 

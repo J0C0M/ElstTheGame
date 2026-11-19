@@ -42,13 +42,21 @@ func get_spawn(spawn_id: StringName) -> Marker3D:
 	return null
 
 
-## The QuestMarker for target [param target_id] in this world, or null.
+## The QuestMarker for target [param target_id] in this world that is nearest
+## to the player, or null.
 func find_quest_marker(target_id: StringName) -> QuestMarker:
+	var player: Player = get_player()
+	var nearest: QuestMarker = null
+	var nearest_distance: float = INF
 	for node: Node in get_tree().get_nodes_in_group(&"quest_markers"):
 		var marker: QuestMarker = node as QuestMarker
-		if marker != null and target_id in marker.ids and is_ancestor_of(marker):
-			return marker
-	return null
+		if marker == null or target_id not in marker.ids or not is_ancestor_of(marker) or marker.is_queued_for_deletion():
+			continue
+		var distance: float = 0.0 if player == null else player.global_position.distance_squared_to(marker.global_position)
+		if distance < nearest_distance:
+			nearest = marker
+			nearest_distance = distance
+	return nearest
 
 
 ## Puts the player at the spawn point [param spawn_id], or at the default one.

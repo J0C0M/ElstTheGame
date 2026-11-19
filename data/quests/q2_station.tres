@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="QuestData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_quest"]
+[ext_resource type="Script" path="res://scripts/data/quest_step.gd" id="2_step"]
+
+[sub_resource type="Resource" id="Step_generators"]
+script = ExtResource("2_step")
+id = &"generators"
+description = "Sla de vier generators in Station Elst kapot. De ingang zit in het gebouw naast het station."
+kind = 4
+flags = Array[StringName]([&"station_generator_1", &"station_generator_2", &"station_generator_3", &"station_generator_4"])
+target = &"generator"
+
+[sub_resource type="Resource" id="Step_report"]
+script = ExtResource("2_step")
+id = &"report"
+description = "Ga terug naar Klaas."
+flag = &"q2_reported"
+target = &"klaas"
+
+[resource]
+script = ExtResource("1_quest")
+id = &"q2_station"
+number = 2
+title = "De aanvoer van Elst kapotmaken"
+description = "Station Elst is de aanvoerlijn van Amber. Vecht je door de station-dungeon en sla de vier generators voor trein en spoor kapot. Het depot achterin wordt zwaar bewaakt."
+steps = Array[ExtResource("2_step")]([SubResource("Step_generators"), SubResource("Step_report")])
+completion_flag = &"station_cleared"
+reward_gold = 75

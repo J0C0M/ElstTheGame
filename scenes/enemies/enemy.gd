@@ -51,7 +51,7 @@ func _ready() -> void:
 	model = data.model_scene.instantiate() as HumanoidModel
 	model.name = "Model"
 	add_child(model)
-	health.reset(data.max_health)
+	health.reset(data.get_max_health())
 	health.health_changed.connect(_on_health_changed)
 	health.died.connect(_on_died)
 	hurtbox.hit_received.connect(_on_hit_received)

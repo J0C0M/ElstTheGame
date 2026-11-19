@@ -1,5 +1,5 @@
 extends SceneTree
-## Headless test for enemies and loot. In the station dungeon: drillers idle
+## Headless test for enemies and loot. In the enemy test room: drillers idle
 ## and patrol, notice the player and warn each other, attack, take sword hits,
 ## die and drop gold; the chest opens once and stays open after loading, and
 ## the enemies come back after loading. In Elst: an enemy gives up the chase,
@@ -32,7 +32,7 @@ func _run() -> void:
 	await _wait_for_navigation()
 	# A new game starts without a sword; Klaas hands it over in the tutorial.
 	root.get_node("GameState").add_gear(load("res://data/items/rusty_sword.tres"))
-	await _go_to("res://scenes/dungeons/Station.tscn", &"Entrance")
+	await _go_to("res://scenes/world/EnemyTestRoom.tscn", &"Entrance")
 	await _test_idle_and_patrol()
 	await _test_pack_notices_player()
 	await _test_enemies_attack()
@@ -99,7 +99,7 @@ func _test_sword_and_loot() -> void:
 	await _frames(30)
 	_check(target.health.current_health < health_before, "the sword hurts an enemy")
 	# Step away, so the coins do not fly to the player before they are counted.
-	_place(Vector3(0, 0, 9), PI)
+	_place(Vector3(0, 0, 14), PI)
 	await _frames(5)
 	var enemy_count: int = _enemies().size()
 	for enemy: Variant in _enemies():
@@ -154,7 +154,7 @@ func _test_bodies_disappear() -> void:
 
 
 func _test_load_brings_enemies_back() -> void:
-	_place(Vector3(0, 0, 8), PI)
+	_place(Vector3(0, 0, 14), PI)
 	await _frames(10)
 	var gold: int = root.get_node("GameState").gold
 	root.get_node("SaveManager").quicksave()

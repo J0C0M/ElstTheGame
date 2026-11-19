@@ -12,15 +12,27 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 3 | `Add-Save-System` | Af, gemerged naar `Development` |
 | 4 | `Add-Enemy-AI-And-Loot` | Af, gemerged naar `Development` |
 | 5 | `Add-Klaas-Dialogue-And-Shop` | Af, gemerged naar `Development` |
-| 6 | `Add-Quest-System-And-Tutorial` | Gebouwd, wacht op akkoord |
-| 7 | `Add-Station-Dungeon` | Nog niet begonnen |
+| 6 | `Add-Quest-System-And-Tutorial` | Af, gemerged naar `Development` |
+| 7 | `Add-Station-Dungeon` | Gebouwd, wacht op akkoord |
 | 8 | `Add-Westeraam-Dungeon` | Nog niet begonnen |
 | 9 | `Add-OBC-Fort-Dungeon` | Nog niet begonnen |
 | 10 | `Add-Bingo-Cave-Dungeon` | Nog niet begonnen |
 | 11 | `Add-Amber-Final-Battle` | Nog niet begonnen |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
-Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is gebouwd en wacht op akkoord.
+Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`.
+
+## Prototypes
+
+- **Prototype 1** bestaat uit Fase 0 t/m 12: de oorspronkelijke visie van de game, van begin tot eind speelbaar. Daar werken we nu aan.
+- **Prototype 2** begint pas als Prototype 1 af is. Wat erin komt, bepaalt de eigenaar dan. Een van de belangrijkste punten wordt graphics en details, waarschijnlijk met nog andere tweaks.
+- **Tot die tijd** blijven modellen en wegen placeholders. Steek er alleen tijd in als de gameplay of de leesbaarheid het nodig heeft. Visuele punten die we tegenkomen, komen in de lijst hieronder.
+
+### Verzamelde punten voor Prototype 2
+
+- Modellen van objecten in de wereld (huizen, bomen, props) zijn nog niet mooi en kunnen veel beter (eigenaar, 19-11-2026).
+- Paden en wegen zijn erg blokkerig en visueel slecht uitgewerkt: de grond is een raster van 1 m (eigenaar, 19-11-2026).
+- Straten zijn op deze schaal maar 2 tot 3 m breed; daardoor zijn de huizen laag gehouden (zie *Kaart verwerken*).
 
 ## Fase 0 – Fundament
 
@@ -330,9 +342,42 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is gebouwd en wacht op ak
 - Fase 7: Quest 2 eindigt na 4 generators (`KILL` of `FLAG` per generator) en zet het verzwakkingseffect aan.
 - Fase 8–10: zet bij de dood van de baas de `completion_flag` van de quest, zodat de dungeon ook telt als Klaas hem nog niet gegeven heeft.
 
+## Fase 7 – Quest 2: Station Elst
+
+### Wat is af
+
+- **Station-dungeon** (`scenes/dungeons/Station.tscn`, gebouwd door `tools/dungeons/gen_station.py`). Vijf ruimtes, van de ingang naar achteren:
+  - de stationshal met poortjes en een kiosk (2 laag drillers);
+  - de perronhal met pilaren, het spoor en een geparkeerde wagon *AMBER EXPRESS* (3 laag drillers, generator 1);
+  - een werkplaats aan de westkant (2 laag drillers, generator 2 en een kist);
+  - de spoortunnel met rood licht (2 laag drillers, generator 3);
+  - het aanvoerdepot van Amber: zwaar bewaakt door 6 laag drillers, met generator 4 op een verhoging en een kist.
+- **Generators** (`scenes/world/props/Generator.tscn`, 60 HP): je slaat ze kapot met het zwaard. Een kapotte generator wordt donker, helt over en geeft een rookwolk. Een vlag in `GameState` onthoudt dat, ook na laden. De `GeneratorGroup` telt af ("Nog 3 te gaan") en zet `station_cleared` zodra de laatste kapot is.
+- **Quest 2 "De aanvoer van Elst kapotmaken"** (`data/quests/q2_station.tres`): Klaas geeft hem na Quest 1, bij "Heb je nog een klus?". Doelen: sla de vier generators kapot (de HUD telt 1/4) en ga terug naar Klaas. Beloning: 75 goud en Inwijding 2.
+- **Verzwakkingseffect:** zodra het station plat ligt, hebben de drillers van Westeraam 20% minder HP (40 → 32). De laag drillers van Amber zelf niet. Het staat in de data: `weakened_by_flag` en `weakened_health_factor` in `EnemyData`.
+- **Eerder klaar dan gevraagd:** sloop je het station voordat Klaas erom vraagt, dan merkt hij dat bij "Heb je nog een klus?". Hij is trots en je krijgt de beloning alsnog.
+- **Kompas:** in Elst wijst het naar de deur van het gebouw naast het station, in de dungeon naar de dichtstbijzijnde generator die nog draait, en daarna naar de uitgang.
+- **Questsysteem:** een nieuw soort doel, `FLAGS`: alle vlaggen gezet, in elke volgorde, ook als ze al eerder gezet waren. Het kompas kiest nu de dichtstbijzijnde markering.
+- **Tests:** `tests/test_station.gd` (29 checks, allemaal geslaagd) speelt Quest 2 van de opdracht tot de beloning, met opslaan en laden in de dungeon en het geval dat je eerder klaar bent. De andere zeven tests slagen ook. `test_enemies` speelt nu in een eigen testkamer (`scenes/world/EnemyTestRoom.tscn`), en `test_save` gebruikt plekken naast de ingang.
+
+### Keuzes en afwijkingen
+
+- **Alleen laag drillers** in de station-dungeon, zoals in het GDD: in groepjes van twee of drie, en zes in het depot.
+- **Een `completion_flag` maakt een actieve quest niet meer meteen af.** Dan beslissen de doelen, zodat je nog terugmeldt bij Klaas. Alleen als de vlag al gezet is wanneer Klaas de quest geeft, is hij meteen af.
+- **Generators** gebruiken `EnemyData` voor hun HP (`data/enemies/station_generator.tres`).
+- **De bevrijding van het station** ("station werkt weer, dorpelingen op het perron") komt met het systeem voor bevrijde gebieden in Fase 8.
+- **Na Quest 2** zegt Klaas "Nog niet" als je om een klus vraagt, tot Fase 8.
+- **Klaas' dialoog** wordt nu ook door een script in de repo gemaakt (`tools/data/gen_klaas_dialogue.py`). Pas dat script aan en draai het opnieuw, in plaats van `klaas.tres` met de hand te bewerken.
+
+### Aandachtspunten voor de volgende fases
+
+- Fase 8: `station_cleared` kan meetellen als bevrijding van het station. Geef de vape-drillers `weakened_by_flag = &"station_cleared"` en `weakened_health_factor = 0.8`.
+- Fase 9: hetzelfde voor de voetbaljongens en de fatbikers. Of de bazen ook zwakker worden, beslissen we in hun eigen fase.
+- Fase 10: de kruisboog komt van Klaas zodra Quest 2 t/m 5 af zijn.
+
 ## Kaart verwerken (`Align-Elst-With-Map`)
 
-Status: gebouwd, wacht op akkoord.
+Status: af, gemerged naar `Development`.
 
 ### Wat is af
 
@@ -370,7 +415,7 @@ Status: gebouwd, wacht op akkoord.
 
 - [ ] **Bron van de kaart** (Google Maps of OpenStreetMap). Tot dat duidelijk is, staat `kaart_elst.png` niet in de repo en kan het script alleen draaien als de kaart lokaal in `docs/reference/` staat. Ook het raster `elst_ground.png` is van de kaart afgeleid.
 - [ ] **Ligging van het spoor** bevestigen.
-- [ ] **`test_enemies` faalt af en toe** (ongeveer 1 op de 10 keer) in de stationsdungeon. De vijanden patrouilleren willekeurig en komen soms toch bij de speler. Dat gebeurde ook al voor deze branch.
+- [x] **`test_enemies` faalde af en toe** in de stationsdungeon, omdat de vijanden willekeurig patrouilleren. Sinds Fase 7 speelt de test in een eigen, langere testkamer; daarna slaagde hij 10 keer op rij.
 
 ## Kaartindeling
 

@@ -16,11 +16,11 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 7 | `Add-Station-Dungeon` | Af, gemerged naar `Development` |
 | 8 | `Add-Westeraam-Dungeon` | Af, gemerged naar `Development` |
 | 9 | `Add-OBC-Fort-Dungeon` | Af, gemerged naar `Development` |
-| 10 | `Add-Bingo-Cave-Dungeon` | Gebouwd, wacht op akkoord |
+| 10 | `Add-Bingo-Cave-Dungeon` | Af, gemerged naar `Development` |
 | 11 | `Add-Amber-Final-Battle` | Nog niet begonnen |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
-Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`.
+Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers en de kijkrichting van vijanden) is gebouwd en wacht op akkoord.
 
 ## Prototypes
 
@@ -467,6 +467,34 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 - Fase 11: de kerk gaat open als `boss_vape_koning`, `boss_fatbike_kindje` en `boss_grumpy_oma` gezet zijn. Klaas vecht mee; de kruisboog is handig tegen Amber in de lucht.
 - Fase 12: geluid voor de bingonummers, de schokgolf, de rolstoel en de kruisboog.
 
+## Dev powers en kijkrichting van vijanden (`Add-Dev-Powers-And-Enemy-Facing`)
+
+Twee verzoeken van de eigenaar na Fase 10, voor Fase 11.
+
+### Wat is af
+
+- **Dev powers** voor het testen. De backtick-toets (`` ` ``) zet ze aan en uit, alleen in debug builds (de editor en debug-exports, niet in een release). Je ziet "DEV POWERS" rechtsboven in beeld.
+  - Je krijgt geen schade.
+  - Je vliegt: Spatie gaat omhoog, Ctrl omlaag, en loslaten houdt je op hoogte.
+  - Je loopt drie keer zo snel, en sprinten kost geen stamina.
+  - Elke treffer van de speler (zwaard of kruisboog) doodt meteen, ook bij bazen en generators, wat de baas ook normaal met een treffer doet.
+  - De dev powers worden niet opgeslagen.
+- **Kijkrichting van vijanden in de dungeons.** Eerst keken bijna alle vijanden van de ingang af, vooral in het station. `aim_enemies()` in `dungeon_builder.py` draait ze nu bij het genereren. Een deel kijkt naar de deur waardoor de speler hun kamer binnenkomt (een beetje schuin), de rest kijkt een willekeurige kant op. Die deur wordt per kamer gevonden door vanaf de ingang door de deuren te lopen. Een vaste seed geeft elke run dezelfde stand.
+
+| Dungeon | Kijkt naar de speler |
+|---|---|
+| Station | 8 van de 15, de rest willekeurig |
+| Westeraam | 10 van de 18 |
+| OBC | 17 van de 20 |
+| Bingo Club | 21 van de 25 |
+
+- **Tests:** `test_player_combat` controleert nu ook de dev powers. Alle tests slagen.
+
+### Keuzes en afwijkingen
+
+- **Ctrl om omlaag te vliegen** is een nieuwe actie (`dev_fly_down`), net als `toggle_dev_powers`.
+- **Westeraam** (geen wens genoemd) zit tussen het station en het OBC in, zodat de moeilijkheid oploopt.
+
 ## Factie-dungeons op slot en een groter Westeraam (`Lock-Faction-Dungeons-And-Expand-Westeraam`)
 
 Twee punten van de eigenaar, na Fase 8 en voor Fase 9.
@@ -576,7 +604,7 @@ Status: af, gemerged naar `Development`.
 
 ### Open punten
 
-- [ ] **Bron van de kaart** (Google Maps of OpenStreetMap). Tot dat duidelijk is, staat `kaart_elst.png` niet in de repo en kan het script alleen draaien als de kaart lokaal in `docs/reference/` staat. Ook het raster `elst_ground.png` is van de kaart afgeleid.
+- [x] **Bron van de kaart:** `kaart_elst.png` is de kaart die de eigenaar heeft aangeleverd (19-11-2026). Hij staat lokaal in `docs/reference/` en nog niet in de repo. `gen_elst.py` kan dus alleen draaien als de kaart daar staat. Het raster `elst_ground.png` is van de kaart afgeleid en staat wel in de repo.
 - [ ] **Ligging van het spoor** bevestigen.
 - [x] **`test_enemies` faalde af en toe** in de stationsdungeon, omdat de vijanden willekeurig patrouilleren. Sinds Fase 7 speelt de test in een eigen, langere testkamer. In Fase 8 faalde de groepscheck nog één keer, omdat een patrouille te ver weg liep; nu staan de vijanden voor die check eerst op hun beginplek.
 

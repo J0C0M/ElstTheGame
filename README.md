@@ -38,6 +38,7 @@ godot --path .
 | Pauzemenu | Esc |
 | Retrofilter aan/uit | F1 |
 | Pixelgrootte wisselen (laag, midden, uit) | F2 |
+| Dev powers aan/uit (alleen in debug builds) | ` (vliegen: Spatie omhoog, Ctrl omlaag) |
 
 De toetsen zitten in de InputMap van het project. Niet alles werkt al: dat hangt af van de fase waarin het project zit. Tijdens het spelen is de muis gevangen voor de camera; in het pauzemenu is hij vrij.
 

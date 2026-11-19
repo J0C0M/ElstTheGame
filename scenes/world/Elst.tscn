@@ -12,6 +12,8 @@
 [ext_resource type="PackedScene" path="res://scenes/world/locations/OBCFort.tscn" id="10_res"]
 [ext_resource type="Script" path="res://scenes/world/runtime_navigation_region.gd" id="11_res"]
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="12_res"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/LowDriller.tscn" id="90_low_driller"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/Driller.tscn" id="91_driller"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.34, 0.44, 0.6, 1)
@@ -2920,3 +2922,25 @@ script = ExtResource("11_res")
 
 [node name="Player" parent="." instance=ExtResource("12_res")]
 position = Vector3(-18, 0, 99)
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="LowDriller1" parent="Enemies" instance=ExtResource("90_low_driller")]
+position = Vector3(132, 0, -30)
+rotation = Vector3(0, 3.0, 0)
+
+[node name="LowDriller2" parent="Enemies" instance=ExtResource("90_low_driller")]
+position = Vector3(137, 0, -25)
+rotation = Vector3(0, 2.6, 0)
+
+[node name="LowDriller3" parent="Enemies" instance=ExtResource("90_low_driller")]
+position = Vector3(128, 0, -23)
+rotation = Vector3(0, 3.4, 0)
+
+[node name="Driller1" parent="Enemies" instance=ExtResource("91_driller")]
+position = Vector3(127, 0, -70)
+rotation = Vector3(0, 1.2, 0)
+
+[node name="Driller2" parent="Enemies" instance=ExtResource("91_driller")]
+position = Vector3(131, 0, -66)
+rotation = Vector3(0, 1.0, 0)

@@ -31,3 +31,11 @@ signal world_change_requested(scene_path: String, spawn_id: StringName)
 signal saves_changed
 ## SaveManager read a save; Main switches to its world and restores it.
 signal save_load_requested(data: Dictionary)
+## The player's gold changed; [param total] is the new amount.
+signal gold_changed(total: int)
+## Items were added to or removed from the inventory.
+signal inventory_changed
+## The player picked something up, for a short line on the HUD.
+signal loot_collected(text: String)
+## An enemy died. [param enemy_id] is the id from its EnemyData.
+signal enemy_killed(enemy_id: StringName)

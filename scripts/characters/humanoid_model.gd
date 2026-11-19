@@ -1,8 +1,9 @@
-class_name PlayerModel
+class_name HumanoidModel
 extends Node3D
-## Low-poly player body made of boxes, animated in code. Walking, running and
-## jumping are procedural; sword swings, blocking, rolling, getting hit and
-## dying are keyframed poses. Runs in _physics_process, so physics
+## Low-poly body made of boxes, animated in code, shared by the player and
+## the human enemies. Walking, running and jumping are procedural; attacks,
+## blocking, rolling, getting hit and dying are keyframed poses. A model scene
+## needs the joints listed in _joints. Runs in _physics_process, so physics
 ## interpolation keeps it smooth.
 
 ## How quickly joints follow their target pose.
@@ -73,6 +74,15 @@ const ACTIONS: Dictionary = {
 		[0.25, {&"torso": Vector3(22, 0, -6), &"head": Vector3(18, 0, 0), &"arm_l": Vector3(-25, 0, -20), &"arm_r": Vector3(-15, 0, 25)}],
 		[1.0, {&"torso": Vector3(0, 0, 0), &"head": Vector3(0, 0, 0), &"arm_l": Vector3(0, 0, 0), &"arm_r": Vector3(10, 0, 5)}],
 	],
+	&"enemy_windup": [
+		[0.0, {&"arm_r": Vector3(10, 0, 5), &"hand": Vector3(0, 0, 0), &"torso": Vector3(0, 0, 0), &"arm_l": Vector3(0, 0, 0)}],
+		[1.0, {&"arm_r": Vector3(130, -40, 0), &"hand": Vector3(-60, 0, 0), &"torso": Vector3(-5, 25, 0), &"arm_l": Vector3(30, 0, -20)}],
+	],
+	&"punch": [
+		[0.0, {&"arm_r": Vector3(130, -40, 0), &"hand": Vector3(-60, 0, 0), &"torso": Vector3(-5, 25, 0), &"arm_l": Vector3(30, 0, -20)}],
+		[0.35, {&"arm_r": Vector3(92, -8, 0), &"hand": Vector3(-90, 0, 0), &"torso": Vector3(-12, -25, 0), &"arm_l": Vector3(40, 0, -10)}],
+		[1.0, {&"arm_r": Vector3(10, 0, 5), &"hand": Vector3(0, 0, 0), &"torso": Vector3(0, 0, 0), &"arm_l": Vector3(0, 0, 0)}],
+	],
 	&"death": [
 		[0.0, {&"body": Vector3(0, 0, 0), &"body_offset": Vector3.ZERO, &"arm_l": Vector3(0, 0, 0), &"arm_r": Vector3(10, 0, 5), &"hand": Vector3(0, 0, 0), &"head": Vector3(0, 0, 0)}],
 		[0.35, {&"body": Vector3(25, 0, 0), &"body_offset": Vector3(0, -0.2, 0), &"arm_l": Vector3(-30, 0, -40), &"arm_r": Vector3(-30, 0, 40), &"hand": Vector3(-60, 0, 0), &"head": Vector3(20, 0, 0)}],
@@ -137,7 +147,7 @@ func set_guard(active: bool) -> void:
 ## [param hold_last_frame] the last pose stays until another action plays.
 func play_action(action: StringName, duration: float, hold_last_frame: bool = false) -> void:
 	if not ACTIONS.has(action):
-		push_error("PlayerModel has no action %s." % action)
+		push_error("HumanoidModel has no action %s." % action)
 		return
 	_action = action
 	_action_time = 0.0

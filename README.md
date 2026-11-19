@@ -52,9 +52,10 @@ godot --headless --path . -s res://tests/check_resources.gd
 godot --headless --path . --fixed-fps 60 -s res://tests/test_player_combat.gd
 godot --headless --path . --fixed-fps 60 -s res://tests/test_world.gd
 godot --headless --path . --fixed-fps 60 -s res://tests/test_save.gd
+godot --headless --path . --fixed-fps 60 -s res://tests/test_enemies.gd
 ```
 
-De eerste laadt alle scenes, scripts en resources. De tweede speelt de testarena met gesimuleerde input en controleert lopen, stamina, ontwijken, aanvallen, blokkeren, parry, doodgaan en terugkomen. De derde start het spel in Elst en controleert het startpunt, de navmesh, de kerk die op slot zit, de tornado en de weg in en uit elke dungeon. De vierde test opslaan en laden.
+De eerste laadt alle scenes, scripts en resources. De tweede speelt de testarena met gesimuleerde input en controleert lopen, stamina, ontwijken, aanvallen, blokkeren, parry, doodgaan en terugkomen. De derde start het spel in Elst en controleert het startpunt, de navmesh, de kerk die op slot zit, de tornado en de weg in en uit elke dungeon. De vierde test opslaan en laden, de vijfde de vijanden, de buit en de kisten.
 
 ## Mappen
 

@@ -148,3 +148,46 @@ theme_override_colors/font_outline_color = Color(0.12, 0.07, 0.04, 1)
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 42
 horizontal_alignment = 1
+
+[node name="Purse" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -96.0
+offset_right = 324.0
+offset_bottom = -68.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="GoldLabel" type="Label" parent="Purse"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.32, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.06, 0.02, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 18
+text = "0 goud"
+
+[node name="PotionLabel" type="Label" parent="Purse"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.62, 0.62, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.02, 0.02, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 18
+text = "0/10 drankjes"
+
+[node name="LootFeed" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -260.0
+offset_right = 424.0
+offset_bottom = -104.0
+grow_vertical = 0
+mouse_filter = 2
+alignment = 2
+

@@ -3,6 +3,9 @@
 [ext_resource type="Script" path="res://scenes/world/game_world.gd" id="1_world"]
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="3_door"]
+[ext_resource type="Script" path="res://scenes/world/runtime_navigation_region.gd" id="20_nav"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/Driller.tscn" id="21_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/Chest.tscn" id="22_chest"]
 
 [sub_resource type="Environment" id="Environment_dungeon"]
 background_mode = 1
@@ -58,6 +61,19 @@ size = Vector3(1, 5, 1)
 [sub_resource type="BoxShape3D" id="Shape_pillar"]
 size = Vector3(1, 5, 1)
 
+[sub_resource type="NavigationMesh" id="NavigationMesh_room"]
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+geometry_source_geometry_mode = 1
+geometry_source_group_name = &"navigation_source"
+cell_size = 0.5
+cell_height = 0.25
+agent_height = 1.75
+agent_radius = 0.5
+agent_max_climb = 0.5
+agent_max_slope = 40.0
+filter_baking_aabb = AABB(-11, -2, -16, 22, 10, 32)
+
 [node name="WesteraamDungeon" type="Node3D"]
 script = ExtResource("1_world")
 location_name = "Westeraam Getho"
@@ -67,7 +83,7 @@ autosave_on_enter = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_dungeon")
 
-[node name="Room" type="Node3D" parent="."]
+[node name="Room" type="Node3D" parent="." groups=["navigation_source"]]
 
 [node name="Floor" type="StaticBody3D" parent="Room"]
 position = Vector3(0, -0.5, 0)
@@ -198,3 +214,19 @@ position = Vector3(0, 0, 11)
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
 position = Vector3(0, 0, 11)
+
+[node name="Navigation" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_room")
+script = ExtResource("20_nav")
+
+[node name="Chest" parent="." instance=ExtResource("22_chest")]
+position = Vector3(0, 0, -14)
+rotation = Vector3(0, 3.14159, 0)
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="Driller1" parent="Enemies" instance=ExtResource("21_enemy")]
+position = Vector3(-2.5, 0, -9)
+
+[node name="Driller2" parent="Enemies" instance=ExtResource("21_enemy")]
+position = Vector3(2.5, 0, -9)

@@ -9,8 +9,8 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 0 | `Setup-Project-Foundation` | Af, gemerged naar `Development` |
 | 1 | `Add-Player-Controller-And-Combat` | Af, gemerged naar `Development` |
 | 2 | `Build-Elst-World-Blockout` | Af, gemerged naar `Development` |
-| 3 | `Add-Save-System` | Gebouwd, wacht op akkoord |
-| 4 | `Add-Enemy-AI-And-Loot` | Nog niet begonnen |
+| 3 | `Add-Save-System` | Af, gemerged naar `Development` |
+| 4 | `Add-Enemy-AI-And-Loot` | Gebouwd, wacht op akkoord |
 | 5 | `Add-Klaas-Dialogue-And-Shop` | Nog niet begonnen |
 | 6 | `Add-Quest-System-And-Tutorial` | Nog niet begonnen |
 | 7 | `Add-Station-Dungeon` | Nog niet begonnen |
@@ -196,6 +196,55 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
   - kisten en generators: een vlag in `GameState` (`set_flag`);
   - nodes met eigen toestand: in de groep `persist` met `save_data()` en `load_data()`.
 - Fase 5 breidt `Player.save_data()` uit met goud en uitrusting, of zet die in `GameState`.
+
+## Fase 4 – Vijanden & loot
+
+### Wat is af
+
+- **Basisvijand** `scenes/enemies/Enemy.tscn` met een state machine:
+  - Idle → Patrol (willekeurige plek rond huis) → Chase → Attack, plus Retreat, Stagger en Dead;
+  - zintuigen: een zichtkegel met zichtlijn, gehoor dichtbij, en 360° zicht zodra hij je kent;
+  - een groep van dezelfde factie waarschuwt elkaar;
+  - navigatie met `NavigationAgent3D` en ontwijken van elkaar;
+  - aanvallen met een duidelijke aanloop: de arm gaat omhoog, daarna de klap;
+  - een parry zet hem uit balans; een treffer duwt hem iets terug;
+  - een levensbalk boven het hoofd.
+- **Laag driller** (leger van Amber, rond het station): 30 HP, 6 schade, grijs trainingspak met oranje strepen, pet en plank. Valt aan in een groepje van drie.
+- **Driller** (Westeraam): 40 HP, 8 schade, zwarte puffer met gele rits, muts, vuisten. **Flankeert**: loopt eerst om je heen naar je zijkant en valt dan aan.
+- **Terugtrekken:** wie je 5 s niet ziet, of te ver van huis raakt, loopt terug naar huis en heeft daar weer volle HP.
+- **Doodgaan:** de vijand valt om, laat buit vallen, meldt `EventBus.enemy_killed` en zakt na 4 s weg. Na laden staan alle vijanden er weer.
+- **Buit:**
+  - `LootTable` met goud van-tot en items met een kans;
+  - een vijand geeft 3–10 goud en heeft 5% kans op een kleine healing potion;
+  - munten en drankjes springen eruit en vliegen naar je toe als je dichtbij komt.
+- **Kisten** (`scenes/world/props/Chest.tscn`): openen met E (20–40 goud). Een open kist blijft open na opslaan en laden (vlag in `GameState`).
+- **GameState:** goud en een inventaris (maximaal 10 potions), beide in de save.
+- **HUD:** goud en drankjes boven de balken, en een korte regel voor alles wat je oppakt ("+7 goud").
+- **Waar ze staan:**
+  - in Elst drie laag drillers ten noorden van het station en twee drillers op de weg naar Westeraam;
+  - in de stationdungeon drie laag drillers en een kist;
+  - in de Westeraam-dungeon twee drillers en een kist.
+  - Alle vier de dungeons bakken nu een navmesh.
+- **Gedeeld model:** `PlayerModel` heet nu `HumanoidModel` (`scripts/characters/humanoid_model.gd`), voor speler en vijanden. Er zijn twee nieuwe acties bij: `enemy_windup` en `punch`.
+- **Test:** `tests/test_enemies.gd` (21 checks, allemaal geslaagd). De vier andere tests slagen nog steeds.
+
+### Keuzes en afwijkingen
+
+- **Terugtrekken** (uit het GDD) betekent hier: terug naar huis als de speler ontkomt, en daar genezen. Vijanden vluchten dus niet bij weinig HP.
+- **Laag drillers** horen bij het leger van Amber (factie `amber`) en hebben daarom de oranje accentkleur. Drillers zijn van Westeraam: geel en zwart.
+- **Wapens:** laag drillers hebben een plank en drillers hun vuisten. Er zijn bewust geen messen of vuurwapens.
+- **Uitrusting als buit** (kist 8%, baas 35%, "altijd het volgende item dat je nog niet hebt") komt in Fase 5, samen met inventaris en uitrusting. `LootTable` kan dat straks via een `LootEntry`.
+- **Potions** kun je al oppakken, maar drinken met Q komt in Fase 5.
+- **Buit op de grond** wordt niet opgeslagen. Na laden staan de vijanden er weer en laten ze opnieuw iets vallen.
+- **Plaatsing:** de vijanden en kisten in Elst en de twee dungeons zijn tijdelijk, om te testen. Fase 7 en 8 bouwen die dungeons echt uit, en Fase 8 laat patrouilles verdwijnen na een bevrijding.
+- **Doodgaan en herladen** van de speler bestond al sinds Fase 3. Deze fase test vooral dat de vijanden na laden terug zijn.
+
+### Aandachtspunten voor de volgende fases
+
+- Fase 5: drankjes drinken met Q, uitrusting als buit (`LootEntry` met een "volgende uitrusting"-regel) en de winkel. Goud staat al in `GameState`.
+- Fase 7: het verzwakkingseffect (20% minder HP voor Westeraam en OBC). Dat kan in `Enemy._ready()` met een vlag in `GameState`.
+- Fase 8: geen patrouilles meer na een bevrijding. Zet de vijanden per gebied onder een node die naar `GameState.liberated_areas` kijkt.
+- Nieuwe vijanden: maak een `EnemyData` met een `model_scene` en een instantie van `Enemy.tscn`. Afstandsvijanden (vape-drillers, voetballers) hebben een eigen aanvalsstate nodig.
 
 ## Voorlopige kaartindeling
 

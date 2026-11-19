@@ -17,6 +17,9 @@ var _banner_tween: Tween
 @onready var _prompt_label: Label = $PromptLabel
 @onready var _message_label: Label = $MessageLabel
 @onready var _location_banner: Label = $LocationBanner
+@onready var _gold_label: Label = $Purse/GoldLabel
+@onready var _potion_label: Label = $Purse/PotionLabel
+@onready var _loot_feed: VBoxContainer = $LootFeed
 
 
 func _ready() -> void:
@@ -29,6 +32,11 @@ func _ready() -> void:
 	EventBus.interaction_prompt_changed.connect(_on_interaction_prompt_changed)
 	EventBus.message_requested.connect(_on_message_requested)
 	EventBus.location_entered.connect(_on_location_entered)
+	EventBus.gold_changed.connect(_on_gold_changed)
+	EventBus.inventory_changed.connect(_on_inventory_changed)
+	EventBus.loot_collected.connect(_on_loot_collected)
+	_on_gold_changed(GameState.gold)
+	_on_inventory_changed()
 	_parry_label.modulate.a = 0.0
 	_death_label.visible = false
 	_prompt_label.visible = false
@@ -101,3 +109,26 @@ func _on_location_entered(display_name: String) -> void:
 	_banner_tween.tween_property(_location_banner, "modulate:a", 1.0, 0.4)
 	_banner_tween.tween_interval(2.2)
 	_banner_tween.tween_property(_location_banner, "modulate:a", 0.0, 0.8)
+
+
+func _on_gold_changed(total: int) -> void:
+	_gold_label.text = "%d goud" % total
+
+
+func _on_inventory_changed() -> void:
+	_potion_label.text = "%d/%d drankjes" % [GameState.get_potion_count(), GameState.MAX_POTIONS]
+
+
+## Adds a short line above the bars that fades away, such as "+7 goud".
+func _on_loot_collected(text: String) -> void:
+	var line: Label = Label.new()
+	line.text = text
+	line.add_theme_color_override("font_color", Color(1, 0.86, 0.4))
+	line.add_theme_color_override("font_outline_color", Color(0.1, 0.06, 0.02))
+	line.add_theme_constant_override("outline_size", 5)
+	line.add_theme_font_size_override("font_size", 18)
+	_loot_feed.add_child(line)
+	var tween: Tween = line.create_tween()
+	tween.tween_interval(1.6)
+	tween.tween_property(line, "modulate:a", 0.0, 0.6)
+	tween.tween_callback(line.queue_free)

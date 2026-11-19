@@ -1,9 +1,10 @@
 class_name VapePuff
 extends Area3D
-## A slow cloud of vape that an enemy blows at the player. It drifts in a
-## straight line, stops at a wall or after a while, hangs in the air for a
-## moment and then fades. It hurts the player once, through its Hitbox, so
-## blocking and parrying work as against any other attack.
+## A projectile that drifts in a straight line: a slow cloud of vape that an
+## enemy blows at the player, or a football (same script, other settings). It
+## stops at a wall or after a while, hangs in the air for a moment and then
+## fades. It hurts the player once, through its Hitbox, so blocking and
+## parrying work as against any other attack.
 
 ## Metres per second while drifting.
 @export var speed: float = 5.0

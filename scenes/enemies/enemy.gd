@@ -147,12 +147,15 @@ func notice_player() -> void:
 
 
 ## Fires the projectile from EnemyData at the player's chest, turned by
-## [param spread_degrees] to the side. Returns the projectile.
+## [param spread_degrees] to the side; a miss (see EnemyData.accuracy) goes
+## further wide. Returns the projectile.
 func fire_projectile(spread_degrees: float = 0.0) -> Node3D:
 	var projectile: Node3D = data.projectile_scene.instantiate() as Node3D
 	get_parent().add_child(projectile)
 	var origin: Vector3 = global_position + Vector3.UP * 1.45 + get_forward() * 0.6
 	var target: Vector3 = get_player().global_position + Vector3.UP * 1.1 if get_player() != null else origin + get_forward()
+	if randf() > data.accuracy:
+		spread_degrees += data.miss_angle * (1.0 if randf() < 0.5 else -1.0)
 	var direction: Vector3 = (target - origin).rotated(Vector3.UP, deg_to_rad(spread_degrees))
 	projectile.call(&"launch", origin, direction, data.damage, self)
 	return projectile

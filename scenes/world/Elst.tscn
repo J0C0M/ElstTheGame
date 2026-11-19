@@ -18,6 +18,8 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/Villager.tscn" id="16_res"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/LowDriller.tscn" id="90_low_driller"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/Driller.tscn" id="91_driller"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/Voetballer.tscn" id="92_voetballer"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/Fatbiker.tscn" id="93_fatbiker"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.34, 0.44, 0.6, 1)
@@ -6002,6 +6004,52 @@ look_seed = 10
 
 [node name="WarmLight" type="OmniLight3D" parent="Areas/WesteraamArea/Liberated"]
 position = Vector3(157, 9, -66)
+light_color = Color(1, 0.74, 0.45, 1)
+light_energy = 0.9
+omni_range = 28.0
+
+[node name="OBCArea" type="Node3D" parent="Areas"]
+script = ExtResource("15_res")
+liberated_by_flag = &"boss_fatbike_kindje"
+
+[node name="Occupied" type="Node3D" parent="Areas/OBCArea"]
+
+[node name="Voetballer1" parent="Areas/OBCArea/Occupied" instance=ExtResource("92_voetballer")]
+position = Vector3(-164, 0, 72)
+rotation = Vector3(0, 1.6, 0)
+
+[node name="Voetballer2" parent="Areas/OBCArea/Occupied" instance=ExtResource("92_voetballer")]
+position = Vector3(-162, 0, 84)
+rotation = Vector3(0, 1.4, 0)
+
+[node name="Fatbiker1" parent="Areas/OBCArea/Occupied" instance=ExtResource("93_fatbiker")]
+position = Vector3(-168, 0, 78)
+rotation = Vector3(0, 1.5, 0)
+
+[node name="Liberated" type="Node3D" parent="Areas/OBCArea"]
+
+[node name="Villager1" parent="Areas/OBCArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(-166, 0, 72)
+lines = PackedStringArray("Het OBC is weer van ons!", "Eindelijk kan ik weer naar school. Geloof ik.", "Geen voetballen meer tegen mijn hoofd!", "Dank je wel!")
+look_seed = 11
+
+[node name="Villager2" parent="Areas/OBCArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(-160, 0, 80)
+lines = PackedStringArray("Het OBC is weer van ons!", "Eindelijk kan ik weer naar school. Geloof ik.", "Geen voetballen meer tegen mijn hoofd!", "Dank je wel!")
+look_seed = 12
+
+[node name="Villager3" parent="Areas/OBCArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(-168, 0, 85)
+lines = PackedStringArray("Het OBC is weer van ons!", "Eindelijk kan ik weer naar school. Geloof ik.", "Geen voetballen meer tegen mijn hoofd!", "Dank je wel!")
+look_seed = 13
+
+[node name="Villager4" parent="Areas/OBCArea/Liberated" instance=ExtResource("16_res")]
+position = Vector3(-158, 0, 74)
+lines = PackedStringArray("Het OBC is weer van ons!", "Eindelijk kan ik weer naar school. Geloof ik.", "Geen voetballen meer tegen mijn hoofd!", "Dank je wel!")
+look_seed = 14
+
+[node name="WarmLight" type="OmniLight3D" parent="Areas/OBCArea/Liberated"]
+position = Vector3(-164, 9, 78)
 light_color = Color(1, 0.74, 0.45, 1)
 light_energy = 0.9
 omni_range = 28.0

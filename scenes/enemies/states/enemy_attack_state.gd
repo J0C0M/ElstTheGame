@@ -4,7 +4,6 @@ extends EnemyState
 
 const STRIKE_DURATION: float = 0.45
 const RECOVER_TIME: float = 0.35
-const LUNGE_SPEED: float = 2.0
 
 var _time: float = 0.0
 var _swung: bool = false
@@ -36,7 +35,7 @@ func physics_update(delta: float) -> void:
 		return
 	var swing_time: float = _time - data.attack_windup
 	if swing_time < data.strike_time and not data.is_ranged():
-		var forward: Vector3 = enemy.get_forward() * LUNGE_SPEED
+		var forward: Vector3 = enemy.get_forward() * data.lunge_speed
 		enemy.velocity.x = forward.x
 		enemy.velocity.z = forward.z
 	else:

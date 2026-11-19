@@ -20,7 +20,19 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 11 | `Add-Amber-Final-Battle` | Nog niet begonnen |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
-Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is gebouwd en wacht op akkoord.
+Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`.
+
+## Prototypes
+
+- **Prototype 1** bestaat uit Fase 0 t/m 12: de oorspronkelijke visie van de game, van begin tot eind speelbaar. Daar werken we nu aan.
+- **Prototype 2** begint pas als Prototype 1 af is. Wat erin komt, bepaalt de eigenaar dan. Een van de belangrijkste punten wordt graphics en details, waarschijnlijk met nog andere tweaks.
+- **Tot die tijd** blijven modellen en wegen placeholders. Steek er alleen tijd in als de gameplay of de leesbaarheid het nodig heeft. Visuele punten die we tegenkomen, komen in de lijst hieronder.
+
+### Verzamelde punten voor Prototype 2
+
+- Modellen van objecten in de wereld (huizen, bomen, props) zijn nog niet mooi en kunnen veel beter (eigenaar, 19-11-2026).
+- Paden en wegen zijn erg blokkerig en visueel slecht uitgewerkt: de grond is een raster van 1 m (eigenaar, 19-11-2026).
+- Straten zijn op deze schaal maar 2 tot 3 m breed; daardoor zijn de huizen laag gehouden (zie *Kaart verwerken*).
 
 ## Fase 0 – Fundament
 
@@ -332,7 +344,7 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is gebouwd en wacht op ak
 
 ## Kaart verwerken (`Align-Elst-With-Map`)
 
-Status: gebouwd, wacht op akkoord.
+Status: af, gemerged naar `Development`.
 
 ### Wat is af
 

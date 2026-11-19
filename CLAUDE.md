@@ -8,6 +8,7 @@ Dit bestand geeft elke Claude Code-sessie de afspraken voor dit project. Lees he
 
 - **Engine:** Godot 4.7 (laatste stabiele 4.x), GDScript met statische types.
 - **Stijl:** low poly, platte kleuren, lichte retrofilter (PS1/N64-sfeer).
+- **Prototypes:** Fase 0 t/m 12 vormen samen Prototype 1, de oorspronkelijke visie. Daarna volgt Prototype 2, onder andere met betere graphics en details; wat erin komt, bepaalt de eigenaar pas als Prototype 1 af is. Steek in Prototype 1 geen tijd in mooiere modellen of wegen, tenzij gameplay of leesbaarheid erom vraagt. Noteer visuele punten in `docs/PROGRESS.md` onder *Verzamelde punten voor Prototype 2*.
 - **Bronnen van waarheid:**
   - `docs/GDD.md`: verhaal, quests, vijanden, bazen, economie, opslaan, stijl, techniek en de 13 ontwikkelfases.
   - `docs/PROGRESS.md`: wat af is, gemaakte keuzes, afwijkingen van het GDD en open punten. Lees dit aan het begin van elke sessie.

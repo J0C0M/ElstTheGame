@@ -42,6 +42,15 @@ func get_spawn(spawn_id: StringName) -> Marker3D:
 	return null
 
 
+## The QuestMarker for target [param target_id] in this world, or null.
+func find_quest_marker(target_id: StringName) -> QuestMarker:
+	for node: Node in get_tree().get_nodes_in_group(&"quest_markers"):
+		var marker: QuestMarker = node as QuestMarker
+		if marker != null and target_id in marker.ids and is_ancestor_of(marker):
+			return marker
+	return null
+
+
 ## Puts the player at the spawn point [param spawn_id], or at the default one.
 func place_player(spawn_id: StringName) -> void:
 	var spawn: Marker3D = get_spawn(spawn_id)

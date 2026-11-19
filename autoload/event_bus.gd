@@ -47,3 +47,14 @@ signal inwijding_changed(level: int)
 signal dialogue_requested(dialogue: DialogueData, speaker: Node)
 ## The player goes to sleep (bed or Klaas): heal up and autosave.
 signal sleep_requested
+## A GameState flag was set.
+signal flag_set(flag: StringName)
+## The player did something a tutorial step may wait for: sprint, jump, dodge, block, drink.
+signal player_action(action: StringName)
+## A save was written. [param save_type] is manual, quick or auto.
+signal game_saved(save_type: String)
+## The player reached a place with an id: a LocationArea or a whole world.
+signal area_entered(area_id: StringName)
+## A quest started, moved on or ended. Empty id: everything changed (load, new game).
+signal quest_updated(quest_id: StringName)
+signal quest_completed(quest_id: StringName)

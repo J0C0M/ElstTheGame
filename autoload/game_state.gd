@@ -7,8 +7,9 @@ extends Node
 const MAX_POTIONS: int = 10
 ## The highest Inwijding level.
 const MAX_INWIJDING: int = 6
-## Gear a new game starts with, worn from the start.
-const START_GEAR: Array[StringName] = [&"rusty_sword", &"plain_clothes"]
+## Gear a new game starts with: just clothes. Klaas hands over the first
+## sword in the tutorial.
+const START_GEAR: Array[StringName] = [&"plain_clothes"]
 ## Selling gear back to Klaas gives this share of its price.
 const SELL_RATE: float = 0.4
 
@@ -49,7 +50,7 @@ func reset() -> void:
 	play_time = 0.0
 	inventory.clear()
 	owned_gear = START_GEAR.duplicate()
-	equipped = {&"sword": &"rusty_sword", &"armor": &"plain_clothes"}
+	equipped = {&"armor": &"plain_clothes"}
 	_flags.clear()
 	_save_blockers.clear()
 	_emit_all()
@@ -186,7 +187,10 @@ func raise_inwijding(level: int) -> void:
 
 func set_flag(flag: StringName, value: bool = true) -> void:
 	if value:
+		var was_set: bool = _flags.has(flag)
 		_flags[flag] = true
+		if not was_set:
+			EventBus.flag_set.emit(flag)
 	else:
 		_flags.erase(flag)
 

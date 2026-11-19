@@ -1,0 +1,81 @@
+[gd_resource type="Resource" script_class="QuestData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_quest"]
+[ext_resource type="Script" path="res://scripts/data/quest_step.gd" id="2_step"]
+[ext_resource type="Resource" path="res://data/items/small_potion.tres" id="3_potion"]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="4_item"]
+
+[sub_resource type="Resource" id="Step_talk_to_klaas"]
+script = ExtResource("2_step")
+id = &"talk_to_klaas"
+description = "Ga het huis van Klaas binnen (E bij de voordeur) en praat met hem."
+kind = 0
+flag = &"q1_met_klaas"
+target = &"klaas"
+
+[sub_resource type="Resource" id="Step_move"]
+script = ExtResource("2_step")
+id = &"move"
+description = "Ga naar buiten en laat zien dat je kunt bewegen: sprint (Shift), spring (Spatie) en ontwijk (Alt, of twee keer snel een richting)."
+kind = 1
+actions = Array[StringName]([&"sprint", &"jump", &"dodge"])
+target = &"klaas_garden"
+
+[sub_resource type="Resource" id="Step_sword"]
+script = ExtResource("2_step")
+id = &"sword"
+description = "Sla de trainingspop in de tuin kapot. Klik voor een slag, klik twee keer voor een combo en houd de knop vast voor een zware aanval."
+kind = 2
+enemy_id = &"training_dummy"
+count = 1
+target = &"training_dummy"
+
+[sub_resource type="Resource" id="Step_block"]
+script = ExtResource("2_step")
+id = &"block"
+description = "Blokkeer een klap van de sparringpop: houd de rechtermuisknop vast. Druk hem precies op tijd in voor een parry."
+kind = 1
+actions = Array[StringName]([&"block"])
+target = &"sparring_dummy"
+
+[sub_resource type="Resource" id="Step_potion"]
+script = ExtResource("2_step")
+id = &"potion"
+description = "Klaas geeft je een drankje. Drink het met Q."
+kind = 1
+actions = Array[StringName]([&"drink"])
+give_item = ExtResource("3_potion")
+
+[sub_resource type="Resource" id="Step_save"]
+script = ExtResource("2_step")
+id = &"save"
+description = "Sla je spel op: druk op F5, of kies Opslaan in het pauzemenu (Esc)."
+kind = 1
+actions = Array[StringName]([&"save"])
+
+[sub_resource type="Resource" id="Step_fight"]
+script = ExtResource("2_step")
+id = &"fight"
+description = "Oefengevecht: versla de twee laag drillers in de tuin."
+kind = 2
+enemy_id = &"low_driller"
+count = 2
+target = &"practice_fight"
+
+[sub_resource type="Resource" id="Step_report"]
+script = ExtResource("2_step")
+id = &"report"
+description = "Ga terug naar Klaas."
+kind = 0
+flag = &"q1_reported"
+target = &"klaas"
+
+[resource]
+script = ExtResource("1_quest")
+id = &"q1_tutorial"
+number = 1
+title = "Inleiding"
+description = "Klaas wil zien wat je kunt voordat hij je inwijdt. Leer bewegen, vechten, blokkeren, drinken en opslaan, en versla twee laag drillers."
+steps = Array[ExtResource("2_step")]([SubResource("Step_talk_to_klaas"), SubResource("Step_move"), SubResource("Step_sword"), SubResource("Step_block"), SubResource("Step_potion"), SubResource("Step_save"), SubResource("Step_fight"), SubResource("Step_report")])
+reward_gold = 20
+reward_items = Array[ExtResource("4_item")]([ExtResource("3_potion"), ExtResource("3_potion")])

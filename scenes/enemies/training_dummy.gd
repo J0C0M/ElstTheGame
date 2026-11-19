@@ -206,6 +206,7 @@ func _on_parried() -> void:
 
 func _on_died() -> void:
 	_set_mode(Mode.BROKEN)
+	EventBus.enemy_killed.emit(data.id)
 	_attack_hitbox.deactivate()
 	_collision.set_deferred("disabled", true)
 	_hurtbox.set_enabled(false)

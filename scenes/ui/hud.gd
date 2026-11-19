@@ -20,6 +20,7 @@ var _banner_tween: Tween
 @onready var _gold_label: Label = $Purse/GoldLabel
 @onready var _potion_label: Label = $Purse/PotionLabel
 @onready var _loot_feed: VBoxContainer = $LootFeed
+@onready var _objective_label: Label = $ObjectiveLabel
 
 
 func _ready() -> void:
@@ -35,6 +36,8 @@ func _ready() -> void:
 	EventBus.gold_changed.connect(_on_gold_changed)
 	EventBus.inventory_changed.connect(_on_inventory_changed)
 	EventBus.loot_collected.connect(_on_loot_collected)
+	EventBus.quest_updated.connect(_on_quest_updated.unbind(1))
+	_on_quest_updated()
 	_on_gold_changed(GameState.gold)
 	_on_inventory_changed()
 	_parry_label.modulate.a = 0.0
@@ -132,3 +135,14 @@ func _on_loot_collected(text: String) -> void:
 	tween.tween_interval(1.6)
 	tween.tween_property(line, "modulate:a", 0.0, 0.6)
 	tween.tween_callback(line.queue_free)
+
+
+## Shows the current objective of the tracked quest under the compass.
+func _on_quest_updated() -> void:
+	var quest: QuestData = QuestManager.get_tracked_quest()
+	var step: QuestStep = QuestManager.get_current_step(quest.id) if quest != null else null
+	_objective_label.visible = step != null
+	if step == null:
+		return
+	var progress: String = QuestManager.get_step_progress(quest.id)
+	_objective_label.text = "%s: %s%s" % [quest.title, step.description, "  (%s)" % progress if not progress.is_empty() else ""]

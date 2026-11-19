@@ -7,33 +7,40 @@
 
 [sub_resource type="Resource" id="Condition_1"]
 script = ExtResource("2_condition")
-required_flag = &"met_klaas"
+quest_id = &"q1_tutorial"
+quest_status = 1
+quest_step = &"talk_to_klaas"
 
 [sub_resource type="Resource" id="Condition_2"]
 script = ExtResource("2_condition")
-forbidden_flag = &"met_klaas"
+quest_id = &"q1_tutorial"
+quest_status = 1
+quest_step = &"report"
 
 [sub_resource type="Resource" id="Condition_3"]
 script = ExtResource("2_condition")
-min_inwijding = 1
+quest_id = &"q1_tutorial"
+quest_status = 1
 
 [sub_resource type="Resource" id="Condition_4"]
 script = ExtResource("2_condition")
-max_inwijding = 0
+quest_id = &"q1_tutorial"
+quest_status = 2
 
 [sub_resource type="Resource" id="Condition_5"]
 script = ExtResource("2_condition")
+min_inwijding = 1
+
+[sub_resource type="Resource" id="Condition_6"]
+script = ExtResource("2_condition")
 min_inwijding = 3
-required_flag = &"met_klaas"
 
 [sub_resource type="Resource" id="Line_first_meeting"]
 script = ExtResource("4_line")
 id = &"first_meeting"
 text = "Hé. Jij bent nieuw hier. Dat zie ik aan je loopje."
 next = &"first_2"
-condition = SubResource("Condition_2")
-action = &"set_flag"
-action_value = "met_klaas"
+condition = SubResource("Condition_1")
 model_action = &"flex"
 
 [sub_resource type="Resource" id="Line_first_2"]
@@ -45,12 +52,12 @@ next = &"first_3"
 [sub_resource type="Resource" id="Choice_1"]
 script = ExtResource("3_choice")
 text = "Wat moet ik doen?"
-next = &"task"
+next = &"tutorial_1"
 
 [sub_resource type="Resource" id="Choice_2"]
 script = ExtResource("3_choice")
 text = "Waarom die zonnebril?"
-next = &"glasses"
+next = &"first_glasses"
 
 [sub_resource type="Resource" id="Line_first_3"]
 script = ExtResource("4_line")
@@ -60,47 +67,64 @@ choices = Array[ExtResource("3_choice")]([SubResource("Choice_1"), SubResource("
 
 [sub_resource type="Resource" id="Choice_3"]
 script = ExtResource("3_choice")
-text = "Wijd me dan in."
-next = &"initiation"
-condition = SubResource("Condition_4")
+text = "Wat moet ik doen?"
+next = &"tutorial_1"
 
-[sub_resource type="Resource" id="Choice_4"]
-script = ExtResource("3_choice")
-text = "Vertel eerst over Amber."
-next = &"lore_1"
-
-[sub_resource type="Resource" id="Choice_5"]
-script = ExtResource("3_choice")
-text = "Later."
-next = &"bye"
-
-[sub_resource type="Resource" id="Line_task"]
+[sub_resource type="Resource" id="Line_first_glasses"]
 script = ExtResource("4_line")
-id = &"task"
-text = "Eerst wil ik zien wat je kunt. Zolang ik je niet heb ingewijd, blijft mijn winkel dicht."
-choices = Array[ExtResource("3_choice")]([SubResource("Choice_3"), SubResource("Choice_4"), SubResource("Choice_5")])
+id = &"first_glasses"
+text = "Deze bril gaat nooit af. Nooit. Volgende vraag."
+choices = Array[ExtResource("3_choice")]([SubResource("Choice_3")])
 
-[sub_resource type="Resource" id="Line_initiation"]
+[sub_resource type="Resource" id="Line_tutorial_1"]
 script = ExtResource("4_line")
-id = &"initiation"
-text = "Goed. Vanaf nu ben je ingewijd. Niveau één. Ga er niet van naast je schoenen lopen."
-next = &"hub"
-action = &"raise_inwijding"
-action_value = "1"
+id = &"tutorial_1"
+text = "Eerst wil ik zien wat je kunt. Hier, een zwaard. Roestig, maar het snijdt."
+next = &"tutorial_2"
+action = &"give_item"
+action_value = "rusty_sword"
+
+[sub_resource type="Resource" id="Line_tutorial_2"]
+script = ExtResource("4_line")
+id = &"tutorial_2"
+text = "Ga naar buiten. Sprint, spring en ontwijk. Sla daarna mijn trainingspop kapot en leer blokkeren bij de sparringpop."
+next = &"tutorial_3"
+
+[sub_resource type="Resource" id="Line_tutorial_3"]
+script = ExtResource("4_line")
+id = &"tutorial_3"
+text = "Raak je de weg kwijt? Je questlog staat onder J, en het kompas bovenin wijst de weg. Vooruit."
+action = &"set_flag"
+action_value = "q1_met_klaas"
+
+[sub_resource type="Resource" id="Line_tutorial_report"]
+script = ExtResource("4_line")
+id = &"tutorial_report"
+text = "Twee drillers in één keer. Niet slecht, voor een niemand."
+next = &"tutorial_reward"
+condition = SubResource("Condition_2")
 model_action = &"flex"
 
-[sub_resource type="Resource" id="Line_glasses"]
+[sub_resource type="Resource" id="Line_tutorial_reward"]
 script = ExtResource("4_line")
-id = &"glasses"
-text = "Deze bril gaat nooit af. Nooit. Volgende vraag."
+id = &"tutorial_reward"
+text = "Je bent nu ingewijd. Mijn winkel staat voor je open. En hier, wat goud en twee drankjes. Niet alles in één keer opmaken."
 next = &"hub"
+action = &"set_flag"
+action_value = "q1_reported"
+
+[sub_resource type="Resource" id="Line_tutorial_busy"]
+script = ExtResource("4_line")
+id = &"tutorial_busy"
+text = "Ik zie nog geen resultaten. Kijk in je questlog als je niet weet wat je moet doen."
+condition = SubResource("Condition_3")
 
 [sub_resource type="Resource" id="Line_greeting_strong"]
 script = ExtResource("4_line")
 id = &"greeting_strong"
 text = "Kijk eens wie er spieren krijgt. Bijna zoveel als ik. Bijna."
 next = &"hub"
-condition = SubResource("Condition_5")
+condition = SubResource("Condition_6")
 model_action = &"flex"
 
 [sub_resource type="Resource" id="Line_greeting"]
@@ -108,36 +132,35 @@ script = ExtResource("4_line")
 id = &"greeting"
 text = "Daar is mijn favoriete niemand."
 next = &"hub"
-condition = SubResource("Condition_1")
 
-[sub_resource type="Resource" id="Choice_6"]
+[sub_resource type="Resource" id="Choice_4"]
 script = ExtResource("3_choice")
 text = "Laat je winkel zien."
-condition = SubResource("Condition_3")
+condition = SubResource("Condition_5")
 action = &"open_shop"
 
-[sub_resource type="Resource" id="Choice_7"]
+[sub_resource type="Resource" id="Choice_5"]
 script = ExtResource("3_choice")
-text = "Wijd me in."
-next = &"initiation"
+text = "Heb je nog een klus?"
+next = &"next_job"
 condition = SubResource("Condition_4")
 
-[sub_resource type="Resource" id="Choice_8"]
+[sub_resource type="Resource" id="Choice_6"]
 script = ExtResource("3_choice")
 text = "Vertel over Amber."
 next = &"lore_1"
 
-[sub_resource type="Resource" id="Choice_9"]
+[sub_resource type="Resource" id="Choice_7"]
 script = ExtResource("3_choice")
 text = "Waarom die zonnebril?"
 next = &"glasses"
 
-[sub_resource type="Resource" id="Choice_10"]
+[sub_resource type="Resource" id="Choice_8"]
 script = ExtResource("3_choice")
 text = "Mag ik hier slapen?"
 next = &"sleep_offer"
 
-[sub_resource type="Resource" id="Choice_11"]
+[sub_resource type="Resource" id="Choice_9"]
 script = ExtResource("3_choice")
 text = "Tot later."
 next = &"bye"
@@ -146,7 +169,13 @@ next = &"bye"
 script = ExtResource("4_line")
 id = &"hub"
 text = "Wat wil je?"
-choices = Array[ExtResource("3_choice")]([SubResource("Choice_6"), SubResource("Choice_7"), SubResource("Choice_8"), SubResource("Choice_9"), SubResource("Choice_10"), SubResource("Choice_11")])
+choices = Array[ExtResource("3_choice")]([SubResource("Choice_4"), SubResource("Choice_5"), SubResource("Choice_6"), SubResource("Choice_7"), SubResource("Choice_8"), SubResource("Choice_9")])
+
+[sub_resource type="Resource" id="Line_next_job"]
+script = ExtResource("4_line")
+id = &"next_job"
+text = "Nog niet. Rust uit. Ik roep je als Amber weer iets flikt."
+next = &"hub"
 
 [sub_resource type="Resource" id="Line_lore_1"]
 script = ExtResource("4_line")
@@ -160,12 +189,18 @@ id = &"lore_2"
 text = "Sinds die dag draait er een tornado om het dorp. Niemand erin, niemand eruit. Station Elst is haar aanvoerlijn. Die moet kapot."
 next = &"hub"
 
-[sub_resource type="Resource" id="Choice_12"]
+[sub_resource type="Resource" id="Line_glasses"]
+script = ExtResource("4_line")
+id = &"glasses"
+text = "Deze bril gaat nooit af. Nooit. Volgende vraag."
+next = &"hub"
+
+[sub_resource type="Resource" id="Choice_10"]
 script = ExtResource("3_choice")
 text = "Ik ga slapen."
 action = &"sleep"
 
-[sub_resource type="Resource" id="Choice_13"]
+[sub_resource type="Resource" id="Choice_11"]
 script = ExtResource("3_choice")
 text = "Nog even niet."
 next = &"hub"
@@ -174,7 +209,7 @@ next = &"hub"
 script = ExtResource("4_line")
 id = &"sleep_offer"
 text = "Het bed staat achterin. Schoenen uit. Slapen is ook trainen."
-choices = Array[ExtResource("3_choice")]([SubResource("Choice_12"), SubResource("Choice_13")])
+choices = Array[ExtResource("3_choice")]([SubResource("Choice_10"), SubResource("Choice_11")])
 
 [sub_resource type="Resource" id="Line_bye"]
 script = ExtResource("4_line")
@@ -184,5 +219,5 @@ text = "Train hard. Of in elk geval een beetje."
 [resource]
 script = ExtResource("1_data")
 speaker = "Klaas"
-starts = Array[StringName]([&"first_meeting", &"greeting_strong", &"greeting"])
-lines = Array[ExtResource("4_line")]([SubResource("Line_first_meeting"), SubResource("Line_first_2"), SubResource("Line_first_3"), SubResource("Line_task"), SubResource("Line_initiation"), SubResource("Line_glasses"), SubResource("Line_greeting_strong"), SubResource("Line_greeting"), SubResource("Line_hub"), SubResource("Line_lore_1"), SubResource("Line_lore_2"), SubResource("Line_sleep_offer"), SubResource("Line_bye")])
+starts = Array[StringName]([&"first_meeting", &"tutorial_report", &"tutorial_busy", &"greeting_strong", &"greeting"])
+lines = Array[ExtResource("4_line")]([SubResource("Line_first_meeting"), SubResource("Line_first_2"), SubResource("Line_first_3"), SubResource("Line_first_glasses"), SubResource("Line_tutorial_1"), SubResource("Line_tutorial_2"), SubResource("Line_tutorial_3"), SubResource("Line_tutorial_report"), SubResource("Line_tutorial_reward"), SubResource("Line_tutorial_busy"), SubResource("Line_greeting_strong"), SubResource("Line_greeting"), SubResource("Line_hub"), SubResource("Line_next_job"), SubResource("Line_lore_1"), SubResource("Line_lore_2"), SubResource("Line_glasses"), SubResource("Line_sleep_offer"), SubResource("Line_bye")])

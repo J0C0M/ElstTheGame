@@ -3,6 +3,11 @@
 [ext_resource type="PackedScene" path="res://scenes/world/props/House.tscn" id="1_res"]
 [ext_resource type="Script" path="res://scenes/world/location_area.gd" id="2_res"]
 [ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="90_door"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/TrainingDummy.tscn" id="91_dummy"]
+[ext_resource type="Resource" path="res://data/enemies/sparring_dummy.tres" id="92_sparring"]
+[ext_resource type="Script" path="res://scripts/quests/quest_spawner.gd" id="93_spawner"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/LowDriller.tscn" id="94_low_driller"]
+[ext_resource type="Script" path="res://scripts/quests/quest_marker.gd" id="95_marker"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
 albedo_color = Color(0.42, 0.64, 0.32, 1)
@@ -154,3 +159,56 @@ door_color = Color(0.3, 0.18, 0.4, 1)
 
 [node name="KlaasHouseExit" type="Marker3D" parent="." groups=["spawn_points"]]
 position = Vector3(0, 0, -4.2)
+
+[node name="TrainingDummy" parent="." instance=ExtResource("91_dummy")]
+position = Vector3(-8, 0, -6)
+rotation = Vector3(0, -1.5708, 0)
+
+[node name="SparringDummy" parent="." instance=ExtResource("91_dummy")]
+position = Vector3(8, 0, -6)
+rotation = Vector3(0, 1.5708, 0)
+data = ExtResource("92_sparring")
+attack_enabled = true
+band_color = Color(0.82, 0.18, 0.16, 1)
+
+[node name="PracticeFight" type="Node3D" parent="."]
+script = ExtResource("93_spawner")
+quest_id = &"q1_tutorial"
+step_id = &"fight"
+enemy_scene = ExtResource("94_low_driller")
+
+[node name="SpawnLeft" type="Marker3D" parent="PracticeFight"]
+position = Vector3(-4, 0, -13)
+rotation = Vector3(0, 3.14159, 0)
+
+[node name="SpawnRight" type="Marker3D" parent="PracticeFight"]
+position = Vector3(4, 0, -13)
+rotation = Vector3(0, 3.14159, 0)
+
+[node name="Markers" type="Node3D" parent="."]
+
+[node name="Klaas" type="Marker3D" parent="Markers"]
+position = Vector3(0, 0, -2.5)
+script = ExtResource("95_marker")
+ids = Array[StringName]([&"klaas"])
+
+[node name="Garden" type="Marker3D" parent="Markers"]
+position = Vector3(0, 0, -9)
+script = ExtResource("95_marker")
+ids = Array[StringName]([&"klaas_garden"])
+
+[node name="Dummy" type="Marker3D" parent="Markers"]
+position = Vector3(-8, 0, -6)
+script = ExtResource("95_marker")
+ids = Array[StringName]([&"training_dummy"])
+
+[node name="Sparring" type="Marker3D" parent="Markers"]
+position = Vector3(8, 0, -6)
+script = ExtResource("95_marker")
+ids = Array[StringName]([&"sparring_dummy"])
+
+[node name="Fight" type="Marker3D" parent="Markers"]
+position = Vector3(0, 0, -13)
+script = ExtResource("95_marker")
+ids = Array[StringName]([&"practice_fight"])
+

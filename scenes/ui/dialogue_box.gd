@@ -1,9 +1,9 @@
 class_name DialogueBox
 extends Control
 ## Shows a conversation from DialogueData: the speaker's line, typed out, and
-## the player's choices. Runs simple actions (flags, Inwijding) itself and
-## hands the others (shop, sleep) to Main through action_chosen, after it
-## has closed.
+## the player's choices. Runs simple actions (flags, Inwijding, quests, gifts)
+## itself and hands the others (shop, sleep) to Main through action_chosen,
+## after it has closed.
 
 signal action_chosen(action: StringName, value: String)
 signal closed
@@ -118,3 +118,11 @@ func _run_action(action: StringName, value: String) -> void:
 			GameState.set_flag(StringName(value))
 		&"raise_inwijding":
 			GameState.raise_inwijding(int(value))
+		&"start_quest":
+			QuestManager.start_quest(StringName(value))
+		&"give_item":
+			var item: ItemData = ItemCatalog.get_item(StringName(value))
+			if item != null and item.is_gear():
+				GameState.add_gear(item)
+			elif item != null:
+				GameState.add_item(item)

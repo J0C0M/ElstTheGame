@@ -14,6 +14,8 @@ const DEATH_DELAY: float = 3.0
 ## World and spawn point of a new game.
 @export var new_game_scene: PackedScene
 @export var new_game_spawn: StringName = &"Start"
+## Quest that starts with a new game: the tutorial.
+@export var first_quest: StringName = &"q1_tutorial"
 ## Shown behind the main menu.
 @export var menu_backdrop: PackedScene
 ## Skips the main menu and starts a new game straight away (for tests).
@@ -39,6 +41,7 @@ var _overlay: Control
 @onready var _dialogue_box: DialogueBox = $UI/Menus/DialogueBox
 @onready var _shop_menu: ShopMenu = $UI/Menus/ShopMenu
 @onready var _inventory_menu: InventoryMenu = $UI/Menus/InventoryMenu
+@onready var _quest_log: QuestLog = $UI/Menus/QuestLog
 @onready var _fade: ColorRect = $UI/Fade
 
 
@@ -62,7 +65,7 @@ func _ready() -> void:
 	EventBus.dialogue_requested.connect(_on_dialogue_requested)
 	EventBus.sleep_requested.connect(sleep)
 	_dialogue_box.action_chosen.connect(_on_dialogue_action)
-	for overlay: Control in [_dialogue_box, _shop_menu, _inventory_menu]:
+	for overlay: Control in [_dialogue_box, _shop_menu, _inventory_menu, _quest_log]:
 		overlay.connect(&"closed", _on_overlay_closed.bind(overlay))
 	if skip_main_menu:
 		start_new_game()
@@ -81,11 +84,10 @@ func _input(event: InputEvent) -> void:
 		_on_escape()
 	elif event.is_action_pressed(&"inventory") and _app_state == AppState.PLAYING and not _changing_world:
 		get_viewport().set_input_as_handled()
-		if _overlay == _inventory_menu:
-			_inventory_menu.close()
-		elif _overlay == null and not get_tree().paused:
-			_open_overlay(_inventory_menu)
-			_inventory_menu.open()
+		_toggle_overlay(_inventory_menu)
+	elif event.is_action_pressed(&"quest_log") and _app_state == AppState.PLAYING and not _changing_world:
+		get_viewport().set_input_as_handled()
+		_toggle_overlay(_quest_log)
 	elif _wants_captured_mouse() and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED \
 			and event is InputEventMouseButton and event.is_pressed():
 		# A click on the game catches the mouse again; it does not attack.
@@ -122,6 +124,7 @@ func start_new_game() -> void:
 	GameState.reset()
 	QuestManager.reset()
 	await _enter_world(new_game_scene.instantiate() as GameWorld, new_game_spawn, {}, {})
+	QuestManager.start_quest(first_quest)
 
 
 ## Switches to the world in [param scene_path] behind a fade and puts the
@@ -200,6 +203,8 @@ func _enter_world(world: GameWorld, spawn_id: StringName, vitals: Dictionary, sa
 	_controls_help.show()
 	_update_mouse()
 	EventBus.location_entered.emit(world.location_name)
+	if not world.location_id.is_empty():
+		EventBus.area_entered.emit(world.location_id)
 	await _fade_to(0.0)
 	GameState.unblock_saving(&"world_change")
 	_changing_world = false
@@ -247,9 +252,18 @@ func _on_submenu_closed() -> void:
 
 
 func _close_menus() -> void:
-	for menu: Control in [_main_menu, _pause_menu, _save_load_menu, _settings_menu, _dialogue_box, _shop_menu, _inventory_menu]:
+	for menu: Control in [_main_menu, _pause_menu, _save_load_menu, _settings_menu, _dialogue_box, _shop_menu, _inventory_menu, _quest_log]:
 		menu.hide()
 	_overlay = null
+
+
+## Opens [param overlay] (inventory or questlog) or closes it when it is open.
+func _toggle_overlay(overlay: Control) -> void:
+	if _overlay == overlay:
+		overlay.call("close")
+	elif _overlay == null and not get_tree().paused:
+		_open_overlay(overlay)
+		overlay.call("open")
 
 
 func _open_overlay(overlay: Control) -> void:

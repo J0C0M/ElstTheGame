@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://data/player/player_stats.tres" id="2_stats"]
-[ext_resource type="Resource" path="res://data/items/rusty_sword.tres" id="3_sword"]
 [ext_resource type="Resource" path="res://data/items/plain_clothes.tres" id="4_armor"]
 [ext_resource type="PackedScene" path="res://scenes/player/PlayerModel.tscn" id="5_model"]
 [ext_resource type="PackedScene" path="res://scenes/player/PlayerCamera.tscn" id="6_camera"]
@@ -34,7 +33,6 @@ collision_layer = 2
 collision_mask = 69
 script = ExtResource("1_player")
 stats = ExtResource("2_stats")
-sword = ExtResource("3_sword")
 armor = ExtResource("4_armor")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

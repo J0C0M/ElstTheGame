@@ -19,3 +19,4 @@ func _on_body_entered(body: Node3D) -> void:
 	if body is Player:
 		GameState.current_location = display_name
 		EventBus.location_entered.emit(display_name)
+		EventBus.area_entered.emit(id)

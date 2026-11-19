@@ -11,6 +11,11 @@ extends Node3D
 @export var respawn_delay: float = 3.0
 ## Save automatically when the player walks in, as for dungeons.
 @export var autosave_on_enter: bool = false
+## Id for quest steps that wait until the player reaches this world.
+@export var location_id: StringName
+## Gear handed over when this world loads and the player lacks it. Meant for
+## test scenes such as the arena, where you want a sword straight away.
+@export var test_gear: Array[ItemData] = []
 
 ## Main turns this off, because it loads the last save after dying.
 var respawn_on_death: bool = true
@@ -18,6 +23,9 @@ var respawn_on_death: bool = true
 
 func _ready() -> void:
 	EventBus.player_died.connect(_on_player_died)
+	for item: ItemData in test_gear:
+		if not GameState.has_gear(item.id):
+			GameState.add_gear(item)
 
 
 func get_player() -> Player:
@@ -31,6 +39,15 @@ func get_spawn(spawn_id: StringName) -> Marker3D:
 	for node: Node in get_tree().get_nodes_in_group(&"spawn_points"):
 		if node.name == spawn_id and is_ancestor_of(node):
 			return node as Marker3D
+	return null
+
+
+## The QuestMarker for target [param target_id] in this world, or null.
+func find_quest_marker(target_id: StringName) -> QuestMarker:
+	for node: Node in get_tree().get_nodes_in_group(&"quest_markers"):
+		var marker: QuestMarker = node as QuestMarker
+		if marker != null and target_id in marker.ids and is_ancestor_of(marker):
+			return marker
 	return null
 
 

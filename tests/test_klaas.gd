@@ -55,18 +55,29 @@ func _test_front_door() -> void:
 func _test_first_conversation() -> void:
 	_place(Vector3(0, 0, -0.9), 0.0)
 	await _frames(10)
+	_check(not _player().has_sword(), "a new game starts without a sword")
 	await _press(&"interact")
 	var box: Variant = _main.get_node("UI/Menus/DialogueBox")
 	_check(box.visible and paused, "talking to Klaas opens a paused conversation")
 	_check(box.get_current_line().id == &"first_meeting", "the first talk starts with the first meeting")
-	_check(_state.has_flag(&"met_klaas"), "Klaas remembers meeting the player")
 	box.choose(0)
 	box.choose(0)
 	_check(box.get_current_line().id == &"first_3", "the conversation moves on")
 	box.choose(0)
-	_check(box.get_current_line().id == &"task", "a choice leads to its line")
+	_check(box.get_current_line().id == &"tutorial_1", "a choice leads to its line")
+	_check(_state.has_gear(&"rusty_sword"), "Klaas hands over the rusty sword")
 	box.choose(0)
-	_check(_state.inwijding == 1, "the first Inwijding opens the shop")
+	box.choose(0)
+	_check(_state.has_flag(&"q1_met_klaas"), "the talk counts for the tutorial")
+	box.choose(0)
+	await _frames(2)
+	_check(not box.visible and not paused, "the conversation ends")
+	# Finish the tutorial at once; test_quests plays it through step by step.
+	root.get_node("QuestManager").complete_quest(&"q1_tutorial")
+	_check(_state.inwijding == 1, "the tutorial reward opens the shop")
+	await _frames(30)
+	await _press(&"interact")
+	_check(box.get_current_line().id == &"greeting", "Klaas greets an old friend differently")
 	box.choose(0)
 	_check(box.get_current_line().id == &"hub", "after that Klaas asks what you want")
 	box.choose(0)
@@ -99,7 +110,7 @@ func _test_shop() -> void:
 func _test_greeting_and_escape() -> void:
 	await _press(&"interact")
 	var box: Variant = _main.get_node("UI/Menus/DialogueBox")
-	_check(box.visible and box.get_current_line().id == &"greeting", "Klaas greets an old friend differently")
+	_check(box.visible, "Klaas talks again")
 	await _press(&"pause")
 	_check(not box.visible and not paused, "Esc ends the conversation")
 
@@ -115,10 +126,11 @@ func _test_armor_and_potion() -> void:
 	attacker.queue_free()
 	await _frames(40)
 	_player().health.set_health(30)
+	var potions_before: int = _state.get_potion_count()
 	await _press(&"use_potion")
 	await _frames(60)
 	_check(_player().health.current_health == 70, "Q drinks a potion for 40 HP")
-	_check(_state.get_potion_count() == 0, "the potion is used up")
+	_check(_state.get_potion_count() == potions_before - 1, "the potion is used up")
 
 
 func _test_inventory_key() -> void:
@@ -131,17 +143,14 @@ func _test_inventory_key() -> void:
 
 func _test_sleep() -> void:
 	_player().health.set_health(40)
+	var newest_before: float = _newest_autosave_time()
 	var bed: Node3D = _main.get_world().find_child("Bed", true, false)
 	_place(bed.global_position + Vector3(0, 0, 2.0), 0.0)
 	await _frames(5)
 	await _press(&"interact")
 	await _frames(70)
 	_check(_player().health.current_health == 100, "sleeping heals")
-	var autosaves: int = 0
-	for meta: Dictionary in root.get_node("SaveManager").list_saves():
-		if meta.get("type") == "auto":
-			autosaves += 1
-	_check(autosaves == 1, "sleeping makes an autosave")
+	_check(_newest_autosave_time() > newest_before, "sleeping makes an autosave")
 
 
 func _test_save_keeps_gear() -> void:
@@ -151,7 +160,7 @@ func _test_save_keeps_gear() -> void:
 	root.get_node("SaveManager").quickload()
 	await _frames(60)
 	_check(_state.is_equipped(_item(&"iron_sword")) and _state.is_equipped(_item(&"leather_armor")), "loading brings back the worn gear")
-	_check(_state.inwijding == 1 and _state.has_flag(&"met_klaas"), "loading brings back the Inwijding")
+	_check(_state.inwijding == 1 and _state.has_flag(&"q1_met_klaas"), "loading brings back the Inwijding")
 	_check(_player().sword.damage == 16, "the loaded player uses the saved sword")
 
 
@@ -170,6 +179,14 @@ func _test_gear_loot() -> void:
 	var found_better: bool = _state.has_gear(&"steel_sword") or _state.has_gear(&"iron_armor")
 	_check(found_better, "a gear drop is the next sword or armour the player lacks")
 	_check(_state.is_equipped(_item(&"steel_sword")) or _state.is_equipped(_item(&"iron_armor")), "found gear that is better goes on")
+
+
+func _newest_autosave_time() -> float:
+	var newest: float = 0.0
+	for meta: Dictionary in root.get_node("SaveManager").list_saves():
+		if meta.get("type") == "auto":
+			newest = maxf(newest, float(meta.get("unix_time", 0.0)))
+	return newest
 
 
 func _wait_for_world(location: String) -> void:

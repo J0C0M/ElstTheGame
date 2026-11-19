@@ -11,8 +11,8 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 2 | `Build-Elst-World-Blockout` | Af, gemerged naar `Development` |
 | 3 | `Add-Save-System` | Af, gemerged naar `Development` |
 | 4 | `Add-Enemy-AI-And-Loot` | Af, gemerged naar `Development` |
-| 5 | `Add-Klaas-Dialogue-And-Shop` | Gebouwd, wacht op akkoord |
-| 6 | `Add-Quest-System-And-Tutorial` | Nog niet begonnen |
+| 5 | `Add-Klaas-Dialogue-And-Shop` | Af, gemerged naar `Development` |
+| 6 | `Add-Quest-System-And-Tutorial` | Gebouwd, wacht op akkoord |
 | 7 | `Add-Station-Dungeon` | Nog niet begonnen |
 | 8 | `Add-Westeraam-Dungeon` | Nog niet begonnen |
 | 9 | `Add-OBC-Fort-Dungeon` | Nog niet begonnen |
@@ -54,7 +54,7 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 ### Open punten
 
 - [x] **Git-identiteit en signing.** Waren niet ingesteld. Op verzoek van de eigenaar staan ze nu in de lokale config van deze repo: `J0C0M <caviagamer.2018@gmail.com>`, met SSH-signing via `~/.ssh/id_ed25519`. Voor het label "Verified" op GitHub moet die sleutel daar als *Signing Key* zijn toegevoegd.
-- [ ] **`docs/reference/kaart_elst.png` ontbreekt.** Tot die er is, geldt de voorlopige kaartindeling hieronder.
+- [ ] **`docs/reference/kaart_elst.png`** is op 19-11-2026 aangeleverd, maar nog niet gecommit. De wereld volgt nog de voorlopige kaartindeling hieronder. Die zetten we in een eigen branch om naar de kaart.
 - [ ] **`docs/reference/Klaas_sigma.png`** staat lokaal klaar, maar is nog niet gecommit. De repo is openbaar, dus de foto zou dan voor iedereen zichtbaar zijn. De eigenaar beslist.
 - [ ] Godot staat niet in de `PATH`. Controles draaien met `~/Downloads/Godot_v4.7.2-stable_linux.x86_64`.
 - [ ] `gh` is niet geïnstalleerd. Merges naar `Development` gaan dus met `git merge` in plaats van via een PR.
@@ -284,9 +284,53 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
   - Klaas' trotse regel ("eerder klaar dan gevraagd") past in dezelfde dialoog.
 - Fase 11: Klaas als bondgenoot kan `KlaasModel.tscn` en het `HumanoidModel` hergebruiken.
 
+## Fase 6 – Questsysteem & Quest 1
+
+### Wat is af
+
+- **Questdata:** `QuestData` (titel, omschrijving, doelen, beloning, `completion_flag`) en `QuestStep` met vier soorten doelen:
+  - `FLAG`: een vlag in `GameState`, bijvoorbeeld uit een gesprek;
+  - `ACTIONS`: dingen die de speler doet, zoals sprinten, springen, ontwijken, blokkeren, drinken of opslaan;
+  - `KILL`: een aantal vijanden met een bepaald `EnemyData`-id;
+  - `REACH`: een gebied of wereld binnengaan.
+- **QuestManager** (autoload) laadt alles uit `data/quests/` en volgt de `EventBus`. Hij houdt per quest de status bij (niet begonnen, actief, af), het huidige doel en de voortgang ("1/2"). Bij elk afgerond doel komt er een melding en een autosave. Aan het eind volgt de beloning: goud, items of uitrusting, en Inwijding +1. Alles gaat mee in de save.
+- **Quest 1 "Inleiding"** (`data/quests/q1_tutorial.tres`):
+  1. praat met Klaas in zijn huis (hij geeft je het roestige zwaard);
+  2. sprint, spring en ontwijk in de tuin;
+  3. sla de trainingspop kapot;
+  4. blokkeer een klap van de sparringpop (die slaat terug);
+  5. drink het drankje dat Klaas je geeft;
+  6. sla je spel op (F5 of via het pauzemenu);
+  7. oefengevecht tegen 2 laag drillers, die pas op dat moment in de tuin verschijnen;
+  8. ga terug naar Klaas. Hij opent zijn winkel en geeft 20 goud, 2 kleine drankjes en Inwijding 1.
+- **Tuin van Klaas:** een trainingspop, een sparringpop met een knuppel en een `QuestSpawner` voor het oefengevecht.
+- **Kompas** bovenin beeld: windrichtingen die meedraaien met de camera, en een gouden ruit met de afstand naar het huidige doel. Doelen zijn `QuestMarker`-nodes met een of meer ids. Binnen bij Klaas wijst het kompas naar de deur als het doel buiten ligt.
+- **Huidig doel in de HUD:** onder het kompas, met de voortgang erbij ("Inleiding: Oefengevecht ... (1/2)").
+- **Questlog (J):** actieve en afgeronde quests, de omschrijving, de doelen (✓ af, ▶ huidig) en de beloning. Het spel pauzeert zolang hij open is.
+- **Klaas praat over de quest:** een eerste kennismaking, een duwtje naar het questlog zolang de tutorial loopt, en een trotse regel als je klaar bent. Daarna kun je naar zijn winkel, of vragen of hij nog een klus heeft ("nog niet", tot Fase 7).
+- **Test:** `tests/test_quests.gd` (32 checks, allemaal geslaagd) speelt Quest 1 van een nieuw spel tot de beloning, met opslaan en laden halverwege en aan het eind. De andere zes tests slagen nog steeds.
+
+### Keuzes en afwijkingen
+
+- **Je begint zonder zwaard.** Klaas geeft het roestige zwaard in het eerste gesprek, niet pas als beloning aan het eind: anders kun je de zwaardles niet doen. Probeer je zonder zwaard aan te vallen of te blokkeren, dan zegt de HUD dat je eerst met Klaas moet praten. In de testarena krijg je het zwaard meteen (`test_gear` op `GameWorld`).
+- **De rest van de beloning** (20 goud, 2 kleine drankjes, Inwijding 1) komt aan het eind, zoals in het GDD. De tijdelijke keuze "Wijd me dan in" uit Fase 5 is weg.
+- **Drinken mag nu ook met volle HP.** Anders kan de drankles vastlopen. Het drankje is dan gewoon op.
+- **De winkel** legt Klaas uit in zijn laatste regel, en het gesprek gaat daarna meteen naar de keuze "Laat je winkel zien". Er is geen apart doel "koop iets", want je hebt dan nog te weinig goud.
+- **"Eerder af dan gevraagd":** een quest met een `completion_flag` die al gezet is, is meteen af zodra Klaas hem geeft, met de beloning erbij. Fase 8–10 zetten die vlag als de baas verslagen is; Klaas' trotse regel komt in die fases.
+- **Autosave na een doel** gebruikt `SaveManager.request_autosave()`. Kan opslaan op dat moment niet (in de lucht, tijdens een wereldwissel), dan probeert hij het elke halve seconde opnieuw.
+- **Oude saves** van voor Fase 6 hebben geen questdata. Ze laden gewoon, maar Quest 1 start dan niet. Begin een nieuw spel om de tutorial te spelen.
+- **Quests 2 t/m 6** komen in hun eigen fase. Klaas zegt tot dan "nog niet" als je om een klus vraagt.
+
+### Aandachtspunten voor de volgende fases
+
+- Een nieuwe quest is een `.tres` in `data/quests/`. Geef doelen een `target` en zet een `QuestMarker` met dat id in de wereld, dan werkt het kompas vanzelf.
+- Klaas geeft de volgende quest met de dialoogactie `start_quest`, met de id van de quest als `action_value`. Voorwaarden in `DialogueCondition` kunnen kijken naar de status en het huidige doel van een quest.
+- Fase 7: Quest 2 eindigt na 4 generators (`KILL` of `FLAG` per generator) en zet het verzwakkingseffect aan.
+- Fase 8–10: zet bij de dood van de baas de `completion_flag` van de quest, zodat de dungeon ook telt als Klaas hem nog niet gegeven heeft.
+
 ## Voorlopige kaartindeling
 
-`kaart_elst.png` ontbreekt nog. Tot die er is, gebruiken we deze indeling: de kerk in het midden, de andere vijf locaties eromheen. De richtingen volgen ruwweg het echte Elst (de kerk in het centrum, het station en het spoor aan de oostkant, Westeraam ten noordoosten van het station, de Over Betuwe College-kant ver in het zuidwesten). Het huis van Klaas staat op een korte loopafstand van alles, zodat het een goede hub is.
+`kaart_elst.png` is er nu, maar de wereld volgt nog deze voorlopige indeling: de kerk in het midden, de andere vijf locaties eromheen. De richtingen volgen ruwweg het echte Elst (de kerk in het centrum, het station en het spoor aan de oostkant, Westeraam ten noordoosten van het station, de Over Betuwe College-kant ver in het zuidwesten). Het huis van Klaas staat op een korte loopafstand van alles, zodat het een goede hub is.
 
 Godot-coördinaten in meters: +X is oost, −Z is noord. De kaart is ca. 500 × 500 m. De tornado is een ring met een vaste muur op 240 m van het midden; vanaf 222 m duwt de wind je terug.
 

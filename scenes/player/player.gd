@@ -33,6 +33,8 @@ var clock: float = 0.0
 var _gravity: float = 0.0
 var _last_tap_time: Dictionary[StringName, float] = {}
 var _interactables: Array[Interactable] = []
+## Outside push for this physics frame, such as the tornado's wind.
+var _wind_velocity: Vector3 = Vector3.ZERO
 var _focused_interactable: Interactable
 
 @onready var model: PlayerModel = $Model
@@ -64,7 +66,12 @@ func _physics_process(delta: float) -> void:
 	state_machine.physics_update(delta)
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
+	# The wind moves the body but is not kept in the velocity, so it stops
+	# as soon as nothing pushes any more.
+	velocity += _wind_velocity
 	move_and_slide()
+	velocity -= _wind_velocity
+	_wind_velocity = Vector3.ZERO
 	model.set_locomotion(Vector2(velocity.x, velocity.z).length(), is_sprinting, is_on_floor())
 	_update_interaction_focus()
 
@@ -154,6 +161,12 @@ func is_facing_point(point: Vector3) -> bool:
 	if to_point.length_squared() < 0.0001:
 		return true
 	return get_forward().angle_to(to_point.normalized()) <= deg_to_rad(stats.block_angle_degrees)
+
+
+## Pushes the player with [param wind_velocity] (metres per second) during
+## this physics frame. Call it every frame the push should last.
+func apply_wind(wind_velocity: Vector3) -> void:
+	_wind_velocity = wind_velocity
 
 
 ## Moves the player to [param at] at once, without sliding there.

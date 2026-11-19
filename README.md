@@ -39,7 +39,16 @@ godot --path .
 | Retrofilter aan/uit | F1 |
 | Pixelgrootte wisselen (laag, midden, uit) | F2 |
 
-De toetsen zitten in de InputMap van het project. Niet alles werkt al: dat hangt af van de fase waarin het project zit.
+De toetsen zitten in de InputMap van het project. Niet alles werkt al: dat hangt af van de fase waarin het project zit. Bij het starten wordt de muis gevangen voor de camera; Esc geeft hem vrij en een klik in het venster vangt hem weer.
+
+## Testen
+
+```bash
+godot --headless --path . -s res://tests/check_resources.gd
+godot --headless --path . --fixed-fps 60 -s res://tests/test_player_combat.gd
+```
+
+De eerste laadt alle scenes, scripts en resources. De tweede speelt de testarena met gesimuleerde input en controleert lopen, stamina, ontwijken, aanvallen, blokkeren, parry, doodgaan en terugkomen.
 
 ## Mappen
 

@@ -43,3 +43,7 @@ signal enemy_killed(enemy_id: StringName)
 signal equipment_changed
 ## Inwijding (the bond with Klaas) changed to [param level].
 signal inwijding_changed(level: int)
+## An NPC wants to talk; Main opens the dialogue box.
+signal dialogue_requested(dialogue: DialogueData, speaker: Node)
+## The player goes to sleep (bed or Klaas): heal up and autosave.
+signal sleep_requested

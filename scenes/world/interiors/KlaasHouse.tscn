@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="3_door"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/Klaas.tscn" id="4_klaas"]
 [ext_resource type="PackedScene" path="res://scenes/world/props/Bed.tscn" id="5_bed"]
+[ext_resource type="Script" path="res://scripts/quests/quest_marker.gd" id="6_marker"]
 
 [sub_resource type="Environment" id="Environment_house"]
 background_mode = 1
@@ -311,3 +312,14 @@ position = Vector3(0, 0, 2.5)
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
 position = Vector3(0, 0, 2.5)
+
+[node name="MarkerKlaas" type="Marker3D" parent="."]
+position = Vector3(0, 0, -3.2)
+script = ExtResource("6_marker")
+ids = Array[StringName]([&"klaas"])
+
+[node name="MarkerOutside" type="Marker3D" parent="."]
+position = Vector3(0, 0, 5.5)
+script = ExtResource("6_marker")
+ids = Array[StringName]([&"klaas_garden", &"training_dummy", &"sparring_dummy", &"practice_fight"])
+

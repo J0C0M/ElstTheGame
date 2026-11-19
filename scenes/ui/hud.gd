@@ -42,6 +42,7 @@ func _ready() -> void:
 	EventBus.loot_collected.connect(_on_loot_collected)
 	EventBus.quest_updated.connect(_on_quest_updated.unbind(1))
 	EventBus.boss_started.connect(_on_boss_started)
+	EventBus.crosshair_changed.connect(func(shown: bool) -> void: ($Crosshair as Label).visible = shown)
 	EventBus.boss_health_changed.connect(_on_boss_health_changed)
 	EventBus.boss_ended.connect(func() -> void: _boss_bar.visible = false)
 	_on_quest_updated()

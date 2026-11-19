@@ -8,6 +8,12 @@ extends CharacterBody3D
 ## to the camera.
 ## Speed an unblocked hit pushes the player back with.
 const KNOCKBACK_SPEED: float = 3.0
+## Seconds to load the next bolt.
+const RELOAD_TIME: float = 0.9
+## Camera field of view while aiming the crossbow.
+const AIM_FOV: float = 48.0
+## How far the crossbow aims.
+const AIM_RANGE: float = 80.0
 
 const TAP_DIRECTIONS: Dictionary = {
 	&"move_forward": Vector3(0, 0, -1), &"move_back": Vector3(0, 0, 1),
@@ -17,9 +23,19 @@ const TAP_DIRECTIONS: Dictionary = {
 @export var stats: PlayerStats
 ## Armour worn when GameState has none.
 @export var armor: ItemData
+## Bolt the crossbow shoots.
+@export var bolt_scene: PackedScene
 
 ## The sword in hand, or null: a new game starts without one.
 var sword: ItemData
+var crossbow: ItemData
+## Weapon in hand: &"sword" or &"crossbow" (keys 1 and 2).
+var weapon: StringName = &"sword"
+## True while the right mouse button aims the crossbow.
+var aiming: bool = false
+var _reload_left: float = 0.0
+var _normal_fov: float = 75.0
+var _crossbow_node: Node3D
 
 ## True while sprinting. Set by the move state, read by the model.
 var is_sprinting: bool = false
@@ -61,6 +77,8 @@ func _ready() -> void:
 	_interaction_area.area_entered.connect(_on_interaction_area_entered)
 	_interaction_area.area_exited.connect(_on_interaction_area_exited)
 	EventBus.interaction_prompt_changed.emit("")
+	_normal_fov = camera.camera.fov
+	_crossbow_node = _build_crossbow()
 	EventBus.equipment_changed.connect(_apply_gear)
 	_apply_gear()
 	health.reset(stats.max_health)
@@ -69,6 +87,8 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	clock += delta
+	_reload_left = maxf(_reload_left - delta, 0.0)
+	camera.camera.fov = lerpf(camera.camera.fov, AIM_FOV if aiming else _normal_fov, minf(10.0 * delta, 1.0))
 	_no_sword_message_wait = maxf(_no_sword_message_wait - delta, 0.0)
 	state_machine.physics_update(delta)
 	if not is_on_floor():
@@ -300,8 +320,72 @@ func _choose_potion() -> ItemData:
 
 
 ## Takes the worn gear from GameState and shows it on the model.
+## Takes the sword (1) or the crossbow (2) in hand.
+func select_weapon(new_weapon: StringName) -> void:
+	if new_weapon == &"crossbow" and crossbow == null:
+		EventBus.message_requested.emit("Je hebt nog geen kruisboog.")
+		return
+	weapon = new_weapon
+	if weapon != &"crossbow":
+		set_aiming(false)
+	_update_weapon_visuals()
+
+
+func set_aiming(on: bool) -> void:
+	if on == aiming:
+		return
+	aiming = on
+	EventBus.crosshair_changed.emit(on)
+
+
+## Shoots a bolt at whatever the crosshair points to, if one is loaded.
+func try_shoot() -> void:
+	if crossbow == null or _reload_left > 0.0:
+		return
+	_reload_left = RELOAD_TIME
+	face_camera_direction()
+	var eye: Camera3D = camera.camera
+	var from: Vector3 = eye.global_position
+	var to: Vector3 = from - eye.global_basis.z * AIM_RANGE
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to, PhysicsLayers.WORLD | PhysicsLayers.ENEMY, [get_rid()])
+	var hit: Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
+	var target: Vector3 = hit.get("position", to)
+	var origin: Vector3 = global_position + Vector3.UP * 1.4 + get_forward() * 0.6
+	var bolt: Node3D = bolt_scene.instantiate() as Node3D
+	get_parent().add_child(bolt)
+	bolt.call(&"launch", origin, target - origin, crossbow.damage, self)
+	EventBus.player_action.emit(&"shoot")
+
+
+func _update_weapon_visuals() -> void:
+	model.get_node("Body/Hips/Torso/ArmR/Hand/Sword").visible = sword != null and weapon == &"sword"
+	_crossbow_node.visible = weapon == &"crossbow"
+
+
+## A simple crossbow in the right hand: a stock and a bow.
+func _build_crossbow() -> Node3D:
+	var root: Node3D = Node3D.new()
+	root.name = "Crossbow"
+	var wood: StandardMaterial3D = StandardMaterial3D.new()
+	wood.albedo_color = Color(0.4, 0.28, 0.16)
+	for part: Array in [[Vector3(0.08, 0.08, 0.55), Vector3(0, -0.05, -0.22)], [Vector3(0.62, 0.04, 0.05), Vector3(0, -0.05, -0.44)]]:
+		var mesh: BoxMesh = BoxMesh.new()
+		mesh.size = part[0]
+		mesh.material = wood
+		var piece: MeshInstance3D = MeshInstance3D.new()
+		piece.mesh = mesh
+		piece.position = part[1]
+		root.add_child(piece)
+	root.visible = false
+	model.get_node("Body/Hips/Torso/ArmR/Hand").add_child(root)
+	return root
+
+
 func _apply_gear() -> void:
 	sword = GameState.get_equipped(&"sword")
+	crossbow = GameState.get_equipped(&"crossbow")
+	if crossbow == null and weapon == &"crossbow":
+		weapon = &"sword"
 	var worn_armor: ItemData = GameState.get_equipped(&"armor")
 	if worn_armor != null:
 		armor = worn_armor
@@ -314,6 +398,7 @@ func _apply_gear() -> void:
 		blade.mesh = blade_mesh
 		blade.position.z = -0.125 - sword.blade_length * 0.5
 		blade.material_override = _gear_material(sword.model_color, true)
+	_update_weapon_visuals()
 	var armor_material: StandardMaterial3D = _gear_material(armor.model_color, armor.armor_tier >= 2)
 	var pieces: Dictionary[String, int] = {
 		"Body/Hips/Torso/ArmorChest": 1,

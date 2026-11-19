@@ -66,3 +66,5 @@ signal boss_ended
 ## The player rests on a bed or a bench: Main heals and autosaves, then shows
 ## [param message].
 signal rest_requested(message: String)
+## The player aims the crossbow or stops aiming: the HUD shows a crosshair.
+signal crosshair_changed(shown: bool)

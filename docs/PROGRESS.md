@@ -380,14 +380,14 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 
 ### Wat is af
 
-- **OBC-dungeon** (`scenes/dungeons/OBC.tscn`, gebouwd door `tools/dungeons/gen_obc.py`): ongeveer 66 × 176 m met 16 vijanden, in twee delen met een checkpoint ertussen.
-  - Deel 1, de school: de aula, een gang met kluisjes, de kantine (kist) en een grote gymzaal.
+- **OBC-dungeon** (`scenes/dungeons/OBC.tscn`, gebouwd door `tools/dungeons/gen_obc.py`): ongeveer 70 × 190 m met 20 vijanden (Westeraam heeft er 18), in twee delen met een checkpoint ertussen.
+  - Deel 1, de school: een grote aula zoals in het echte OBC (hoge witte hal, een houten zittrap, glazen galerijen op twee verdiepingen, ringlampen en groene banken), de kantine (kist), een gang met kluisjes en een grote gymzaal.
   - Checkpoint: de docentenkamer, met een autosave en een rustbank.
   - Deel 2, achter de school: het binnenplein waar fatbikers rondrijden (kist), het fietsenhok en het sportveld met de baas.
-- **Kakker-voetbaljongens** (35 HP, 8 schade): rode polo, witte kraag, een navy trui over de schouders en blond haar. Ze houden afstand en schieten voetballen; 60% gaat recht op je af, de rest mist.
-- **Fatbikers** (60 HP, 15 schade): rijden op een fatbike, cirkelen om je heen (flankeren) en chargeren dan met hoge snelheid.
+- **Kakker-voetbaljongens** (38 HP, 10 schade): rode polo, witte kraag, een navy trui over de schouders en blond haar. Ze houden afstand en schieten voetballen; 60% gaat recht op je af, de rest mist.
+- **Fatbikers** (65 HP, 16 schade): rijden op een fatbike, cirkelen om je heen (flankeren) en chargeren dan met hoge snelheid.
 - **Nieuw in `EnemyData`:** `lunge_speed` (de charge van een fatbiker) en `accuracy` met `miss_angle` (hoe vaak een schot raak gaat).
-- **Het fatbike-kindje** (350 HP, 20 schade, `scenes/bosses/FatbikeKid.tscn`):
+- **Het fatbike-kindje** (450 HP, 20 schade, `scenes/bosses/FatbikeKid.tscn`):
   - een klein, bleek kindje met blauwe ogen op een veel te grote, opgevoerde fatbike;
   - hij laat zijn motor brullen ("VRRRRMMM!") terwijl een rode lijn op de grond laat zien waar hij heen gaat, en chargeert dan in een rechte lijn;
   - knalt hij tegen een muur, dan is hij 3 s versuft, en alleen dan kun je hem raken;
@@ -395,6 +395,7 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
   - tijdens het gevecht gaat het hek van het sportveld dicht en kun je niet opslaan; hij laat 100 goud vallen en heeft 35% kans op uitrusting.
 - **OBC bevrijd:** in Elst spelen twee voetballers en een fatbiker op het schoolplein. Na het fatbike-kindje (`boss_fatbike_kindje`) lopen er dorpelingen.
 - **Quest 4 "OBC Elst Fort"** (`data/quests/q4_obc.tres`): Klaas geeft hem na Quest 3. Doelen: versla het fatbike-kindje en ga terug naar Klaas. Beloning: 150 goud en Inwijding 4. Ook eerder verslagen telt.
+- **Bugfix na de eerste test van de eigenaar:** een rek in de docentenkamer stond voor de deur naar deel 2, zodat je er niet langs kon. De tests merkten dat niet, omdat ze de speler verplaatsen. `test_world` loopt nu voor elke dungeon een route over de navmesh van de ingang naar het einde (laatste generator of baas). Op de oude OBC-scene faalt die check, op de nieuwe slaagt hij.
 - **Tests:** `tests/test_obc.gd` (29 checks, allemaal geslaagd). De andere negen tests slagen ook.
 
 ### Keuzes en afwijkingen
@@ -402,12 +403,13 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 - **Het motorgeluid** uit het GDD is voorlopig de tekst "VRRRRMMM!" boven zijn hoofd, en de fiets trilt. Echt geluid komt in Fase 12.
 - **De voetballen** gebruiken hetzelfde script als de vapewolkjes, maar zijn sneller en verdwijnen meteen na een muur.
 - **De fatbikers** rijden op een fiets, maar hun benen lopen nog mee (placeholder; staat ook bij de punten voor Prototype 2).
+- **Moeilijkheid (besluit eigenaar):** de factie-dungeons worden steeds iets zwaarder: Westeraam, dan OBC, dan de Bingo Club. Het OBC heeft daarom meer vijanden dan Westeraam (20 tegen 18), zijn vijanden hebben iets meer HP en schade, en het fatbike-kindje heeft 450 HP in plaats van de 350 uit het GDD (de Vape-koning heeft 400). Het GDD is bijgewerkt.
 - **Het fatbike-kindje** is niet zwakker na het station, net als de Vape-koning.
 - **Na Quest 4** zegt Klaas "Nog niet" als je om een klus vraagt, tot Fase 10.
 
 ### Aandachtspunten voor de volgende fases
 
-- Fase 10: de Bingo Club Boomer Cave op dezelfde manier: groter dan het station, twee delen met een checkpoint, een `LiberatedArea` in `tools/map/gen_elst.py` en Quest 5 in `tools/data/gen_klaas_dialogue.py`. Daarna geeft Klaas de kruisboog (Quest 2 t/m 5 af).
+- Fase 10: de Bingo Club Boomer Cave wordt de zwaarste factie-dungeon (meer vijanden dan het OBC, Grumpy Oma sterker dan het fatbike-kindje), op dezelfde manier opgebouwd: groter dan het station, twee delen met een checkpoint, een `LiberatedArea` in `tools/map/gen_elst.py` en Quest 5 in `tools/data/gen_klaas_dialogue.py`. Daarna geeft Klaas de kruisboog (Quest 2 t/m 5 af).
 
 ## Factie-dungeons op slot en een groter Westeraam (`Lock-Faction-Dungeons-And-Expand-Westeraam`)
 

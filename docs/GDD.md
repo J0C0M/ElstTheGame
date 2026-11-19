@@ -139,7 +139,7 @@ Elke factie heeft eigen vijanden, een eigen dungeon en een eindbaas met één du
 | Baas | Dungeon | HP | Aanvallen | Zwakke plek / kans voor de speler |
 | --- | --- | --- | --- | --- |
 | De Vape-koning (rijkste vapeverkoper van Westeraam) | Westeraam Getho | 400 | Verstopt zich in één van 4 vape-wolken en schiet daaruit dodelijke vape-wolkjes (15 schade). Onder 50% schiet hij er 3 tegelijk | Ren naar zijn wolk. Hij is dan 4 s kwetsbaar en vlucht daarna naar een andere wolk |
-| Het fatbike-kindje (erg klein, wit, met blauwe ogen, op een veel te grote opgevoerde fatbike) | OBC Elst Fort | 350 | Chargeert in een rechte lijn. Je ziet het aankomen aan een gierende motor en een lijn op de grond. Onder 50% chargeert hij 2 keer achter elkaar | Ontwijk de charge. Knalt hij tegen een muur, dan staat hij 3 s versuft |
+| Het fatbike-kindje (erg klein, wit, met blauwe ogen, op een veel te grote opgevoerde fatbike) | OBC Elst Fort | 450 | Chargeert in een rechte lijn. Je ziet het aankomen aan een gierende motor en een lijn op de grond. Onder 50% chargeert hij 2 keer achter elkaar | Ontwijk de charge. Knalt hij tegen een muur, dan staat hij 3 s versuft |
 | Grumpy Oma (groot, dik, als een soort Hulk) | Bingo Club Boomer Cave | 500 | Springt en ground slamt (schokgolf, spring eroverheen), draait als een tornado door de arena en slaat van dichtbij. Erg agressief, onder 30% wordt ze nog sneller | Na een ground slam en na de tornado staat ze 2 s uitgeput |
 | Amber de Draak | De Kerk van Amber | 2 × 800 | Fase 1: vuuradem in een kegel, staartzwiep, vleugelwind die je wegduwt, opvliegen met een regen van vuurballen. Fase 2: woedend en sneller, laat brandende plekken achter en roept 2–3 drillers op | Raak haar met de kruisboog als ze vliegt, dan stort ze neer. Op de grond is haar kop kwetsbaar na een vuuradem |
 
@@ -165,6 +165,7 @@ De game heeft 6 hoofdquests die Klaas één voor één geeft. De drie factie-dun
 
 **Regels voor de volgorde**
 
+- **Moeilijkheid:** de factie-dungeons worden steeds iets zwaarder: eerst Westeraam Getho, dan OBC Elst Fort (iets sterker) en als zwaarste de Bingo Club Boomer Cave. Dat geldt ook als de speler een andere volgorde kiest. Zwaarder betekent meer vijanden, iets meer HP en schade, en een sterkere baas.
 - Klaas geeft de quests in volgorde 1 t/m 6. Station Elst is vanaf het begin open. De drie factie-dungeons gaan pas open als Station Elst gesloopt is; Klaas zegt dat als hij Quest 2 geeft. De kerk zit op slot tot de drie factiebazen verslagen zijn.
 - Maak je een factie-dungeon af voordat Klaas die quest gegeven heeft, dan telt hij toch. Bij je volgende bezoek is Klaas trots op je (eigen tekstregel) en wordt de quest afgestreept. Je krijgt de beloning dan alsnog.
 - **Kruisboog:** krijg je van Klaas zodra Quest 2 t/m 5 allemaal af zijn.

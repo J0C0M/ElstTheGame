@@ -1,0 +1,70 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/bosses/grumpy_oma.gd" id="1_oma"]
+[ext_resource type="Resource" path="res://data/enemies/grumpy_oma.tres" id="2_data"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/models/GrumpyOmaModel.tscn" id="3_model"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="4_health"]
+[ext_resource type="Script" path="res://scripts/components/hurtbox.gd" id="5_hurtbox"]
+[ext_resource type="Script" path="res://scripts/components/hitbox.gd" id="6_hitbox"]
+[ext_resource type="Script" path="res://scripts/components/loot_dropper.gd" id="7_loot"]
+[ext_resource type="PackedScene" path="res://scenes/bosses/Shockwave.tscn" id="8_wave"]
+
+[sub_resource type="CapsuleShape3D" id="Shape_body"]
+radius = 0.9
+height = 3.4
+
+[sub_resource type="CapsuleShape3D" id="Shape_hurtbox"]
+radius = 1.2
+height = 3.8
+
+[sub_resource type="BoxShape3D" id="Shape_hit"]
+size = Vector3(3.0, 3.0, 3.0)
+
+[node name="GrumpyOma" type="CharacterBody3D"]
+collision_layer = 0
+collision_mask = 1
+motion_mode = 1
+script = ExtResource("1_oma")
+data = ExtResource("2_data")
+shockwave_scene = ExtResource("8_wave")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.7, 0)
+shape = SubResource("Shape_body")
+
+[node name="Model" parent="." instance=ExtResource("3_model")]
+transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, 0, 0, 0)
+
+[node name="TiredLabel" type="Label3D" parent="."]
+position = Vector3(0, 4.4, 0)
+pixel_size = 0.01
+billboard = 1
+modulate = Color(1, 0.9, 0.3, 1)
+outline_modulate = Color(0, 0, 0, 1)
+text = "* uitgeput *"
+font_size = 56
+outline_size = 10
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("4_health")
+
+[node name="Hurtbox" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("5_hurtbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+position = Vector3(0, 1.9, 0)
+shape = SubResource("Shape_hurtbox")
+
+[node name="AttackHitbox" type="Area3D" parent="."]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("6_hitbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AttackHitbox"]
+position = Vector3(0, 1.5, -1.2)
+shape = SubResource("Shape_hit")
+
+[node name="LootDropper" type="Node3D" parent="."]
+script = ExtResource("7_loot")

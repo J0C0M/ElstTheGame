@@ -43,7 +43,7 @@ ROOMS = {
     # Part 2: behind the school.
     "Binnenplein": ((-38, 2, -134, -94), (0.55, 0.32, 0.3), 9.0, {"N": [(-16, 4)], "S": [(-21, 15)], "W": [], "E": []}),
     "Fietsenhok": ((-20, -12, -150, -134), (0.4, 0.4, 0.42), 4.0, {"N": None, "S": None, "W": [], "E": []}),
-    "Sportveld": ((-34, 2, -186, -150), (0.3, 0.3, 0.38), 8.0, {"N": [], "S": [(-16, 4)], "W": [], "E": []}),
+    "Sportveld": ((-29, -3, -176, -150), (0.3, 0.3, 0.38), 8.0, {"N": [], "S": [(-16, 4)], "W": [], "E": []}),
 }
 # (name, centre x, centre z, size, colour, solid). No prop may stand in a doorway:
 # test_world walks the navigation mesh from the entrance to the boss.
@@ -86,10 +86,10 @@ PROPS = [
     ("Planter2", -6, -122, (3.0, 0.8, 3.0), GRASS, True),
     ("Planter3", -30, -126, (3.0, 0.8, 3.0), GRASS, True),
     ("ShedRack", -19.4, -142, (0.6, 1.0, 14), STEEL, True),
-    ("Pitch", -16, -168, (34, 0.02, 34), GRASS, False),
-    ("PitchLine", -16, -168, (34, 0.03, 0.15), WHITE, False),
-    ("GoalWest", -33.2, -168, (0.8, 2.2, 6), WHITE, False),
-    ("GoalEast", 1.2, -168, (0.8, 2.2, 6), WHITE, False),
+    ("Pitch", -16, -163, (24, 0.02, 24), GRASS, False),
+    ("PitchLine", -16, -163, (24, 0.03, 0.15), WHITE, False),
+    ("GoalWest", -28.2, -163, (0.8, 2.2, 6), WHITE, False),
+    ("GoalEast", -3.8, -163, (0.8, 2.2, 6), WHITE, False),
 ]
 # The wooden sitting staircase of the aula: eight steps rising to the north wall.
 for step in range(8):
@@ -127,10 +127,10 @@ LIGHTS = [
     ("LightPlein1", -28, 7.5, -104, (1.0, 0.75, 0.5), 1.8, 18),
     ("LightPlein2", -8, 7.5, -124, (1.0, 0.75, 0.5), 1.8, 18),
     ("LightShed", -16, 3.5, -142, (0.9, 0.9, 1.0), 1.4, 10),
-    ("LightField1", -26, 7.0, -158, (1.0, 0.95, 0.85), 2.0, 18),
-    ("LightField2", -6, 7.0, -158, (1.0, 0.95, 0.85), 2.0, 18),
-    ("LightField3", -26, 7.0, -178, (1.0, 0.95, 0.85), 2.0, 18),
-    ("LightField4", -6, 7.0, -178, (1.0, 0.95, 0.85), 2.0, 18),
+    ("LightField1", -22, 7.0, -156, (1.0, 0.95, 0.85), 2.0, 18),
+    ("LightField2", -10, 7.0, -156, (1.0, 0.95, 0.85), 2.0, 18),
+    ("LightField3", -22, 7.0, -170, (1.0, 0.95, 0.85), 2.0, 18),
+    ("LightField4", -10, 7.0, -170, (1.0, 0.95, 0.85), 2.0, 18),
 ]
 # The ring lamps of the aula: (x, y, z).
 RINGS = [(-6, 10.0, -8), (6, 10.0, -8), (-6, 10.0, -22), (6, 10.0, -22)]
@@ -153,7 +153,7 @@ ENEMIES = [
 CHESTS = [("ChestKantine", -33, -5, 3.14159), ("ChestPlein", -36.5, -132.5, 0.7854)]
 CHECKPOINT = (-21, -84)
 BENCH = (-27.15, -80, -1.5708)
-BOSS_START = (-16, -176)
+BOSS_START = (-16, -169)
 
 
 def main():
@@ -199,11 +199,11 @@ def main():
              f"rotation = {vec(0, BENCH[2], 0)}", "",
              '[node name="BossArena" type="Node3D" parent="."]', "",
              '[node name="HelperSpawns" type="Node3D" parent="BossArena"]', "",
-             '[node name="SpawnWest" type="Marker3D" parent="BossArena/HelperSpawns"]', "position = Vector3(-30, 0, -154)", "",
-             '[node name="SpawnEast" type="Marker3D" parent="BossArena/HelperSpawns"]', "position = Vector3(-2, 0, -154)", "",
+             '[node name="SpawnWest" type="Marker3D" parent="BossArena/HelperSpawns"]', "position = Vector3(-26, 0, -153)", "",
+             '[node name="SpawnEast" type="Marker3D" parent="BossArena/HelperSpawns"]', "position = Vector3(-6, 0, -153)", "",
              '[node name="FatbikeKid" parent="BossArena" instance=ExtResource("24_kid")]', f"position = {vec(BOSS_START[0], 0, BOSS_START[1])}",
              'gate_path = NodePath("../../ArenaGate")', "",
-             '[node name="MarkerBoss" type="Marker3D" parent="BossArena"]', f"position = {vec(BOSS_START[0], 1, -168)}", 'script = ExtResource("4_marker")',
+             '[node name="MarkerBoss" type="Marker3D" parent="BossArena"]', f"position = {vec(BOSS_START[0], 1, -163)}", 'script = ExtResource("4_marker")',
              "ids = Array[StringName]([&\"fatbike_kindje\"])", ""]
     for name, x, z, yaw in CHESTS:
         extra += [f'[node name="{name}" parent="." instance=ExtResource("23_chest")]', f"position = {vec(x, 0, z)}",

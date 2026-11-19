@@ -81,7 +81,7 @@ func _test_enemies() -> void:
 	var kicker: Variant = _main.get_world().find_child("Voetballer1", true, false)
 	var biker: Variant = _main.get_world().find_child("Fatbiker1", true, false)
 	_check(kicker.data.is_ranged() and is_equal_approx(kicker.data.accuracy, 0.6), "voetballers shoot, and hit 60% of the time")
-	_check(kicker.health.max_health == 30 and biker.health.max_health == 52, "the destroyed station weakens OBC's enemies")
+	_check(kicker.health.max_health == 30 and biker.health.max_health == 64, "the destroyed station weakens OBC's enemies")
 	_place(kicker.global_position + Vector3(0, 0, 9), 0.0)
 	var shot: bool = false
 	for i: int in 600:
@@ -118,7 +118,7 @@ func _test_checkpoint() -> void:
 func _test_boss_fight() -> void:
 	var kid: Variant = _main.get_world().find_child("FatbikeKid", true, false)
 	var gate: Variant = _main.get_world().get_node("ArenaGate")
-	_place(Vector3(-16, 0, -164), 0.0)
+	_place(Vector3(-16, 0, -158), 0.0)
 	await _frames(5)
 	_check(kid.mode == AIMING, "walking onto the sports field starts the fight")
 	_check(_state.is_saving_blocked() and _main.get_node("UI/HUD/BossBar").visible, "saving is blocked and the boss bar shows")

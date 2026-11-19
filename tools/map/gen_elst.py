@@ -61,6 +61,10 @@ ENEMIES = [
     ("LowDriller3", "90_low_driller", 72.0, -61.0, 1.9),
     ("Driller1", "91_driller", 146.0, -28.0, 3.4),
     ("Driller2", "91_driller", 152.0, -24.0, 3.1),
+    # Kakkers on the pitch inside OBC Elst Fort, well inside its walls.
+    ("Voetballer1", "92_voetballer", -164.0, 72.0, 1.6),
+    ("Voetballer2", "92_voetballer", -162.0, 84.0, 1.4),
+    ("Fatbiker1", "93_fatbiker", -168.0, 78.0, 1.5),
 ]
 # Areas that change once liberated: node name, flag, the enemies (from ENEMIES)
 # that patrol it until then, and the villagers (x, z) that come after, with
@@ -74,6 +78,9 @@ AREAS = [
     ("WesteraamArea", "boss_vape_koning", ["Driller1", "Driller2"],
      [(152.0, -66.0), (160.0, -64.0), (156.0, -60.0), (162.0, -70.0)], (157.0, -66.0),
      ["Geen vapewolken meer in de portiek!", "De Vape-koning is weg. Ik kan weer ademen.", "Westeraam is weer van ons!", "Dank je wel!"]),
+    ("OBCArea", "boss_fatbike_kindje", ["Voetballer1", "Voetballer2", "Fatbiker1"],
+     [(-166.0, 72.0), (-160.0, 80.0), (-168.0, 85.0), (-158.0, 74.0)], (-164.0, 78.0),
+     ["Het OBC is weer van ons!", "Eindelijk kan ik weer naar school. Geloof ik.", "Geen voetballen meer tegen mijn hoofd!", "Dank je wel!"]),
 ]
 LOCATION_SCENES = {"Kerk": "5_res", "KlaasHouse": "6_res", "BingoClub": "7_res", "Station": "8_res",
                    "Westeraam": "9_res", "OBCFort": "10_res"}
@@ -465,6 +472,8 @@ def write_scene(houses, trees, boxes):
         ("PackedScene", "res://scenes/npcs/Villager.tscn", "16_res"),
         ("PackedScene", "res://scenes/enemies/LowDriller.tscn", "90_low_driller"),
         ("PackedScene", "res://scenes/enemies/Driller.tscn", "91_driller"),
+        ("PackedScene", "res://scenes/enemies/Voetballer.tscn", "92_voetballer"),
+        ("PackedScene", "res://scenes/enemies/Fatbiker.tscn", "93_fatbiker"),
     ]
     for kind, path, rid in ext:
         out.append(f'[ext_resource type="{kind}" path="{path}" id="{rid}"]')

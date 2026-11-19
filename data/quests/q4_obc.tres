@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="QuestData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_quest"]
+[ext_resource type="Script" path="res://scripts/data/quest_step.gd" id="2_step"]
+
+[sub_resource type="Resource" id="Step_boss"]
+script = ExtResource("2_step")
+id = &"boss"
+description = "Ga naar OBC Elst Fort in het zuidwesten en versla het fatbike-kindje."
+flag = &"boss_fatbike_kindje"
+target = &"fatbike_kindje"
+
+[sub_resource type="Resource" id="Step_report"]
+script = ExtResource("2_step")
+id = &"report"
+description = "Ga terug naar Klaas."
+flag = &"q4_reported"
+target = &"klaas"
+
+[resource]
+script = ExtResource("1_quest")
+id = &"q4_obc"
+number = 4
+title = "OBC Elst Fort"
+description = "Een stel kakker-voetbaljongens en fatbikers heeft het OBC ingenomen. Hun baas is het fatbike-kindje op zijn opgevoerde fatbike. Vecht je door de school en versla hem."
+steps = Array[ExtResource("2_step")]([SubResource("Step_boss"), SubResource("Step_report")])
+completion_flag = &"boss_fatbike_kindje"
+reward_gold = 150

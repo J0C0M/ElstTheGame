@@ -12,7 +12,7 @@ De game wordt in 13 fases gebouwd. Zie [`docs/GDD.md`](docs/GDD.md) voor het ont
 
 1. Installeer [Godot 4.7](https://godotengine.org/download) (de standaardversie, niet .NET).
 2. Start Godot, kies **Importeren** en selecteer `project.godot` in deze map.
-3. Druk op **F5** (of de afspeelknop) om de hoofdscene `res://scenes/main/Main.tscn` te starten. Je begint in Elst, in de tuin van Klaas.
+3. Druk op **F5** (of de afspeelknop) om de hoofdscene `res://scenes/main/Main.tscn` te starten. Je komt in het hoofdmenu; met **Nieuw spel** begin je in Elst, in de tuin van Klaas.
 
 Vanaf de commandoregel:
 
@@ -39,7 +39,11 @@ godot --path .
 | Retrofilter aan/uit | F1 |
 | Pixelgrootte wisselen (laag, midden, uit) | F2 |
 
-De toetsen zitten in de InputMap van het project. Niet alles werkt al: dat hangt af van de fase waarin het project zit. Bij het starten wordt de muis gevangen voor de camera; Esc geeft hem vrij en een klik in het venster vangt hem weer.
+De toetsen zitten in de InputMap van het project. Niet alles werkt al: dat hangt af van de fase waarin het project zit. Tijdens het spelen is de muis gevangen voor de camera; in het pauzemenu is hij vrij.
+
+## Opslaan
+
+Opslaan werkt zoals in Skyrim: via het pauzemenu (Esc) met een eigen naam, met een quicksave (F5, laden met F9) en automatisch bij het binnengaan van een dungeon. Ga je dood, dan laadt de nieuwste save. De saves staan in de gebruikersmap van Godot, in `saves/`.
 
 ## Testen
 
@@ -47,9 +51,10 @@ De toetsen zitten in de InputMap van het project. Niet alles werkt al: dat hangt
 godot --headless --path . -s res://tests/check_resources.gd
 godot --headless --path . --fixed-fps 60 -s res://tests/test_player_combat.gd
 godot --headless --path . --fixed-fps 60 -s res://tests/test_world.gd
+godot --headless --path . --fixed-fps 60 -s res://tests/test_save.gd
 ```
 
-De eerste laadt alle scenes, scripts en resources. De tweede speelt de testarena met gesimuleerde input en controleert lopen, stamina, ontwijken, aanvallen, blokkeren, parry, doodgaan en terugkomen. De derde start het spel in Elst en controleert het startpunt, de navmesh, de kerk die op slot zit, de tornado en de weg in en uit elke dungeon.
+De eerste laadt alle scenes, scripts en resources. De tweede speelt de testarena met gesimuleerde input en controleert lopen, stamina, ontwijken, aanvallen, blokkeren, parry, doodgaan en terugkomen. De derde start het spel in Elst en controleert het startpunt, de navmesh, de kerk die op slot zit, de tornado en de weg in en uit elke dungeon. De vierde test opslaan en laden.
 
 ## Mappen
 

@@ -8,8 +8,8 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 |---|---|---|
 | 0 | `Setup-Project-Foundation` | Af, gemerged naar `Development` |
 | 1 | `Add-Player-Controller-And-Combat` | Af, gemerged naar `Development` |
-| 2 | `Build-Elst-World-Blockout` | Gebouwd, wacht op akkoord |
-| 3 | `Add-Save-System` | Nog niet begonnen |
+| 2 | `Build-Elst-World-Blockout` | Af, gemerged naar `Development` |
+| 3 | `Add-Save-System` | Gebouwd, wacht op akkoord |
 | 4 | `Add-Enemy-AI-And-Loot` | Nog niet begonnen |
 | 5 | `Add-Klaas-Dialogue-And-Shop` | Nog niet begonnen |
 | 6 | `Add-Quest-System-And-Tutorial` | Nog niet begonnen |
@@ -151,6 +151,51 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 - Fase 3 (opslaan) kan `GameState.current_location` gebruiken als locatienaam in de save, en moet `Player.save_data()` uitbreiden met positie en rotatie.
 - Vijanden (Fase 4) kunnen meteen de navmesh van Elst gebruiken. Nieuwe statische geometrie moet onder een node in de groep `navigation_source` komen.
 - Bevrijde gebieden (Fase 8) kunnen per locatiescene dorpelingen en een warmere kleur krijgen. De `LocationArea` per locatie heeft daarvoor al een `id`.
+
+## Fase 3 – Opslaan & menu's
+
+### Wat is af
+
+- **SaveManager:**
+  - eigen saves met een naam (onbeperkt aantal);
+  - één quicksave: F5 slaat op, F9 laadt;
+  - drie autosaves die om de beurt worden overschreven, gemaakt bij het binnengaan van een dungeon.
+- **Elke save** is een JSON-bestand in `user://saves/` met een screenshot van 192×108 ernaast. Erin staan:
+  - `save_version`;
+  - metadata: soort, naam, datum, plaats en speeltijd;
+  - de wereldscene, `GameState` en `QuestManager`;
+  - de data van nodes in de groep `persist`: nu de speler, met positie, draaiing, camerahoek, HP en stamina.
+- **GameState** houdt nu ook goud, Inwijding, bevrijde gebieden, de kerkdeur, vlaggen (kisten, generators) en de speeltijd bij. Opslaan kan geblokkeerd worden met een reden.
+- **Doodgaan** laadt na 3 s de nieuwste save. Is er nog geen save, dan begin je opnieuw bij het startpunt.
+- **Hoofdmenu** met Elst op de achtergrond: een camera draait langzaam rond de kerk. Knoppen: Doorgaan, Nieuw spel, Laden, Instellingen en Afsluiten.
+- **Pauzemenu** (Esc): het spel staat stil. Knoppen: Verder spelen, Opslaan, Laden, Instellingen, Naar hoofdmenu en Afsluiten.
+- **Opslaan- en laadmenu:** een lijst met screenshot, naam, plaats, datum en speeltijd. Je kunt overschrijven, laden en verwijderen (met "Zeker?").
+- **Instellingen:**
+  - retrofilter, pixelgrootte en volledig scherm;
+  - muisgevoeligheid;
+  - volume voor alles, muziek en effecten (audiobussen `Music` en `SFX`).
+  - Alles wordt meteen toegepast en bewaard.
+- **Menuthema** (`scenes/ui/menu_theme.tres`) in de kleuren van Amber: donker met amberkleurige randen.
+- **Test:** `tests/test_save.gd` (23 checks, allemaal geslaagd). De wereldtest en de combattest slagen nog steeds.
+
+### Keuzes en afwijkingen
+
+- **Screenshot in de save:** komt uit de 3D-wereld zelf, zonder HUD en menu's, en dus ook met de retropixels. Headless (in tests) is er geen screenshot.
+- **Niet opslaan:** dat kan niet in de lucht, als je dood bent of tijdens een wereldwissel. Baasgevechten en scènes kunnen opslaan blokkeren met `GameState.block_saving()`. Het pauzemenu zet de knop Opslaan dan uit.
+- **Laden:** zet eerst `GameState` en `QuestManager` terug, daarna komt de wereld. Zo kan een wereld in `_ready()` al zien wat er bevrijd is.
+- **Volume:** de schuiven werken al op de audiobussen, maar er is nog geen geluid (Fase 12).
+- **Volledig scherm** staat er als extra instelling bij. Het GDD noemt het niet, maar het is handig.
+- **Autosave:** alleen bij dungeons, want quests (Fase 6) en slapen bij Klaas (Fase 5) bestaan nog niet. Daar hoeft straks alleen `SaveManager.autosave()` bij.
+- **Escape** opent nu het pauzemenu en geeft de muis niet meer zomaar vrij. In menu's is de muis vrij.
+- **Het label met filterinfo** linksboven is weg; de filter staat nu in de instellingen. F1 en F2 werken nog wel.
+- **Een `-s`-test** wordt gecompileerd voordat de autoloads bestaan. De tests zetten daarom `SaveManager.save_dir` via `root.get_node("SaveManager")`, en de echte saves blijven onaangeraakt.
+
+### Aandachtspunten voor de volgende fases
+
+- Nieuwe dingen die bewaard moeten blijven:
+  - kisten en generators: een vlag in `GameState` (`set_flag`);
+  - nodes met eigen toestand: in de groep `persist` met `save_data()` en `load_data()`.
+- Fase 5 breidt `Player.save_data()` uit met goud en uitrusting, of zet die in `GameState`.
 
 ## Voorlopige kaartindeling
 

@@ -23,7 +23,10 @@ godot --headless --path . --quit-after 120  # opstarten, kijk naar fouten in de 
 godot --headless --path . -s res://tests/check_resources.gd                    # alle scenes, scripts en resources laden
 godot --headless --path . --fixed-fps 60 -s res://tests/test_player_combat.gd  # gameplaytest van de testarena
 godot --headless --path . --fixed-fps 60 -s res://tests/test_world.gd          # wereld, tornado en dungeondeuren
+godot --headless --path . --fixed-fps 60 -s res://tests/test_save.gd           # opslaan, laden, autosave en dood
 ```
+
+Tests die opslaan zetten `SaveManager.save_dir` op `user://test_saves/` en ruimen die map op. Raak de echte saves van de speler (`user://saves/`) nooit aan.
 
 Controleer na elk onderdeel of het project nog laadt en start zonder fouten. Headless worden shaders niet gecompileerd: controleer een nieuwe of gewijzigde shader met een run met venster. Is Godot er niet, meld dat dan één keer en wees extra precies met `.tscn`- en `.tres`-syntax.
 
@@ -109,7 +112,9 @@ Werk alleen aan de fase waar de eigenaar om vraagt. Begin pas aan een volgende f
 - **Collision layers met een naam:** 1 `wereld`, 2 `speler`, 3 `vijand`, 4 `speler_hitbox`, 5 `vijand_hitbox`, 6 `interactie`, 7 `tornado_grens`. Gebruik in code de constanten uit `PhysicsLayers` (`res://scripts/physics_layers.gd`).
 - **Low-poly placeholders:** bouw personages, gebouwen en props uit Godot-primitieven (`BoxMesh`, `CapsuleMesh`, `CylinderMesh`, `PrismMesh`, CSG voor gebouwen) met vlakke kleuren (`StandardMaterial3D`, geen texturen). Een personage bestaat uit losse delen voor hoofd, romp, armen en benen, en heeft simpele animaties. Klaas: lang, breed, gespierd, blond haar, strakke kaak, zwarte zonnebril. Houd modellen in aparte scenes, zodat ze later te vervangen zijn door Blender- of CC0-modellen. Factiekleuren: Westeraam geel/zwart, OBC rood/navy, Bingo blauw/pastel, Amber amber/oranje, Klaas paars/goud.
 - **Retrofilter:** `res://scenes/main/RetroScreen.tscn` rendert de 3D-wereld in een `SubViewport` op lage resolutie (Midden 640×360, Laag 960×540, Uit = volle resolutie) en schaalt die met nearest-neighbour op. `res://shaders/retro_post.gdshader` doet kleurkwantisatie (32 tinten), 4×4 Bayer-dithering, vignette en filmruis. De HUD staat buiten de viewport en blijft scherp. Werelden laad je met `RetroScreen.set_world()`. Gebruik voor muislook `InputEventMouseMotion.screen_relative`, want `relative` wordt geschaald door de filter.
-- **Opslaan:** JSON in `user://saves/`. Nodes in de groep `persist` hebben `save_data() -> Dictionary` en `load_data(data: Dictionary)`. Elk bestand heeft een veld `save_version`. Niet opslaan tijdens baasgevechten en scènes.
+- **Opslaan:** `SaveManager` schrijft JSON in `user://saves/`, met een screenshot (`.png`) ernaast. Er zijn eigen saves met een naam, één quicksave (F5/F9) en drie autosaves die om de beurt worden overschreven. Een save bevat `save_version`, metadata, de wereldscene, `GameState`, `QuestManager` en de `save_data()` van elke node in de groep `persist` binnen de wereld (sleutel: pad vanaf de wereldroot). Bij laden zet `Main` eerst `GameState` en `QuestManager` terug, maakt dan de wereld en roept `load_data()` aan. Vijanden worden niet opgeslagen: die spawnen opnieuw.
+- **Wanneer niet opslaan:** blokkeer opslaan met `GameState.block_saving(reden)` en `unblock_saving(reden)`, bijvoorbeeld tijdens een baasgevecht of een scène. In de lucht, dood of tijdens een wereldwissel kan het sowieso niet. Autosave: bij het binnengaan van een wereld met `autosave_on_enter` (de dungeons). Later ook na een questdoel (Fase 6) en bij slapen (Fase 5).
+- **Menu's en pauze:** `Main` heeft de toestanden hoofdmenu en spelen. Esc opent het pauzemenu en zet `get_tree().paused` aan. `Main` loopt altijd door; `RetroScreen` (de wereld) pauzeert. Doodgaan laadt na 3 s de nieuwste save, of laat je opnieuw beginnen als er nog geen is.
 - **Assets en audio:** alleen zelfgemaakt materiaal of CC0. Noteer bron en licentie in `CREDITS.md`. Download geen betaalde assets of assets met een onduidelijke licentie.
 - **`.gitignore`:** `.godot/`, `export/`, `build/`, `*.tmp`, `.claude/settings.local.json`. Commit `.import`- en `*.uid`-bestanden wel.
 - **`docs/`** heeft een `.gdignore`, zodat Godot de referentieplaatjes niet importeert of exporteert.

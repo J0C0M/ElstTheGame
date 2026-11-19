@@ -14,13 +14,13 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 5 | `Add-Klaas-Dialogue-And-Shop` | Af, gemerged naar `Development` |
 | 6 | `Add-Quest-System-And-Tutorial` | Af, gemerged naar `Development` |
 | 7 | `Add-Station-Dungeon` | Af, gemerged naar `Development` |
-| 8 | `Add-Westeraam-Dungeon` | Gebouwd, wacht op akkoord |
+| 8 | `Add-Westeraam-Dungeon` | Af, gemerged naar `Development` |
 | 9 | `Add-OBC-Fort-Dungeon` | Nog niet begonnen |
 | 10 | `Add-Bingo-Cave-Dungeon` | Nog niet begonnen |
 | 11 | `Add-Amber-Final-Battle` | Nog niet begonnen |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
-Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`.
+Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is gebouwd en wacht op akkoord.
 
 ## Prototypes
 
@@ -375,11 +375,37 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 - Fase 9: hetzelfde voor de voetbaljongens en de fatbikers. Of de bazen ook zwakker worden, beslissen we in hun eigen fase.
 - Fase 10: de kruisboog komt van Klaas zodra Quest 2 t/m 5 af zijn.
 
+## Factie-dungeons op slot en een groter Westeraam (`Lock-Faction-Dungeons-And-Expand-Westeraam`)
+
+Twee punten van de eigenaar, na Fase 8 en voor Fase 9.
+
+### Wat is af
+
+- **De factie-dungeons zitten op slot tot het station plat ligt.** De deuren van Westeraam, OBC en de Bingo Club hebben `unlocked_by_flag = &"station_cleared"`. Zolang die vlag ontbreekt, meldt de deur: "De deur zit op slot. Zolang Station Elst Amber bevoorraadt, houdt ze deze plek dicht. Sloop eerst het station." De kerk blijft op slot tot Fase 11.
+- **Klaas zegt het bij Quest 2:** "En zolang dat station draait, houdt Amber Westeraam, het OBC en de Bingo Club op slot. Eerst het station, dan pas de rest." Bij Quest 3 begint hij met "Nu het station plat ligt, zijn de deuren van de wijken open."
+- **Westeraam is groter en heeft twee delen**, met een checkpoint ertussen (ongeveer 65 × 158 m en 18 vijanden; het station is 56 × 114 m met 15):
+  - deel 1, de flats: het portiek, de galerij, de vape shop en de binnenplaats, daarna de kelderstrap;
+  - de checkpoint: de fietsenkelder, zonder vijanden, met fietsen, een snoepautomaat en een rustbank;
+  - deel 2, onder de flats: een parkeergarage met pilaren en geparkeerde auto's, een vape-lab, een gouden gang met twee drillers, en daarachter het Vape-paleis.
+- **Checkpoint** (`scenes/world/props/Checkpoint.tscn`): de eerste keer dat je erin loopt, slaat het spel automatisch op. Ga je daarna dood, dan begin je weer bij de checkpoint en niet bij de ingang.
+- **Rustbank** (`scenes/world/props/RestBench.tscn`): met E rust je even uit. Je krijgt je HP en stamina terug en het spel slaat op, net als het bed bij Klaas. Bed en bank sturen allebei `EventBus.rest_requested` met hun eigen tekst.
+- **Tests:** `test_world` controleert dat de drie deuren op slot zitten zolang het station draait, `test_station` controleert Klaas' nieuwe zin, en `test_westeraam` de checkpoint en de bank. Alle acht tests slagen.
+
+### Keuzes en afwijkingen
+
+- **Het GDD is bijgewerkt** met beide besluiten: de volgorde (eerst het station, dan de facties) en de factie-dungeons met twee delen en een checkpoint.
+- **Een checkpoint geldt per bezoek:** loop je de dungeon opnieuw in, dan slaat hij weer op als je hem bereikt. Laad je een save in de kelder zelf, dan slaat hij niet meteen opnieuw op.
+- **De rustbank** heelt helemaal, zoals slapen. Dat maakt de pauze tussen de twee delen echt een pauze.
+
+### Aandachtspunten voor de volgende fases
+
+- Fase 9 en 10: OBC Elst Fort en Bingo Club Boomer Cave krijgen dezelfde opbouw. Ze worden groter dan het station, met een eerste deel, een checkpoint (`Checkpoint` en `RestBench`) en een tweede deel met de baas. Bouw ze met `tools/dungeons/dungeon_builder.py`.
+
 ## Fase 8 – Quest 3: Westeraam Getho
 
 ### Wat is af
 
-- **Westeraam-dungeon** (`scenes/dungeons/Westeraam.tscn`, gebouwd door `tools/dungeons/gen_westeraam.py`). Vijf ruimtes, van de ingang naar achteren:
+- **Westeraam-dungeon** (`scenes/dungeons/Westeraam.tscn`, gebouwd door `tools/dungeons/gen_westeraam.py`; daarna groter gemaakt, zie *Factie-dungeons op slot en een groter Westeraam*). Vijf ruimtes, van de ingang naar achteren:
   - het portiek van de flats;
   - een lange galerij (2 drillers);
   - een vape shop (2 vape-drillers en een kist);

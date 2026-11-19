@@ -1,0 +1,191 @@
+class_name Player
+extends CharacterBody3D
+## The player. The states under StateMachine decide what happens each physics
+## frame; this script holds the stats and shared helpers, applies gravity and
+## moves the body.
+
+## Move actions that dodge when tapped twice, with their direction relative
+## to the camera.
+## Speed an unblocked hit pushes the player back with.
+const KNOCKBACK_SPEED: float = 3.0
+
+const TAP_DIRECTIONS: Dictionary = {
+	&"move_forward": Vector3(0, 0, -1), &"move_back": Vector3(0, 0, 1),
+	&"move_left": Vector3(-1, 0, 0), &"move_right": Vector3(1, 0, 0),
+}
+
+@export var stats: PlayerStats
+@export var sword: ItemData
+@export var armor: ItemData
+
+## True while sprinting. Set by the move state, read by the model.
+var is_sprinting: bool = false
+## True during the first part of a dodge roll.
+var is_invulnerable: bool = false
+## True while the block state is active.
+var is_blocking: bool = false
+## Clock time the current block was pressed, for the parry window.
+var block_started_at: float = -INF
+## Seconds of physics time since the player spawned. Used for input timing,
+## so it follows the game clock rather than the wall clock.
+var clock: float = 0.0
+
+var _gravity: float = 0.0
+var _last_tap_time: Dictionary[StringName, float] = {}
+
+@onready var model: PlayerModel = $Model
+@onready var camera: PlayerCamera = $Camera
+@onready var health: HealthComponent = $Health
+@onready var stamina: StaminaComponent = $Stamina
+@onready var sword_hitbox: Hitbox = $SwordHitbox
+@onready var hurtbox: Hurtbox = $Hurtbox
+@onready var state_machine: StateMachine = $StateMachine
+
+
+func _ready() -> void:
+	_gravity = float(ProjectSettings.get_setting("physics/3d/default_gravity")) * stats.gravity_multiplier
+	health.health_changed.connect(EventBus.player_health_changed.emit)
+	stamina.stamina_changed.connect(EventBus.player_stamina_changed.emit)
+	stamina.insufficient.connect(EventBus.player_stamina_insufficient.emit)
+	health.died.connect(_on_died)
+	hurtbox.hit_received.connect(_on_hit_received)
+	health.reset(stats.max_health)
+	stamina.reset(stats.max_stamina, stats.stamina_regen_per_second, stats.stamina_regen_delay)
+
+
+func _physics_process(delta: float) -> void:
+	clock += delta
+	state_machine.physics_update(delta)
+	if not is_on_floor():
+		velocity.y -= _gravity * delta
+	move_and_slide()
+	model.set_locomotion(Vector2(velocity.x, velocity.z).length(), is_sprinting, is_on_floor())
+
+
+## Move input turned to match the camera, on the ground plane. Length 0 to 1.
+func get_move_direction() -> Vector3:
+	var input: Vector2 = Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
+	return camera.get_yaw_basis() * Vector3(input.x, 0.0, input.y)
+
+
+## Accelerates the horizontal velocity towards [param direction] times [param speed].
+func move_horizontally(direction: Vector3, speed: float, acceleration: float, delta: float) -> void:
+	var horizontal: Vector3 = Vector3(velocity.x, 0.0, velocity.z)
+	horizontal = horizontal.move_toward(direction * speed, acceleration * delta)
+	velocity.x = horizontal.x
+	velocity.z = horizontal.z
+
+
+## Turns smoothly to face [param direction] on the ground plane.
+func turn_towards(direction: Vector3, delta: float) -> void:
+	if direction.length_squared() < 0.0001:
+		return
+	var target_yaw: float = atan2(-direction.x, -direction.z)
+	rotation.y = lerp_angle(rotation.y, target_yaw, 1.0 - exp(-stats.turn_speed * delta))
+
+
+## Faces [param direction] straight away.
+func face_direction_now(direction: Vector3) -> void:
+	if direction.length_squared() < 0.0001:
+		return
+	rotation.y = atan2(-direction.x, -direction.z)
+
+
+## Faces where the camera looks, straight away. Used for attacks and blocking.
+func face_camera_direction() -> void:
+	rotation.y = camera.yaw
+
+
+## Damage of one sword hit with the equipped sword.
+func get_sword_damage(multiplier: float) -> int:
+	return roundi(sword.damage * multiplier)
+
+
+## Starts a dodge roll if the player stands on the ground and has the stamina.
+## Without a direction the player rolls backwards.
+func try_dodge(direction: Vector3) -> bool:
+	if not is_on_floor() or not stamina.try_spend(stats.dodge_stamina_cost):
+		return false
+	var backwards: bool = direction.length_squared() < 0.01
+	if backwards:
+		direction = -get_forward()
+	state_machine.transition_to(&"Dodge", {"direction": direction.normalized(), "backwards": backwards})
+	return true
+
+
+## Registers a press on a move action. Returns true on the second press of a
+## double tap.
+func register_direction_tap(action: StringName) -> bool:
+	var previous: float = _last_tap_time.get(action, -INF)
+	if clock - previous <= stats.double_tap_window:
+		_last_tap_time[action] = -INF
+		return true
+	_last_tap_time[action] = clock
+	return false
+
+
+## Direction of a tapped move action, turned to match the camera.
+func get_tap_direction(action: StringName) -> Vector3:
+	var local_direction: Vector3 = TAP_DIRECTIONS[action]
+	return camera.get_yaw_basis() * local_direction
+
+
+func get_forward() -> Vector3:
+	return -global_basis.z
+
+
+## True when [param point] lies within the block angle in front of the player.
+func is_facing_point(point: Vector3) -> bool:
+	var to_point: Vector3 = point - global_position
+	to_point.y = 0.0
+	if to_point.length_squared() < 0.0001:
+		return true
+	return get_forward().angle_to(to_point.normalized()) <= deg_to_rad(stats.block_angle_degrees)
+
+
+## Brings the player back to life at [param at], with full health and stamina.
+func respawn(at: Transform3D) -> void:
+	global_transform = at
+	velocity = Vector3.ZERO
+	is_invulnerable = false
+	health.reset(stats.max_health)
+	stamina.refill()
+	model.reset_pose()
+	camera.snap_behind_target()
+	reset_physics_interpolation()
+	state_machine.transition_to(&"Move")
+	EventBus.player_respawned.emit()
+
+
+func _on_hit_received(hit: HitData) -> void:
+	if health.is_dead() or is_invulnerable:
+		return
+	var damage: float = hit.damage
+	var guarded: bool = false
+	var guard_broken: bool = false
+	if is_blocking and is_facing_point(hit.source.global_position):
+		if clock - block_started_at <= stats.parry_window:
+			hit.hitbox.parried.emit()
+			model.play_action(&"parry", 0.3)
+			EventBus.player_parried.emit()
+			return
+		if stamina.try_spend(stats.block_stamina_cost):
+			guarded = true
+			damage *= 1.0 - stats.block_damage_reduction
+			model.play_action(&"block_impact", 0.25)
+		else:
+			guard_broken = true
+	damage *= 1.0 - armor.damage_reduction
+	health.take_damage(maxi(roundi(damage), 1))
+	if health.is_dead() or guarded:
+		return
+	var away: Vector3 = global_position - hit.source.global_position
+	away.y = 0.0
+	velocity += away.normalized() * KNOCKBACK_SPEED
+	var duration: float = stats.guard_break_duration if guard_broken else stats.hurt_duration
+	state_machine.transition_to(&"Hurt", {"duration": duration})
+
+
+func _on_died() -> void:
+	state_machine.transition_to(&"Dead")
+	EventBus.player_died.emit()

@@ -6,9 +6,12 @@ enum PixelSize { LOW, MEDIUM, OFF }
 
 const SETTINGS_PATH: String = "user://settings.cfg"
 const GRAPHICS_SECTION: String = "graphics"
+const CONTROLS_SECTION: String = "controls"
 
 var retro_filter_enabled: bool = true
 var pixel_size: PixelSize = PixelSize.MEDIUM
+## Camera turn in degrees per pixel of mouse movement.
+var mouse_sensitivity: float = 0.15
 
 
 func _ready() -> void:
@@ -26,6 +29,13 @@ func set_pixel_size(new_size: PixelSize) -> void:
 	if new_size == pixel_size:
 		return
 	pixel_size = new_size
+	_save_and_notify()
+
+
+func set_mouse_sensitivity(degrees_per_pixel: float) -> void:
+	if is_equal_approx(degrees_per_pixel, mouse_sensitivity):
+		return
+	mouse_sensitivity = degrees_per_pixel
 	_save_and_notify()
 
 
@@ -53,6 +63,7 @@ func _load() -> void:
 	var size_name: String = str(config.get_value(GRAPHICS_SECTION, "pixel_size", ""))
 	if PixelSize.has(size_name):
 		pixel_size = PixelSize[size_name]
+	mouse_sensitivity = float(config.get_value(CONTROLS_SECTION, "mouse_sensitivity", mouse_sensitivity))
 
 
 func _save_and_notify() -> void:
@@ -60,6 +71,7 @@ func _save_and_notify() -> void:
 	config.load(SETTINGS_PATH)
 	config.set_value(GRAPHICS_SECTION, "retro_filter_enabled", retro_filter_enabled)
 	config.set_value(GRAPHICS_SECTION, "pixel_size", PixelSize.find_key(pixel_size))
+	config.set_value(CONTROLS_SECTION, "mouse_sensitivity", mouse_sensitivity)
 	var error: Error = config.save(SETTINGS_PATH)
 	if error != OK:
 		push_warning("Could not save settings to %s (error %d)." % [SETTINGS_PATH, error])

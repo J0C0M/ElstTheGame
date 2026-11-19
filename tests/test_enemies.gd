@@ -29,6 +29,7 @@ func _run() -> void:
 	_main.skip_main_menu = true
 	root.add_child(_main)
 	await _frames(40)
+	await _wait_for_navigation()
 	# A new game starts without a sword; Klaas hands it over in the tutorial.
 	root.get_node("GameState").add_gear(load("res://data/items/rusty_sword.tres"))
 	await _go_to("res://scenes/dungeons/Station.tscn", &"Entrance")
@@ -199,6 +200,19 @@ func _go_to(scene_path: String, spawn_id: StringName) -> void:
 			break
 		OS.delay_msec(10)
 		await physics_frame
+
+
+## Lets the navigation mesh of the current world finish baking on its thread,
+## so it does not compete with the next world for time.
+func _wait_for_navigation() -> void:
+	var start: int = Time.get_ticks_msec()
+	var mesh: NavigationMesh = _main.get_world().get_node("Navigation").navigation_mesh
+	while NavigationServer3D.is_baking_navigation_mesh(mesh) or mesh.get_polygon_count() == 0:
+		if Time.get_ticks_msec() - start > 20000:
+			break
+		OS.delay_msec(10)
+		await physics_frame
+	print("navigation baked after %d ms" % (Time.get_ticks_msec() - start))
 
 
 func _enemies() -> Array[Node]:

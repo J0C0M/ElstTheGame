@@ -43,20 +43,23 @@ func _run() -> void:
 
 
 func _test_quicksave_and_quickload() -> void:
-	_place(Vector3(5, 0, 60), 1.0)
+	# Two open spots in Klaas' garden, next to the start.
+	var start: Vector3 = _main.get_world().get_spawn(&"Start").global_position
+	var spot: Vector3 = start + Vector3(3, 0, 1)
+	_place(spot, 1.0)
 	_player().health.set_health(61)
 	_game_state.gold = 42
 	await _frames(5)
 	await _press(&"quicksave")
 	_check(FileAccess.file_exists(TEST_SAVE_DIR + "quicksave.json"), "F5 writes the quicksave")
-	_place(Vector3(30, 0, 30), 0.0)
+	_place(start + Vector3(-3, 0, 2), 0.0)
 	_player().health.set_health(100)
 	_game_state.gold = 0
 	await _frames(5)
 	await _press(&"quickload")
 	await _frames(60)
 	_check(_main.get_world().location_name == "Elst", "F9 loads back into Elst")
-	_check(_player().global_position.distance_to(Vector3(5, 0, 60)) < 0.1, "the position comes back")
+	_check(_player().global_position.distance_to(spot) < 0.1, "the position comes back")
 	_check(absf(angle_difference(_player().rotation.y, 1.0)) < 0.01, "the rotation comes back")
 	_check(_player().health.current_health == 61, "the health comes back")
 	_check(_game_state.gold == 42, "GameState comes back")

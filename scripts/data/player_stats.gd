@@ -63,6 +63,11 @@ extends Resource
 ## Seconds after pressing block in which a hit is parried.
 @export var parry_window: float = 0.0
 
+@export_group("Potions")
+## Seconds a potion takes to drink; a hit before the end saves the potion.
+@export var potion_drink_time: float = 0.0
+@export var potion_move_speed: float = 0.0
+
 @export_group("Getting hit")
 @export var hurt_duration: float = 0.0
 @export var guard_break_duration: float = 0.0

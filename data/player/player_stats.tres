@@ -41,3 +41,5 @@ block_angle_degrees = 75.0
 parry_window = 0.2
 hurt_duration = 0.35
 guard_break_duration = 0.8
+potion_drink_time = 0.8
+potion_move_speed = 1.5

@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://scenes/player/states/player_block_state.gd" id="15_block"]
 [ext_resource type="Script" path="res://scenes/player/states/player_hurt_state.gd" id="16_hurt"]
 [ext_resource type="Script" path="res://scenes/player/states/player_dead_state.gd" id="17_dead"]
+[ext_resource type="Script" path="res://scenes/player/states/player_drink_state.gd" id="18_drink"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.35
@@ -97,3 +98,6 @@ script = ExtResource("16_hurt")
 
 [node name="Dead" type="Node" parent="StateMachine"]
 script = ExtResource("17_dead")
+
+[node name="Drink" type="Node" parent="StateMachine"]
+script = ExtResource("18_drink")

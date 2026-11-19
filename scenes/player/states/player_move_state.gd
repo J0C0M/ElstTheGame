@@ -18,6 +18,8 @@ func handle_input(event: InputEvent) -> void:
 		player.velocity.y = player.stats.jump_velocity
 	elif event.is_action_pressed(&"interact"):
 		player.interact()
+	elif event.is_action_pressed(&"use_potion") and player.is_on_floor():
+		player.try_drink()
 	elif event.is_action_pressed(&"attack") and player.is_on_floor():
 		state_machine.transition_to(&"Attack")
 	elif event.is_action_pressed(&"block_aim") and player.is_on_floor():

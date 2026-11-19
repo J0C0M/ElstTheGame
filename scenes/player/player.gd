@@ -37,7 +37,7 @@ var _interactables: Array[Interactable] = []
 var _wind_velocity: Vector3 = Vector3.ZERO
 var _focused_interactable: Interactable
 
-@onready var model: PlayerModel = $Model
+@onready var model: HumanoidModel = $Model
 @onready var camera: PlayerCamera = $Camera
 @onready var health: HealthComponent = $Health
 @onready var stamina: StaminaComponent = $Stamina

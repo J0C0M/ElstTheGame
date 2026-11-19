@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/enemies/projectiles/vape_puff.gd" id="1_puff"]
+[ext_resource type="Script" path="res://scripts/components/hitbox.gd" id="2_hitbox"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_card"]
+albedo_color = Color(0.97, 0.97, 0.94, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_border"]
+albedo_color = Color(0.3, 0.45, 0.85, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_card"]
+material = SubResource("Mat_card")
+size = Vector3(0.34, 0.03, 0.42)
+
+[sub_resource type="BoxMesh" id="Mesh_border"]
+material = SubResource("Mat_border")
+size = Vector3(0.4, 0.02, 0.48)
+
+[sub_resource type="BoxMesh" id="Mesh_header"]
+material = SubResource("Mat_border")
+size = Vector3(0.34, 0.035, 0.08)
+
+[sub_resource type="SphereShape3D" id="Shape_world"]
+radius = 0.1
+
+[sub_resource type="SphereShape3D" id="Shape_hit"]
+radius = 0.4
+
+[node name="BingoCard" type="Area3D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_puff")
+speed = 13.0
+travel_time = 1.6
+linger_time = 0.1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape_world")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Border" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Mesh_border")
+
+[node name="Card" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Mesh_card")
+
+[node name="Header" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 0.005, -0.17)
+mesh = SubResource("Mesh_header")
+
+[node name="Hitbox" type="Area3D" parent="."]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("2_hitbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+shape = SubResource("Shape_hit")

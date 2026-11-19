@@ -8,6 +8,9 @@ extends Node3D
 
 ## How quickly joints follow their target pose.
 const SMOOTHING: float = 28.0
+## Sits with the legs forward and does not walk, such as in a wheelchair.
+@export var seated: bool = false
+
 ## Stride phase speed per metre per second of movement.
 const STRIDE_RATE: float = 2.2
 const BODY_BASE_POSITION: Vector3 = Vector3(0.0, 0.95, 0.0)
@@ -199,6 +202,14 @@ func reset_pose() -> void:
 func _locomotion_pose(delta: float) -> Dictionary[StringName, Vector3]:
 	var pose: Dictionary[StringName, Vector3] = {}
 	_idle_time += delta
+	if seated:
+		pose[&"leg_l"] = Vector3(75, 0, 0)
+		pose[&"leg_r"] = Vector3(75, 0, 0)
+		pose[&"arm_l"] = Vector3(25, 0, -10)
+		pose[&"arm_r"] = Vector3(25, 0, 10)
+		pose[&"torso"] = Vector3(sin(_idle_time * 2.0) * 1.5, 0, 0)
+		pose[&"body_offset"] = Vector3(0, -0.42, 0)
+		return pose
 	if not _on_floor:
 		pose[&"leg_l"] = Vector3(35, 0, 0)
 		pose[&"leg_r"] = Vector3(-15, 0, 0)

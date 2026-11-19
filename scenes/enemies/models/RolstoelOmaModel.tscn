@@ -1,0 +1,143 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/models/OmaModel.tscn" id="1_oma"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_frame"]
+albedo_color = Color(0.62, 0.64, 0.68, 1)
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="Mat_tyre"]
+albedo_color = Color(0.08, 0.08, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_seat"]
+albedo_color = Color(0.3, 0.45, 0.82, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_cards"]
+albedo_color = Color(0.97, 0.97, 0.94, 1)
+
+[sub_resource type="CylinderMesh" id="Mesh_wheel"]
+material = SubResource("Mat_tyre")
+top_radius = 0.34
+bottom_radius = 0.34
+height = 0.06
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_rim"]
+material = SubResource("Mat_frame")
+top_radius = 0.27
+bottom_radius = 0.27
+height = 0.07
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_caster"]
+material = SubResource("Mat_tyre")
+top_radius = 0.08
+bottom_radius = 0.08
+height = 0.05
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="Mesh_seat"]
+material = SubResource("Mat_seat")
+size = Vector3(0.56, 0.07, 0.5)
+
+[sub_resource type="BoxMesh" id="Mesh_back"]
+material = SubResource("Mat_seat")
+size = Vector3(0.56, 0.55, 0.06)
+
+[sub_resource type="BoxMesh" id="Mesh_bar"]
+material = SubResource("Mat_frame")
+size = Vector3(0.04, 0.04, 0.9)
+
+[sub_resource type="BoxMesh" id="Mesh_post"]
+material = SubResource("Mat_frame")
+size = Vector3(0.04, 0.75, 0.04)
+
+[sub_resource type="BoxMesh" id="Mesh_handle"]
+material = SubResource("Mat_tyre")
+size = Vector3(0.05, 0.05, 0.16)
+
+[sub_resource type="BoxMesh" id="Mesh_footrest"]
+material = SubResource("Mat_frame")
+size = Vector3(0.44, 0.03, 0.2)
+
+[sub_resource type="BoxMesh" id="Mesh_cards"]
+material = SubResource("Mat_cards")
+size = Vector3(0.26, 0.1, 0.32)
+
+[node name="RolstoelOmaModel" instance=ExtResource("1_oma")]
+seated = true
+
+[node name="Wheelchair" type="Node3D" parent="."]
+
+[node name="Seat" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(0, 0.5, 0.05)
+mesh = SubResource("Mesh_seat")
+
+[node name="Back" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(0, 0.82, 0.3)
+mesh = SubResource("Mesh_back")
+
+[node name="BarL" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(-0.29, 0.45, -0.15)
+mesh = SubResource("Mesh_bar")
+
+[node name="BarR" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(0.29, 0.45, -0.15)
+mesh = SubResource("Mesh_bar")
+
+[node name="PostL" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(-0.29, 0.75, 0.32)
+mesh = SubResource("Mesh_post")
+
+[node name="PostR" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(0.29, 0.75, 0.32)
+mesh = SubResource("Mesh_post")
+
+[node name="HandleL" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(-0.29, 1.12, 0.4)
+mesh = SubResource("Mesh_handle")
+
+[node name="HandleR" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(0.29, 1.12, 0.4)
+mesh = SubResource("Mesh_handle")
+
+[node name="WheelL" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(-0.36, 0.34, 0.08)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("Mesh_wheel")
+
+[node name="RimL" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(-0.36, 0.34, 0.08)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("Mesh_rim")
+
+[node name="WheelR" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(0.36, 0.34, 0.08)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("Mesh_wheel")
+
+[node name="RimR" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(0.36, 0.34, 0.08)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("Mesh_rim")
+
+[node name="CasterL" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(-0.25, 0.08, -0.55)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("Mesh_caster")
+
+[node name="CasterR" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(0.25, 0.08, -0.55)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("Mesh_caster")
+
+[node name="Footrest" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(0, 0.2, -0.78)
+mesh = SubResource("Mesh_footrest")
+
+[node name="Cards" type="MeshInstance3D" parent="Wheelchair"]
+position = Vector3(0.12, 0.62, -0.3)
+mesh = SubResource("Mesh_cards")

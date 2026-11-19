@@ -28,7 +28,10 @@ func physics_update(delta: float) -> void:
 		if _time >= data.attack_windup:
 			_swung = true
 			if data.is_ranged():
-				enemy.fire_projectile()
+				for shot: int in data.burst_count:
+					var offset: float = 0.0 if data.burst_count < 2 else lerpf(-0.5, 0.5, float(shot) / (data.burst_count - 1))
+					enemy.fire_projectile(offset * data.burst_spread)
+				enemy.apply_knockback(-enemy.get_forward() * data.recoil)
 			else:
 				enemy.attack_hitbox.activate(enemy.get_damage())
 			enemy.model.play_action(data.attack_action, STRIKE_DURATION)

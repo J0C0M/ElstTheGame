@@ -7,8 +7,8 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | Fase | Branch | Status |
 |---|---|---|
 | 0 | `Setup-Project-Foundation` | Af, gemerged naar `Development` |
-| 1 | `Add-Player-Controller-And-Combat` | Gebouwd, wacht op akkoord |
-| 2 | `Build-Elst-World-Blockout` | Nog niet begonnen |
+| 1 | `Add-Player-Controller-And-Combat` | Af, gemerged naar `Development` |
+| 2 | `Build-Elst-World-Blockout` | Gebouwd, wacht op akkoord |
 | 3 | `Add-Save-System` | Nog niet begonnen |
 | 4 | `Add-Enemy-AI-And-Loot` | Nog niet begonnen |
 | 5 | `Add-Klaas-Dialogue-And-Shop` | Nog niet begonnen |
@@ -93,18 +93,70 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 - **Pantser:** wordt al meegerekend bij schade (gewone kleding: 0%).
 - **Levensbalk boven vijanden:** staat in de 3D-wereld, dus de retrofilter maakt hem ook pixelig. Bij volle HP is hij verborgen.
 - **Animaties** staan in code (keyframes per pose), zonder `AnimationPlayer`. Een later Blender-model kan dezelfde `play_action()`-namen krijgen.
-- `FilterTest.tscn` is niet meer de startwereld, maar staat er nog. Fase 2 vervangt hem door Elst.
+- `FilterTest.tscn` is niet meer de startwereld. In Fase 2 is hij weggehaald.
 
 ### Aandachtspunten voor de volgende fases
 
 - Vijanden in Fase 4 kunnen `HealthComponent`, `Hitbox`, `Hurtbox` en `StateMachine` overnemen zoals de trainingspop en de speler dat doen. `Hitbox.parried` is het signaal om uit balans te raken.
 - Na een teleport of het laden van een save: `reset_physics_interpolation()` op de verplaatste node en `camera.snap_behind_target()` voor de speler (zie `Player.respawn()`).
 
+## Fase 2 – Wereld van Elst (blockout)
+
+### Wat is af
+
+- **Open wereld** `scenes/world/Elst.tscn`, ongeveer 470 × 470 m binnen de tornado, met:
+  - wegen van de kerk naar elke locatie en een ring van wegen eromheen;
+  - woonstraten met 113 huizen en 261 bomen;
+  - het spoor van noord naar zuid met overwegen;
+  - weilanden in de buitenring, een industrieterrein achter het station en de Aamsche Plas.
+- **Zes kernlocaties** als eigen scenes in `scenes/world/locations/`, in de factiekleuren:
+  - de Kerk van Amber met toren, spits en amberkleurige banieren; de deur zit op slot;
+  - het huis van Klaas met tuin en heg; hier begin je;
+  - Bingo Club Boomer Cave, een blauwe hal met een rotsige grotingang en een BINGO-bord;
+  - Elst Station met perron, overkapping, stationsgebouw en het gebouw ernaast met generators;
+  - Westeraam Getho, vier gele en zwarte flats rond een plein;
+  - OBC Elst Fort, een school met torens, een muur, een poort en een voetbalveld.
+- **Tornado** (`Tornado.tscn`) als ring rond de kaart:
+  - twee draaiende stofmuren met een eigen shader en rondvliegend puin, van overal te zien;
+  - vanaf 222 m duwt de wind je terug (harder dan sprinten) en verschijnt "De tornado is te sterk. Je kunt Elst niet ontsnappen.";
+  - een vaste muur op 240 m houdt iedereen binnen.
+- **Mist en licht:** een amberkleurige, wat sombere lucht met mist, zodat de tornado in de verte vervaagt. Een zon met schaduwen tot 140 m.
+- **Navigatiemesh:** wordt bij het laden van Elst in ongeveer 0,3 s op een thread gebakken. Er lopen paden van het huis van Klaas naar alle vier de dungeoningangen.
+- **Dungeoningangen en lege dungeons:**
+  - E voor een deur fadet naar zwart en zet je in de dungeon (`scenes/dungeons/Station`, `Westeraam`, `OBC` en `BingoCave`);
+  - elke dungeon is een lege kamer in de factiekleuren met een bord ("dungeon volgt in fase …") en een deur terug naar dezelfde ingang in Elst;
+  - HP en stamina gaan mee.
+- **Systemen:**
+  - `Interactable` met de prompt "[E] …" op de HUD;
+  - meldingen op het scherm;
+  - `LocationArea` met de plaatsnaam groot in beeld als je een locatie binnenloopt;
+  - `GameWorld` met spawnpunten en terugkomen na de dood;
+  - wereldwissels met een fade in `Main`.
+- **Test:** `tests/test_world.gd` controleert het startpunt, de navmesh, de kerkdeur, de tornado en alle vier de dungeons heen en terug (allemaal geslaagd).
+
+### Keuzes en afwijkingen
+
+- **Kaart:** `kaart_elst.png` ontbreekt nog steeds. Ik heb de voorlopige indeling hieronder gebruikt. OBC en Westeraam staan dichter bij het midden dan eerst gepland, want op de oude plek lagen ze bijna in de tornado.
+- **Industrieterrein en Aamsche Plas** staan niet in het GDD, maar passen bij het echte Elst en vullen de oostkant. De plas heeft een onzichtbare oever, dus je kunt er niet in lopen.
+- **De kerk** heeft nog geen interieur. De deur meldt dat hij op slot zit tot de drie facties verslagen zijn. Fase 11 koppelt dat aan `GameState`.
+- **Het huis van Klaas** is in deze fase alleen van buiten. Klaas zelf, het interieur, de winkel en slapen komen in Fase 5.
+- **Doodgaan** brengt je terug op het startpunt van de wereld waar je bent (in een dungeon de ingang). Fase 3 vervangt dat door "de laatste save laden".
+- **Navmesh:** wordt bij het laden gebakken in plaats van als bestand in de repo te staan. Zo blijft hij kloppen terwijl de blockout nog verandert. Het mesh-resource wordt gedeeld, dus terugkomen in Elst bakt niet opnieuw.
+- **Huizen en bomen** bouwen hun mesh in code met vertexkleuren. Zo is elk prop één draw call. In de editor blijven het gewone nodes die je kunt verplaatsen, met `size` en kleuren in de inspector.
+- **`Elst.tscn`** is één keer met een script gegenereerd (wegen, huizen, bomen en weilanden op basis van een vaste seed). Het script staat niet in de repo: de scene is nu de bron en wordt verder in de editor bewerkt.
+- **De testarena** is gebleven als losse scene om combat te testen (open hem in de editor en druk op F6). Het spel start nu in Elst.
+
+### Aandachtspunten voor de volgende fases
+
+- Fase 3 (opslaan) kan `GameState.current_location` gebruiken als locatienaam in de save, en moet `Player.save_data()` uitbreiden met positie en rotatie.
+- Vijanden (Fase 4) kunnen meteen de navmesh van Elst gebruiken. Nieuwe statische geometrie moet onder een node in de groep `navigation_source` komen.
+- Bevrijde gebieden (Fase 8) kunnen per locatiescene dorpelingen en een warmere kleur krijgen. De `LocationArea` per locatie heeft daarvoor al een `id`.
+
 ## Voorlopige kaartindeling
 
 `kaart_elst.png` ontbreekt nog. Tot die er is, gebruiken we deze indeling: de kerk in het midden, de andere vijf locaties eromheen. De richtingen volgen ruwweg het echte Elst (de kerk in het centrum, het station en het spoor aan de oostkant, Westeraam ten noordoosten van het station, de Over Betuwe College-kant ver in het zuidwesten). Het huis van Klaas staat op een korte loopafstand van alles, zodat het een goede hub is.
 
-Godot-coördinaten in meters: +X is oost, −Z is noord. De kaart is ca. 500 × 500 m, met de tornado als ring op ongeveer 240 m van het midden.
+Godot-coördinaten in meters: +X is oost, −Z is noord. De kaart is ca. 500 × 500 m. De tornado is een ring met een vaste muur op 240 m van het midden; vanaf 222 m duwt de wind je terug.
 
 | Kleur | Locatie | Plek | Positie (x, z) |
 |---|---|---|---|
@@ -112,9 +164,10 @@ Godot-coördinaten in meters: +X is oost, −Z is noord. De kaart is ca. 500 × 
 | Paars | Huis van Klaas | Zuid, vlak bij het centrum | (−20, 110) |
 | Blauw | Bingo Club Boomer Cave | West | (−130, −20) |
 | Groen | Elst Station + gebouw ernaast | Oost, aan het spoor | (125, 30) |
-| Geel | Westeraam Getho | Noordoost, voorbij het spoor | (190, −110) |
-| Rood | OBC Elst Fort | Zuidwest | (−170, 170) |
+| Geel | Westeraam Getho | Noordoost, voorbij het spoor | (160, −105) |
+| Rood | OBC Elst Fort | Zuidwest | (−130, 130) |
 
 - Het spoor loopt van noord naar zuid op ongeveer x = 110.
 - Hoofdwegen lopen van de kerk naar elke locatie. Daartussen staan woonstraten en weilanden.
-- Fase 2 werkt dit uit. Komt `kaart_elst.png` er alsnog, dan volgen we die en passen we deze tabel aan.
+- De Aamsche Plas ligt in het zuidoosten rond (165, 128), het industrieterrein tussen het spoor en de plas.
+- Fase 2 heeft dit uitgewerkt in `Elst.tscn`. Komt `kaart_elst.png` er alsnog, dan schuiven we de locaties in de editor en passen we deze tabel aan.

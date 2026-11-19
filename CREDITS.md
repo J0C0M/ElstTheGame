@@ -12,7 +12,8 @@ Alle assets in dit project zijn zelfgemaakt of CC0. Voeg bij elk nieuw asset de 
 
 | Wat | Bron | Licentie |
 | --- | --- | --- |
-| Speler, trainingspoppen, testarena en de filtertestscene (blokken, cilinders en prisma's) | Zelfgemaakt in Godot | Eigen werk |
+| Speler, trainingspoppen, testarena, Elst, de kernlocaties en de dungeons (blokken, cilinders en prisma's) | Zelfgemaakt in Godot | Eigen werk |
+| Huizen, bomen en puin van de tornado (in code gebouwd, `scripts/world/low_poly_mesh.gd`) | Zelfgemaakt | Eigen werk |
 
 ## Shaders
 
@@ -20,6 +21,7 @@ Alle assets in dit project zijn zelfgemaakt of CC0. Voeg bij elk nieuw asset de 
 | --- | --- | --- |
 | `shaders/retro_post.gdshader` | Zelfgeschreven | Eigen werk |
 | `shaders/health_bar_3d.gdshader` | Zelfgeschreven | Eigen werk |
+| `shaders/tornado.gdshader` | Zelfgeschreven | Eigen werk |
 
 ## Afbeeldingen
 

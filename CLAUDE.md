@@ -22,6 +22,7 @@ godot --headless --path . --import          # importeren
 godot --headless --path . --quit-after 120  # opstarten, kijk naar fouten in de output
 godot --headless --path . -s res://tests/check_resources.gd                    # alle scenes, scripts en resources laden
 godot --headless --path . --fixed-fps 60 -s res://tests/test_player_combat.gd  # gameplaytest van de testarena
+godot --headless --path . --fixed-fps 60 -s res://tests/test_world.gd          # wereld, tornado en dungeondeuren
 ```
 
 Controleer na elk onderdeel of het project nog laadt en start zonder fouten. Headless worden shaders niet gecompileerd: controleer een nieuwe of gewijzigde shader met een run met venster. Is Godot er niet, meld dat dan één keer en wees extra precies met `.tscn`- en `.tres`-syntax.
@@ -112,6 +113,10 @@ Werk alleen aan de fase waar de eigenaar om vraagt. Begin pas aan een volgende f
 - **Assets en audio:** alleen zelfgemaakt materiaal of CC0. Noteer bron en licentie in `CREDITS.md`. Download geen betaalde assets of assets met een onduidelijke licentie.
 - **`.gitignore`:** `.godot/`, `export/`, `build/`, `*.tmp`, `.claude/settings.local.json`. Commit `.import`- en `*.uid`-bestanden wel.
 - **`docs/`** heeft een `.gdignore`, zodat Godot de referentieplaatjes niet importeert of exporteert.
+- **Werelden:** elke speelbare scene (`Elst.tscn`, de dungeons, de testarena) heeft een `GameWorld`-root met `location_name` en `default_spawn`, een eigen `Player` en spawnpunten (`Marker3D` in de groep `spawn_points`, gevonden op nodenaam). Een wereldwissel gaat via `EventBus.world_change_requested(scene_path, spawn_id)`: `Main` fadet naar zwart, wisselt de wereld en neemt HP en stamina mee via `Player.save_data()`/`load_data()`.
+- **Interactie:** `Interactable` (laag 6) toont zijn `prompt` als de speler ervoor staat; E roept `interact()` aan. `DungeonEntrance` gebruikt dat voor deuren (op slot of naar een andere scene). `LocationArea` toont een plaatsnaam en zet `GameState.current_location`.
+- **Elst:** `scenes/world/Elst.tscn` is één keer gegenereerd met een script en wordt nu gewoon in de editor bewerkt. De zes kernlocaties zijn aparte scenes in `scenes/world/locations/`. Huizen (`House`) en bomen (`TreeProp`) bouwen hun mesh in code met vertexkleuren (`LowPolyMesh`): één draw call per prop.
+- **Navigatie:** `Elst.tscn` bakt zijn navmesh bij het laden op een thread, uit de colliders van nodes in de groep `navigation_source` (laag 1). Nieuwe statische geometrie hoort onder zo'n node. In headless tests moet je echte tijd laten verstrijken (`OS.delay_msec`) voordat de navmap klaar is.
 - **Tests met `-s`:** het hoofdscript wordt gecompileerd voordat de autoloads bestaan. Gebruik daarin dus geen projectklassen die autoloads aanroepen (zoals `Player`) als type, maar `Variant`.
 
 ## Codeconventies

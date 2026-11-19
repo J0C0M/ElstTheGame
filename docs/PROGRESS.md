@@ -464,7 +464,7 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 
 ### Aandachtspunten voor de volgende fases
 
-- Fase 11: de kerk gaat open als `boss_vape_koning`, `boss_fatbike_kindje` en `boss_grumpy_oma` gezet zijn. Klaas vecht mee; de kruisboog is handig tegen Amber in de lucht.
+- Fase 11: de kerk gaat open als `boss_vape_koning`, `boss_fatbike_kindje` en `boss_grumpy_oma` gezet zijn. Volg het kerkplan in het GDD (*De Kerk van Amber*): boven in het kerkgebouw beginnen, dan trappen en gangen ondergronds met doodlopende kamers en vijanden van alle facties, Klaas voor de arena (praten en winkel) en een ronde arena met 5 pilaren. Klaas vecht mee tot hij sneuvelt; de kruisboog is handig tegen Amber in de lucht.
 - Fase 12: geluid voor de bingonummers, de schokgolf, de rolstoel en de kruisboog.
 
 ## Dev powers en kijkrichting van vijanden (`Add-Dev-Powers-And-Enemy-Facing`)
@@ -489,6 +489,8 @@ Twee verzoeken van de eigenaar na Fase 10, voor Fase 11.
 | Bingo Club | 21 van de 25 |
 
 - **Tests:** `test_player_combat` controleert nu ook de dev powers. Alle tests slagen.
+- **Plan voor de kerk (eigenaar, 20-11-2026)** staat in het GDD en in de fasetabel van `CLAUDE.md`. Je begint boven in het kerkgebouw en gaat via trappen en gangen steeds dieper ondergronds, langs doodlopende kamers en vijanden van alle facties. Aan het eind wacht Klaas voor de arena (praten, kopen en verkopen), en de arena is een ronde ruimte met 5 pilaren.
+- **GDD bijgewerkt** met de dev powers, de kijkrichting van vijanden, de bron van de kaart en de herlaadtijd van de kruisboog (0,9 s, zoals gebouwd).
 
 ### Keuzes en afwijkingen
 

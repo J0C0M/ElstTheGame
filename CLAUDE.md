@@ -12,7 +12,7 @@ Dit bestand geeft elke Claude Code-sessie de afspraken voor dit project. Lees he
 - **Bronnen van waarheid:**
   - `docs/GDD.md`: verhaal, quests, vijanden, bazen, economie, opslaan, stijl, techniek en de 13 ontwikkelfases.
   - `docs/PROGRESS.md`: wat af is, gemaakte keuzes, afwijkingen van het GDD en open punten. Lees dit aan het begin van elke sessie.
-  - `docs/reference/`: `kaart_elst.png` (kaart met een kleur per locatie) en `Klaas_sigma.png` (hoe Klaas eruitziet).
+  - `docs/reference/`: `kaart_elst.png` (de kaart die de eigenaar aanleverde, met een kleur per locatie) en `Klaas_sigma.png` (hoe Klaas eruitziet). Beide staan alleen lokaal en niet in de repo; commit ze alleen als de eigenaar daarom vraagt.
 
 ## Godot draaien
 
@@ -93,7 +93,7 @@ Controleer na elk onderdeel of het project nog laadt en start zonder fouten. Hea
 | 8 | `Add-Westeraam-Dungeon` | Quest 3: vape-drillers, Vape-koning, systeem voor bevrijde gebieden |
 | 9 | `Add-OBC-Fort-Dungeon` | Quest 4: voetbaljongens, fatbikers, fatbike-kindje |
 | 10 | `Add-Bingo-Cave-Dungeon` | Quest 5: oma's, bingo-opa's, Grumpy Oma, kruisboog als beloning |
-| 11 | `Add-Amber-Final-Battle` | Quest 6: kerk, Klaas als bondgenoot, Amber met 2 levensbalken, scène met Klaas, gouden Tren-spuit, tornado verdwijnt, eindscène |
+| 11 | `Add-Amber-Final-Battle` | Quest 6: kerk-dungeon (begint boven in het kerkgebouw met een echt kerkinterieur, dan trappen en gangen steeds dieper ondergronds met doodlopende kamers, vijanden van alle facties door elkaar), Klaas voor de arena (laatste gesprek, kopen en verkopen), ronde arena met 5 lange pilaren, Amber met 2 levensbalken, Klaas vecht mee tot hij sneuvelt, gouden Tren-spuit, tornado verdwijnt, eindscène |
 | 12 | `Polish-And-Release-Build` | Audio, balans, bugfixes, laadschermen, export presets voor Windows en Linux |
 
 Werk alleen aan de fase waar de eigenaar om vraagt. Begin pas aan een volgende fase als daarom gevraagd wordt.

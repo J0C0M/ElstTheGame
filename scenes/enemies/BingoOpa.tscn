@@ -17,5 +17,5 @@ billboard = 1
 modulate = Color(0.55, 0.8, 1, 1)
 outline_modulate = Color(0, 0, 0, 1)
 text = "B-12!"
-font_size = 56
+font_size = 44
 outline_size = 10

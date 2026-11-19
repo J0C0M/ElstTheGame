@@ -80,7 +80,11 @@ albedo_color = Color(0.4, 0.3, 0.2, 1)
 albedo_color = Color(0.95, 0.95, 0.93, 1)
 
 [sub_resource type="StandardMaterial3D" id="Mat_card"]
-albedo_color = Color(0.6, 0.8, 1.0, 1)
+albedo_color = Color(0.4, 0.26, 0.14, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_crook"]
+material = SubResource("Mat_card")
+size = Vector3(0.05, 0.05, 0.16)
 
 [sub_resource type="BoxMesh" id="Mesh_vest"]
 material = SubResource("Mat_vest")
@@ -96,7 +100,7 @@ size = Vector3(0.18, 0.05, 0.03)
 
 [sub_resource type="BoxMesh" id="Mesh_card"]
 material = SubResource("Mat_card")
-size = Vector3(0.2, 0.26, 0.02)
+size = Vector3(0.05, 0.95, 0.05)
 
 [node name="OpaModel" type="Node3D"]
 script = ExtResource("1_model")
@@ -212,6 +216,10 @@ mesh = SubResource("Mesh_10")
 [node name="Hand" type="Node3D" parent="Body/Hips/Torso/ArmR"]
 position = Vector3(0, -0.56, 0)
 
-[node name="BingoCard" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
-position = Vector3(0, -0.12, -0.05)
+[node name="WalkingStick" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
+position = Vector3(0, -0.4, -0.05)
 mesh = SubResource("Mesh_card")
+
+[node name="Crook" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
+position = Vector3(0, 0.06, -0.1)
+mesh = SubResource("Mesh_crook")

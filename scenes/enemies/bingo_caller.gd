@@ -1,20 +1,29 @@
 class_name BingoCaller
 extends Node3D
-## Makes a bingo-opa call out bingo numbers while he fights. Every few calls
-## he shouts BINGO!, and the grumpy grandmas nearby hit harder for a while.
+## Makes a bingo-opa call out bingo numbers and wise bingo facts while he
+## fights.
 
-@export var call_interval: float = 2.2
-@export var calls_per_bingo: int = 4
-@export var buff_radius: float = 10.0
-@export var buff_factor: float = 1.25
-@export var buff_time: float = 5.0
-## Enemy id of the grandmas the BINGO! fires up.
-@export var buffs_enemy_id: StringName = &"boze_oma"
+const FACTS: Array[String] = [
+	"Bingo komt uit Italië, jochie!",
+	"75 ballen. Altijd 75!",
+	"88: twee dikke dames!",
+	"22: twee eendjes!",
+	"Vroeger kostte een kaart een kwartje!",
+	"Kijk diagonaal. Altijd diagonaal.",
+	"Grumpy Oma had drie keer BINGO op één avond!",
+	"Wie BINGO roept, moet het ook hebben!",
+]
+const LETTERS: String = "BINGO"
+const NUMBER_TIME: float = 1.4
+const FACT_TIME: float = 2.4
 
-const SHOW_TIME: float = 1.4
+@export var call_interval: float = 2.4
+## Every this many calls is a fact instead of a number.
+@export var calls_per_fact: int = 3
 
+## How many calls he made, for tests.
+var calls: int = 0
 var _timer: float = 1.0
-var _calls: int = 0
 var _shown: float = 0.0
 
 @onready var _enemy: Enemy = get_parent() as Enemy
@@ -35,23 +44,16 @@ func _physics_process(delta: float) -> void:
 	if _timer > 0.0:
 		return
 	_timer = call_interval
-	_calls += 1
-	if _calls % calls_per_bingo == 0:
-		bingo()
+	calls += 1
+	if calls % calls_per_fact == 0:
+		_show(FACTS.pick_random(), FACT_TIME)
 	else:
-		_show("%s-%d!" % ["BINGO"[randi() % 5], randi_range(1, 75)])
+		# He knows his letters: B is 1 to 15, I is 16 to 30, and so on.
+		var number: int = randi_range(1, 75)
+		_show("%s-%d!" % [LETTERS[floori((number - 1) / 15.0)], number], NUMBER_TIME)
 
 
-## Shouts BINGO! and fires up the grandmas within reach.
-func bingo() -> void:
-	_show("BINGO!")
-	for node: Node in get_tree().get_nodes_in_group(&"enemies"):
-		var other: Enemy = node as Enemy
-		if other != null and other.data.id == buffs_enemy_id and other.global_position.distance_to(global_position) <= buff_radius:
-			other.buff_damage(buff_factor, buff_time, "WOEST!")
-
-
-func _show(text: String) -> void:
+func _show(text: String, seconds: float) -> void:
 	_label.text = text
 	_label.visible = true
-	_shown = SHOW_TIME
+	_shown = seconds

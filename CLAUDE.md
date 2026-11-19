@@ -25,6 +25,7 @@ godot --headless --path . --fixed-fps 60 -s res://tests/test_player_combat.gd  #
 godot --headless --path . --fixed-fps 60 -s res://tests/test_world.gd          # wereld, tornado en dungeondeuren
 godot --headless --path . --fixed-fps 60 -s res://tests/test_save.gd           # opslaan, laden, autosave en dood
 godot --headless --path . --fixed-fps 60 -s res://tests/test_enemies.gd        # vijanden, loot, kisten en terugtrekken
+godot --headless --path . --fixed-fps 60 -s res://tests/test_klaas.gd          # Klaas, dialoog, winkel, uitrusting, slapen
 ```
 
 Tests die opslaan zetten `SaveManager.save_dir` op `user://test_saves/` en ruimen die map op. Raak de echte saves van de speler (`user://saves/`) nooit aan.
@@ -126,6 +127,9 @@ Werk alleen aan de fase waar de eigenaar om vraagt. Begin pas aan een volgende f
 - **Vijanden:** `scenes/enemies/Enemy.tscn` is de basis; een variant (`LowDriller.tscn`, `Driller.tscn`) is een instantie met een eigen `EnemyData`. Daarin staan stats, zintuigen, factie, `model_scene` (een `HumanoidModel`-scene) en `loot`. De states staan in `scenes/enemies/states/`: Idle → Patrol → Chase → Attack, terug via Retreat (naar huis, daar weer vol HP), plus Stagger na een parry en Dead. Vijanden van dezelfde factie waarschuwen elkaar binnen `alert_radius`. Ze lopen via `NavigationAgent3D` met ontwijken; zonder navmesh lopen ze rechtdoor.
 - **Personagemodellen:** `HumanoidModel` (`scripts/characters/humanoid_model.gd`) is van de speler en van alle menselijke vijanden. Een modelscene heeft dezelfde gewrichten als `PlayerModel.tscn`. Acties zoals `swing_light_1`, `punch`, `enemy_windup`, `hurt` en `death` staan in `ACTIONS`.
 - **Loot:** `LootTable` (goud van-tot plus `LootEntry`-items met een kans) wordt gedropt door `LootDropper`. Dat maakt `GoldPickup`/`ItemPickup` in de wereldroot; die vliegen naar de speler als hij dichtbij komt. Goud en items staan in `GameState` (`add_gold`, `add_item`, maximaal 10 potions). `ItemCatalog.get_item(id)` vindt een `ItemData` op id. Een `Chest` is na openen een vlag in `GameState`, dus blijft open na laden.
+- **Uitrusting:** `GameState` houdt `owned_gear` en `equipped` (slot `sword`, `armor`, `crossbow` → item-id) bij. `add_gear()` trekt betere spullen meteen aan, met een melding. `sell_gear()` geeft 40%. `get_next_gear()` geeft het volgende zwaard of pantser dat de speler nog niet heeft (voor `LootEntry.Kind.NEXT_GEAR`). De speler leest zijn uitrusting uit `GameState` bij `EventBus.equipment_changed` en toont die op het model (lengte en kleur van het zwaard, vest, schouderstukken en helm per `armor_tier`).
+- **Dialoog:** `DialogueData` → `DialogueLine` → `DialogueChoice`, met `DialogueCondition` (Inwijding van-tot, vlag wel/niet). De eerste `starts`-regel waarvan de voorwaarde klopt opent het gesprek. Acties: `set_flag`, `raise_inwijding` (die doet de `DialogueBox` zelf), `open_shop` en `sleep` (die gaan naar `Main`). `model_action` laat de spreker een animatie doen. Een NPC vraagt een gesprek aan met `EventBus.dialogue_requested(dialogue, speaker)`.
+- **Overlays:** dialoog, winkel en inventaris (Tab) pauzeren het spel via `Main._open_overlay()`. Esc sluit ze. Klaas heeft `process_mode = ALWAYS`, zodat hij tijdens een gesprek blijft bewegen.
 - **Tests met `-s`:** het hoofdscript wordt gecompileerd voordat de autoloads bestaan. Gebruik daarin dus geen projectklassen die autoloads aanroepen (zoals `Player`) als type, maar `Variant`.
 
 ## Codeconventies

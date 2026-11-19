@@ -145,6 +145,8 @@ shape = SubResource("BoxShape3D_12")
 mesh = SubResource("BoxMesh_11")
 
 [node name="SchoolDoor" parent="." instance=ExtResource("2_res")]
+unlocked_by_flag = &"station_cleared"
+locked_message = "De deur zit op slot. Zolang Station Elst Amber bevoorraadt, houdt ze deze plek dicht. Sloop eerst het station."
 position = Vector3(0, 0, 4.85)
 prompt = "OBC Elst Fort binnengaan"
 door_color = Color(0.14, 0.18, 0.4, 1)

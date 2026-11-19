@@ -75,6 +75,8 @@ shape = SubResource("BoxShape3D_7")
 mesh = SubResource("BoxMesh_6")
 
 [node name="CaveDoor" parent="." instance=ExtResource("2_res")]
+unlocked_by_flag = &"station_cleared"
+locked_message = "De deur zit op slot. Zolang Station Elst Amber bevoorraadt, houdt ze deze plek dicht. Sloop eerst het station."
 position = Vector3(0, 0, -9.9)
 prompt = "Bingo Club Boomer Cave binnengaan"
 door_color = Color(0.14, 0.2, 0.42, 1)

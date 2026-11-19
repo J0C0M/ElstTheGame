@@ -390,6 +390,7 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 - **De Vape-koning** (400 HP, 15 schade per wolkje, `scenes/bosses/VapeKing.tscn`):
   - hij verstopt zich in een van de vier wolken en schiet van daaruit; in zijn wolk flikkert een gouden glinstering;
   - loop je zijn wolk in, dan staat hij 4 s te hoesten en kun je hem raken; daarna vlucht hij naar een andere wolk;
+  - terwijl hij vlucht, loopt het hele paleis vol dichte vape, zodat je niet goed ziet waar hij heen gaat; zodra hij in zijn nieuwe wolk zit, trekt die weer op (op verzoek van de eigenaar);
   - onder 50% blaast hij drie wolkjes tegelijk;
   - hij laat 100 goud vallen en heeft 35% kans op uitrusting.
 - **Baasgevecht:** een grote levensbalk onderin beeld. Opslaan is geblokkeerd zolang het gevecht loopt. Een verslagen baas blijft verslagen na laden (vlag `boss_vape_koning`).
@@ -400,7 +401,8 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 - **Dorpelingen** (`scenes/npcs/Villager.tscn`): vrolijke figuren, elk met een eigen kleur shirt, broek en huid, en soms een muts. Ze wandelen rond. Kom je dichtbij, dan zwaaien ze en zeggen ze iets, zoals "De treinen rijden weer!".
 - **Quest 3 "Westeraam Getho"** (`data/quests/q3_westeraam.tres`): Klaas geeft hem na Quest 2. Doelen: versla de Vape-koning en ga terug naar Klaas. Beloning: 150 goud en Inwijding +1 (dat is dan 3). Versla je hem eerder, dan is Klaas trots en krijg je de beloning alsnog.
 - **Gedeelde dungeonbouwer** (`tools/dungeons/dungeon_builder.py`): het station en Westeraam gebruiken dezelfde code. De stationsdungeon kwam er hetzelfde uit, op één regel na: `default_spawn = &"Entrance"`, die sinds Fase 7 ontbrak.
-- **Tests:** `tests/test_westeraam.gd` (39 checks, allemaal geslaagd). Die speelt de bevrijde gebieden, de vape-drillers, het hele baasgevecht met opslaan en laden, de beloning en het geval dat je eerder klaar bent. De andere acht tests slagen ook.
+- **Bugfix:** na doodgaan bleef "Je bent dood" in beeld staan, omdat de geladen save een nieuwe speler maakt. De HUD haalt het bericht nu weg zodra er weer een levende speler is; `test_save` controleert dat.
+- **Tests:** `tests/test_westeraam.gd` (41 checks, allemaal geslaagd). Die speelt de bevrijde gebieden, de vape-drillers, het hele baasgevecht met opslaan en laden, de beloning en het geval dat je eerder klaar bent. De andere acht tests slagen ook.
 
 ### Keuzes en afwijkingen
 
@@ -458,7 +460,7 @@ Status: af, gemerged naar `Development`.
 
 - [ ] **Bron van de kaart** (Google Maps of OpenStreetMap). Tot dat duidelijk is, staat `kaart_elst.png` niet in de repo en kan het script alleen draaien als de kaart lokaal in `docs/reference/` staat. Ook het raster `elst_ground.png` is van de kaart afgeleid.
 - [ ] **Ligging van het spoor** bevestigen.
-- [x] **`test_enemies` faalde af en toe** in de stationsdungeon, omdat de vijanden willekeurig patrouilleren. Sinds Fase 7 speelt de test in een eigen, langere testkamer; daarna slaagde hij 10 keer op rij.
+- [x] **`test_enemies` faalde af en toe** in de stationsdungeon, omdat de vijanden willekeurig patrouilleren. Sinds Fase 7 speelt de test in een eigen, langere testkamer. In Fase 8 faalde de groepscheck nog één keer, omdat een patrouille te ver weg liep; nu staan de vijanden voor die check eerst op hun beginplek.
 
 ## Kaartindeling
 

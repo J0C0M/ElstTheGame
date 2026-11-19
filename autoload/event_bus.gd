@@ -25,3 +25,5 @@ signal interaction_prompt_changed(prompt: String)
 signal message_requested(text: String)
 ## The player arrived in a named place: a world, a dungeon or a part of Elst.
 signal location_entered(display_name: String)
+## Asks Main to switch to another world scene and put the player at a spawn point.
+signal world_change_requested(scene_path: String, spawn_id: StringName)

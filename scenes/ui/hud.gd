@@ -55,6 +55,9 @@ func _ready() -> void:
 
 
 func _on_health_changed(current: int, maximum: int) -> void:
+	# A living player again, respawned or loaded from a save, ends the death message.
+	if current > 0:
+		_death_label.visible = false
 	_health_bar.max_value = maximum
 	if _health_tween != null:
 		_health_tween.kill()

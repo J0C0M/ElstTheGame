@@ -83,7 +83,19 @@ albedo_color = Color(0.8, 0.8, 0.82, 1)
 albedo_color = Color(0.1, 0.1, 0.12, 1)
 
 [sub_resource type="StandardMaterial3D" id="Mat_bag"]
-albedo_color = Color(0.6, 0.3, 0.6, 1)
+albedo_color = Color(0.42, 0.12, 0.48, 1)
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_clasp"]
+albedo_color = Color(0.95, 0.78, 0.25, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_strap"]
+material = SubResource("Mat_bag")
+size = Vector3(0.03, 0.16, 0.03)
+
+[sub_resource type="BoxMesh" id="Mesh_clasp"]
+material = SubResource("Mat_clasp")
+size = Vector3(0.08, 0.04, 0.02)
 
 [sub_resource type="BoxMesh" id="Mesh_cardigan"]
 material = SubResource("Mat_cardigan")
@@ -107,7 +119,7 @@ size = Vector3(0.26, 0.05, 0.02)
 
 [sub_resource type="BoxMesh" id="Mesh_bag"]
 material = SubResource("Mat_bag")
-size = Vector3(0.28, 0.22, 0.1)
+size = Vector3(0.3, 0.24, 0.12)
 
 [node name="OmaModel" type="Node3D"]
 script = ExtResource("1_model")
@@ -234,3 +246,11 @@ position = Vector3(0, -0.56, 0)
 [node name="Handbag" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
 position = Vector3(0, -0.12, 0)
 mesh = SubResource("Mesh_bag")
+
+[node name="Strap" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
+position = Vector3(0, 0.04, 0)
+mesh = SubResource("Mesh_strap")
+
+[node name="Clasp" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
+position = Vector3(0, -0.04, -0.065)
+mesh = SubResource("Mesh_clasp")

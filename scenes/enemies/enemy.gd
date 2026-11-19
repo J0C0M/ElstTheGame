@@ -26,6 +26,10 @@ var player_detected: bool = false
 var time_since_seen: float = INF
 ## Side (1 or -1) this enemy circles round to when it flanks.
 var flank_side: float = 1.0
+## Seconds until a leaping enemy may leap again.
+var leap_cooldown_left: float = 0.0
+## Seconds a patient enemy keeps fighting up close without being hit.
+var patience_left: float = INF
 var model: HumanoidModel
 
 var _gravity: float = 0.0
@@ -71,6 +75,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	attack_cooldown_left = maxf(attack_cooldown_left - delta, 0.0)
+	leap_cooldown_left = maxf(leap_cooldown_left - delta, 0.0)
 	_update_buff(delta)
 	_update_perception(delta)
 	state_machine.physics_update(delta)
@@ -167,13 +172,18 @@ func fire_projectile(spread_degrees: float = 0.0) -> Node3D:
 	return projectile
 
 
+## Pushes the enemy away, such as the recoil of a shot.
+func apply_knockback(push: Vector3) -> void:
+	_knockback = push
+
+
 ## Damage of the next attack, with any buff.
 func get_damage() -> int:
 	return roundi(data.damage * damage_multiplier)
 
 
 ## Lets the enemy hit harder for [param seconds], such as after a bingo-opa's
-## BINGO!. A red word above its head shows it.
+## Grumpy Oma's BINGO!. A red word above its head shows it.
 func buff_damage(factor: float, seconds: float, word: String) -> void:
 	damage_multiplier = factor
 	_buff_left = seconds
@@ -269,6 +279,8 @@ func _on_hit_received(hit: HitData) -> void:
 	health.take_damage(hit.damage)
 	if health.is_dead():
 		return
+	if data.patience > 0.0:
+		patience_left = data.patience
 	var away: Vector3 = global_position - hit.source.global_position
 	away.y = 0.0
 	_knockback = away.normalized() * KNOCKBACK_SPEED

@@ -66,6 +66,26 @@ extends Resource
 ## miss_angle degrees to one side.
 @export_range(0.0, 1.0) var accuracy: float = 1.0
 @export var miss_angle: float = 15.0
+## Shots per attack; a burst fans out over burst_spread degrees.
+@export var burst_count: int = 1
+@export var burst_spread: float = 0.0
+## Speed the enemy is pushed back with when it fires, like a cannon.
+@export var recoil: float = 0.0
+@export_group("Leap")
+## The enemy leaps at the player from up to this far (0: never leaps).
+@export var leap_range: float = 0.0
+## Seconds in the air during a leap.
+@export var leap_time: float = 0.7
+## Seconds of fighting up close without being hit before the enemy hops
+## away again (0: never).
+@export var patience: float = 0.0
+@export var hop_away_distance: float = 7.0
+## Seconds the enemy waits after hopping away before it attacks again.
+@export var hop_away_wait: float = 2.0
+
+
+func can_leap() -> bool:
+	return leap_range > 0.0
 
 
 func is_ranged() -> bool:

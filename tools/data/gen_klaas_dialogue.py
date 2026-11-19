@@ -1,4 +1,4 @@
-"""Writes data/dialogue/klaas.tres: Klaas' conversation, with Quest 1 and 2.
+"""Writes data/dialogue/klaas.tres: Klaas' conversation, with Quest 1 to 3.
 
 Run from the project root: python3 tools/data/gen_klaas_dialogue.py
 """
@@ -72,7 +72,13 @@ q2_offer = cond(min_inwijding=1, quest_id=Q2, quest_status=0, forbidden_flag="st
 q2_early = cond(min_inwijding=1, quest_id=Q2, quest_status=0, required_flag="station_cleared")
 q2_active = cond(quest_id=Q2, quest_status=1)
 q2_report = cond(quest_id=Q2, quest_status=1, quest_step="report")
-q2_done = cond(quest_id=Q2, quest_status=2)
+Q3 = "q3_westeraam"
+# Klaas gives the quests in order, so Inwijding 2 means Quest 2 is done.
+q3_offer = cond(min_inwijding=2, quest_id=Q3, quest_status=0, forbidden_flag="boss_vape_koning")
+q3_early = cond(min_inwijding=2, quest_id=Q3, quest_status=0, required_flag="boss_vape_koning")
+q3_active = cond(quest_id=Q3, quest_status=1)
+q3_report = cond(quest_id=Q3, quest_status=1, quest_step="report")
+q3_done = cond(quest_id=Q3, quest_status=2)
 shop_open = cond(min_inwijding=1)
 strong = cond(min_inwijding=3)
 
@@ -95,6 +101,9 @@ line("tutorial_busy", "Ik zie nog geen resultaten. Kijk in je questlog als je ni
 line("q2_report", "Het is stil op het spoor. Geen trein meer voor Amber. Dat heb jij gedaan.", "q2_reward", condition=q2_report, model_action="flex")
 line("q2_reward", "Zonder aanvoer zijn haar drillers in Westeraam en bij het OBC een stuk slapper. Hier, je beloning.", "hub",
      action="set_flag", value="q2_reported")
+line("q3_report", "De Vape-koning is weg? Dan kan Westeraam eindelijk weer ademen.", "q3_reward", condition=q3_report, model_action="flex")
+line("q3_reward", "De mensen lopen alweer over straat. Hier, 150 goud. Die heb je verdiend.", "hub",
+     action="set_flag", value="q3_reported")
 line("greeting_strong", "Kijk eens wie er spieren krijgt. Bijna zoveel als ik. Bijna.", "hub", condition=strong, model_action="flex")
 line("greeting", "Daar is mijn favoriete niemand.", "hub")
 line("hub", "Wat wil je?", choices=[
@@ -102,7 +111,10 @@ line("hub", "Wat wil je?", choices=[
     choice("Heb je nog een klus?", "q2_offer", q2_offer),
     choice("Heb je nog een klus?", "q2_early", q2_early),
     choice("Heb je nog een klus?", "q2_busy", q2_active),
-    choice("Heb je nog een klus?", "next_job", q2_done),
+    choice("Heb je nog een klus?", "q3_offer", q3_offer),
+    choice("Heb je nog een klus?", "q3_early", q3_early),
+    choice("Heb je nog een klus?", "q3_busy", q3_active),
+    choice("Heb je nog een klus?", "next_job", q3_done),
     choice("Vertel over Amber.", "lore_1"),
     choice("Waarom die zonnebril?", "glasses"),
     choice("Mag ik hier slapen?", "sleep_offer"),
@@ -117,6 +129,15 @@ line("q2_go", "Zo mag ik het horen. De ingang zit in het gebouw naast het statio
 line("q2_busy", "Die generators draaien nog. Ik hoor het gezoem tot hier.", "hub")
 line("q2_early", "Wacht even. Het station ligt al plat? Ik had het je nog niet eens gevraagd.", "q2_early_2", model_action="flex")
 line("q2_early_2", "Eerder klaar dan gevraagd. Dat noem ik inzet. Hier, je beloning.", "hub", action="start_quest", value=Q2)
+line("q3_offer", "Westeraam Getho is van de drillers. Hun baas noemt zichzelf de Vape-koning: de rijkste vapeverkoper van het dorp.", "q3_offer_2")
+line("q3_offer_2", "Hij verstopt zich in zijn eigen vapewolken en schiet van daaruit. Loop recht op zijn wolk af, dan staat hij even te hoesten. Dat is je kans.", choices=[
+    choice("Ik pak die Vape-koning.", "q3_go", action="start_quest", value=Q3),
+    choice("Nog even niet.", "hub"),
+])
+line("q3_go", "Westeraam ligt aan de overkant van het spoor. De ingang zit in de flats. Neem drankjes mee.", "hub")
+line("q3_busy", "De Vape-koning zit nog op zijn troon. Ik ruik het tot hier.", "hub")
+line("q3_early", "Ik hoorde het al. De Vape-koning is verslagen, en ik had het je niet eens gevraagd.", "q3_early_2", model_action="flex")
+line("q3_early_2", "Dat noem ik nou een echte Elstenaar in wording. Hier, je beloning.", "hub", action="start_quest", value=Q3)
 line("next_job", "Nog niet. Rust uit. Ik roep je als Amber weer iets flikt.", "hub")
 line("lore_1", "Amber kwam uit Arnhem-Zuid. Groot, oranje, slecht humeur. Ze nam Elst over en zette overal haar drillers neer.", "lore_2")
 line("lore_2", "Sinds die dag draait er een tornado om het dorp. Niemand erin, niemand eruit. Station Elst is haar aanvoerlijn. Die moet kapot.", "hub")
@@ -135,6 +156,6 @@ out = ['[gd_resource type="Resource" script_class="DialogueData" format=3]', '',
 for block in subs:
     out += block + [""]
 out += ['[resource]', 'script = ExtResource("1_data")', 'speaker = "Klaas"',
-        'starts = Array[StringName]([&"first_meeting", &"tutorial_report", &"tutorial_busy", &"q2_report", &"greeting_strong", &"greeting"])',
+        'starts = Array[StringName]([&"first_meeting", &"tutorial_report", &"tutorial_busy", &"q2_report", &"q3_report", &"greeting_strong", &"greeting"])',
         'lines = Array[ExtResource("4_line")]([' + ", ".join(f'SubResource("{l}")' for l in line_ids) + "])"]
 pathlib.Path("data/dialogue/klaas.tres").write_text("\n".join(out) + "\n")

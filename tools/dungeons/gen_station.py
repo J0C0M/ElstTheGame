@@ -8,6 +8,10 @@ Amber's supply depot, which is heavily guarded. Each of the last four holds
 one of the four generators. +x is east, -z is north (deeper in).
 """
 import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).parent))
+from dungeon_builder import Dungeon, STEEL, vec  # noqa: E402
 
 OUT = pathlib.Path("scenes/dungeons/Station.tscn")
 HEIGHT = 5.0
@@ -26,11 +30,8 @@ ROOMS = {
     "Depot": ((-6, 26, -94, -66), (0.36, 0.26, 0.18), 6.0,
               {"N": [], "S": [(8, 8)], "W": [], "E": []}),
 }
-FLOOR = (0.42, 0.42, 0.4)
-CEILING = (0.17, 0.17, 0.19)
 AMBER = (0.95, 0.58, 0.14)
 WOOD = (0.5, 0.36, 0.22)
-STEEL = (0.45, 0.45, 0.48)
 YELLOW = (0.9, 0.8, 0.2)
 DARK = (0.2, 0.2, 0.22)
 
@@ -118,186 +119,32 @@ ENEMIES = [
 CHESTS = [("ChestWorkshop", -28.5, -14, -1.5708), ("ChestDepot", -4, -92, 0.7854)]
 
 
-def f(v):
-    s = f"{v:.4f}".rstrip("0").rstrip(".")
-    return "0" if s in ("-0", "") else s
-
-
-def vec(*v):
-    return "Vector3(" + ", ".join(f(c) for c in v) + ")"
-
-
-def col(c):
-    return f"Color({f(c[0])}, {f(c[1])}, {f(c[2])}, 1)"
-
-
-subs = []
-_materials = {}
-_meshes = {}
-_shapes = {}
-
-
-def material(c):
-    if c not in _materials:
-        mid = f"Mat_{len(_materials) + 1}"
-        _materials[c] = mid
-        subs.append([f'[sub_resource type="StandardMaterial3D" id="{mid}"]', f"albedo_color = {col(c)}", "roughness = 0.9"])
-    return _materials[c]
-
-
-def box_mesh(size, c):
-    key = (tuple(round(v, 3) for v in size), c)
-    if key not in _meshes:
-        mid = f"Box_{len(_meshes) + 1}"
-        _meshes[key] = mid
-        subs.append([f'[sub_resource type="BoxMesh" id="{mid}"]', f'material = SubResource("{material(c)}")', f"size = {vec(*size)}"])
-    return _meshes[key]
-
-
-def box_shape(size):
-    key = tuple(round(v, 3) for v in size)
-    if key not in _shapes:
-        sid = f"Shape_{len(_shapes) + 1}"
-        _shapes[key] = sid
-        subs.append([f'[sub_resource type="BoxShape3D" id="{sid}"]', f"size = {vec(*size)}"])
-    return _shapes[key]
-
-
-nodes = []
-
-
-def solid(parent, name, pos, size, c):
-    nodes.append([f'[node name="{name}" type="StaticBody3D" parent="{parent}"]', f"position = {vec(*pos)}"])
-    nodes.append([f'[node name="CollisionShape3D" type="CollisionShape3D" parent="{parent}/{name}"]', f'shape = SubResource("{box_shape(size)}")'])
-    nodes.append([f'[node name="Mesh" type="MeshInstance3D" parent="{parent}/{name}"]', f'mesh = SubResource("{box_mesh(size, c)}")'])
-
-
-def visual(parent, name, pos, size, c):
-    nodes.append([f'[node name="{name}" type="MeshInstance3D" parent="{parent}"]', f"position = {vec(*pos)}",
-                  f'mesh = SubResource("{box_mesh(size, c)}")'])
-
-
-def wall_segments(a0, a1, doors):
-    """Pieces of a wall from a0 to a1 along its axis, leaving the doors open."""
-    cuts = sorted((c - w / 2, c + w / 2) for c, w in doors)
-    pieces, start = [], a0
-    for lo, hi in cuts:
-        if lo > start:
-            pieces.append((start, lo))
-        start = max(start, hi)
-    if a1 > start:
-        pieces.append((start, a1))
-    return [(lo, hi) for lo, hi in pieces if hi - lo > 0.05]
-
-
-def lintel(room, side, n, centre, width, height, colour, along_x):
-    """The wall above a door: 3.2 m high doors, 4.5 m for the track."""
-    if width > 8:
-        return
-    top = 3.2 if width <= 4 else 4.5
-    if top >= height:
-        return
-    size = (width, height - top, 1) if along_x else (1, height - top, width)
-    solid("Structure", f"{room}Lintel{side}{n}", (centre[0], (top + height) / 2, centre[1]), size, colour)
-
-
-def build_rooms():
-    nodes.append(['[node name="Structure" type="Node3D" parent="." groups=["navigation_source"]]'])
-    for name, ((x0, x1, z0, z1), wall_color, height, sides) in ROOMS.items():
-        solid("Structure", f"{name}Floor", ((x0 + x1) / 2, -0.5, (z0 + z1) / 2), (x1 - x0, 1, z1 - z0), FLOOR)
-        solid("Structure", f"{name}Ceiling", ((x0 + x1) / 2, height + 0.5, (z0 + z1) / 2), (x1 - x0, 1, z1 - z0), CEILING)
-        for side, doors in sides.items():
-            if doors is None:
-                continue
-            # North and south walls cover the corners; west and east walls fit
-            # in between. Where a neighbour owns a wall, stop at its face.
-            if side in ("N", "S"):
-                z = z0 if side == "N" else z1
-                a0 = x0 - 0.5 if sides["W"] is not None else x0 + 0.5
-                a1 = x1 + 0.5 if sides["E"] is not None else x1 - 0.5
-                for n, (lo, hi) in enumerate(wall_segments(a0, a1, doors)):
-                    solid("Structure", f"{name}Wall{side}{n}", ((lo + hi) / 2, height / 2, z), (hi - lo, height, 1), wall_color)
-                for n, (centre, width) in enumerate(doors):
-                    lintel(name, side, n, (centre, z), width, height, wall_color, along_x=True)
-            else:
-                x = x0 if side == "W" else x1
-                for n, (lo, hi) in enumerate(wall_segments(z0 + 0.5, z1 - 0.5, doors)):
-                    solid("Structure", f"{name}Wall{side}{n}", (x, height / 2, (lo + hi) / 2), (1, height, hi - lo), wall_color)
-                for n, (centre, width) in enumerate(doors):
-                    lintel(name, side, n, (x, centre), width, height, wall_color, along_x=False)
-    for name, x, z, size, c, is_solid in PROPS:
-        pos = (x, size[1] / 2 + (0.01 if not is_solid else 0), z)
-        (solid if is_solid else visual)("Structure", name, pos, size, c)
-
-
-def build_details():
-    nodes.append(['[node name="Track" type="Node3D" parent="."]'])
-    length = RAIL_Z[1] - RAIL_Z[0]
-    centre = (RAIL_Z[0] + RAIL_Z[1]) / 2
-    visual("Track", "Bed", (RAIL_X, 0.02, centre), (3.0, 0.04, length), (0.3, 0.27, 0.24))
-    for name, dx in (("RailLeft", -0.72), ("RailRight", 0.72)):
-        visual("Track", name, (RAIL_X + dx, 0.1, centre), (0.12, 0.14, length), STEEL)
-    for name, x, y, z, yaw, text, c in LABELS:
-        nodes.append([f'[node name="{name}" type="Label3D" parent="."]', f"position = {vec(x, y, z)}", f"rotation = {vec(0, yaw, 0)}",
-                      "pixel_size = 0.01", f"modulate = {col(c)}", "outline_modulate = Color(0, 0, 0, 1)", f'text = "{text}"',
-                      "font_size = 64", "outline_size = 12"])
-    for name, x, y, z, c, energy, rng in LIGHTS:
-        nodes.append([f'[node name="{name}" type="OmniLight3D" parent="."]', f"position = {vec(x, y, z)}", f"light_color = {col(c)}",
-                      f"light_energy = {f(energy)}", f"omni_range = {f(rng)}"])
-
-
 def main():
-    build_rooms()
-    build_details()
-    head = ['[gd_scene format=3]', '',
-            '[ext_resource type="Script" path="res://scenes/world/game_world.gd" id="1_world"]',
-            '[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="2_player"]',
-            '[ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="3_door"]',
-            '[ext_resource type="Script" path="res://scripts/quests/quest_marker.gd" id="4_marker"]',
-            '[ext_resource type="Script" path="res://scenes/world/runtime_navigation_region.gd" id="20_nav"]',
-            '[ext_resource type="PackedScene" path="res://scenes/enemies/LowDriller.tscn" id="21_enemy"]',
-            '[ext_resource type="PackedScene" path="res://scenes/world/props/Chest.tscn" id="22_chest"]',
-            '[ext_resource type="Script" path="res://scenes/world/props/generator_group.gd" id="23_group"]',
-            '[ext_resource type="PackedScene" path="res://scenes/world/props/Generator.tscn" id="24_generator"]', '',
-            '[sub_resource type="Environment" id="Environment_dungeon"]', 'background_mode = 1',
-            'background_color = Color(0.03, 0.03, 0.04, 1)', 'ambient_light_source = 2',
-            'ambient_light_color = Color(0.3, 0.42, 0.35, 1)', 'ambient_light_energy = 0.3', '',
-            '[sub_resource type="NavigationMesh" id="NavigationMesh_station"]', 'geometry_parsed_geometry_type = 1',
-            'geometry_collision_mask = 1', 'geometry_source_geometry_mode = 1',
-            'geometry_source_group_name = &"navigation_source"', 'cell_size = 0.5', 'cell_height = 0.25',
-            'agent_height = 1.75', 'agent_radius = 0.5', 'agent_max_climb = 0.5', 'agent_max_slope = 40.0',
-            'filter_baking_aabb = AABB(-32, -2, -96, 60, 10, 118)', '']
-    out = head[:]
-    for block in subs:
-        out += block + [""]
-    out += ['[node name="StationDungeon" type="Node3D"]', 'script = ExtResource("1_world")', 'location_name = "Station Elst"',
-            'location_id = &"station_dungeon"', "autosave_on_enter = true", "",
-            '[node name="WorldEnvironment" type="WorldEnvironment" parent="."]', 'environment = SubResource("Environment_dungeon")', ""]
-    for block in nodes:
-        out += block + [""]
-    out += ['[node name="ExitDoor" parent="." instance=ExtResource("3_door")]', "position = Vector3(0, 0, 19.25)",
-            'target_scene = "res://scenes/world/Elst.tscn"', "target_spawn = &\"StationExit\"", 'prompt = "Terug naar Elst"',
-            "door_color = Color(0.3, 0.7, 0.4, 1)", "",
-            '[node name="MarkerExit" type="Marker3D" parent="."]', "position = Vector3(0, 0, 18)", 'script = ExtResource("4_marker")',
-            "ids = Array[StringName]([&\"klaas\"])", "",
-            '[node name="Entrance" type="Marker3D" parent="." groups=["spawn_points"]]', "position = Vector3(0, 0, 16)", "",
-            '[node name="Player" parent="." instance=ExtResource("2_player")]', "position = Vector3(0, 0, 16)", "",
-            '[node name="Navigation" type="NavigationRegion3D" parent="."]', 'navigation_mesh = SubResource("NavigationMesh_station")',
-            'script = ExtResource("20_nav")', "",
-            '[node name="Generators" type="Node3D" parent="." groups=["navigation_source"]]', 'script = ExtResource("23_group")',
-            'completion_flag = &"station_cleared"', 'done_message = "Alle vier de generators liggen plat. Geen trein meer voor Amber. Ga terug naar Klaas."', ""]
+    d = Dungeon()
+    d.build_rooms(ROOMS, PROPS)
+    d.build_track(RAIL_X, RAIL_Z)
+    d.build_labels_and_lights(LABELS, LIGHTS)
+    ext = [("PackedScene", "res://scenes/enemies/LowDriller.tscn", "21_enemy"),
+           ("PackedScene", "res://scenes/world/props/Chest.tscn", "22_chest"),
+           ("Script", "res://scenes/world/props/generator_group.gd", "23_group"),
+           ("PackedScene", "res://scenes/world/props/Generator.tscn", "24_generator")]
+    extra = ['[node name="Generators" type="Node3D" parent="." groups=["navigation_source"]]', 'script = ExtResource("23_group")',
+             'completion_flag = &"station_cleared"', 'done_message = "Alle vier de generators liggen plat. Geen trein meer voor Amber. Ga terug naar Klaas."', ""]
     for n, (name, x, z, yaw) in enumerate(GENERATORS, 1):
-        out += [f'[node name="{name}" parent="Generators" instance=ExtResource("24_generator")]',
-                f"position = {vec(x, 0.3 if name == 'Generator4' else 0, z)}", f"rotation = {vec(0, yaw, 0)}",
-                f'flag = &"station_generator_{n}"', ""]
+        extra += [f'[node name="{name}" parent="Generators" instance=ExtResource("24_generator")]',
+                  f"position = {vec(x, 0.3 if name == 'Generator4' else 0, z)}", f"rotation = {vec(0, yaw, 0)}",
+                  f'flag = &"station_generator_{n}"', ""]
     for name, x, z, yaw in CHESTS:
-        out += [f'[node name="{name}" parent="." instance=ExtResource("22_chest")]', f"position = {vec(x, 0, z)}",
-                f"rotation = {vec(0, yaw, 0)}", ""]
-    out += ['[node name="Enemies" type="Node3D" parent="."]', ""]
+        extra += [f'[node name="{name}" parent="." instance=ExtResource("22_chest")]', f"position = {vec(x, 0, z)}",
+                  f"rotation = {vec(0, yaw, 0)}", ""]
+    extra += ['[node name="Enemies" type="Node3D" parent="."]', ""]
     for name, x, z, yaw in ENEMIES:
-        out += [f'[node name="LowDriller{name}" parent="Enemies" instance=ExtResource("21_enemy")]',
-                f"position = {vec(x, 0, z)}", f"rotation = {vec(0, yaw, 0)}", ""]
-    OUT.write_text("\n".join(out).rstrip("\n") + "\n")
+        extra += [f'[node name="LowDriller{name}" parent="Enemies" instance=ExtResource("21_enemy")]',
+                  f"position = {vec(x, 0, z)}", f"rotation = {vec(0, yaw, 0)}", ""]
+    world = {"root": "StationDungeon", "location_name": "Station Elst", "location_id": "station_dungeon",
+             "ambient": (0.3, 0.42, 0.35), "nav_id": "NavigationMesh_station", "nav_aabb": (-32, -2, -96, 60, 10, 118),
+             "exit": (19.25, 18, 16, "StationExit", (0.3, 0.7, 0.4))}
+    d.write(OUT, world, ext, extra)
     print("wrote", OUT, "with", len(GENERATORS), "generators and", len(ENEMIES), "enemies")
 
 

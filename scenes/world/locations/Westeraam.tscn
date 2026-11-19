@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/props/House.tscn" id="1_res"]
 [ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="2_res"]
 [ext_resource type="Script" path="res://scenes/world/location_area.gd" id="3_res"]
+[ext_resource type="Script" path="res://scripts/quests/quest_marker.gd" id="4_marker"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
 albedo_color = Color(0.3, 0.3, 0.31, 1)
@@ -89,6 +90,11 @@ outline_size = 14
 
 [node name="WesteraamExit" type="Marker3D" parent="." groups=["spawn_points"]]
 position = Vector3(0, 0, 5)
+
+[node name="MarkerDoor" type="Marker3D" parent="."]
+position = Vector3(0, 0, 6)
+script = ExtResource("4_marker")
+ids = Array[StringName]([&"vape_koning"])
 
 [node name="LocationArea" type="Area3D" parent="."]
 script = ExtResource("3_res")

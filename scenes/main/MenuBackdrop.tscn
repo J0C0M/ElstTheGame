@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/main/menu_backdrop.gd" id="1_backdrop"]
+[ext_resource type="PackedScene" path="res://scenes/world/Elst.tscn" id="2_world"]
+
+[node name="MenuBackdrop" type="Node3D"]
+script = ExtResource("1_backdrop")
+world_scene = ExtResource("2_world")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+fov = 60.0

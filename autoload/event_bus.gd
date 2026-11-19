@@ -68,3 +68,5 @@ signal boss_ended
 signal rest_requested(message: String)
 ## The player aims the crossbow or stops aiming: the HUD shows a crosshair.
 signal crosshair_changed(shown: bool)
+## Dev powers went on or off (` in debug builds): the HUD shows it.
+signal dev_powers_changed(enabled: bool)

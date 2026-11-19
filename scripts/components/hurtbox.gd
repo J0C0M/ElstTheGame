@@ -12,6 +12,14 @@ func _ready() -> void:
 
 
 func receive_hit(hit: HitData) -> void:
+	# With dev powers every hit from the player kills, whatever the owner
+	# would normally do with it.
+	if GameState.dev_powers and hit.source is Player:
+		var health: HealthComponent = get_parent().get_node_or_null(^"Health") as HealthComponent
+		if health != null:
+			if not health.is_dead():
+				health.take_damage(health.current_health)
+			return
 	hit_received.emit(hit)
 
 

@@ -43,6 +43,8 @@ func _ready() -> void:
 	EventBus.quest_updated.connect(_on_quest_updated.unbind(1))
 	EventBus.boss_started.connect(_on_boss_started)
 	EventBus.crosshair_changed.connect(func(shown: bool) -> void: ($Crosshair as Label).visible = shown)
+	EventBus.dev_powers_changed.connect(func(enabled: bool) -> void: ($DevPowers as Label).visible = enabled)
+	($DevPowers as Label).visible = GameState.dev_powers
 	EventBus.boss_health_changed.connect(_on_boss_health_changed)
 	EventBus.boss_ended.connect(func() -> void: _boss_bar.visible = false)
 	_on_quest_updated()

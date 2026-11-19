@@ -1,0 +1,95 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/inventory_menu.gd" id="1_menu"]
+
+[node name="InventoryMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(720, 560)
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Center/Panel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.75, 0.35, 1)
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+text = "Inventaris"
+
+[node name="InfoLabel" type="Label" parent="Center/Panel/Content"]
+layout_mode = 2
+unique_name_in_owner = true
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(1, 0.84, 0.32, 1)
+text = ""
+
+[node name="SlotsHeading" type="Label" parent="Center/Panel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.55, 1)
+theme_override_font_sizes/font_size = 22
+text = "Uitrusting"
+
+[node name="Slots" type="VBoxContainer" parent="Center/Panel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="GearHeading" type="Label" parent="Center/Panel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.55, 1)
+theme_override_font_sizes/font_size = 22
+text = "Je spullen"
+
+[node name="Scroll" type="ScrollContainer" parent="Center/Panel/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="GearList" type="VBoxContainer" parent="Center/Panel/Content/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="PotionHeading" type="Label" parent="Center/Panel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.55, 1)
+theme_override_font_sizes/font_size = 22
+text = "Drankjes (Q om te drinken)"
+
+[node name="PotionList" type="VBoxContainer" parent="Center/Panel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="Center/Panel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Terug"

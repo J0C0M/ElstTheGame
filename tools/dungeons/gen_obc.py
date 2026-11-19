@@ -16,7 +16,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from dungeon_builder import Dungeon, vec  # noqa: E402
+from dungeon_builder import Dungeon, aim_enemies, vec  # noqa: E402
 
 OUT = pathlib.Path("scenes/dungeons/OBC.tscn")
 
@@ -150,6 +150,8 @@ ENEMIES = [
     ("Voetballer11", "21_voetballer", -34, -118, -1.0), ("Voetballer12", "21_voetballer", -14, -130, 0),
     ("Fatbiker7", "22_fatbiker", -16, -138, 0), ("Fatbiker8", "22_fatbiker", -16, -146, 0.2),
 ]
+# Most of them face the player coming in; the yaws above are replaced.
+ENEMIES = aim_enemies(ENEMIES, ROOMS, (0, -4), 0.7, seed=9)
 CHESTS = [("ChestKantine", -33, -5, 3.14159), ("ChestPlein", -36.5, -132.5, 0.7854)]
 CHECKPOINT = (-21, -84)
 BENCH = (-27.15, -80, -1.5708)

@@ -6,7 +6,9 @@ floor, a ceiling and walls with door gaps; north and south walls cover the
 corners, west and east walls fit in between. A side set to None has no wall:
 the neighbouring room builds it. +x is east, -z is north (deeper in).
 """
+import math
 import pathlib
+import random
 
 FLOOR = (0.42, 0.42, 0.4)
 CEILING = (0.17, 0.17, 0.19)
@@ -184,3 +186,54 @@ class Dungeon:
                 'script = ExtResource("20_nav")', ""]
         out += extra
         pathlib.Path(out_path).write_text("\n".join(out).rstrip("\n") + "\n")
+
+
+def _room_at(rooms, x, z, skip=None, margin=0.6):
+    for name, ((x0, x1, z0, z1), *_rest) in rooms.items():
+        if name != skip and x0 - margin <= x <= x1 + margin and z0 - margin <= z <= z1 + margin:
+            return name
+    return None
+
+
+def entry_points(rooms, start):
+    """For each room, the doorway the player first comes in through, found by
+    walking through the doors from the room that holds [start] (x, z). A side
+    without a wall (None) counts as one wide doorway in its middle."""
+    first = _room_at(rooms, *start, margin=0)
+    entry = {first: start}
+    queue = [first]
+    while queue:
+        name = queue.pop(0)
+        (x0, x1, z0, z1), _colour, _height, sides = rooms[name]
+        points = []
+        for side, doors in sides.items():
+            centres = [(x0 + x1) / 2 if side in ("N", "S") else (z0 + z1) / 2] if doors is None else [door[0] for door in doors]
+            for c in centres:
+                points.append({"N": (c, z0), "S": (c, z1), "W": (x0, c), "E": (x1, c)}[side])
+        for point in points:
+            other = _room_at(rooms, *point, skip=name)
+            if other is not None and other not in entry:
+                entry[other] = point
+                queue.append(other)
+    return entry
+
+
+def aim_enemies(enemies, rooms, start, toward_share, seed):
+    """Turns the enemies at the start, so not all of them look the same way:
+    about [toward_share] of them face the doorway the player comes in through
+    (a little off), the others look a random way. Enemies are tuples that end
+    in x, z, yaw; the same seed gives the same result every run."""
+    rng = random.Random(seed)
+    entry = entry_points(rooms, start)
+    aimed = []
+    for enemy in enemies:
+        x, z = enemy[-3], enemy[-2]
+        target = entry.get(_room_at(rooms, x, z))
+        toward = rng.random() < toward_share
+        jitter = rng.uniform(-0.45, 0.45)
+        if toward and target is not None:
+            yaw = math.atan2(-(target[0] - x), -(target[1] - z)) + jitter
+        else:
+            yaw = rng.uniform(-math.pi, math.pi)
+        aimed.append(tuple(enemy[:-1]) + (round(yaw, 3),))
+    return aimed

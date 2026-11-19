@@ -96,12 +96,17 @@ func _test_enemies() -> void:
 			enemy.health.take_damage(999)
 	await _frames(30)
 	_player().health.set_health(100)
-	_place(biker.global_position + biker.get_forward() * 5.0, biker.rotation.y + PI)
+	# Enemies face the player at the start, so the fatbiker may have chased
+	# during the football test: put it back home first.
+	biker.global_position = biker.home
+	biker.reset_physics_interpolation()
+	_place(biker.home + Vector3(0, 0, 5), 0.0)
+	biker.notice_player()
 	for i: int in 400:
 		await physics_frame
 		if _player().health.current_health < 100:
 			break
-	_check(_player().health.current_health <= 90, "a fatbiker's charge hurts")
+	_check(_player().health.current_health <= 90, "a fatbiker's charge hurts (%d)" % _player().health.current_health)
 	_player().is_invulnerable = true
 	biker.health.take_damage(999)
 

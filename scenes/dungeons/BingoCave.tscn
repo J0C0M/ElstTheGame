@@ -1586,100 +1586,100 @@ rotation = Vector3(0, 3.1416, 0)
 
 [node name="Opa1" parent="Enemies" instance=ExtResource("22_opa")]
 position = Vector3(-4, 0, -10)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, -2.618, 0)
 
 [node name="Opa2" parent="Enemies" instance=ExtResource("22_opa")]
 position = Vector3(4, 0, -11)
-rotation = Vector3(0, 0.2, 0)
+rotation = Vector3(0, 2.358, 0)
 
 [node name="Oma1" parent="Enemies" instance=ExtResource("21_oma")]
 position = Vector3(-14, 0, -27.5)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, -1.967, 0)
 
 [node name="Oma2" parent="Enemies" instance=ExtResource("21_oma")]
 position = Vector3(14, 0, -26)
-rotation = Vector3(0, -0.3, 0)
+rotation = Vector3(0, 1.885, 0)
 
 [node name="Opa3" parent="Enemies" instance=ExtResource("22_opa")]
 position = Vector3(0, 0, -34.5)
-rotation = Vector3(0, 0.3, 0)
+rotation = Vector3(0, 2.987, 0)
 
 [node name="Opa4" parent="Enemies" instance=ExtResource("22_opa")]
 position = Vector3(6, 0, -27.5)
-rotation = Vector3(0, -0.2, 0)
+rotation = Vector3(0, 3.068, 0)
 
 [node name="Opa5" parent="Enemies" instance=ExtResource("22_opa")]
 position = Vector3(-12, 0, -34.5)
-rotation = Vector3(0, 0.4, 0)
+rotation = Vector3(0, 2.263, 0)
 
 [node name="Rolstoel1" parent="Enemies" instance=ExtResource("25_rolstoel")]
 position = Vector3(-2, 0, -46)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, -3.182, 0)
 
 [node name="Rolstoel2" parent="Enemies" instance=ExtResource("25_rolstoel")]
 position = Vector3(16, 0, -46)
-rotation = Vector3(0, -0.3, 0)
+rotation = Vector3(0, 2.809, 0)
 
 [node name="Oma3" parent="Enemies" instance=ExtResource("21_oma")]
 position = Vector3(-30, 0, -35)
-rotation = Vector3(0, 1.2, 0)
+rotation = Vector3(0, -0.94, 0)
 
 [node name="Opa6" parent="Enemies" instance=ExtResource("22_opa")]
 position = Vector3(-28, 0, -40)
-rotation = Vector3(0, 1.4, 0)
+rotation = Vector3(0, -1.901, 0)
 
 [node name="Rolstoel3" parent="Enemies" instance=ExtResource("25_rolstoel")]
 position = Vector3(-23, 0, -36)
-rotation = Vector3(0, 1, 0)
+rotation = Vector3(0, -0.209, 0)
 
 [node name="Opa7" parent="Enemies" instance=ExtResource("22_opa")]
 position = Vector3(12, 0, -58)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, -2.863, 0)
 
 [node name="Oma4" parent="Enemies" instance=ExtResource("21_oma")]
 position = Vector3(12, 0, -72)
-rotation = Vector3(0, 0.2, 0)
+rotation = Vector3(0, 2.812, 0)
 
 [node name="Oma5" parent="Enemies" instance=ExtResource("21_oma")]
 position = Vector3(0, 0, -110)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, -0.841, 0)
 
 [node name="Oma6" parent="Enemies" instance=ExtResource("21_oma")]
 position = Vector3(20, 0, -103)
-rotation = Vector3(0, 0.4, 0)
+rotation = Vector3(0, 0.308, 0)
 
 [node name="Oma7" parent="Enemies" instance=ExtResource("21_oma")]
 position = Vector3(24, 0, -122)
-rotation = Vector3(0, -0.3, 0)
+rotation = Vector3(0, 2.318, 0)
 
 [node name="Oma8" parent="Enemies" instance=ExtResource("21_oma")]
 position = Vector3(6, 0, -130)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, -2.657, 0)
 
 [node name="Opa8" parent="Enemies" instance=ExtResource("22_opa")]
 position = Vector3(14, 0, -118)
-rotation = Vector3(0, 0.2, 0)
+rotation = Vector3(0, 2.803, 0)
 
 [node name="Opa9" parent="Enemies" instance=ExtResource("22_opa")]
 position = Vector3(-4, 0, -110)
-rotation = Vector3(0, 1, 0)
+rotation = Vector3(0, -2.706, 0)
 
 [node name="Rolstoel4" parent="Enemies" instance=ExtResource("25_rolstoel")]
 position = Vector3(-4, 0, -122)
-rotation = Vector3(0, 1, 0)
+rotation = Vector3(0, -2.304, 0)
 
 [node name="Rolstoel5" parent="Enemies" instance=ExtResource("25_rolstoel")]
 position = Vector3(30, 0, -116)
-rotation = Vector3(0, -1, 0)
+rotation = Vector3(0, 2.439, 0)
 
 [node name="Rolstoel6" parent="Enemies" instance=ExtResource("25_rolstoel")]
 position = Vector3(12, 0, -131)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, 0.422, 0)
 
 [node name="Opa10" parent="Enemies" instance=ExtResource("22_opa")]
 position = Vector3(12, 0, -142)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, 3.233, 0)
 
 [node name="Oma9" parent="Enemies" instance=ExtResource("21_oma")]
 position = Vector3(12, 0, -150)
-rotation = Vector3(0, 0.2, 0)
+rotation = Vector3(0, 3.39, 0)

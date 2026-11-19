@@ -14,7 +14,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from dungeon_builder import Dungeon, vec  # noqa: E402
+from dungeon_builder import Dungeon, aim_enemies, vec  # noqa: E402
 
 OUT = pathlib.Path("scenes/dungeons/Westeraam.tscn")
 
@@ -128,6 +128,8 @@ ENEMIES = [
     ("VapeDriller8", "22_vape", 2, -80, 1.6), ("VapeDriller9", "22_vape", -5, -90, 1.2),
     ("Driller8", "21_driller", -27, -104, 0), ("Driller9", "21_driller", -26, -109, 0.2),
 ]
+# Half of them face the player coming in; the yaws above are replaced.
+ENEMIES = aim_enemies(ENEMIES, ROOMS, (0, 8), 0.5, seed=1)
 CHESTS = [("ChestShop", 17.5, -7.5, -1.5708), ("ChestYard", -12.5, -60.5, 0.7854), ("ChestLab", 4.5, -77.5, -1.5708)]
 # The four clouds the Vape-koning hides in, around the middle of his palace.
 HIDEOUTS = [(-35, -122), (-19, -122), (-35, -136), (-19, -136)]

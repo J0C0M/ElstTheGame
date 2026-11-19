@@ -1951,80 +1951,80 @@ rotation = Vector3(0, 0.7854, 0)
 
 [node name="Voetballer1" parent="Enemies" instance=ExtResource("21_voetballer")]
 position = Vector3(-5, 0, -16)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, -2.861, 0)
 
 [node name="Voetballer2" parent="Enemies" instance=ExtResource("21_voetballer")]
 position = Vector3(6, 0, -15)
-rotation = Vector3(0, 0.3, 0)
+rotation = Vector3(0, 2.972, 0)
 
 [node name="Fatbiker1" parent="Enemies" instance=ExtResource("22_fatbiker")]
 position = Vector3(0, 0, -10)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, 3.144, 0)
 
 [node name="Voetballer3" parent="Enemies" instance=ExtResource("21_voetballer")]
 position = Vector3(-30, 0, -6)
-rotation = Vector3(0, 1.2, 0)
+rotation = Vector3(0, 0.341, 0)
 
 [node name="Voetballer4" parent="Enemies" instance=ExtResource("21_voetballer")]
 position = Vector3(-24, 0, -14)
-rotation = Vector3(0, 1, 0)
+rotation = Vector3(0, -2.306, 0)
 
 [node name="Voetballer5" parent="Enemies" instance=ExtResource("21_voetballer")]
 position = Vector3(14, 0, -40)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, 3.325, 0)
 
 [node name="Voetballer6" parent="Enemies" instance=ExtResource("21_voetballer")]
 position = Vector3(13, 0, -54)
-rotation = Vector3(0, 0.2, 0)
+rotation = Vector3(0, -2.897, 0)
 
 [node name="Voetballer7" parent="Enemies" instance=ExtResource("21_voetballer")]
 position = Vector3(6, 0, -82)
-rotation = Vector3(0, 0.3, 0)
+rotation = Vector3(0, -3.029, 0)
 
 [node name="Voetballer8" parent="Enemies" instance=ExtResource("21_voetballer")]
 position = Vector3(22, 0, -74)
-rotation = Vector3(0, -0.4, 0)
+rotation = Vector3(0, 2.628, 0)
 
 [node name="Voetballer9" parent="Enemies" instance=ExtResource("21_voetballer")]
 position = Vector3(14, 0, -88)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, 1.723, 0)
 
 [node name="Fatbiker2" parent="Enemies" instance=ExtResource("22_fatbiker")]
 position = Vector3(20, 0, -66)
-rotation = Vector3(0, 0.5, 0)
+rotation = Vector3(0, 2.578, 0)
 
 [node name="Fatbiker3" parent="Enemies" instance=ExtResource("22_fatbiker")]
 position = Vector3(4, 0, -70)
-rotation = Vector3(0, -0.5, 0)
+rotation = Vector3(0, -2.544, 0)
 
 [node name="Fatbiker4" parent="Enemies" instance=ExtResource("22_fatbiker")]
 position = Vector3(-26, 0, -108)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, -2.595, 0)
 
 [node name="Fatbiker5" parent="Enemies" instance=ExtResource("22_fatbiker")]
 position = Vector3(-10, 0, -112)
-rotation = Vector3(0, 0.4, 0)
+rotation = Vector3(0, 2.222, 0)
 
 [node name="Fatbiker6" parent="Enemies" instance=ExtResource("22_fatbiker")]
 position = Vector3(-22, 0, -126)
-rotation = Vector3(0, -0.3, 0)
+rotation = Vector3(0, -3.371, 0)
 
 [node name="Voetballer10" parent="Enemies" instance=ExtResource("21_voetballer")]
 position = Vector3(-4, 0, -104)
-rotation = Vector3(0, 1, 0)
+rotation = Vector3(0, 2.381, 0)
 
 [node name="Voetballer11" parent="Enemies" instance=ExtResource("21_voetballer")]
 position = Vector3(-34, 0, -118)
-rotation = Vector3(0, -1, 0)
+rotation = Vector3(0, -2.297, 0)
 
 [node name="Voetballer12" parent="Enemies" instance=ExtResource("21_voetballer")]
 position = Vector3(-14, 0, -130)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, -0.761, 0)
 
 [node name="Fatbiker7" parent="Enemies" instance=ExtResource("22_fatbiker")]
 position = Vector3(-16, 0, -138)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, 2.713, 0)
 
 [node name="Fatbiker8" parent="Enemies" instance=ExtResource("22_fatbiker")]
 position = Vector3(-16, 0, -146)
-rotation = Vector3(0, 0.2, 0)
+rotation = Vector3(0, 3.507, 0)

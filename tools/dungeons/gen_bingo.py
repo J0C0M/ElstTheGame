@@ -15,7 +15,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from dungeon_builder import Dungeon, vec  # noqa: E402
+from dungeon_builder import Dungeon, aim_enemies, vec  # noqa: E402
 
 OUT = pathlib.Path("scenes/dungeons/BingoCave.tscn")
 
@@ -112,6 +112,8 @@ ENEMIES = [
     ("Rolstoel4", "25_rolstoel", -4, -122, 1.0), ("Rolstoel5", "25_rolstoel", 30, -116, -1.0), ("Rolstoel6", "25_rolstoel", 12, -131, 0),
     ("Opa10", "22_opa", 12, -142, 0), ("Oma9", "21_oma", 12, -150, 0.2),
 ]
+# Nearly all of them face the player coming in; the yaws above are replaced.
+ENEMIES = aim_enemies(ENEMIES, ROOMS, (0, -4), 0.85, seed=10)
 CHESTS = [("ChestKeuken", -32.5, -44.5, 0.7854), ("ChestGrot", -8, -98, 3.14159)]
 CHECKPOINT = (12, -88)
 BENCH = (21.15, -84, 1.5708)

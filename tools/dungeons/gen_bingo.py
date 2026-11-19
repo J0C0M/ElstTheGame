@@ -95,20 +95,22 @@ LIGHTS = [
     ("LightHol3", 4, 8.0, -178, (1.0, 0.6, 0.6), 2.2, 18),
     ("LightHol4", 20, 8.0, -178, (1.0, 0.6, 0.6), 2.2, 18),
 ]
-# Enemies: (name, scene id, x, z, yaw). 24 of them, the most of any dungeon.
+# Enemies: (name, scene id, x, z, yaw). 25 of them, the most of any dungeon:
+# bingo-opa's with walking sticks, leaping boze oma's and wheelchair oma's
+# that fire bingo cards from a distance.
 ENEMIES = [
-    # Part 1.
-    ("Oma1", "21_oma", -4, -10, 0), ("Oma2", "21_oma", 4, -11, 0.2),
-    ("Oma3", "21_oma", -14, -27.5, 0), ("Oma4", "21_oma", 0, -34.5, 0.3), ("Oma5", "21_oma", 14, -26, -0.3),
-    ("Oma6", "21_oma", -4, -44, 0), ("Opa1", "22_opa", -12, -34.5, 0.4), ("Opa2", "22_opa", 6, -27.5, -0.2),
-    ("Opa3", "22_opa", 16, -40, 0.5),
-    ("Oma7", "21_oma", -30, -35, 1.2), ("Oma8", "21_oma", -24, -41, 1.0), ("Opa4", "22_opa", -28, -40, 1.4),
-    ("Oma9", "21_oma", 12, -58, 0), ("Oma10", "21_oma", 12, -72, 0.2),
-    # Part 2.
-    ("Oma11", "21_oma", 0, -110, 0), ("Oma12", "21_oma", 20, -103, 0.4), ("Oma13", "21_oma", 24, -122, -0.3),
-    ("Oma14", "21_oma", 6, -130, 0), ("Oma15", "21_oma", 14, -118, 0.2), ("Opa5", "22_opa", -4, -118, 1.0),
-    ("Opa6", "22_opa", 30, -116, -1.0), ("Opa7", "22_opa", 12, -126, 0),
-    ("Oma16", "21_oma", 12, -142, 0), ("Oma17", "21_oma", 12, -150, 0.2),
+    # Part 1: the entrance, the bingo hall, the kitchen and the corridor.
+    ("Opa1", "22_opa", -4, -10, 0), ("Opa2", "22_opa", 4, -11, 0.2),
+    ("Oma1", "21_oma", -14, -27.5, 0), ("Oma2", "21_oma", 14, -26, -0.3), ("Opa3", "22_opa", 0, -34.5, 0.3),
+    ("Opa4", "22_opa", 6, -27.5, -0.2), ("Opa5", "22_opa", -12, -34.5, 0.4),
+    ("Rolstoel1", "25_rolstoel", -2, -46, 0), ("Rolstoel2", "25_rolstoel", 16, -46, -0.3),
+    ("Oma3", "21_oma", -30, -35, 1.2), ("Opa6", "22_opa", -28, -40, 1.4), ("Rolstoel3", "25_rolstoel", -23, -36, 1.0),
+    ("Opa7", "22_opa", 12, -58, 0), ("Oma4", "21_oma", 12, -72, 0.2),
+    # Part 2: the cave and the cave passage.
+    ("Oma5", "21_oma", 0, -110, 0), ("Oma6", "21_oma", 20, -103, 0.4), ("Oma7", "21_oma", 24, -122, -0.3),
+    ("Oma8", "21_oma", 6, -130, 0), ("Opa8", "22_opa", 14, -118, 0.2), ("Opa9", "22_opa", -4, -110, 1.0),
+    ("Rolstoel4", "25_rolstoel", -4, -122, 1.0), ("Rolstoel5", "25_rolstoel", 30, -116, -1.0), ("Rolstoel6", "25_rolstoel", 12, -131, 0),
+    ("Opa10", "22_opa", 12, -142, 0), ("Oma9", "21_oma", 12, -150, 0.2),
 ]
 CHESTS = [("ChestKeuken", -32.5, -44.5, 0.7854), ("ChestGrot", -8, -98, 3.14159)]
 CHECKPOINT = (12, -88)
@@ -130,6 +132,7 @@ def main():
            ("PackedScene", "res://scenes/enemies/BingoOpa.tscn", "22_opa"),
            ("PackedScene", "res://scenes/world/props/Chest.tscn", "23_chest"),
            ("PackedScene", "res://scenes/bosses/GrumpyOma.tscn", "24_boss"),
+           ("PackedScene", "res://scenes/enemies/RolstoelOma.tscn", "25_rolstoel"),
            ("PackedScene", "res://scenes/world/props/Checkpoint.tscn", "26_checkpoint"),
            ("PackedScene", "res://scenes/world/props/RestBench.tscn", "27_bench")]
     extra = ['[node name="Checkpoint" parent="." instance=ExtResource("26_checkpoint")]', f"position = {vec(CHECKPOINT[0], 0, CHECKPOINT[1])}", "",

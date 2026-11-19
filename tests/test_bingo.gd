@@ -1,9 +1,11 @@
 extends SceneTree
 ## Headless test for Quest 5, the Bingo Club Boomer Cave and the crossbow:
-## Klaas gives the quest, a bingo-opa's BINGO! fires up the grandmas, the
-## coffee room is a checkpoint, Grumpy Oma blocks most damage until she is
-## exhausted after a slam (with a shockwave) or a tornado, the lair gate
-## closes and saving is blocked during the fight, the Bingo Club is
+## Klaas gives the quest, bingo-opa's call numbers and facts, a boze oma leaps
+## at the player and hops away when left alone, a wheelchair oma fires a burst
+## of bingo cards, the coffee room is a checkpoint, Grumpy Oma slaps slowly
+## and catches her breath, a parry, slam or tornado exhausts her (extra
+## damage), hits bounce off her tornado, she calls her followers twice, the
+## lair gate closes and saving is blocked during the fight, the Bingo Club is
 ## liberated, Klaas gives the crossbow, a crossbow bolt hurts an enemy, and a
 ## boss beaten before Klaas asked still counts. Uses its own save folder.
 ## Run: godot --headless --path . --fixed-fps 60 -s res://tests/test_bingo.gd
@@ -15,9 +17,11 @@ const TEST_SAVE_DIR: String = "user://test_saves/"
 const QUEST: StringName = &"q5_bingo"
 const DUNGEON: String = "res://scenes/dungeons/BingoCave.tscn"
 const CHASE: int = 1
+const SLAP: int = 2
 const JUMP: int = 3
 const SPIN: int = 4
 const EXHAUSTED: int = 5
+const ROAR: int = 6
 
 var _failures: int = 0
 var _main: Variant
@@ -45,6 +49,8 @@ func _run() -> void:
 	await _test_klaas_gives_quest()
 	await _test_grandmas()
 	await _test_checkpoint()
+	await _test_leaping_oma()
+	await _test_wheelchair_oma()
 	await _test_boss_fight()
 	await _test_reward_and_crossbow()
 	await _test_beaten_early()
@@ -76,14 +82,14 @@ func _test_klaas_gives_quest() -> void:
 
 func _test_grandmas() -> void:
 	await _go_to(DUNGEON)
-	_check(_main.get_world().location_name == "Bingo Club Boomer Cave", "the cave door leads into the Bingo Club")
-	_check(_main.get_world().get_node("Enemies").get_child_count() == 24, "the Bingo Club has the most enemies: 24")
-	var oma: Variant = _main.get_world().find_child("Oma3", true, false)
-	var opa: Variant = _main.get_world().find_child("Opa1", true, false)
-	_check(oma.health.max_health == 45, "boze oma's are not weakened by the station")
-	opa.get_node("BingoCaller").bingo()
-	_check(is_equal_approx(oma.damage_multiplier, 1.25) and oma.get_damage() == 13, "BINGO! makes the grandmas nearby hit 25% harder")
 	_player().is_invulnerable = true
+	_check(_main.get_world().location_name == "Bingo Club Boomer Cave", "the cave door leads into the Bingo Club")
+	_check(_main.get_world().get_node("Enemies").get_child_count() == 25, "the Bingo Club has the most enemies: 25")
+	var opa: Variant = _main.get_world().find_child("Opa1", true, false)
+	_check(opa.health.max_health == 35 and opa.model.find_child("WalkingStick") != null, "bingo-opa's are not weakened and carry a walking stick")
+	opa.notice_player()
+	await _frames(200)
+	_check(opa.get_node("BingoCaller").calls > 0, "a bingo-opa calls numbers and facts while he fights")
 
 
 func _test_checkpoint() -> void:
@@ -95,6 +101,36 @@ func _test_checkpoint() -> void:
 	_check(_count_saves("auto") == autosaves + 1, "the coffee room halfway is a checkpoint with an autosave")
 
 
+func _test_leaping_oma() -> void:
+	var oma: Variant = _spawn("res://scenes/enemies/BozeOma.tscn", Vector3(6, 0, -93))
+	_place(Vector3(6, 0, -83.5), PI)
+	await _frames(5)
+	oma.notice_player()
+	await _wait_until(func() -> bool: return oma.state_machine.get_state_name() == &"Leap", 120)
+	_check(oma.state_machine.get_state_name() == &"Leap", "a boze oma leaps at the player from far away")
+	await _wait_until(func() -> bool: return oma.state_machine.get_state_name() != &"Leap", 120)
+	_check(oma.distance_to_player() < 2.6, "she lands right next to the player (%.1f m)" % oma.distance_to_player())
+	await _wait_until(func() -> bool: return oma.distance_to_player() > 5.0, 600)
+	_check(oma.distance_to_player() > 5.0, "left alone for too long, she hops away again")
+	await _wait_until(func() -> bool: return oma.distance_to_player() < 2.6, 400)
+	_check(oma.distance_to_player() < 2.6, "after a short wait she leaps back in")
+	oma.queue_free()
+
+
+func _test_wheelchair_oma() -> void:
+	var granny: Variant = _spawn("res://scenes/enemies/RolstoelOma.tscn", Vector3(6, 0, -93))
+	_place(Vector3(6, 0, -83.5), PI)
+	await _frames(5)
+	_check(granny.model.seated and granny.data.run_speed < 2.0, "the wheelchair oma sits and is very slow")
+	granny.notice_player()
+	var most: int = 0
+	for i: int in 180:
+		await physics_frame
+		most = maxi(most, _count_cards())
+	_check(most >= 3, "she fires a burst of bingo cards like a cannon (%d)" % most)
+	granny.queue_free()
+
+
 func _test_boss_fight() -> void:
 	var oma: Variant = _main.get_world().find_child("GrumpyOma", true, false)
 	var gate: Variant = _main.get_world().get_node("ArenaGate")
@@ -102,29 +138,54 @@ func _test_boss_fight() -> void:
 	await _frames(5)
 	_check(oma.mode == CHASE, "walking into her lair starts the fight")
 	_check(_state.is_saving_blocked() and gate.visible, "saving is blocked and the gate of the lair closes")
+	oma.set("_special_timer", 999.0)
 	_hit(oma, 100)
-	_check(oma.health.current_health == 525, "her handbag blocks most damage (%d)" % oma.health.current_health)
+	_check(oma.health.current_health == 450, "she takes normal damage while she walks (%d)" % oma.health.current_health)
+	_place(oma.global_position + oma.global_basis.z * -2.5, 0.0)
+	await _wait_until(func() -> bool: return oma.mode == SLAP, 120)
+	var frames: int = 0
+	while oma.mode == SLAP and frames < 300:
+		frames += 1
+		await physics_frame
+	_check(oma.mode == CHASE and frames >= 100, "her slap is slow and she catches her breath after it (%.1f s)" % (frames / 60.0))
+	await _wait_until(func() -> bool: return oma.mode == SLAP, 120)
+	oma.get_node("AttackHitbox").parried.emit()
+	_check(oma.mode == EXHAUSTED, "parrying her slap knocks the wind out of her")
+	_hit(oma, 20)
+	_check(oma.health.current_health == 420, "exhausted, she takes 50%% extra damage (%d)" % oma.health.current_health)
+	await _wait_until(func() -> bool: return oma.mode == CHASE, 300)
 	_place(oma.global_position + Vector3(0, 0, 8), PI)
 	oma.set("_special_timer", 0.0)
 	await _frames(2)
 	_check(oma.mode == JUMP, "she jumps for a ground slam")
-	await _wait_for_mode(oma, EXHAUSTED)
+	await _wait_until(func() -> bool: return oma.mode == EXHAUSTED, 300)
 	_check(_count_with_script("shockwave.gd") > 0, "her landing sends a shockwave over the floor")
-	_hit(oma, 100)
-	_check(oma.health.current_health == 425, "exhausted, she takes full damage")
-	await _wait_for_mode(oma, CHASE)
+	await _wait_until(func() -> bool: return oma.mode == CHASE, 300)
 	_place(oma.global_position + Vector3(0, 0, 8), PI)
 	oma.set("_special_timer", 0.0)
 	await _frames(2)
 	_check(oma.mode == SPIN, "next she spins like a tornado")
-	await _wait_for_mode(oma, EXHAUSTED)
+	_hit(oma, 100)
+	_check(oma.health.current_health == 420, "hits bounce off her tornado")
+	await _wait_until(func() -> bool: return oma.mode == EXHAUSTED, 300)
 	_check(oma.mode == EXHAUSTED, "after the tornado she is exhausted too")
-	oma.health.take_damage(300)
+	var followers: int = oma.get_parent().get_child_count()
+	oma.health.take_damage(90)
+	await _wait_until(func() -> bool: return oma.mode == ROAR, 300)
+	_check(oma.followers_called == 1 and oma.get_parent().get_child_count() == followers + 2, "at two thirds she roars BINGO! and two followers come")
+	var follower: Variant = oma.get_parent().get_child(oma.get_parent().get_child_count() - 1)
+	_check(follower.damage_multiplier > 1.0, "her BINGO! fires up her followers")
+	await _wait_until(func() -> bool: return oma.mode == CHASE, 300)
+	oma.health.take_damage(170)
 	_check(oma.is_enraged(), "below 30% health she gets faster")
+	await _wait_until(func() -> bool: return oma.mode == ROAR, 300)
+	_check(oma.followers_called == 2, "at one third she calls her followers again")
 	oma.health.take_damage(1000)
 	await _frames(5)
 	_check(_state.has_flag(&"boss_grumpy_oma") and not _state.is_saving_blocked(), "beating her is remembered and saving works again")
 	_check(not gate.visible and _step() == &"report", "the gate opens and the quest sends you back to Klaas")
+	for node: Node in get_nodes_in_group(&"enemies"):
+		node.queue_free()
 	await _frames(60)
 
 
@@ -190,11 +251,27 @@ func _hit(target: Variant, damage: int) -> void:
 	target.get_node("Hurtbox").receive_hit(load("res://scripts/components/hit_data.gd").new(damage, _player(), null))
 
 
-func _wait_for_mode(boss: Variant, mode: int) -> void:
-	for i: int in 600:
-		if boss.mode == mode:
+func _wait_until(condition: Callable, frames: int) -> void:
+	for i: int in frames:
+		if condition.call():
 			return
 		await physics_frame
+
+
+func _spawn(scene_path: String, position: Vector3) -> Variant:
+	var enemy: Node3D = (load(scene_path) as PackedScene).instantiate() as Node3D
+	# Placed before it enters the tree, so the spot becomes its home.
+	enemy.position = position
+	_main.get_world().add_child(enemy)
+	return enemy
+
+
+func _count_cards() -> int:
+	var count: int = 0
+	for node: Node in _main.get_world().get_children():
+		if node.scene_file_path == "res://scenes/enemies/projectiles/BingoCard.tscn":
+			count += 1
+	return count
 
 
 func _count_with_script(script_file: String) -> int:

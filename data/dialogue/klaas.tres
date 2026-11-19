@@ -592,7 +592,7 @@ action_value = "q4_obc"
 [sub_resource type="Resource" id="Line_q5_offer"]
 script = ExtResource("4_line")
 id = &"q5_offer"
-text = "De Bingo Club is een grot geworden. Boze oma's slaan met hun handtas en de opa's roepen de nummers. Bij BINGO worden ze woest."
+text = "De Bingo Club is een grot geworden. Opa's slaan met hun wandelstok, oma's springen je met hun tasje te lijf en de rolstoel-oma's schieten bingokaarten."
 next = &"q5_offer_2"
 
 [sub_resource type="Resource" id="Choice_28"]
@@ -610,7 +610,7 @@ next = &"hub"
 [sub_resource type="Resource" id="Line_q5_offer_2"]
 script = ExtResource("4_line")
 id = &"q5_offer_2"
-text = "Hun baas is Grumpy Oma. Groot, dik en sterker dan ik. Bijna. Spring over haar schokgolf, en sla pas als ze uitgeput is."
+text = "Hun leider is Grumpy Oma: de nummer 1 van de bingo en een trouwe volger van Amber. Voor die oudjes is ze een messias. Ontwijk haar klap, spring over haar schokgolf en sla hard als ze uitgeput is."
 choices = Array[ExtResource("3_choice")]([SubResource("Choice_28"), SubResource("Choice_29")])
 
 [sub_resource type="Resource" id="Line_q5_go"]

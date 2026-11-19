@@ -172,8 +172,8 @@ line("q4_go", "Het OBC ligt helemaal in het zuidwesten. Pas op voor de ballen.",
 line("q4_busy", "Ik hoor die opgevoerde fatbike nog steeds gieren. Je bent nog niet klaar.", "hub")
 line("q4_early", "Dat gegier is gestopt. Heb jij het fatbike-kindje al van zijn fiets geduwd?", "q4_early_2", model_action="flex")
 line("q4_early_2", "Eerder klaar dan gevraagd. Ik ben trots op je. Hier, je beloning.", "hub", action="start_quest", value=Q4)
-line("q5_offer", "De Bingo Club is een grot geworden. Boze oma's slaan met hun handtas en de opa's roepen de nummers. Bij BINGO worden ze woest.", "q5_offer_2")
-line("q5_offer_2", "Hun baas is Grumpy Oma. Groot, dik en sterker dan ik. Bijna. Spring over haar schokgolf, en sla pas als ze uitgeput is.", choices=[
+line("q5_offer", "De Bingo Club is een grot geworden. Opa's slaan met hun wandelstok, oma's springen je met hun tasje te lijf en de rolstoel-oma's schieten bingokaarten.", "q5_offer_2")
+line("q5_offer_2", "Hun leider is Grumpy Oma: de nummer 1 van de bingo en een trouwe volger van Amber. Voor die oudjes is ze een messias. Ontwijk haar klap, spring over haar schokgolf en sla hard als ze uitgeput is.", choices=[
     choice("Ik pak Grumpy Oma.", "q5_go", action="start_quest", value=Q5),
     choice("Nog even niet.", "hub"),
 ])

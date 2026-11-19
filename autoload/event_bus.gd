@@ -39,3 +39,7 @@ signal inventory_changed
 signal loot_collected(text: String)
 ## An enemy died. [param enemy_id] is the id from its EnemyData.
 signal enemy_killed(enemy_id: StringName)
+## The player put on other gear.
+signal equipment_changed
+## Inwijding (the bond with Klaas) changed to [param level].
+signal inwijding_changed(level: int)

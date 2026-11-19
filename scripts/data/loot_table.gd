@@ -16,6 +16,7 @@ func roll_gold() -> int:
 func roll_items() -> Array[LootEntry]:
 	var dropped: Array[LootEntry] = []
 	for entry: LootEntry in entries:
-		if entry.item != null and randf() < entry.chance:
+		var has_item: bool = entry.item != null or entry.kind == LootEntry.Kind.NEXT_GEAR
+		if has_item and randf() < entry.chance:
 			dropped.append(entry)
 	return dropped

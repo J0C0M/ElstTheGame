@@ -20,8 +20,13 @@ func drop() -> void:
 		pile.amount = gold
 		_spawn(pile, parent)
 	for entry: LootEntry in loot.roll_items():
+		var item: ItemData = entry.item
+		if entry.kind == LootEntry.Kind.NEXT_GEAR:
+			item = GameState.get_next_gear()
+		if item == null:
+			continue
 		var pickup: ItemPickup = ITEM_SCENE.instantiate()
-		pickup.item = entry.item
+		pickup.item = item
 		pickup.count = entry.count
 		_spawn(pickup, parent)
 

@@ -10,3 +10,4 @@ type = 3
 heal_amount = 40
 price = 20
 required_inwijding = 1
+model_color = Color(0.86, 0.14, 0.2, 1)

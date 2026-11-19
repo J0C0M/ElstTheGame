@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"steel_armor"
+display_name = "Stalen pantser"
+type = 1
+damage_reduction = 0.45
+price = 350
+required_inwijding = 4
+can_drop = true
+model_color = Color(0.8, 0.83, 0.88, 1)
+armor_tier = 3

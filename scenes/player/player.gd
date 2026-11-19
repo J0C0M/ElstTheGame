@@ -15,6 +15,7 @@ const TAP_DIRECTIONS: Dictionary = {
 }
 
 @export var stats: PlayerStats
+## Gear worn when GameState has none (for example in the test arena).
 @export var sword: ItemData
 @export var armor: ItemData
 
@@ -57,6 +58,8 @@ func _ready() -> void:
 	_interaction_area.area_entered.connect(_on_interaction_area_entered)
 	_interaction_area.area_exited.connect(_on_interaction_area_exited)
 	EventBus.interaction_prompt_changed.emit("")
+	EventBus.equipment_changed.connect(_apply_gear)
+	_apply_gear()
 	health.reset(stats.max_health)
 	stamina.reset(stats.max_stamina, stats.stamina_regen_per_second, stats.stamina_regen_delay)
 
@@ -103,6 +106,18 @@ func face_direction_now(direction: Vector3) -> void:
 	if direction.length_squared() < 0.0001:
 		return
 	rotation.y = atan2(-direction.x, -direction.z)
+
+
+## Starts drinking the potion that suits the missing health best.
+func try_drink() -> void:
+	if health.current_health >= health.max_health:
+		EventBus.message_requested.emit("Je bent al helemaal fit.")
+		return
+	var potion: ItemData = _choose_potion()
+	if potion == null:
+		EventBus.message_requested.emit("Je hebt geen drankjes.")
+		return
+	state_machine.transition_to(&"Drink", {"potion": potion})
 
 
 ## Faces where the camera looks, straight away. Used for attacks and blocking.
@@ -245,6 +260,59 @@ func _on_hit_received(hit: HitData) -> void:
 	velocity += away.normalized() * KNOCKBACK_SPEED
 	var duration: float = stats.guard_break_duration if guard_broken else stats.hurt_duration
 	state_machine.transition_to(&"Hurt", {"duration": duration})
+
+
+## The smallest potion that heals all missing health, or else the biggest one.
+func _choose_potion() -> ItemData:
+	var missing: int = health.max_health - health.current_health
+	var best: ItemData = null
+	for id: StringName in GameState.inventory:
+		var item: ItemData = ItemCatalog.get_item(id)
+		if item == null or item.type != ItemData.ItemType.CONSUMABLE:
+			continue
+		if best == null:
+			best = item
+		elif best.heal_amount < missing:
+			if item.heal_amount > best.heal_amount:
+				best = item
+		elif item.heal_amount >= missing and item.heal_amount < best.heal_amount:
+			best = item
+	return best
+
+
+## Takes the worn gear from GameState and shows it on the model.
+func _apply_gear() -> void:
+	var worn_sword: ItemData = GameState.get_equipped(&"sword")
+	if worn_sword != null:
+		sword = worn_sword
+	var worn_armor: ItemData = GameState.get_equipped(&"armor")
+	if worn_armor != null:
+		armor = worn_armor
+	var blade: MeshInstance3D = model.get_node("Body/Hips/Torso/ArmR/Hand/Sword/Blade")
+	var blade_mesh: BoxMesh = BoxMesh.new()
+	blade_mesh.size = Vector3(0.035, 0.08, sword.blade_length)
+	blade.mesh = blade_mesh
+	blade.position.z = -0.125 - sword.blade_length * 0.5
+	blade.material_override = _gear_material(sword.model_color, true)
+	var armor_material: StandardMaterial3D = _gear_material(armor.model_color, armor.armor_tier >= 2)
+	var pieces: Dictionary[String, int] = {
+		"Body/Hips/Torso/ArmorChest": 1,
+		"Body/Hips/Torso/ArmL/Pauldron": 2,
+		"Body/Hips/Torso/ArmR/Pauldron": 2,
+		"Body/Hips/Torso/Head/Helmet": 3,
+	}
+	for path: String in pieces:
+		var piece: MeshInstance3D = model.get_node(path)
+		piece.visible = armor.armor_tier >= pieces[path]
+		piece.material_override = armor_material
+
+
+func _gear_material(color: Color, metal: bool) -> StandardMaterial3D:
+	var material: StandardMaterial3D = StandardMaterial3D.new()
+	material.albedo_color = color
+	material.metallic = 0.45 if metal else 0.0
+	material.roughness = 0.45 if metal else 1.0
+	return material
 
 
 func _update_interaction_focus() -> void:

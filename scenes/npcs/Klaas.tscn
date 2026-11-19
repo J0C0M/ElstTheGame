@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/npcs/klaas.gd" id="1_klaas"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/KlaasModel.tscn" id="2_model"]
+[ext_resource type="Script" path="res://scripts/components/interactable.gd" id="3_interactable"]
+[ext_resource type="Resource" path="res://data/dialogue/klaas.tres" id="4_dialogue"]
+
+[sub_resource type="CapsuleShape3D" id="Shape_body"]
+radius = 0.45
+height = 2.1
+
+[sub_resource type="BoxShape3D" id="Shape_talk"]
+size = Vector3(2.4, 2, 2.2)
+
+[node name="Klaas" type="StaticBody3D"]
+process_mode = 3
+script = ExtResource("1_klaas")
+dialogue = ExtResource("4_dialogue")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.05, 0)
+shape = SubResource("Shape_body")
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+
+[node name="Interactable" type="Area3D" parent="."]
+script = ExtResource("3_interactable")
+prompt = "Praten met Klaas"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable"]
+position = Vector3(0, 1, -1.1)
+shape = SubResource("Shape_talk")

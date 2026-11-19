@@ -12,7 +12,7 @@ Alle assets in dit project zijn zelfgemaakt of CC0. Voeg bij elk nieuw asset de 
 
 | Wat | Bron | Licentie |
 | --- | --- | --- |
-| Speler, drillers, trainingspoppen, kisten, munten, drankjes, testarena, Elst, de kernlocaties en de dungeons (blokken, cilinders en prisma's) | Zelfgemaakt in Godot | Eigen werk |
+| Speler (met uitrusting), Klaas, drillers, trainingspoppen, kisten, munten, drankjes, bed, het huis van Klaas, testarena, Elst, de kernlocaties en de dungeons (blokken, cilinders en prisma's) | Zelfgemaakt in Godot | Eigen werk |
 | Huizen, bomen en puin van de tornado (in code gebouwd, `scripts/world/low_poly_mesh.gd`) | Zelfgemaakt | Eigen werk |
 
 ## Shaders

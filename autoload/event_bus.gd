@@ -39,3 +39,11 @@ signal inventory_changed
 signal loot_collected(text: String)
 ## An enemy died. [param enemy_id] is the id from its EnemyData.
 signal enemy_killed(enemy_id: StringName)
+## The player put on other gear.
+signal equipment_changed
+## Inwijding (the bond with Klaas) changed to [param level].
+signal inwijding_changed(level: int)
+## An NPC wants to talk; Main opens the dialogue box.
+signal dialogue_requested(dialogue: DialogueData, speaker: Node)
+## The player goes to sleep (bed or Klaas): heal up and autosave.
+signal sleep_requested

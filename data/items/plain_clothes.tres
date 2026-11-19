@@ -7,4 +7,4 @@ script = ExtResource("1_item")
 id = &"plain_clothes"
 display_name = "Gewone kleding"
 type = 1
-damage_reduction = 0.0
+model_color = Color(1, 1, 1, 1)

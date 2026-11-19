@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"iron_sword"
+display_name = "IJzeren zwaard"
+type = 0
+damage = 16
+price = 80
+required_inwijding = 1
+can_drop = true
+model_color = Color(0.62, 0.63, 0.66, 1)
+blade_length = 0.95

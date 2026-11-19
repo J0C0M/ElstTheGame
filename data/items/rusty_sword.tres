@@ -8,3 +8,5 @@ id = &"rusty_sword"
 display_name = "Roestig zwaard"
 type = 0
 damage = 10
+model_color = Color(0.6, 0.5, 0.42, 1)
+blade_length = 0.85

@@ -115,6 +115,11 @@ func _test_sword_and_loot() -> void:
 
 func _test_chest() -> void:
 	var chest: Variant = _main.get_world().get_node("Chest")
+	# Pick up any coins the enemies left, so only the chest's gold is counted.
+	for pile: Node in _pickups("gold_pickup.gd"):
+		_place((pile as Node3D).global_position, 0.0)
+		await _frames(5)
+	await _frames(10)
 	var gold_before: int = root.get_node("GameState").gold
 	_place(chest.global_position + chest.global_basis.z * -1.4, chest.global_rotation.y + PI)
 	await _frames(5)

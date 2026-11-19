@@ -10,6 +10,9 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="8_pause_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/SaveLoadMenu.tscn" id="9_save_load_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/SettingsMenu.tscn" id="10_settings_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DialogueBox.tscn" id="11_dialogue_box"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ShopMenu.tscn" id="12_shop_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/InventoryMenu.tscn" id="13_inventory_menu"]
 
 [node name="Main" type="Node"]
 process_mode = 3
@@ -37,7 +40,7 @@ theme_override_colors/font_outline_color = Color(0.08, 0.06, 0.12, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 14
 text = "WASD lopen · Shift sprinten · Spatie springen
-E: gebruiken (deuren)
+E: gebruiken · Q: drankje · Tab: inventaris
 Alt of dubbel tikken: ontwijken
 Klik: aanval · nog een klik: combo
 Klik vasthouden: zware aanval
@@ -62,6 +65,12 @@ theme = ExtResource("6_theme")
 [node name="SaveLoadMenu" parent="UI/Menus" instance=ExtResource("9_save_load_menu")]
 
 [node name="SettingsMenu" parent="UI/Menus" instance=ExtResource("10_settings_menu")]
+
+[node name="DialogueBox" parent="UI/Menus" instance=ExtResource("11_dialogue_box")]
+
+[node name="ShopMenu" parent="UI/Menus" instance=ExtResource("12_shop_menu")]
+
+[node name="InventoryMenu" parent="UI/Menus" instance=ExtResource("13_inventory_menu")]
 
 [node name="Fade" type="ColorRect" parent="UI"]
 anchors_preset = 15

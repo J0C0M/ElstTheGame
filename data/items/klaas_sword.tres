@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"klaas_sword"
+display_name = "Klaas' zwaard"
+type = 0
+damage = 34
+price = 400
+required_inwijding = 5
+model_color = Color(0.62, 0.38, 0.88, 1)
+blade_length = 1.15

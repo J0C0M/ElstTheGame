@@ -10,8 +10,8 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 1 | `Add-Player-Controller-And-Combat` | Af, gemerged naar `Development` |
 | 2 | `Build-Elst-World-Blockout` | Af, gemerged naar `Development` |
 | 3 | `Add-Save-System` | Af, gemerged naar `Development` |
-| 4 | `Add-Enemy-AI-And-Loot` | Gebouwd, wacht op akkoord |
-| 5 | `Add-Klaas-Dialogue-And-Shop` | Nog niet begonnen |
+| 4 | `Add-Enemy-AI-And-Loot` | Af, gemerged naar `Development` |
+| 5 | `Add-Klaas-Dialogue-And-Shop` | Gebouwd, wacht op akkoord |
 | 6 | `Add-Quest-System-And-Tutorial` | Nog niet begonnen |
 | 7 | `Add-Station-Dungeon` | Nog niet begonnen |
 | 8 | `Add-Westeraam-Dungeon` | Nog niet begonnen |
@@ -245,6 +245,44 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 - Fase 7: het verzwakkingseffect (20% minder HP voor Westeraam en OBC). Dat kan in `Enemy._ready()` met een vlag in `GameState`.
 - Fase 8: geen patrouilles meer na een bevrijding. Zet de vijanden per gebied onder een node die naar `GameState.liberated_areas` kijkt.
 - Nieuwe vijanden: maak een `EnemyData` met een `model_scene` en een instantie van `Enemy.tscn`. Afstandsvijanden (vape-drillers, voetballers) hebben een eigen aanvalsstate nodig.
+
+## Fase 5 – Klaas, dialoog & winkel
+
+### Wat is af
+
+- **Klaas** (`scenes/npcs/Klaas.tscn`, model `KlaasModel.tscn`): lang, breed en gespierd, met een strak paars shirt, blond haar met een kuif, een strakke kaak, een zwarte zonnebril en een gouden ketting. Hij draait naar je toe als je in de buurt komt, praat als je op E drukt en "flext" bij zijn begroeting.
+- **Huis van Klaas:** de voordeur in Elst leidt naar het interieur (`scenes/world/interiors/KlaasHouse.tscn`). Daar staan Klaas achter een toonbank, een bed, een halterrek, een spiegel en eiwitshakes op de plank.
+- **Dialoogsysteem:** `DialogueData` met regels, keuzes, voorwaarden (Inwijding, vlaggen) en acties. Het dialoogvenster typt de tekst uit en toont genummerde keuzes. Klaas' gesprek staat in `data/dialogue/klaas.tres`: een eerste kennismaking, het verhaal over Amber, de zonnebril, de winkel en slapen. Hij begroet je anders als je hem al kent, en nog anders vanaf Inwijding 3.
+- **Winkel:**
+  - alles uit de tabel in het GDD, met prijzen;
+  - dicht tot Inwijding 1, elk item vanaf zijn eigen Inwijding-niveau;
+  - wat je koopt en beter is, trek je meteen aan;
+  - oude uitrusting verkoop je voor 40% (gedragen spullen niet);
+  - maximaal 10 drankjes.
+- **Inventaris (Tab):** wat je draagt per slot, al je spullen met "Aantrekken", je drankjes, goud en Inwijding.
+- **Uitrusting zichtbaar:** het zwaard krijgt de lengte en kleur van het item (roestig, ijzer, staal, het paarse zwaard van Klaas). Pantser toont een vest (leer), schouderstukken (ijzer) en een helm (staal). Pantser haalt ook echt schade af.
+- **Drankjes:** Q drinkt het drankje dat het beste past (klein +40, groot +100). Tijdens het drinken loop je langzaam. Word je geraakt voordat het drankje werkt, dan houd je het.
+- **Slapen** in het bed (of via Klaas): je bent weer helemaal fit en er komt een autosave.
+- **Buit:** een kist heeft 8% kans op het volgende zwaard of pantser dat je nog niet hebt. Je vindt dus nooit iets slechters. Het item ligt dan als zwaardje op de grond.
+- **Opslaan:** uitrusting, Inwijding en vlaggen gaan mee in de save.
+- **Test:** `tests/test_klaas.gd` (36 checks, allemaal geslaagd). De andere vijf tests slagen nog steeds.
+
+### Keuzes en afwijkingen
+
+- **Tijdelijke Inwijding 1:** volgens het GDD opent de winkel pas na Quest 1. Die quest komt in Fase 6. Tot dan kun je in het eerste gesprek kiezen voor "Wijd me dan in", en dat geeft Inwijding 1. Fase 6 haalt die keuze weg en geeft de Inwijding als beloning van de tutorial.
+- **Startuitrusting:** je begint met het roestige zwaard en gewone kleding. Het GDD noemt het roestige zwaard ook als beloning van Quest 1; Fase 6 beslist of je eerst zonder zwaard begint.
+- **Interieur:** het huis van Klaas is een eigen scene (zoals een dungeon, maar zonder autosave bij binnenkomst), zodat er plek is voor een bed en een toonbank.
+- **Pauze:** gesprekken, de winkel en de inventaris zetten het spel op pauze. Vijanden kunnen je dan dus niets doen.
+- **Klaas' zwaard en de kruisboog** zijn nooit buit (`can_drop` uit). De kruisboog is niet te koop; die krijg je in Fase 10.
+- **Bazen** krijgen hun 35% kans op uitrusting in hun eigen fase, met dezelfde `NEXT_GEAR`-regel.
+
+### Aandachtspunten voor de volgende fases
+
+- Fase 6:
+  - Quest 1 geeft Inwijding 1, 2 kleine drankjes en 20 goud. Verwijder dan de keuze "Wijd me dan in" uit `klaas.tres` (regels `task` en `hub`).
+  - `DialogueCondition` krijgt voorwaarden voor de status van een quest.
+  - Klaas' trotse regel ("eerder klaar dan gevraagd") past in dezelfde dialoog.
+- Fase 11: Klaas als bondgenoot kan `KlaasModel.tscn` en het `HumanoidModel` hergebruiken.
 
 ## Voorlopige kaartindeling
 

@@ -166,7 +166,7 @@ func _test_load_brings_enemies_back() -> void:
 
 
 func _test_give_up_and_heal() -> void:
-	var enemy: Variant = _main.get_world().get_node("Enemies/LowDriller1")
+	var enemy: Variant = _main.get_world().find_child("LowDriller1", true, false)
 	_player().is_invulnerable = true
 	_place(enemy.global_position + Vector3(0, 0, 3), PI)
 	await _frames(20)

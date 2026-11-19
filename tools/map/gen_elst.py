@@ -62,6 +62,19 @@ ENEMIES = [
     ("Driller1", "91_driller", 146.0, -28.0, 3.4),
     ("Driller2", "91_driller", 152.0, -24.0, 3.1),
 ]
+# Areas that change once liberated: node name, flag, the enemies (from ENEMIES)
+# that patrol it until then, and the villagers (x, z) that come after, with
+# their lines and a warm light in the middle.
+AREAS = [
+    ("KlaasArea", "q1_reported", [], [(30.0, -22.0), (40.0, -22.0), (35.0, -27.0)], (35.0, -22.0),
+     ["Klaas is weer terug!", "Heb je Klaas al zien flexen?", "Dank je wel!", "Het is weer gezellig in de straat."]),
+    ("StationArea", "station_cleared", ["LowDriller1", "LowDriller2", "LowDriller3"],
+     [(104.0, -60.0), (112.0, -57.0), (118.0, -62.0)], (110.0, -60.0),
+     ["De treinen rijden weer!", "Eindelijk weer een trein naar Nijmegen.", "Geen eiwitshakes meer voor Amber!", "Dank je wel!"]),
+    ("WesteraamArea", "boss_vape_koning", ["Driller1", "Driller2"],
+     [(152.0, -66.0), (160.0, -64.0), (156.0, -60.0), (162.0, -70.0)], (157.0, -66.0),
+     ["Geen vapewolken meer in de portiek!", "De Vape-koning is weg. Ik kan weer ademen.", "Westeraam is weer van ons!", "Dank je wel!"]),
+]
 LOCATION_SCENES = {"Kerk": "5_res", "KlaasHouse": "6_res", "BingoClub": "7_res", "Station": "8_res",
                    "Westeraam": "9_res", "OBCFort": "10_res"}
 START_LOCAL = (0.0, -11.0)  # the Start marker inside KlaasHouse.tscn
@@ -448,6 +461,8 @@ def write_scene(houses, trees, boxes):
         ("PackedScene", "res://scenes/player/Player.tscn", "12_res"),
         ("Script", "res://scripts/world/ground_map.gd", "13_res"),
         ("Image", "res://" + RASTER_PATH.as_posix(), "14_res"),
+        ("Script", "res://scripts/world/liberated_area.gd", "15_res"),
+        ("PackedScene", "res://scenes/npcs/Villager.tscn", "16_res"),
         ("PackedScene", "res://scenes/enemies/LowDriller.tscn", "90_low_driller"),
         ("PackedScene", "res://scenes/enemies/Driller.tscn", "91_driller"),
     ]
@@ -514,10 +529,27 @@ def write_scene(houses, trees, boxes):
     klaas = L.LOCATIONS["KlaasHouse"]
     sx, sz = klaas["pos"][0] + START_LOCAL[0], klaas["pos"][1] + START_LOCAL[1]
     out += ['[node name="Player" parent="." instance=ExtResource("12_res")]', f"position = {vec(sx, 0, sz)}", ""]
-    out += ['[node name="Enemies" type="Node3D" parent="."]', ""]
-    for name, rid, x, z, yaw in ENEMIES:
-        out += [f'[node name="{name}" parent="Enemies" instance=ExtResource("{rid}")]', f"position = {vec(x, 0, z)}",
-                f"rotation = {vec(0, yaw, 0)}", ""]
+    out += ['[node name="Areas" type="Node3D" parent="."]', ""]
+    enemies = {e[0]: e for e in ENEMIES}
+    seed = 1
+    for area, flag, enemy_names, villagers, light, lines in AREAS:
+        base = f"Areas/{area}"
+        out += [f'[node name="{area}" type="Node3D" parent="Areas"]', 'script = ExtResource("15_res")', f'liberated_by_flag = &"{flag}"', "",
+                f'[node name="Occupied" type="Node3D" parent="{base}"]', ""]
+        for name in enemy_names:
+            _, rid, x, z, yaw = enemies[name]
+            out += [f'[node name="{name}" parent="{base}/Occupied" instance=ExtResource("{rid}")]', f"position = {vec(x, 0, z)}",
+                    f"rotation = {vec(0, yaw, 0)}", ""]
+        out += [f'[node name="Liberated" type="Node3D" parent="{base}"]', ""]
+        packed_lines = ", ".join('"' + line + '"' for line in lines)
+        for n, (x, z) in enumerate(villagers, 1):
+            out += [f'[node name="Villager{n}" parent="{base}/Liberated" instance=ExtResource("16_res")]', f"position = {vec(x, 0, z)}",
+                    f"lines = PackedStringArray({packed_lines})", f"look_seed = {seed}", ""]
+            seed += 1
+        out += [f'[node name="WarmLight" type="OmniLight3D" parent="{base}/Liberated"]', f"position = {vec(light[0], 9, light[1])}",
+                "light_color = Color(1, 0.74, 0.45, 1)", "light_energy = 0.9", "omni_range = 28.0", ""]
+    assigned = {name for area in AREAS for name in area[2]}
+    assert assigned == set(enemies), "every enemy outside belongs to an area"
     SCENE_PATH.write_text("\n".join(out).rstrip("\n") + "\n")
 
 

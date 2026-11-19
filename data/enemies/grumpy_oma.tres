@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1_enemy")
 id = &"grumpy_oma"
-display_name = "Grumpy Oma"
+display_name = "Grumpy Oma, bingokampioen"
 faction = &"bingo"
 loot = ExtResource("2_loot")
 max_health = 550
-damage = 18
+damage = 16

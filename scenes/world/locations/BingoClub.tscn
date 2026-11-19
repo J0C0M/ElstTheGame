@@ -1,0 +1,105 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/props/House.tscn" id="1_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="2_res"]
+[ext_resource type="Script" path="res://scenes/world/location_area.gd" id="3_res"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_color = Color(0.3, 0.3, 0.32, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+material = SubResource("StandardMaterial3D_1")
+size = Vector3(32, 0.05, 16)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3"]
+albedo_color = Color(0.42, 0.41, 0.4, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
+material = SubResource("StandardMaterial3D_3")
+size = Vector3(3, 4.8, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5"]
+size = Vector3(3, 4.8, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6"]
+material = SubResource("StandardMaterial3D_3")
+size = Vector3(9, 1.4, 3.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7"]
+size = Vector3(9, 1.4, 3.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8"]
+size = Vector3(40, 20, 44)
+
+[node name="BingoClub" type="Node3D"]
+
+[node name="Parking" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.02, -20)
+mesh = SubResource("BoxMesh_2")
+
+[node name="Hall" parent="." instance=ExtResource("1_res")]
+position = Vector3(0, 0, 2)
+size = Vector3(28, 7, 18)
+roof_height = 3
+wall_color = Color(0.26, 0.43, 0.78, 1)
+roof_color = Color(0.94, 0.73, 0.83, 1)
+has_door = false
+
+[node name="RockLeft" type="StaticBody3D" parent="."]
+position = Vector3(-3, 2.4, -8.3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RockLeft"]
+shape = SubResource("BoxShape3D_5")
+
+[node name="Mesh" type="MeshInstance3D" parent="RockLeft"]
+mesh = SubResource("BoxMesh_4")
+
+[node name="RockRight" type="StaticBody3D" parent="."]
+position = Vector3(3, 2.4, -8.3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RockRight"]
+shape = SubResource("BoxShape3D_5")
+
+[node name="Mesh" type="MeshInstance3D" parent="RockRight"]
+mesh = SubResource("BoxMesh_4")
+
+[node name="RockTop" type="StaticBody3D" parent="."]
+position = Vector3(0, 5.4, -8.3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RockTop"]
+shape = SubResource("BoxShape3D_7")
+
+[node name="Mesh" type="MeshInstance3D" parent="RockTop"]
+mesh = SubResource("BoxMesh_6")
+
+[node name="CaveDoor" parent="." instance=ExtResource("2_res")]
+position = Vector3(0, 0, -9.9)
+prompt = "Bingo Club Boomer Cave binnengaan"
+door_color = Color(0.14, 0.2, 0.42, 1)
+target_scene = "res://scenes/dungeons/BingoCave.tscn"
+target_spawn = &"Entrance"
+
+[node name="Sign" type="Label3D" parent="."]
+position = Vector3(0, 9.2, -7.2)
+rotation = Vector3(0, 3.142, 0)
+pixel_size = 0.02
+double_sided = false
+modulate = Color(0.94, 0.73, 0.83, 1)
+outline_modulate = Color(0.05, 0.04, 0.05, 1)
+text = "BINGO"
+font_size = 160
+outline_size = 14
+
+[node name="BingoExit" type="Marker3D" parent="." groups=["spawn_points"]]
+position = Vector3(0, 0, -14)
+
+[node name="LocationArea" type="Area3D" parent="."]
+script = ExtResource("3_res")
+id = &"bingo_club"
+display_name = "Bingo Club Boomer Cave"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LocationArea"]
+position = Vector3(0, 10, -6)
+shape = SubResource("BoxShape3D_8")

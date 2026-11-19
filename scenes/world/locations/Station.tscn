@@ -1,0 +1,192 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/props/House.tscn" id="1_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="2_res"]
+[ext_resource type="Script" path="res://scenes/world/location_area.gd" id="3_res"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_color = Color(0.62, 0.62, 0.6, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+material = SubResource("StandardMaterial3D_1")
+size = Vector3(5, 1, 60)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3"]
+size = Vector3(5, 1, 60)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
+material = SubResource("StandardMaterial3D_1")
+size = Vector3(5, 0.5, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5"]
+size = Vector3(5, 0.5, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6"]
+albedo_color = Color(0.24, 0.3, 0.27, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_7"]
+material = SubResource("StandardMaterial3D_6")
+size = Vector3(4.4, 0.3, 32)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8"]
+albedo_color = Color(0.25, 0.25, 0.26, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_9"]
+material = SubResource("StandardMaterial3D_8")
+size = Vector3(0.25, 3.2, 0.25)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_10"]
+albedo_color = Color(0.6, 0.58, 0.55, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_11"]
+material = SubResource("StandardMaterial3D_10")
+size = Vector3(30, 0.05, 14)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_12"]
+albedo_color = Color(0.36, 0.42, 0.38, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_13"]
+material = SubResource("StandardMaterial3D_12")
+size = Vector3(3, 2.4, 2.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_14"]
+size = Vector3(3, 2.4, 2.4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_15"]
+albedo_color = Color(0.9, 0.75, 0.15, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_16"]
+material = SubResource("StandardMaterial3D_15")
+size = Vector3(3.02, 0.4, 0.05)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_17"]
+size = Vector3(60, 20, 90)
+
+[node name="Station" type="Node3D"]
+
+[node name="Platform" type="StaticBody3D" parent="."]
+position = Vector3(-10.5, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Platform"]
+shape = SubResource("BoxShape3D_3")
+
+[node name="Mesh" type="MeshInstance3D" parent="Platform"]
+mesh = SubResource("BoxMesh_2")
+
+[node name="PlatformRamp" type="StaticBody3D" parent="."]
+position = Vector3(-10.5, 0.25, -31.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlatformRamp"]
+shape = SubResource("BoxShape3D_5")
+
+[node name="Mesh" type="MeshInstance3D" parent="PlatformRamp"]
+mesh = SubResource("BoxMesh_4")
+
+[node name="Canopy" type="MeshInstance3D" parent="."]
+position = Vector3(-10.5, 4.2, 0)
+mesh = SubResource("BoxMesh_7")
+
+[node name="CanopyPost1" type="MeshInstance3D" parent="."]
+position = Vector3(-10.5, 2.6, -14)
+mesh = SubResource("BoxMesh_9")
+
+[node name="CanopyPost2" type="MeshInstance3D" parent="."]
+position = Vector3(-10.5, 2.6, 0)
+mesh = SubResource("BoxMesh_9")
+
+[node name="CanopyPost3" type="MeshInstance3D" parent="."]
+position = Vector3(-10.5, 2.6, 14)
+mesh = SubResource("BoxMesh_9")
+
+[node name="NameBoard" type="Label3D" parent="."]
+position = Vector3(-10.5, 3.2, -6)
+rotation = Vector3(0, -1.571, 0)
+pixel_size = 0.02
+double_sided = false
+modulate = Color(1, 1, 1, 1)
+outline_modulate = Color(0.05, 0.04, 0.05, 1)
+text = "Elst"
+font_size = 96
+outline_size = 14
+
+[node name="StationBuilding" parent="." instance=ExtResource("1_res")]
+position = Vector3(0, 0, 0)
+rotation = Vector3(0, 1.571, 0)
+size = Vector3(24, 6, 10)
+roof_height = 3
+wall_color = Color(0.3, 0.6, 0.38, 1)
+roof_color = Color(0.24, 0.3, 0.27, 1)
+
+[node name="Square" type="MeshInstance3D" parent="."]
+position = Vector3(2, 0.02, -36)
+mesh = SubResource("BoxMesh_11")
+
+[node name="SupplyBuilding" parent="." instance=ExtResource("1_res")]
+position = Vector3(16, 0, 26)
+size = Vector3(22, 9, 16)
+roof_height = 0
+wall_color = Color(0.42, 0.48, 0.44, 1)
+roof_color = Color(0.2, 0.22, 0.2, 1)
+has_door = false
+
+[node name="SupplyDoor" parent="." instance=ExtResource("2_res")]
+position = Vector3(16, 0, 17.85)
+prompt = "Het gebouw naast het station binnengaan"
+door_color = Color(0.3, 0.7, 0.4, 1)
+target_scene = "res://scenes/dungeons/Station.tscn"
+target_spawn = &"Entrance"
+
+[node name="Generator1" type="StaticBody3D" parent="."]
+position = Vector3(8, 1.2, 15.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Generator1"]
+shape = SubResource("BoxShape3D_14")
+
+[node name="Mesh" type="MeshInstance3D" parent="Generator1"]
+mesh = SubResource("BoxMesh_13")
+
+[node name="GeneratorStripe1" type="MeshInstance3D" parent="."]
+position = Vector3(8, 1.6, 14.28)
+mesh = SubResource("BoxMesh_16")
+
+[node name="Generator2" type="StaticBody3D" parent="."]
+position = Vector3(24, 1.2, 15.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Generator2"]
+shape = SubResource("BoxShape3D_14")
+
+[node name="Mesh" type="MeshInstance3D" parent="Generator2"]
+mesh = SubResource("BoxMesh_13")
+
+[node name="GeneratorStripe2" type="MeshInstance3D" parent="."]
+position = Vector3(24, 1.6, 14.28)
+mesh = SubResource("BoxMesh_16")
+
+[node name="Sign" type="Label3D" parent="."]
+position = Vector3(-5.15, 5.2, 0)
+rotation = Vector3(0, -1.571, 0)
+pixel_size = 0.02
+double_sided = false
+modulate = Color(0.85, 1, 0.85, 1)
+outline_modulate = Color(0.05, 0.04, 0.05, 1)
+text = "Station Elst"
+font_size = 64
+outline_size = 14
+
+[node name="StationExit" type="Marker3D" parent="." groups=["spawn_points"]]
+position = Vector3(16, 0, 14)
+
+[node name="LocationArea" type="Area3D" parent="."]
+script = ExtResource("3_res")
+id = &"station"
+display_name = "Elst Station"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LocationArea"]
+position = Vector3(5, 10, 0)
+shape = SubResource("BoxShape3D_17")

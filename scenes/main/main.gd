@@ -1,8 +1,9 @@
 extends Node
 ## Root scene. Holds the retro screen (with the 3D world inside), the HUD and
-## the menus. Runs the main menu, the pause menu, world changes behind a fade,
-## new games, loading saves and what happens after dying, and catches the
-## mouse for the camera while playing.
+## the menus. Runs the main menu, the pause menu, conversations, the shop and
+## the inventory, world changes behind a fade, new games, loading saves,
+## sleeping and what happens after dying, and catches the mouse for the camera
+## while playing.
 
 enum AppState { MAIN_MENU, PLAYING }
 
@@ -25,6 +26,8 @@ var _changing_world: bool = false
 var _capture_on_focus: bool = false
 ## Menu to show again when the settings or save menu closes.
 var _menu_below: Control
+## Window that pauses play: the dialogue box, the shop or the inventory.
+var _overlay: Control
 
 @onready var _retro_screen: RetroScreen = $RetroScreen
 @onready var _hud: Control = $UI/HUD
@@ -33,6 +36,9 @@ var _menu_below: Control
 @onready var _pause_menu: PauseMenu = $UI/Menus/PauseMenu
 @onready var _save_load_menu: SaveLoadMenu = $UI/Menus/SaveLoadMenu
 @onready var _settings_menu: SettingsMenu = $UI/Menus/SettingsMenu
+@onready var _dialogue_box: DialogueBox = $UI/Menus/DialogueBox
+@onready var _shop_menu: ShopMenu = $UI/Menus/ShopMenu
+@onready var _inventory_menu: InventoryMenu = $UI/Menus/InventoryMenu
 @onready var _fade: ColorRect = $UI/Fade
 
 
@@ -53,6 +59,11 @@ func _ready() -> void:
 	_pause_menu.quit_pressed.connect(get_tree().quit)
 	_save_load_menu.closed.connect(_on_submenu_closed)
 	_settings_menu.closed.connect(_on_submenu_closed)
+	EventBus.dialogue_requested.connect(_on_dialogue_requested)
+	EventBus.sleep_requested.connect(sleep)
+	_dialogue_box.action_chosen.connect(_on_dialogue_action)
+	for overlay: Control in [_dialogue_box, _shop_menu, _inventory_menu]:
+		overlay.connect(&"closed", _on_overlay_closed.bind(overlay))
 	if skip_main_menu:
 		start_new_game()
 	else:
@@ -68,6 +79,13 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"pause"):
 		get_viewport().set_input_as_handled()
 		_on_escape()
+	elif event.is_action_pressed(&"inventory") and _app_state == AppState.PLAYING and not _changing_world:
+		get_viewport().set_input_as_handled()
+		if _overlay == _inventory_menu:
+			_inventory_menu.close()
+		elif _overlay == null and not get_tree().paused:
+			_open_overlay(_inventory_menu)
+			_inventory_menu.open()
 	elif _wants_captured_mouse() and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED \
 			and event is InputEventMouseButton and event.is_pressed():
 		# A click on the game catches the mouse again; it does not attack.
@@ -118,6 +136,22 @@ func change_world(scene_path: String, spawn_id: StringName) -> void:
 	var player: Player = _world.get_player()
 	var vitals: Dictionary = player.get_vitals() if player != null else {}
 	await _enter_world(scene.instantiate() as GameWorld, spawn_id, vitals, {})
+
+
+## Sleeps behind a fade: full health and stamina, then an autosave.
+func sleep() -> void:
+	if _changing_world or _app_state != AppState.PLAYING:
+		return
+	_changing_world = true
+	await _fade_to(1.0)
+	var player: Player = _world.get_player()
+	if player != null:
+		player.health.reset()
+		player.stamina.refill()
+	EventBus.message_requested.emit("Je hebt goed geslapen.")
+	await _fade_to(0.0)
+	_changing_world = false
+	SaveManager.autosave()
 
 
 func pause() -> void:
@@ -193,6 +227,8 @@ func _on_escape() -> void:
 		_settings_menu.close()
 	elif _save_load_menu.visible:
 		_save_load_menu.close()
+	elif _overlay != null:
+		_overlay.call("close")
 	elif _pause_menu.visible:
 		resume()
 	elif _app_state == AppState.PLAYING:
@@ -211,8 +247,40 @@ func _on_submenu_closed() -> void:
 
 
 func _close_menus() -> void:
-	for menu: Control in [_main_menu, _pause_menu, _save_load_menu, _settings_menu]:
+	for menu: Control in [_main_menu, _pause_menu, _save_load_menu, _settings_menu, _dialogue_box, _shop_menu, _inventory_menu]:
 		menu.hide()
+	_overlay = null
+
+
+func _open_overlay(overlay: Control) -> void:
+	_overlay = overlay
+	get_tree().paused = true
+	_update_mouse()
+
+
+func _on_overlay_closed(overlay: Control) -> void:
+	if _overlay != overlay:
+		return
+	_overlay = null
+	if not _pause_menu.visible:
+		get_tree().paused = false
+	_update_mouse()
+
+
+func _on_dialogue_requested(dialogue: DialogueData, speaker: Node) -> void:
+	if _app_state != AppState.PLAYING or _changing_world or _overlay != null:
+		return
+	_open_overlay(_dialogue_box)
+	_dialogue_box.start(dialogue, speaker)
+
+
+func _on_dialogue_action(action: StringName, _value: String) -> void:
+	match action:
+		&"open_shop":
+			_open_overlay(_shop_menu)
+			_shop_menu.open()
+		&"sleep":
+			sleep()
 
 
 func _on_save_load_requested(data: Dictionary) -> void:

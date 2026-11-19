@@ -186,7 +186,10 @@ func raise_inwijding(level: int) -> void:
 
 func set_flag(flag: StringName, value: bool = true) -> void:
 	if value:
+		var was_set: bool = _flags.has(flag)
 		_flags[flag] = true
+		if not was_set:
+			EventBus.flag_set.emit(flag)
 	else:
 		_flags.erase(flag)
 

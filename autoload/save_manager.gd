@@ -21,6 +21,28 @@ var save_dir: String = "user://saves/"
 ## The world being played, set by Main. Null while in the main menu.
 var world: GameWorld
 
+## An autosave that waits until saving is allowed again.
+var _autosave_pending: bool = false
+var _autosave_wait: float = 0.0
+
+
+func _process(delta: float) -> void:
+	if not _autosave_pending:
+		return
+	_autosave_wait -= delta
+	if _autosave_wait <= 0.0:
+		_autosave_wait = 0.5
+		if can_save():
+			_autosave_pending = false
+			autosave()
+
+
+## Autosaves as soon as saving is allowed, for example after an objective
+## finished in the middle of a fight. Quiet until then.
+func request_autosave() -> void:
+	_autosave_pending = true
+	_autosave_wait = 0.0
+
 
 ## Writes a save. [param save_name] names a manual save, and [param replace_id]
 ## overwrites an existing manual save instead of making a new one.
@@ -34,6 +56,7 @@ func save_game(type: SaveType, save_name: String = "", replace_id: String = "") 
 		return false
 	_save_thumbnail(id)
 	EventBus.saves_changed.emit()
+	EventBus.game_saved.emit(TYPE_NAMES[type])
 	return true
 
 

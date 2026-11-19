@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://scenes/world/props/House.tscn" id="1_res"]
 [ext_resource type="Script" path="res://scenes/world/location_area.gd" id="2_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="90_door"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
 albedo_color = Color(0.42, 0.64, 0.32, 1)
@@ -143,3 +144,13 @@ display_name = "Huis van Klaas"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LocationArea"]
 position = Vector3(0, 10, -3)
 shape = SubResource("BoxShape3D_14")
+
+[node name="FrontDoor" parent="." instance=ExtResource("90_door")]
+position = Vector3(0, 0, -1.6)
+target_scene = "res://scenes/world/interiors/KlaasHouse.tscn"
+target_spawn = &"Entrance"
+prompt = "Huis van Klaas binnengaan"
+door_color = Color(0.3, 0.18, 0.4, 1)
+
+[node name="KlaasHouseExit" type="Marker3D" parent="." groups=["spawn_points"]]
+position = Vector3(0, 0, -4.2)

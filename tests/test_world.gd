@@ -9,6 +9,8 @@ extends SceneTree
 ## classes that use them (Main, Player, GameWorld) are held in Variant here.
 
 const ELST: String = "Elst"
+## Node deepest in each dungeon that a walkable route from the entrance must reach.
+const DEEPEST: Dictionary = {"Station Elst": "Generator4", "Westeraam Getho": "MarkerBoss", "OBC Elst Fort": "MarkerBoss"}
 ## Door node in Elst, dungeon name, and the spawn point you come back out at.
 const DUNGEONS: Array = [
 	["SupplyDoor", "Station Elst", "StationExit"],
@@ -94,6 +96,24 @@ func _test_locked_factions() -> void:
 			"%s stays locked until the station is down" % door_name)
 
 
+## Walks the navigation mesh from the entrance to the end of a dungeon, so a
+## prop or wall in a doorway shows up here.
+func _test_route(dungeon: Variant, target_name: String) -> void:
+	var map: RID = dungeon.get_node("Navigation").get_navigation_map()
+	var start: Vector3 = dungeon.get_spawn(&"Entrance").global_position
+	var target: Vector3 = dungeon.find_child(target_name, true, false).global_position
+	target.y = 0.0
+	var path: PackedVector3Array = PackedVector3Array()
+	for i: int in 300:
+		OS.delay_msec(10)
+		await physics_frame
+		path = NavigationServer3D.map_get_path(map, start, target, true)
+		if path.size() > 1 and Vector2(path[-1].x - target.x, path[-1].z - target.z).length() < 2.5:
+			break
+	var reached: bool = path.size() > 1 and Vector2(path[-1].x - target.x, path[-1].z - target.z).length() < 2.5
+	_check(reached, "a walkable route leads from the entrance of %s to its end" % dungeon.location_name)
+
+
 func _test_tornado() -> void:
 	_messages.clear()
 	_place(Vector3(0, 0, -228), 0.0)
@@ -122,6 +142,8 @@ func _test_dungeon(door_name: String, dungeon_name: String, exit_spawn: String) 
 	_check(_player().global_position.distance_to(dungeon.get_spawn(&"Entrance").global_position) < 0.5,
 		"the player arrives at the entrance of %s" % dungeon_name)
 	_check(_player().health.current_health == 73, "health carries over into %s" % dungeon_name)
+	if DEEPEST.has(dungeon_name):
+		await _test_route(dungeon, DEEPEST[dungeon_name])
 	await _stand_at_door("ExitDoor")
 	await _press(&"interact")
 	await _frames(60)

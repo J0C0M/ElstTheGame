@@ -18,3 +18,8 @@ signal player_stamina_insufficient
 signal player_parried
 signal player_died
 signal player_respawned
+
+## Prompt of the interactable the player faces, or "" when there is none.
+signal interaction_prompt_changed(prompt: String)
+## Short message on screen, such as a locked door.
+signal message_requested(text: String)

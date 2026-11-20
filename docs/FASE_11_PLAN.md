@@ -85,7 +85,9 @@ De vier bestaande dungeons blijven exact hetzelfde. Dat controleer ik door ze op
 
 **Na blok A** kun je de hele kerk door tot aan Klaas, met de winkel en het checkpoint. Amber zelf ontbreekt nog.
 
-## Blok B – Het gevecht
+## Blok B – Het gevecht (af)
+
+Afwijking bij het bouwen: Klaas slaat met zijn vuisten (14 schade om de 1,6 s); Amber start 6 m voor het midden van de arena, want op 12 m staat een pilaar.
 
 ### B1. Amber-model (`Add the low-poly Amber model`)
 

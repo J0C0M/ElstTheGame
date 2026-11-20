@@ -17,7 +17,7 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 8 | `Add-Westeraam-Dungeon` | Af, gemerged naar `Development` |
 | 9 | `Add-OBC-Fort-Dungeon` | Af, gemerged naar `Development` |
 | 10 | `Add-Bingo-Cave-Dungeon` | Af, gemerged naar `Development` |
-| 11 | `Add-Amber-Final-Battle` | In aanbouw: blok A (de weg naar Amber) af, blok B en C volgen |
+| 11 | `Add-Amber-Final-Battle` | In aanbouw: blok A (de weg naar Amber) en B (het gevecht) af en tussentijds naar `Development` gemerged (op verzoek van de eigenaar); blok C volgt |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
 Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
@@ -458,7 +458,32 @@ Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn
 - **Fix: waarschuwen** (eigenaar): een vijand die je opmerkt of die je in de rug slaat, waarschuwt zijn buren één keer.
   - Station en Westeraam: alleen binnen 7 m, zonder kettingreactie, dus geen hele kamer tegelijk.
   - OBC en Bingo Club (`alert_chain`): de waarschuwing gaat door, zodat een hele kamer op je af kan komen, zoals eerst.
-- **Tests:** `tests/test_amber.gd` (20 checks). `test_world` loopt de route door de kerk tot Klaas. `test_enemies` controleert het waarschuwen. `test_station` gebruikt de nieuwe HP.
+- **Tests:** `tests/test_amber.gd` (20 checks na blok A). `test_world` loopt de route door de kerk tot Klaas. `test_enemies` controleert het waarschuwen. `test_station` gebruikt de nieuwe HP.
+
+### Wat is af (blok B, het gevecht)
+
+- **Amber-model** (`tools/models/gen_amber.py`, `AmberModel.tscn`, `amber_model.gd`): een draak van zo'n 12 m. Ze heeft een romp met stekels, een lange nek en een kop met hoorns, gloeiende ogen, een kaak die opengaat en een keel die gloeit. Verder vleugels met vliezen, een staart in drie delen en vier poten. Haar houdingen: rust, inademen, vuuradem, hijgen, staart, vleugels, vliegen, versuft en dood.
+- **Klaas als bondgenoot** (`KlaasAlly.tscn`, `klaas_ally.gd`):
+  - Na "Ik ben er klaar voor" stapt de Klaas bij de poort opzij (`leave_on_flag`) en volgt de bondgenoot je.
+  - In het gevecht loopt hij naar Amber en slaat haar om de 1,6 s voor 14 schade. Amber kiest hem in 35% van haar aanvallen.
+  - Raakt ze hem, dan wankelt hij en roept iets ("Is dat alles, hagedis?"). Als ze vliegt, roept hij "Pak je kruisboog!".
+- **Amber, balk 1** (`Amber.tscn`, `amber.gd`, `amber.tres`, 2 × 800 HP). Elke aanval wordt aangekondigd:
+  - **Vuuradem:** 0,8 s inademen, dan 2 s een kegel vuur tot 14 m, 8 schade per kwart seconde. Een pilaar ertussen houdt het tegen. Daarna hijgt ze 2 s met haar kop laag, en dan doet een klap op haar kop dubbele schade.
+  - **Staart:** een zwiep (20 schade) naar wie naast of achter haar staat.
+  - **Vleugels:** 2,5 s wind die je wegblaast; een pilaar beschermt je ook dan.
+  - **Vliegen:** om de 25 s vliegt ze op en spuwt ze vuurballen (`AmberMeteor`): een rode ring, 1 s later de inslag (18 schade) met een brandende plek. Een pilaar vangt ze op. Drie kruisboogpijlen (90 schade) halen haar neer; versuft ligt ze 4 s, met haar kop dubbel kwetsbaar. Anders landt ze na 12 s.
+  - Een klap die kop en lijf allebei raakt, telt één keer.
+- **De overgang** (`scripts/cutscene/cutscene.gd`, `EventBus.subtitle_requested`, ondertitels onderin de HUD):
+  1. Als balk 1 leeg is, laadt Amber een vuurbal op de speler.
+  2. Klaas springt ertussen, wordt geraakt en valt (`klaas_fallen`).
+  3. Na een paar regels tekst begint balk 2.
+  - Tijdens de scène beweegt de speler niet en kan niet opslaan.
+- **Amber, balk 2:**
+  - Ze is woedend: 30% sneller, met een rode gloed, en ze vliegt vaker.
+  - Waar ze loopt en na haar vuuradem laat ze brandende plekken achter.
+  - Op 66% en 33% roept ze telkens twee drillers op.
+- **Haar dood:** `boss_amber`, opslaan weer vrij, de poort open, en de gouden Tren-spuit (`TrenSpuit.tscn`) op de grond. Oppakken zet `tren_spuit_found`. Laad je daarna een save, dan ligt Klaas er nog en ook de spuit, zolang je die niet had.
+- **Tests:** `test_amber.gd` heeft nu 36 checks, voor de hele weg tot en met het oppakken van de spuit.
 
 ### Keuzes en afwijkingen
 
@@ -466,10 +491,20 @@ Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn
 - **Klaas is tijdens Quest 6 niet thuis,** zodat hij niet op twee plekken tegelijk staat. Zijn winkel is dan bij de arena. Hij blijft wel thuis zolang er nog een quest is om in te leveren: versla je de derde baas vóór je verslag doet, dan krijg je eerst nog je beloning en de kruisboog.
 - **Laag driller en driller** hebben andere HP dan het GDD (30 en 40); het GDD is bijgewerkt.
 
-### Nog te doen
+### Nog te doen: blok C (zie ook `docs/FASE_11_PLAN.md`)
 
-- Blok B: het Amber-model, Klaas als bondgenoot, levensbalk 1, de scène waarin Klaas sneuvelt, en levensbalk 2.
-- Blok C: Klaas weer tot leven, de tornado die verdwijnt, de eindscène, de aftiteling en vrij spelen, en de laatste tests en docs.
+- **C1, Klaas weer tot leven:** de quest staat dan op doel `revive` (vlag `klaas_revived`, marker `klaas_fallen` op de `KlaasAlly`).
+  - Geef `KlaasAlly` een `Interactable` ("Gebruik de Tren-spuit op Klaas") die alleen werkt als hij `FALLEN` is en `tren_spuit_found` gezet is.
+  - Speel dan met `Cutscene` een korte scène: `KlaasAlly.revive()`, flexen, een droge regel. Zet `klaas_revived`; daarmee is Quest 6 af en wordt de Inwijding 6.
+- **C2, de tornado verdwijnt:** `TornadoBorder` (`scenes/world/tornado_border.gd`) heeft nog geen `dissolve()`.
+  - Na `klaas_revived`: fade naar Elst, een scène waarin de tornado in ~6 s krimpt en vervaagt.
+  - Daarna, ook na laden, geen tornado en lichtere dieptemist (Environment in `Elst.tscn`). Wel een onzichtbare grens bij de oude ring met de melding "Je hoeft nergens meer heen. Elst is weer van jou."
+- **C3, einde:**
+  - Een `LiberatedArea` voor het kerkplein in `tools/map/gen_elst.py` (feest, dorpelingen, lichtjes) op `klaas_revived`.
+  - De eindscène op het kerkplein, waarin Klaas je "een echte Elstenaar" noemt.
+  - De aftiteling met "Een game van J0C0M", Godot en de CC0-bronnen uit `CREDITS.md`.
+  - Nieuwe regels voor Klaas thuis (`q6_done` in `gen_klaas_dialogue.py`). Daarna speel je vrij verder.
+- **C4:** `test_amber.gd` uitbreiden met C1–C3. `PROGRESS.md`, `CLAUDE.md`, `README.md` en het GDD bijwerken. Een testchecklist, en dan akkoord en mergen.
 
 ## Fase 10 – Quest 5: Bingo Club Boomer Cave
 

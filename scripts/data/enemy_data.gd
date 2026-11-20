@@ -48,6 +48,9 @@ extends Resource
 @export var hearing_range: float = 0.0
 ## Allies of the same faction within this distance join the chase.
 @export var alert_radius: float = 0.0
+## Warned allies warn their own neighbours in turn, so a whole room can come
+## at once (OBC, Bingo Club). Without it only the ones close by come.
+@export var alert_chain: bool = false
 ## The enemy gives up when it gets this far from home.
 @export var leash_range: float = 0.0
 ## Patrol points are picked within this distance of home.

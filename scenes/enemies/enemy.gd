@@ -24,6 +24,9 @@ var aware: bool = false
 var player_detected: bool = false
 ## Seconds since the enemy last noticed the player.
 var time_since_seen: float = INF
+## True once this enemy has warned its pack in the current fight; it warns
+## again only after it calmed down (Idle).
+var pack_warned: bool = false
 ## Side (1 or -1) this enemy circles round to when it flanks.
 var flank_side: float = 1.0
 ## Seconds until a leaping enemy may leap again.
@@ -148,12 +151,15 @@ func face_player(delta: float, turn_speed: float = 8.0) -> void:
 		turn_towards(player.global_position - global_position, delta, turn_speed)
 
 
-## Makes the enemy notice the player, for example when hit or warned.
-func notice_player() -> void:
+## Makes the enemy notice the player, for example when hit or warned. With
+## [param warn_others] off it does not pass the warning on.
+func notice_player(warn_others: bool = true) -> void:
 	if health.is_dead():
 		return
 	time_since_seen = 0.0
 	if state_machine.get_state_name() in [&"Idle", &"Patrol", &"Retreat"]:
+		if not warn_others:
+			pack_warned = true
 		state_machine.transition_to(&"Chase")
 
 
@@ -209,13 +215,15 @@ func _update_buff(delta: float) -> void:
 		_buff_label.visible = false
 
 
-## Warns nearby enemies of the same faction that the player is here.
+## Warns nearby enemies of the same faction that the player is here, once
+## per fight. They pass it on only with EnemyData.alert_chain.
 func alert_pack() -> void:
+	pack_warned = true
 	for node: Node in get_tree().get_nodes_in_group(&"enemies"):
 		var other: Enemy = node as Enemy
 		if other != null and other != self and other.data.faction == data.faction \
 				and global_position.distance_to(other.global_position) <= data.alert_radius:
-			other.notice_player()
+			other.notice_player(data.alert_chain)
 
 
 ## Falls over, drops loot and sinks away after a while.
@@ -256,12 +264,19 @@ func _can_detect_player() -> bool:
 		return true
 	if distance > data.sight_range:
 		return false
+	# Up close the corner of the eye counts too.
+	var view_angle: float = data.sight_angle_degrees if distance > data.sight_range * 0.5 else maxf(data.sight_angle_degrees, 160.0)
 	var flat: Vector3 = Vector3(to_player.x, 0.0, to_player.z)
-	if not aware and get_forward().angle_to(flat) > deg_to_rad(data.sight_angle_degrees * 0.5):
+	if not aware and get_forward().angle_to(flat) > deg_to_rad(view_angle * 0.5):
 		return false
-	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(
-		global_position + Vector3.UP * 1.6, player.global_position + Vector3.UP * 1.2, PhysicsLayers.WORLD, [get_rid()])
-	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+	# The head or the chest of the player: a bench or a fence hides only one.
+	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	for height: float in [1.2, 1.7]:
+		var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(
+			global_position + Vector3.UP * 1.6, player.global_position + Vector3.UP * height, PhysicsLayers.WORLD, [get_rid()])
+		if space.intersect_ray(query).is_empty():
+			return true
+	return false
 
 
 func _on_velocity_computed(safe_velocity: Vector3) -> void:

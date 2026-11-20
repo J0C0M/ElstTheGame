@@ -6,6 +6,7 @@ var _wait: float = 0.0
 
 func enter(_data: Dictionary) -> void:
 	enemy.aware = false
+	enemy.pack_warned = false
 	_wait = randf_range(1.5, 3.5)
 
 

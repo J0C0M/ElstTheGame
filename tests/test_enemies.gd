@@ -1,6 +1,7 @@
 extends SceneTree
 ## Headless test for enemies and loot. In the enemy test room: drillers idle
-## and patrol, notice the player and warn each other, attack, take sword hits,
+## and patrol, notice the player and warn each other (close by, or the whole
+## room in the Bingo Club), attack, take sword hits,
 ## die and drop gold; the chest opens once and stays open after loading, and
 ## the enemies come back after loading. In Elst: an enemy gives up the chase,
 ## walks home and heals. Uses its own save folder.
@@ -42,6 +43,7 @@ func _run() -> void:
 	await _test_load_brings_enemies_back()
 	await _go_to("res://scenes/world/Elst.tscn", &"StationExit")
 	await _test_give_up_and_heal()
+	await _test_warnings()
 	_clear_saves()
 	DirAccess.remove_absolute(TEST_SAVE_DIR)
 	print("test_enemies: %d failed" % _failures)
@@ -188,6 +190,34 @@ func _test_give_up_and_heal() -> void:
 	_check(gave_up, "an enemy gives up when the player gets away")
 	_check(enemy.global_position.distance_to(enemy.home) < 2.0, "it walks back home")
 	_check(enemy.health.current_health == enemy.health.max_health, "it heals up at home")
+
+
+func _test_warnings() -> void:
+	# Far from the player, so only the warnings make them chase.
+	var base: Vector3 = _player().global_position + Vector3(0, 0, -70)
+	var drillers: Array[Variant] = []
+	for x: float in [0.0, 5.0, 12.0]:
+		drillers.append(_spawn("res://scenes/enemies/LowDriller.tscn", base + Vector3(x, 0, 0)))
+	var grannies: Array[Variant] = []
+	for x: float in [0.0, 10.0, 20.0]:
+		grannies.append(_spawn("res://scenes/enemies/BozeOma.tscn", base + Vector3(x, 0, -30)))
+	await _frames(5)
+	drillers[0].notice_player()
+	grannies[0].notice_player()
+	await _frames(1)
+	_check(drillers[1].state_machine.get_state_name() == &"Chase", "a laag driller warns the one next to him")
+	_check(drillers[2].state_machine.get_state_name() != &"Chase", "but not one further away: no whole room at once")
+	_check(grannies[2].state_machine.get_state_name() == &"Chase", "in the Bingo Club the warning goes round the whole room")
+	for enemy: Variant in drillers + grannies:
+		enemy.queue_free()
+
+
+func _spawn(scene_path: String, position: Vector3) -> Variant:
+	var enemy: Node3D = (load(scene_path) as PackedScene).instantiate() as Node3D
+	# Placed before it enters the tree, so the spot becomes its home.
+	enemy.position = position
+	_main.get_world().add_child(enemy)
+	return enemy
 
 
 func _go_to(scene_path: String, spawn_id: StringName) -> void:

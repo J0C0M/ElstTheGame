@@ -344,9 +344,14 @@ func set_aiming(on: bool) -> void:
 	EventBus.crosshair_changed.emit(on)
 
 
-## Shoots a bolt at whatever the crosshair points to, if one is loaded.
+## Shoots a bolt at whatever the crosshair points to, if one is loaded and
+## the player has arrows left (each shot uses one).
 func try_shoot() -> void:
 	if crossbow == null or _reload_left > 0.0:
+		return
+	if not GameState.remove_item(GameState.BOLT_ID):
+		_reload_left = RELOAD_TIME
+		EventBus.message_requested.emit("Je pijlen zijn op. Koop nieuwe bij Klaas of zoek ze in kisten.")
 		return
 	_reload_left = RELOAD_TIME
 	face_camera_direction()

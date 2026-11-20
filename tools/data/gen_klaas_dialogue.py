@@ -123,7 +123,7 @@ line("q4_report", "Het fatbike-kindje van zijn fiets geduwd? Dat had ik graag ge
 line("q4_reward", "Het OBC is weer van de leerlingen. Hier, 150 goud.", "hub", action="set_flag", value="q4_reported")
 line("q5_report", "Grumpy Oma verslagen? Dan wordt het vanavond eindelijk weer een gezellige bingoavond.", "q5_reward", condition=q5_report, model_action="flex")
 line("q5_reward", "Hier, 150 goud. En er is meer.", "q5_crossbow", action="set_flag", value="q5_reported")
-line("q5_crossbow", "Je hebt al mijn klussen gedaan. Daarom krijg je mijn oude kruisboog. Druk op 2 om hem te pakken en houd de rechtermuisknop vast om te richten.", "hub",
+line("q5_crossbow", "Je hebt al mijn klussen gedaan. Daarom krijg je mijn oude kruisboog. Druk op 2 om hem te pakken en houd de rechtermuisknop vast om te richten. Er zitten 15 pijlen bij. Meer koop je bij mij, of je vindt ze in kisten.", "hub",
      action="give_item", value="crossbow")
 line("greeting_strong", "Kijk eens wie er spieren krijgt. Bijna zoveel als ik. Bijna.", "hub", condition=strong, model_action="flex")
 line("greeting", "Daar is mijn favoriete niemand.", "hub")

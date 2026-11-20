@@ -7,7 +7,7 @@ signal closed
 
 const TYPE_ORDER: Dictionary = {
 	ItemData.ItemType.SWORD: 0, ItemData.ItemType.ARMOR: 1,
-	ItemData.ItemType.CROSSBOW: 2, ItemData.ItemType.CONSUMABLE: 3,
+	ItemData.ItemType.CROSSBOW: 2, ItemData.ItemType.CONSUMABLE: 3, ItemData.ItemType.AMMO: 4,
 }
 
 @onready var _gold_label: Label = %GoldLabel
@@ -43,7 +43,7 @@ func buy(item: ItemData) -> bool:
 	if item.is_gear():
 		GameState.add_gear(item)
 	else:
-		GameState.add_item(item)
+		GameState.add_item(item, item.bundle)
 	EventBus.message_requested.emit("Gekocht: %s" % item.display_name)
 	return true
 
@@ -93,7 +93,12 @@ func _why_not_buyable(item: ItemData) -> String:
 		return "Inwijding %d" % item.required_inwijding
 	if item.is_gear() and GameState.has_gear(item.id):
 		return "In bezit"
-	if not item.is_gear() and GameState.get_potion_count() >= GameState.MAX_POTIONS:
+	if item.type == ItemData.ItemType.AMMO:
+		if not GameState.has_crossbow():
+			return "Geen kruisboog"
+		if GameState.get_item_count(item.id) >= GameState.MAX_BOLTS:
+			return "Vol"
+	elif not item.is_gear() and GameState.get_potion_count() >= GameState.MAX_POTIONS:
 		return "Vol"
 	if GameState.gold < item.price:
 		return "%d goud nodig" % item.price

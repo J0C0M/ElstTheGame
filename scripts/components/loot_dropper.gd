@@ -23,7 +23,8 @@ func drop() -> void:
 		var item: ItemData = entry.item
 		if entry.kind == LootEntry.Kind.NEXT_GEAR:
 			item = GameState.get_next_gear()
-		if item == null:
+		# Arrows only drop for a player who has the crossbow.
+		if item == null or (item.type == ItemData.ItemType.AMMO and not GameState.has_crossbow()):
 			continue
 		var pickup: ItemPickup = ITEM_SCENE.instantiate()
 		pickup.item = item

@@ -69,7 +69,7 @@ func _rebuild() -> void:
 			_potion_list.add_child(line)
 	if GameState.inventory.is_empty():
 		var none: Label = Label.new()
-		none.text = "Geen drankjes. Klaas verkoopt ze."
+		none.text = "Geen drankjes of pijlen. Klaas verkoopt ze."
 		none.modulate = Color(1, 1, 1, 0.6)
 		_potion_list.add_child(none)
 

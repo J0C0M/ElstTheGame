@@ -311,7 +311,7 @@ action_value = "q5_reported"
 [sub_resource type="Resource" id="Line_q5_crossbow"]
 script = ExtResource("4_line")
 id = &"q5_crossbow"
-text = "Je hebt al mijn klussen gedaan. Daarom krijg je mijn oude kruisboog. Druk op 2 om hem te pakken en houd de rechtermuisknop vast om te richten."
+text = "Je hebt al mijn klussen gedaan. Daarom krijg je mijn oude kruisboog. Druk op 2 om hem te pakken en houd de rechtermuisknop vast om te richten. Er zitten 15 pijlen bij. Meer koop je bij mij, of je vindt ze in kisten."
 next = &"hub"
 action = &"give_item"
 action_value = "crossbow"

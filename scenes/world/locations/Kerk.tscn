@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/props/TreeProp.tscn" id="3_res"]
 [ext_resource type="Script" path="res://scenes/world/location_area.gd" id="4_res"]
 [ext_resource type="PackedScene" path="res://scenes/world/locations/KerkDecor.tscn" id="99_decor"]
+[ext_resource type="Script" path="res://scripts/quests/quest_marker.gd" id="98_marker"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
 albedo_color = Color(0.6, 0.58, 0.55, 1)
@@ -77,7 +78,7 @@ mesh = SubResource("BoxMesh_6")
 position = Vector3(0, 0, -17.7)
 prompt = "Kerk van Amber"
 door_color = Color(0.5, 0.28, 0.1, 1)
-locked = true
+unlocked_by_flag = &"church_open"
 locked_message = "De kerkdeuren zitten op slot. Eerst moeten de drie facties verslagen zijn."
 
 [node name="Sign" type="Label3D" parent="."]
@@ -120,3 +121,8 @@ position = Vector3(0, 10, 0)
 shape = SubResource("BoxShape3D_7")
 
 [node name="Decor" parent="." instance=ExtResource("99_decor")]
+
+[node name="MarkerDoor" type="Marker3D" parent="."]
+position = Vector3(0, 0, -19.5)
+script = ExtResource("98_marker")
+ids = Array[StringName]([&"kerk"])

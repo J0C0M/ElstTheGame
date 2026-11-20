@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="QuestData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_quest"]
+[ext_resource type="Script" path="res://scripts/data/quest_step.gd" id="2_step"]
+
+[sub_resource type="Resource" id="Step_enter"]
+script = ExtResource("2_step")
+id = &"enter"
+description = "De kerkdeuren zijn open. Ga de Kerk van Amber in, op het plein in het midden van Elst."
+kind = 3
+area_id = &"kerk_dungeon"
+target = &"kerk"
+
+[sub_resource type="Resource" id="Step_descend"]
+script = ExtResource("2_step")
+id = &"descend"
+description = "Vecht je door de kerk naar beneden, tot diep onder de grond."
+kind = 3
+area_id = &"kerk_voorkamer"
+target = &"klaas_church"
+
+[sub_resource type="Resource" id="Step_klaas"]
+script = ExtResource("2_step")
+id = &"klaas"
+description = "Praat met Klaas voor het hol van Amber."
+flag = &"klaas_ready"
+target = &"klaas_church"
+
+[sub_resource type="Resource" id="Step_amber"]
+script = ExtResource("2_step")
+id = &"amber"
+description = "Versla Amber de Draak, samen met Klaas."
+flag = &"boss_amber"
+target = &"amber"
+
+[sub_resource type="Resource" id="Step_revive"]
+script = ExtResource("2_step")
+id = &"revive"
+description = "Gebruik de gouden Tren-spuit op Klaas."
+flag = &"klaas_revived"
+target = &"klaas_fallen"
+
+[resource]
+script = ExtResource("1_quest")
+id = &"q6_amber"
+number = 6
+title = "Amber de Draak"
+description = "De drie facties zijn verslagen en de kerk is open. Diep onder de kerk wacht Amber de Draak. Klaas gaat vooruit en wacht op je voor haar hol."
+steps = Array[ExtResource("2_step")]([SubResource("Step_enter"), SubResource("Step_descend"), SubResource("Step_klaas"), SubResource("Step_amber"), SubResource("Step_revive")])
+completion_flag = &"klaas_revived"
+start_flag = &"church_open"
+start_message = "Amber, door de tornado: \"Dus jij hebt mijn volgelingen verslagen, niemand? Kom maar naar mijn kerk. Ik wacht op je.\""

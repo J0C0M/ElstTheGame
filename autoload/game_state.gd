@@ -12,6 +12,8 @@ const MAX_INWIJDING: int = 6
 const START_GEAR: Array[StringName] = [&"plain_clothes"]
 ## Selling gear back to Klaas gives this share of its price.
 const SELL_RATE: float = 0.4
+## Beating these three bosses opens the church (flag church_open).
+const CHURCH_BOSSES: Array[StringName] = [&"boss_vape_koning", &"boss_fatbike_kindje", &"boss_grumpy_oma"]
 
 ## Dev powers for testing (` in debug builds): no damage, flying, much
 ## faster and every hit kills. Not saved.
@@ -195,6 +197,7 @@ func set_flag(flag: StringName, value: bool = true) -> void:
 		_flags[flag] = true
 		if not was_set:
 			EventBus.flag_set.emit(flag)
+			_check_church()
 	else:
 		_flags.erase(flag)
 
@@ -254,6 +257,20 @@ func load_data(data: Dictionary) -> void:
 	for flag: Variant in data.get("flags", []):
 		_flags[StringName(str(flag))] = true
 	_emit_all()
+	# Saves from before the church could open.
+	_check_church()
+
+
+## Opens the church once the three faction bosses are beaten.
+func _check_church() -> void:
+	if has_flag(&"church_open"):
+		church_open = true
+		return
+	for boss: StringName in CHURCH_BOSSES:
+		if not has_flag(boss):
+			return
+	church_open = true
+	set_flag(&"church_open")
 
 
 func _inventory_as_strings() -> Dictionary:

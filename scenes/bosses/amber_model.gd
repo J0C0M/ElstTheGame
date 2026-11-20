@@ -32,6 +32,7 @@ var _wings: Array[DragonWingRig] = []
 @onready var _jaw: Node3D = $Body/Neck/Head/Jaw
 @onready var _mouth: Node3D = $Body/Neck/Head/MouthGlow
 @onready var _throat: Node3D = $Body/Neck/ThroatGlow
+@onready var _neck_heat: OmniLight3D = $Body/Neck/NeckHeat
 @onready var _tails: Array[Node3D] = [$Body/Tail, $Body/Tail/Tail2, $Body/Tail/Tail2/Tail3, $Body/Tail/Tail2/Tail3/Tail4]
 @onready var _legs: Array[Node3D] = [$Body/LegFL, $Body/LegFR, $Body/LegBL, $Body/LegBR]
 @onready var _knees: Array[Node3D] = [$Body/LegFL/Knee, $Body/LegFR/Knee, $Body/LegBL/Knee, $Body/LegBR/Knee]
@@ -183,7 +184,10 @@ func _physics_process(delta: float) -> void:
 		body_roll += sin(_stride) * 0.03 * minf(gait, 1.0)
 	neck_pitch += look_pitch
 	_mouth.visible = pose in [Pose.INHALE, Pose.BREATH]
-	_throat.visible = pose == Pose.INHALE
+	# The underside of her neck glows hot while she inhales and breathes fire.
+	_throat.visible = pose in [Pose.INHALE, Pose.BREATH]
+	_neck_heat.visible = _throat.visible
+	_neck_heat.light_energy = 3.0 + sin(_time * 14.0) * 1.0
 	_neck.rotation.x = lerp_angle(_neck.rotation.x, neck_pitch, weight)
 	_neck.rotation.y = lerp_angle(_neck.rotation.y, sin(_time * 0.7) * 0.06, weight)
 	_head.rotation.x = lerp_angle(_head.rotation.x, head_pitch, weight)

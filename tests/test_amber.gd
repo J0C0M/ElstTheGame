@@ -259,6 +259,22 @@ func _test_first_bar() -> void:
 	health = _fresh_health()
 	await _force(amber, BREATH, 1.0)
 	_check(player.health.current_health == health, "a pillar between her and the player stops the flames")
+	# Under her neck is no safe spot: it burns there too, and it glows.
+	_put_amber(amber, CENTRE, 108.0)
+	await _frames(3)
+	var neck: Array = amber.call(&"_neck_zone")
+	var under: Vector3 = (neck[0] + neck[1]) * 0.5
+	_place(Vector3(under.x, CENTRE.y, under.z), 0.0)
+	health = _fresh_health()
+	await _force(amber, BREATH, 0.6)
+	_check(player.health.current_health < health, "standing under her neck while she breathes fire burns too")
+	amber.mode = BREATH
+	amber.set("_timer", 0.5)
+	amber.model.pose = 2
+	await _frames(15)
+	_check(amber.get_node("Model/Body/Neck/ThroatGlow").visible and amber.get_node("Model/Body/Neck/NeckHeat").visible,
+		"the underside of her neck glows hot")
+	await _frames(40)
 	# Panting with her head low after the breath.
 	amber.mode = PANT
 	amber.set("_timer", 3.0)
@@ -386,7 +402,7 @@ func _test_klaas_falls() -> void:
 		if amber.phase == 2:
 			break
 	_check(ally.mode == ALLY_FALLEN and _state.has_flag(&"klaas_fallen"), "Klaas takes her fireball for the player and falls")
-	_check(amber.phase == 2 and amber.health.current_health == 900 and _main.get_node("UI/HUD/BossBar/BossName").text.ends_with("2/2"),
+	_check(amber.phase == 2 and amber.health.current_health == 1050 and _main.get_node("UI/HUD/BossBar/BossName").text.ends_with("2/2"),
 		"then her second bar starts")
 	_check(_player().process_mode == Node.PROCESS_MODE_INHERIT and _state.is_saving_blocked(), "the player fights on, still without saving")
 
@@ -395,9 +411,9 @@ func _test_second_bar_and_death() -> void:
 	var amber: Variant = _main.get_world().get_node("Amber")
 	amber.set("_flight_wait", 999.0)
 	var enemies: int = get_nodes_in_group(&"enemies").size()
-	amber.health.take_damage(320)
+	amber.health.take_damage(370)
 	await _frames(5)
-	_check(amber.helps == 1 and get_nodes_in_group(&"enemies").size() == enemies + 2, "furious, she calls two drillers")
+	_check(amber.helps == 1 and get_nodes_in_group(&"enemies").size() == enemies + 2, "furious, she calls two cultists")
 	# Her new attack: she rears up and stamps, rings of fire run over the floor.
 	_put_amber(amber, CENTRE, 90.0)
 	_place(_spot(90.0, 13.0), PI)

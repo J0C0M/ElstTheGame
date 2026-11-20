@@ -75,10 +75,13 @@ func _ready() -> void:
 ## [param forward], [param half_angle] degrees to either side, out to
 ## [param distance] metres, on a floor at [param floor_y]. [param urgency]
 ## from 0 to 1 makes it pulse faster and brighter.
-func show_warning(mouth: Vector3, forward: Vector3, half_angle: float, distance: float, floor_y: float, urgency: float, exclude: Array[RID]) -> void:
+## [param neck_from] and [param neck_to] mark the hot zone under her neck,
+## [param neck_half_width] wide to either side; it is shown too.
+func show_warning(mouth: Vector3, forward: Vector3, half_angle: float, distance: float, floor_y: float, urgency: float, exclude: Array[RID],
+		neck_from: Vector3 = Vector3.INF, neck_to: Vector3 = Vector3.INF, neck_half_width: float = 0.0) -> void:
 	_warning_time += get_physics_process_delta_time() * lerpf(4.0, 14.0, urgency)
 	var alpha: float = lerpf(0.45, 0.75, urgency) + sin(_warning_time) * 0.15
-	_draw_fan(mouth, forward, half_angle, distance, floor_y, Color(1.0, 0.1, 0.04, alpha), exclude)
+	_draw_fan(mouth, forward, half_angle, distance, floor_y, Color(1.0, 0.1, 0.04, alpha), exclude, neck_from, neck_to, neck_half_width)
 
 
 ## Hides the warning.
@@ -163,7 +166,8 @@ func _spawn(mouth: Vector3, target: Vector3, exclude: Array[RID]) -> void:
 		return
 
 
-func _draw_fan(mouth: Vector3, forward: Vector3, half_angle: float, distance: float, floor_y: float, color: Color, exclude: Array[RID]) -> void:
+func _draw_fan(mouth: Vector3, forward: Vector3, half_angle: float, distance: float, floor_y: float, color: Color, exclude: Array[RID],
+		neck_from: Vector3, neck_to: Vector3, neck_half_width: float) -> void:
 	_fan_instance.visible = true
 	_fan.clear_surfaces()
 	_fan.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -189,4 +193,12 @@ func _draw_fan(mouth: Vector3, forward: Vector3, half_angle: float, distance: fl
 				_fan.surface_add_vertex(vertex)
 		previous = point
 		previous_inner = inner
+	if neck_from != Vector3.INF:
+		# The hot strip under her neck, from her chest to her mouth.
+		var a: Vector3 = Vector3(neck_from.x, floor_y + 0.07, neck_from.z)
+		var b: Vector3 = Vector3(neck_to.x, floor_y + 0.07, neck_to.z)
+		var across: Vector3 = (b - a).cross(Vector3.UP).normalized() * neck_half_width
+		for vertex: Vector3 in [a - across, a + across, b + across, a - across, b + across, b - across]:
+			_fan.surface_set_color(color)
+			_fan.surface_add_vertex(vertex)
 	_fan.surface_end()

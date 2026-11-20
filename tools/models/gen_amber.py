@@ -66,7 +66,10 @@ for n, (w, z) in enumerate(((1.75, -0.6), (1.5, -1.85), (1.3, -3.05))):
     m.box(neck, f"NeckPart{n}", (0, 0, z), (w, w, 1.45), SCALE)
     m.box(neck, f"ThroatPlate{n}", (0, -w / 2 - 0.05, z), (w * 0.7, 0.14, 1.2), BELLY)
 spines(neck, "NeckSpine", [(-0.6, 0.85, 0.6, 0.8), (-1.85, 0.72, 0.55, 0.8), (-3.05, 0.62, 0.45, 0.8)], 0.2)
-m.box(neck, "ThroatGlow", (0, -0.86, -1.85), (0.7, 0.1, 3.6), THROAT, glow=3.0, hidden=True)
+m.box(neck, "ThroatGlow", (0, -0.9, -1.85), (1.15, 0.14, 3.9), THROAT, glow=4.0, hidden=True)
+# Heat under the neck while she breathes fire: it lights the floor below.
+m.nodes.append(['[node name="NeckHeat" type="OmniLight3D" parent="Body/Neck"]', "visible = false", "position = Vector3(0, -1.6, -1.8)",
+                "light_color = Color(1, 0.45, 0.1, 1)", "light_energy = 4.0", "omni_range = 7.0"])
 m.marker(neck, "ProbeNeck", (0, 0, -2.0))
 
 # --- Head: skull, cheeks, snout, brows, eyes, horns, teeth and a jaw.

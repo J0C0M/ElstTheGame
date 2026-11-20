@@ -1,5 +1,7 @@
 """Builds four location scenes in scenes/world/locations/: Station, Westeraam,
-OBCFort and BingoClub, the outsides of the four dungeons.
+OBCFort and BingoClub, the outsides of the four dungeons. For the church and
+Klaas' house, which are made by hand, it builds only their decoration
+(KerkDecor.tscn and KlaasHouseDecor.tscn), instanced as "Decor" in them.
 
 Run from the project root: python3 tools/map/gen_locations.py
 
@@ -113,7 +115,7 @@ class Location:
         self.raw('[node name="MarkerDoor" type="Marker3D" parent="."]', f"position = {vec(*marker_pos)}", 'script = ExtResource("4_marker")',
                  f'ids = Array[StringName]([&"{marker_id}"])')
 
-    def write(self, file_name, area_id, area_name, area_pos, area_size):
+    def write(self, file_name, area_id=None, area_name="", area_pos=(0, 0, 0), area_size=(1, 1, 1)):
         out = ['[gd_scene format=3]', '',
                '[ext_resource type="PackedScene" path="res://scenes/world/props/House.tscn" id="1_house"]',
                '[ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="2_door"]',
@@ -138,7 +140,10 @@ class Location:
             out.append("")
         for block in self.nodes:
             out += block + [""]
-        out += ['[node name="LocationArea" type="Area3D" parent="."]', 'script = ExtResource("3_area")', f'id = &"{area_id}"',
+        if area_id is None:
+            out = [line for line in out if "Shape_area" not in line and "size = " + vec(*area_size) != line]
+        else:
+            out += ['[node name="LocationArea" type="Area3D" parent="."]', 'script = ExtResource("3_area")', f'id = &"{area_id}"',
                 f'display_name = "{area_name}"', '',
                 '[node name="CollisionShape3D" type="CollisionShape3D" parent="LocationArea"]', f"position = {vec(*area_pos)}",
                 'shape = SubResource("Shape_area")']
@@ -633,7 +638,123 @@ def build_bingo():
     loc.write("BingoClub.tscn", "bingo_club", "Bingo Club Boomer Cave", (0, 10, -6), (40, 20, 44))
 
 
+def build_kerk_decor():
+    """The church of Amber: buttresses and stained glass along the nave, a
+    portal with braziers, clocks, a belfry and a rose window on the tower,
+    and a churchyard with graves, benches and lamps round the square."""
+    loc = Location("KerkDecor")
+    rng = random.Random(5)
+    stone = (0.7, 0.66, 0.6)
+    glass = [AMBER, (0.85, 0.2, 0.2), (0.25, 0.4, 0.9), (0.6, 0.3, 0.8), YELLOW]
+    for x in (-7.5, 7.5):
+        for z in range(-8, 19, 5):
+            loc.add("Solids", x, 3.5, z, 1.0, 7, 1.6, stone)
+        for z in range(-6, 17, 5):
+            loc.add("Glow", x * 0.937, 5.2, z + 0.5, 0.1, 4.2, 1.4, rng.choice(glass))
+            loc.add("Details", x * 0.937, 7.45, z + 0.5, 0.12, 0.3, 1.6, stone)
+    for dx in (-1.9, 1.9):
+        loc.add("Solids", dx, 2.1, -17.85, 0.6, 4.2, 0.6, stone)
+    loc.add("Details", 0, 4.5, -17.85, 4.4, 0.8, 0.6, stone)
+    loc.add("Details", 0, 0.03, -19.6, 6, 0.05, 3.2, stone)
+    loc.add("Glow", 0, 10.5, -17.56, 2.6, 2.6, 0.08, (0.95, 0.5, 0.15))
+    loc.add("Details", 0, 10.5, -17.6, 3.0, 3.0, 0.06, stone)
+    loc.add("Glow", 0, 13.6, -17.58, 1.2, 1.2, 0.06, AMBER, math.pi / 4)
+    for x in (-3.6, 3.6):
+        loc.ground("Solids", x, -19.6, 0.8, 1.0, 0.8, DARK)
+        loc.add("Details", x, 1.1, -19.6, 1.1, 0.2, 1.1, DARK)
+        loc.add("Glow", x, 1.45, -19.6, 0.6, 0.5, 0.6, (1.0, 0.5, 0.1))
+    loc.light("BrazierLight", (0, 2.5, -20.5), (1.0, 0.55, 0.2), 2.0, 9.0)
+    for yaw in (math.pi, math.pi / 2, -math.pi / 2):
+        g = loc.group(0, -13, yaw, 26)
+        g.add("Details", 0, 0, 4.53, 3.0, 3.0, 0.08, WHITE)
+        g.add("Details", 0, 0, 4.55, 3.3, 3.3, 0.05, YELLOW)
+        g.add("Details", 0, 0.5, 4.6, 0.15, 1.1, 0.05, BLACK)
+        g.add("Details", 0.35, 0, 4.6, 0.8, 0.15, 0.05, BLACK)
+    for yaw in (0.0, math.pi / 2, math.pi, -math.pi / 2):
+        g = loc.group(0, -13, yaw, 30.5)
+        for dx in (-1.6, 1.6):
+            g.add("Details", dx, 0, -4.53, 1.2, 3.0, 0.06, BLACK)
+    loc.add("Details", 0, 50.2, -13, 0.5, 0.5, 0.5, YELLOW)
+    # Churchyard behind and beside the nave, with a low stone wall.
+    for x0 in (-20, 10):
+        for row in range(3):
+            for col in range(4):
+                x, z = x0 + col * 2.6, 6 + row * 4
+                loc.ground("Solids", x, z, 0.9, rng.uniform(0.9, 1.4), 0.25, (0.55, 0.55, 0.57), yaw=rng.uniform(-0.15, 0.15))
+                loc.add("Details", x, 0.04, z + 1.1, 0.9, 0.05, 1.8, GREEN)
+    for x0, x1 in ((-21.5, -9), (9, 21.5)):
+        loc.ground("Solids", (x0 + x1) / 2, 2.8, x1 - x0, 0.7, 0.5, stone)
+    # The square: benches, lamps and paving lines.
+    for i in range(-22, 23, 4):
+        loc.add("Details", i, 0.04, -20, 0.08, 0.01, 6, (0.55, 0.52, 0.5))
+    for x, z, yaw in ((-12, -10, math.pi / 2), (12, -10, -math.pi / 2), (-12, -2, math.pi / 2), (12, -2, -math.pi / 2)):
+        bench(loc, x, z, yaw)
+    for x, z in ((-9, -21), (9, -21), (-14, -6), (14, -6)):
+        lamp_post(loc, x, z, 4.2)
+    loc.write("KerkDecor.tscn")
+
+
+def build_klaas_decor():
+    """Klaas' house in purple and gold: a porch with gold columns, gold trim,
+    a chimney, flower beds, an outdoor gym, a purple car, a barbecue, a
+    mailbox and a flag. The practice yard in front stays free."""
+    loc = Location("KlaasHouseDecor")
+    gold = (0.95, 0.75, 0.2)
+    purple = (0.46, 0.29, 0.66)
+    loc.add("Details", 0, 3.1, -2.6, 5.4, 0.3, 2.2, purple)
+    loc.add("Details", 0, 3.3, -3.65, 5.5, 0.15, 0.1, gold)
+    for x in (-2.4, 2.4):
+        loc.add("Solids", x, 1.5, -3.4, 0.3, 3.0, 0.3, gold)
+    loc.label("Emblem", (0, 4.2, -1.62), math.pi, "K", gold, font=160, pixel=0.012)
+    loc.add("Details", 0, 7.9, -1.56, 14.2, 0.3, 0.1, gold)
+    loc.add("Solids", 4, 10.8, 6, 1.0, 3.2, 1.0, (0.45, 0.22, 0.18))
+    for x0 in (-6.5, 3.2):
+        loc.ground("Details", x0 + 1.65, -2.2, 3.3, 0.35, 0.8, (0.4, 0.26, 0.16))
+        for i in range(6):
+            loc.add("Details", x0 + 0.3 + i * 0.55, 0.45, -2.2, 0.2, 0.2, 0.2, [RED, YELLOW, PINK, gold][i % 4])
+    for z in (-12, -8, -4):
+        for x in (-1.6, 1.6):
+            loc.ground("Details", x, z, 0.12, 0.6, 0.12, DARK)
+            loc.add("Glow", x, 0.65, z, 0.22, 0.12, 0.22, LAMP)
+    # Outdoor gym on the left of the house.
+    g = loc.group(-11.5, 3, 0)
+    g.add("Solids", 0, 0.45, 0, 0.5, 0.15, 1.6, BLACK)
+    for dz in (-0.6, 0.6):
+        g.add("Details", 0, 0.22, dz, 0.4, 0.44, 0.1, DARK)
+    for dx in (-0.6, 0.6):
+        g.add("Details", dx, 0.75, -0.65, 0.08, 0.9, 0.08, STEEL)
+    g.add("Details", 0, 1.15, -0.65, 2.2, 0.06, 0.06, STEEL)
+    for dx in (-0.9, 0.9):
+        g.add("Details", dx, 1.15, -0.65, 0.12, 0.6, 0.6, BLACK)
+    for dx in (-1.2, 1.2):
+        g.add("Solids", dx, 1.4, 2.6, 0.12, 2.8, 0.12, DARK)
+    g.add("Details", 0, 2.75, 2.6, 2.5, 0.08, 0.08, STEEL)
+    for i in range(4):
+        g.add("Details", -0.9 + i * 0.6, 0.15, -2.2, 0.3, 0.3, 0.3, BLACK)
+    loc.label("GymSign", (-11.5, 3.4, 5.55), math.pi, "SIGMA GYM", gold, font=48, pixel=0.008)
+    # A purple car, a barbecue with a parasol, a mailbox and a flag.
+    car(loc, 12, -11, 0.0, purple)
+    loc.add("Details", 12, 0.71, -11, 0.4, 0.02, 4.2, gold)
+    g = loc.group(11, 3, 0)
+    g.add("Solids", 0, 0.8, 0, 0.9, 0.12, 0.6, DARK)
+    g.add("Details", 0, 0.4, 0, 0.1, 0.8, 0.1, DARK)
+    g.add("Glow", 0, 0.9, 0, 0.7, 0.05, 0.4, (1.0, 0.4, 0.1))
+    g.add("Solids", 2.5, 0.75, 0, 1.4, 0.08, 1.4, WHITE)
+    g.add("Details", 2.5, 1.4, 0, 0.06, 2.8, 0.06, STEEL)
+    g.add("Details", 2.5, 2.8, 0, 2.6, 0.12, 2.6, purple)
+    g.add("Details", 2.5, 2.9, 0, 1.4, 0.12, 1.4, gold)
+    loc.ground("Details", -3.4, -16.6, 0.1, 1.1, 0.1, DARK)
+    loc.add("Solids", -3.4, 1.25, -16.6, 0.5, 0.4, 0.6, purple)
+    loc.add("Details", -3.12, 1.4, -16.5, 0.04, 0.3, 0.12, gold)
+    flag(loc, -13, -13, 0, purple, gold)
+    for x in (-2.6, 2.6):
+        loc.add("Details", x, 1.3, -16, 0.6, 0.2, 0.6, gold)
+    loc.write("KlaasHouseDecor.tscn")
+
+
 if __name__ == "__main__":
+    build_kerk_decor()
+    build_klaas_decor()
     build_station()
     build_westeraam()
     build_obc()

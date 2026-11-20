@@ -499,6 +499,10 @@ Verzoeken van de eigenaar na Fase 10, voor Fase 11.
   - **OBC Elst Fort:** het fort is behouden en versterkt met hogere rode bakstenen muren met kantelen en banieren, vier torens met kantelen, schietgaten en rood-navy vlaggen, en een poortgebouw met een opgetrokken valhek en een "OBC ELST FORT"-bord. Binnen staan de school met rode band, navy luifel en fietsen, en het voetbalveld met lijnen, doelen met netten, dug-outs, lichtmasten en een scorebord.
   - **Bingo Club:** het blauwe clubhuis met een grotmond van rotsen en stalactieten om de deur, een "BOOMER CAVE"-bordje en een groot BINGO-bord met lampjes. Verder gestreepte luifels, bloembakken, banken en rollators, en een parkeerplaats met vakken, drie scootmobielen met vlaggetje, de Bingo Express (minibus), een reuzen-bingobal (B-12), hagen en lantaarns.
 
+- **Kerk en Huis van Klaas mooier** (derde verzoek): `gen_locations.py` maakt voor beide een decoratie-scene (`KerkDecor.tscn`, `KlaasHouseDecor.tscn`), die als `Decor` in de met de hand gemaakte scenes hangt. Zo blijven deuren, markers en de vergrendeling van de kerk ongemoeid.
+  - **Kerk:** steunberen en glas-in-loodramen langs het schip, een stenen portaal met twee vuurschalen, een roosvenster en een amberkleurige ruit op de toren, klokken en galmgaten, een kerkhof met grafstenen achter een stenen muurtje, en banken, lantaarns en bestrating op het plein.
+  - **Huis van Klaas:** een veranda met gouden zuilen en een gouden K, een gouden rand, een schoorsteen, bloembakken, tuinverlichting langs het pad, een buitengym ("SIGMA GYM"), een paarse auto met gouden streep, een barbecue met parasol, een brievenbus en een paars-gouden vlag. Het oefenveld voor de deur blijft vrij.
+
 ### Keuzes en afwijkingen (tweede verzoek)
 
 - **Inwoners verschijnen alleen als je door de deur binnenkomt**, niet bij het laden van een save in de dungeon. Zo blijft de dungeon na opnieuw laden leeg, zoals gevraagd.

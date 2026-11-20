@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/quests/quest_spawner.gd" id="93_spawner"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/LowDriller.tscn" id="94_low_driller"]
 [ext_resource type="Script" path="res://scripts/quests/quest_marker.gd" id="95_marker"]
+[ext_resource type="PackedScene" path="res://scenes/world/locations/KlaasHouseDecor.tscn" id="99_decor"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
 albedo_color = Color(0.42, 0.64, 0.32, 1)
@@ -212,3 +213,4 @@ position = Vector3(0, 0, -13)
 script = ExtResource("95_marker")
 ids = Array[StringName]([&"practice_fight"])
 
+[node name="Decor" parent="." instance=ExtResource("99_decor")]

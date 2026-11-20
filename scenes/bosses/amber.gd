@@ -24,7 +24,7 @@ extends CharacterBody3D
 ## When the first bar is empty a scene follows in which Klaas saves the
 ## player and falls. With the second bar she is furious: faster, burning
 ## patches where she walks and after her breath, twice she calls
-## drillers, and she has a new attack: she rears up and stamps, and two
+## cultists from Zevenaar, and she has a new attack: she rears up and stamps, and two
 ## rings of fire run over the floor (jump over them). When she dies she drops the golden Tren syringe. Saving is
 ## blocked during the fight and the gate is shut; a GameState flag keeps her
 ## beaten.
@@ -104,9 +104,9 @@ enum Mode { WAITING, CHASE, INHALE, BREATH, PANT, TAIL_WINDUP, TAIL, WINGS, TAKE
 @export var fire_patch_scene: PackedScene
 @export var fire_patch_damage: int = 6
 @export var helper_scene: PackedScene
-## Where the drillers come in, from the arena centre; two per call.
+## Where the cultists come in, from the arena centre; two per call.
 @export var helper_offsets: Array[Vector3] = []
-## Health ratios of the second bar at which she calls drillers.
+## Health ratios of the second bar at which she calls cultists.
 @export var help_at: Array[float] = [0.66, 0.33]
 ## Her stamp in the second bar: rings of fire that run over the floor.
 @export var fire_wave_scene: PackedScene
@@ -129,6 +129,8 @@ const LAND_TIME: float = 1.4
 const LAP_SPAN: float = 288.0
 const TRAMPLE_REACH: float = 3.2
 const WING_REACH: float = 9.0
+## Half the width of the hot zone under her neck while she breathes fire.
+const NECK_HEAT: float = 2.4
 const ROARS: Array[String] = ["GRAAAAH!", "Uit mijn buurt, insecten!", "Jullie krijgen me niet te pakken!"]
 
 var mode: Mode = Mode.WAITING
@@ -136,7 +138,7 @@ var mode: Mode = Mode.WAITING
 var phase: int = 1
 ## The player or Klaas: whom her next attack is for.
 var target: Node3D
-## How many times she called drillers, laps she ran and breaths she took, for tests.
+## How many times she called cultists, laps she ran and breaths she took, for tests.
 var helps: int = 0
 var laps: int = 0
 var stamps: int = 0
@@ -432,7 +434,8 @@ func _inhale(player: Player, delta: float, speed_factor: float) -> void:
 	if _timer > inhale_time * 0.4:
 		_turn_to(_target_position(player), delta, speed_factor * 1.5)
 	var urgency: float = 1.0 - clampf(_timer / inhale_time, 0.0, 1.0)
-	breath.show_warning(model.get_mouth(), _forward(), _breath_half_angle(), breath_range, _ground_y, urgency, _excluded)
+	var neck: Array[Vector3] = _neck_zone()
+	breath.show_warning(model.get_mouth(), _forward(), _breath_half_angle(), breath_range, _ground_y, urgency, _excluded, neck[0], neck[1], NECK_HEAT)
 	if _timer <= 0.0:
 		mode = Mode.BREATH
 		breaths += 1
@@ -450,7 +453,8 @@ func _breathe(player: Player, delta: float) -> void:
 		rotation.y = _breath_yaw + deg_to_rad(breath_sweep) * _sweep_side * lerpf(-1.0, 1.0, progress)
 	var mouth: Vector3 = model.get_mouth()
 	var shown: Vector3 = _forward().rotated(Vector3.UP, _breath_yaw - rotation.y) if phase == 2 else _forward()
-	breath.show_warning(mouth, shown, _breath_half_angle(), breath_range, _ground_y, 1.0, _excluded)
+	var neck: Array[Vector3] = _neck_zone()
+	breath.show_warning(mouth, shown, _breath_half_angle(), breath_range, _ground_y, 1.0, _excluded, neck[0], neck[1], NECK_HEAT)
 	breath.pour(mouth, _forward(), breath_angle, breath_range, _ground_y, delta, _excluded)
 	_tick -= delta
 	if _tick <= 0.0:
@@ -466,9 +470,20 @@ func _breathe(player: Player, delta: float) -> void:
 		model.pose = AmberModel.Pose.PANT
 
 
+## The floor under her neck, from her chest to her mouth: it burns too, so
+## running in under her head is no way out of the breath.
+func _neck_zone() -> Array[Vector3]:
+	return [_flat((model.get_node(^"Body/ProbeChest") as Node3D).global_position), _flat(model.get_mouth())]
+
+
 func _breath_tick(player: Player) -> void:
 	var mouth: Vector3 = model.get_mouth()
+	var neck: Array[Vector3] = _neck_zone()
 	for victim: Node3D in _victims(player):
+		var feet: Vector3 = _flat(victim.global_position)
+		if Geometry3D.get_closest_point_to_segment(feet, neck[0], neck[1]).distance_to(feet) <= NECK_HEAT:
+			_hurt(victim, breath_damage)
+			continue
 		var chest: Vector3 = victim.global_position + Vector3.UP * CHEST
 		var to: Vector3 = _flat(chest - mouth)
 		if to.length() > breath_range or rad_to_deg(_forward().angle_to(to)) > breath_angle:
@@ -835,7 +850,7 @@ func _on_health_changed(current: int, maximum: int) -> void:
 
 
 func _call_helpers() -> void:
-	EventBus.message_requested.emit("Amber roept haar drillers!")
+	EventBus.message_requested.emit("Amber roept haar cultisten uit Zevenaar!")
 	var parent: Node3D = get_parent() as Node3D
 	for i: int in [helps * 2, helps * 2 + 1]:
 		if helper_scene == null or i >= helper_offsets.size():

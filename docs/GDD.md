@@ -72,9 +72,9 @@ De wereld is één compacte kaart van Elst. De kerk staat in het midden en vijf 
 - **De Kerk van Amber** is de laatste en zwaarste dungeon. Hij gaat van boven naar beneden:
   1. **Boven, in het kerkgebouw:** je begint in de kerk zelf. Het interieur is dat van een echte kerk: een middenpad met kerkbanken, een altaar, een preekstoel, een orgel en glas-in-loodramen, met Ambers kleuren (amber en oranje).
   2. **Ondergronds:** via een trap ga je naar beneden, een gangenstelsel in. Met nog meer trappen ga je steeds dieper onder de grond. Onderweg zijn er een paar doodlopende kamers.
-  3. **Vijanden:** door de hele dungeon kom je de vijanden van alle andere dungeons door elkaar tegen: laag drillers, drillers, vape-drillers, kakker-voetbaljongens, fatbikers, bingo-opa's, boze oma's en rolstoel-oma's.
-  4. **Klaas bij de arena:** aan het einde van de gangen staat Klaas voor de ingang van de baasarena. Je kunt hier nog één keer met hem praten en spullen kopen en verkopen.
-  5. **De baasarena:** een enorme ronde ruimte met 5 lange pilaren. Hier vecht je tegen Amber de Draak. Klaas vecht de eerste helft mee, tot hij sneuvelt (zie *Amber, het verloop*); de tweede helft doe je alleen.
+  3. **Vijanden:** door de hele dungeon kom je de vijanden van alle andere dungeons door elkaar tegen: laag drillers, drillers, vape-drillers, kakker-voetbaljongens, fatbikers, bingo-opa's, boze oma's en rolstoel-oma's. Ze zijn even sterk als in hun eigen dungeon.
+  4. **Klaas bij de arena:** aan het einde van de gangen staat Klaas voor de ingang van de baasarena. Je kunt hier nog één keer met hem praten en spullen kopen en verkopen. Hier is ook een checkpoint met autosave.
+  5. **De baasarena:** een enorme ronde ruimte met 5 lange pilaren, die dekking geven tegen Ambers vuuradem en vuurballen. Hier vecht je tegen Amber de Draak. Klaas vecht de eerste helft mee, tot hij sneuvelt (zie *Amber, het verloop*); de tweede helft doe je alleen.
 - **Vijanden buiten:** rond elke factielocatie zwerven patrouilles van die factie. Na het verslaan van de dungeon spawnen ze daar niet meer.
 - **Verslagen dungeons:** is de baas verslagen (of in Station Elst de laatste generator), dan blijft de dungeon leeg: de vijanden komen niet terug, ook niet na opnieuw laden. Ga je eruit en weer naar binnen, dan lopen er een paar inwoners rond, net als buiten in een bevrijd gebied.
 - **Wereldstaat:** per gebied wordt bijgehouden of het bezet of bevrijd is. Een bevrijd gebied krijgt dorpelingen, andere muziek en een warmere kleur.
@@ -371,23 +371,28 @@ Het project wordt in 13 fases gebouwd. Na elke fase moet de game speelbaar zijn.
 
 ## Aannames & open punten
 
-Deze keuzes heb ik zelf gemaakt waar de idee-notitie niets zei of zichzelf tegensprak. Pas ze gerust aan.
+Keuzes waar de idee-notitie niets zei of zichzelf tegensprak, met het besluit van de eigenaar (20-11-2026).
 
-**Aannames**
+**Aannames (bevestigd door de eigenaar)**
 
-- Quest 5 in de notitie zegt “Je valt OBC Elst Fort Dungeon aan”. Ik ga ervan uit dat dit Bingo Club Boomer Cave moet zijn.
+- Quest 5 in de notitie zegt “Je valt OBC Elst Fort Dungeon aan”. Dit moet Bingo Club Boomer Cave zijn.
 - De kerk gaat open na de drie factiebazen. Daarvoor is Station Elst ook nodig, want zonder het station gaan de factie-dungeons niet open.
 - Station Elst slopen maakt de vijanden van Westeraam en OBC zwakker (20% minder HP). Zo heeft Quest 2 ook een effect in het spel.
-- Station Elst is vanaf het begin open, de factie-dungeons na het station en de kerk na de drie factiebazen (besluit eigenaar).
-- In de kerk zijn de vijanden op volle sterkte: de verzwakking door het station geldt daar niet (voorstel, beslissen in Fase 11).
-- Bij Klaas voor de arena is ook een checkpoint met autosave, zodat je na doodgaan in het baasgevecht daar terugkomt (voorstel).
+- Station Elst is vanaf het begin open, de factie-dungeons na het station en de kerk na de drie factiebazen.
+- In de kerk zijn de vijanden hetzelfde als in hun eigen dungeon, ook wat sterkte betreft: wie door het station verzwakt was, blijft dat.
+- Bij Klaas voor de arena is ook een checkpoint met autosave, zodat je na doodgaan in het baasgevecht daar terugkomt.
 - Na de eindscène mag de speler vrij door het bevrijde Elst blijven lopen.
-- Alle getallen (HP, schade, prijzen, kansen) zijn startwaarden voor het testen.
+- Alle getallen (HP, schade, prijzen, kansen) zijn startwaarden voor het testen. Ze staan in de `.tres`-bestanden; waar we van dit document afwijken, staat dat in `docs/PROGRESS.md`.
+- **Scènes in Prototype 1** (Klaas die sneuvelt, de tornado die verdwijnt, de eindscène) zijn eenvoudig, met tekst en camera, maar wel compleet. Na de grafische overhaul van Prototype 2 maken we ze opnieuw.
 
-**Open punten**
+**Besloten open punten**
 
 - [x] `kaart_elst.png` en `Klaas_sigma.png` zijn aangeleverd door de eigenaar en staan lokaal in `docs/reference/`.
-- [ ] Geven de 5 pilaren in de arena dekking tegen Ambers vuuradem en vuurballen? (Voorstel: ja.)
-- [ ] Is een controller nodig in de eerste versie?
-- [ ] Komen er stemmen of alleen tekstballonnen? (Voorstel: alleen tekst plus korte geluidjes.)
-- [ ] Welke sidequests komen er na versie 1?
+- [x] De 5 pilaren in de arena geven dekking tegen Ambers vuuradem en vuurballen.
+- [x] Geen controller in Prototype 1; die komt in een later prototype.
+- [x] Geen stemmen. Dialoog blijft tekst in tekstblokjes zoals nu. In Prototype 2 maken de NPC's en de speler geluidjes op het ritme van de tekst, net als in *Undertale*.
+
+**Nog open**
+
+- [ ] Welke sidequests komen er? De eigenaar komt hierop terug als we Prototype 2 gaan ontwerpen.
+- [ ] Voorstel voor eigen vijanden in de kerk, naast die van de andere dungeons: **Amber-cultisten**, dorpelingen in amber-oranje gewaden die Amber aanbidden. Hun gezang maakt vijanden in de buurt woest, zoals de BINGO van Grumpy Oma. En **draakjes**, kleine vliegende draakjes die vuurballen spugen; daar oefen je de kruisboog op voordat Amber gaat vliegen. Beslist de eigenaar bij Fase 11.

@@ -247,6 +247,8 @@ func _test_reward_and_crossbow() -> void:
 	_act(&"block_aim", false)
 	_check(target.health.current_health < 45, "a crossbow bolt hurts an enemy (%d)" % target.health.current_health)
 	_check(_state.get_bolt_count() == 14, "each shot uses an arrow")
+	var bow: Variant = _player().get("_crossbow_model")
+	_check(bow.draw == 1.0 and bow.get_node("LoadedBolt").visible, "after the reload the string is spanned and a bolt lies ready")
 	_check(_main.get_node("UI/HUD/Purse/PotionLabel").text.contains("14/30 pijlen"), "the HUD shows the arrows left")
 	# Out of arrows: no shot.
 	_state.remove_item(&"bolt", 14)

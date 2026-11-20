@@ -17,6 +17,7 @@ const RELOAD_TIME: float = 0.9
 const AIM_FOV: float = 48.0
 ## How far the crossbow aims.
 const AIM_RANGE: float = 80.0
+const CROSSBOW_SCENE: PackedScene = preload("res://scenes/player/CrossbowModel.tscn")
 
 const TAP_DIRECTIONS: Dictionary = {
 	&"move_forward": Vector3(0, 0, -1), &"move_back": Vector3(0, 0, 1),
@@ -38,7 +39,11 @@ var weapon: StringName = &"sword"
 var aiming: bool = false
 var _reload_left: float = 0.0
 var _normal_fov: float = 75.0
+## Pivot in the right hand that turns the crossbow from carrying to aiming.
 var _crossbow_node: Node3D
+var _crossbow_model: CrossbowModel
+## Seconds the bow stays raised after a shot, while it is spanned again.
+var _shot_pose_left: float = 0.0
 
 ## True while sprinting. Set by the move state, read by the model.
 var is_sprinting: bool = false
@@ -91,6 +96,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	clock += delta
 	_reload_left = maxf(_reload_left - delta, 0.0)
+	_update_crossbow_pose(delta)
 	camera.camera.fov = lerpf(camera.camera.fov, AIM_FOV if aiming else _normal_fov, minf(10.0 * delta, 1.0))
 	_no_sword_message_wait = maxf(_no_sword_message_wait - delta, 0.0)
 	state_machine.physics_update(delta)
@@ -361,10 +367,14 @@ func try_shoot() -> void:
 	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to, PhysicsLayers.WORLD | PhysicsLayers.ENEMY, [get_rid()])
 	var hit: Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
 	var target: Vector3 = hit.get("position", to)
-	var origin: Vector3 = global_position + Vector3.UP * 1.4 + get_forward() * 0.6
+	var origin: Vector3 = _crossbow_model.get_muzzle()
 	var bolt: Node3D = bolt_scene.instantiate() as Node3D
 	get_parent().add_child(bolt)
 	bolt.call(&"launch", origin, target - origin, crossbow.damage, self)
+	# The string snaps forward; the bow kicks up and is spanned again.
+	_crossbow_model.draw = 0.0
+	_shot_pose_left = RELOAD_TIME + 0.3
+	model.play_action(&"crossbow_shoot", RELOAD_TIME)
 	EventBus.player_action.emit(&"shoot")
 
 
@@ -373,23 +383,31 @@ func _update_weapon_visuals() -> void:
 	_crossbow_node.visible = weapon == &"crossbow"
 
 
-## A simple crossbow in the right hand: a stock and a bow.
+## The crossbow (CrossbowModel.tscn) in the right hand, on a pivot: it
+## points forward along the hanging arm, and turns to lie along the raised
+## arm when aiming.
 func _build_crossbow() -> Node3D:
-	var root: Node3D = Node3D.new()
-	root.name = "Crossbow"
-	var wood: StandardMaterial3D = StandardMaterial3D.new()
-	wood.albedo_color = Color(0.4, 0.28, 0.16)
-	for part: Array in [[Vector3(0.08, 0.08, 0.55), Vector3(0, -0.05, -0.22)], [Vector3(0.62, 0.04, 0.05), Vector3(0, -0.05, -0.44)]]:
-		var mesh: BoxMesh = BoxMesh.new()
-		mesh.size = part[0]
-		mesh.material = wood
-		var piece: MeshInstance3D = MeshInstance3D.new()
-		piece.mesh = mesh
-		piece.position = part[1]
-		root.add_child(piece)
-	root.visible = false
-	model.get_node("Body/Hips/Torso/ArmR/Hand").add_child(root)
-	return root
+	var pivot: Node3D = Node3D.new()
+	pivot.name = "Crossbow"
+	_crossbow_model = CROSSBOW_SCENE.instantiate() as CrossbowModel
+	pivot.add_child(_crossbow_model)
+	pivot.visible = false
+	model.get_node("Body/Hips/Torso/ArmR/Hand").add_child(pivot)
+	return pivot
+
+
+## Raises the crossbow while aiming and right after a shot, and spans the
+## string again during the reload.
+func _update_crossbow_pose(delta: float) -> void:
+	_shot_pose_left = maxf(_shot_pose_left - delta, 0.0)
+	var raised: bool = weapon == &"crossbow" and (aiming or _shot_pose_left > 0.0)
+	model.set_aim(raised, rad_to_deg(camera.pitch))
+	var turn: float = deg_to_rad(HumanoidModel.AIM_BOW_TURN) if raised else 0.0
+	_crossbow_node.rotation.x = lerp_angle(_crossbow_node.rotation.x, turn, 1.0 - exp(-14.0 * delta))
+	if _reload_left > 0.0:
+		_crossbow_model.draw = smoothstep(0.3, 0.68, 1.0 - _reload_left / RELOAD_TIME)
+	else:
+		_crossbow_model.draw = 1.0
 
 
 func _apply_gear() -> void:

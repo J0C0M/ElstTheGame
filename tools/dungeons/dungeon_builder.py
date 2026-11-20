@@ -263,7 +263,7 @@ def entry_points(rooms, start):
     queue = [first]
     while queue:
         name = queue.pop(0)
-        (x0, x1, z0, z1), _colour, _height, sides = rooms[name]
+        (x0, x1, z0, z1), _colour, _height, sides = rooms[name][:4]
         points = []
         for side, doors in sides.items():
             centres = [(x0 + x1) / 2 if side in ("N", "S") else (z0 + z1) / 2] if doors is None else [door[0] for door in doors]

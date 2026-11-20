@@ -12,6 +12,12 @@ const REPATH_INTERVAL: float = 0.25
 const KNOCKBACK_SPEED: float = 2.5
 ## Seconds a body stays before it sinks into the ground.
 const CORPSE_TIME: float = 4.0
+## Seconds an enemy hunts the player after being hit by them: it does not
+## give up when it loses sight, and may chase further from home. So a shot
+## from far away brings the enemy (and its pack) to the shooter.
+const HUNT_TIME: float = 15.0
+## While hunting, the enemy may go this many times its leash range from home.
+const HUNT_LEASH_FACTOR: float = 2.5
 
 @export var data: EnemyData
 
@@ -24,6 +30,8 @@ var aware: bool = false
 var player_detected: bool = false
 ## Seconds since the enemy last noticed the player.
 var time_since_seen: float = INF
+## Seconds left that this enemy hunts the player (see HUNT_TIME).
+var hunt_left: float = 0.0
 ## True once this enemy has warned its pack in the current fight; it warns
 ## again only after it calmed down (Idle).
 var pack_warned: bool = false
@@ -78,6 +86,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	attack_cooldown_left = maxf(attack_cooldown_left - delta, 0.0)
+	hunt_left = maxf(hunt_left - delta, 0.0)
 	leap_cooldown_left = maxf(leap_cooldown_left - delta, 0.0)
 	_update_buff(delta)
 	_update_perception(delta)
@@ -226,6 +235,22 @@ func alert_pack() -> void:
 			other.notice_player(data.alert_chain)
 
 
+## How far from home this enemy may chase the player now.
+func get_leash() -> float:
+	return data.leash_range * (HUNT_LEASH_FACTOR if hunt_left > 0.0 else 1.0)
+
+
+## Hit by the player: this enemy and its pack nearby hunt the player down.
+func _start_hunt() -> void:
+	hunt_left = HUNT_TIME
+	for node: Node in get_tree().get_nodes_in_group(&"enemies"):
+		var other: Enemy = node as Enemy
+		if other != null and other != self and other.data.faction == data.faction and not other.health.is_dead() \
+				and global_position.distance_to(other.global_position) <= data.alert_radius * 1.5:
+			other.hunt_left = HUNT_TIME
+			other.notice_player(false)
+
+
 ## Falls over, drops loot and sinks away after a while.
 func die() -> void:
 	attack_hitbox.deactivate()
@@ -250,7 +275,7 @@ func _update_perception(delta: float) -> void:
 		return
 	_perception_wait = PERCEPTION_INTERVAL
 	player_detected = _can_detect_player()
-	if player_detected:
+	if player_detected or hunt_left > 0.0:
 		time_since_seen = 0.0
 
 
@@ -301,6 +326,8 @@ func _on_hit_received(hit: HitData) -> void:
 	_knockback = away.normalized() * KNOCKBACK_SPEED
 	if state_machine.get_state_name() != &"Attack":
 		model.play_action(&"hurt", 0.3)
+	if hit.source is Player:
+		_start_hunt()
 	notice_player()
 
 

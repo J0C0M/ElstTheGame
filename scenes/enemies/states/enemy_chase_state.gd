@@ -2,7 +2,7 @@ extends EnemyState
 ## Runs at the player and attacks when close. Flankers circle round to the
 ## player's side first; ranged enemies keep their distance. Gives up when
 ## the player gets away or the chase leads
-## too far from home.
+## too far from home (further while it hunts the player who hit it).
 
 ## Seconds without noticing the player before the enemy gives up.
 const LOSE_TIME: float = 5.0
@@ -20,7 +20,7 @@ func enter(_data: Dictionary) -> void:
 func physics_update(delta: float) -> void:
 	var player: Player = enemy.get_player()
 	if player == null or player.health.is_dead() or enemy.time_since_seen > LOSE_TIME \
-			or enemy.global_position.distance_to(enemy.home) > enemy.data.leash_range:
+			or enemy.global_position.distance_to(enemy.home) > enemy.get_leash():
 		state_machine.transition_to(&"Retreat")
 		return
 	var distance: float = enemy.distance_to_player()

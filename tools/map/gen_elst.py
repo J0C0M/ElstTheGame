@@ -450,6 +450,34 @@ def block(text, header):
     return text[start:end if end >= 0 else len(text)].rstrip("\n")
 
 
+def outskirt_trees(rng):
+    """Trees beyond the tornado, on the skirt of the ground, so the land seems
+    to go on into the fog. A rng of its own keeps the town as it is."""
+    trees = []
+    while len(trees) < 160:
+        angle, radius = rng.uniform(0, math.tau), rng.uniform(250.0, 340.0)
+        x, z = math.cos(angle) * radius, math.sin(angle) * radius
+        if abs(x - L.RAIL_X) < 9.0:
+            continue
+        trees.append({"pos": (x, z), "yaw": rng.uniform(0, math.tau), "scale": rng.uniform(1.0, 1.6), "pine": rng.random() < 0.5})
+    return trees
+
+
+def outskirt_roads():
+    """Main roads that reach the tornado go on beyond it: (centre, yaw, length)."""
+    roads = []
+    for pts in L.MAIN_ROADS.values():
+        for end, prev in ((pts[0], pts[1]), (pts[-1], pts[-2])):
+            if math.hypot(*end) < 200.0:
+                continue
+            dx, dz = end[0] - prev[0], end[1] - prev[1]
+            n = math.hypot(dx, dz)
+            dx, dz = dx / n, dz / n
+            length = 160.0
+            roads.append(((end[0] + dx * length / 2, end[1] + dz * length / 2), math.atan2(dx, dz), length))
+    return roads
+
+
 def write_scene(houses, trees, boxes):
     old = SCENE_PATH.read_text()
     keep_sub = [block(old, h) for h in (
@@ -496,7 +524,7 @@ def write_scene(houses, trees, boxes):
     out.append("")
     for b in keep_sub:
         out += [b, ""]
-    rail_len = 420.0
+    rail_len = 760.0  # on through the tornado, into the fog
     out += ['[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ballast"]', "albedo_color = " + col(PALETTE[BALLAST]), "",
             '[sub_resource type="BoxMesh" id="BoxMesh_ballast"]', 'material = SubResource("StandardMaterial3D_ballast")',
             f"size = {vec(4.4, 0.24, rail_len)}", "",
@@ -506,7 +534,10 @@ def write_scene(houses, trees, boxes):
             f"size = {vec(0.12, 0.16, rail_len)}", "",
             '[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_planks"]', "albedo_color = Color(0.45, 0.33, 0.22, 1)", "",
             '[sub_resource type="BoxMesh" id="BoxMesh_crossing"]', 'material = SubResource("StandardMaterial3D_planks")',
-            f"size = {vec(5.0, 0.12, 2 * MAIN_HALF_WIDTH)}", ""]
+            f"size = {vec(5.0, 0.12, 2 * MAIN_HALF_WIDTH)}", "",
+            '[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_road"]', "albedo_color = " + col(PALETTE[MAIN]), "",
+            '[sub_resource type="BoxMesh" id="BoxMesh_road"]', 'material = SubResource("StandardMaterial3D_road")',
+            f"size = {vec(2 * MAIN_HALF_WIDTH, 0.06, 1)}", ""]
     for n, (_, size) in enumerate(boxes):
         out += [f'[sub_resource type="BoxShape3D" id="BoxShape3D_water{n}"]', f"size = {vec(size[0], 2, size[1])}", ""]
     out += [keep_nodes["root"], "", keep_nodes["env"], "", keep_nodes["sun"], "", keep_nodes["tornado"], "",
@@ -543,6 +574,10 @@ def write_scene(houses, trees, boxes):
         if t["pine"]:
             lines.append("kind = 0")
         out += lines + [""]
+    out += ['[node name="OutskirtRoads" type="Node3D" parent="."]', ""]
+    for n, ((x, z), yaw, length) in enumerate(outskirt_roads(), 1):
+        out += [f'[node name="Road{n}" type="MeshInstance3D" parent="OutskirtRoads"]', f"position = {vec(x, 0.03, z)}",
+                f"rotation = {vec(0, yaw, 0)}", f"scale = {vec(1, 1, length)}", 'mesh = SubResource("BoxMesh_road")', ""]
     out += ['[node name="Locations" type="Node3D" parent="." groups=["navigation_source"]]', ""]
     for name, loc in L.LOCATIONS.items():
         out += [f'[node name="{name}" parent="Locations" instance=ExtResource("{LOCATION_SCENES[name]}")]',
@@ -629,7 +664,7 @@ def main():
     grid = build_raster()
     dist = road_distance(grid)
     houses, occupied = place_houses(grid, dist, rng)
-    trees = place_trees(grid, dist, occupied, rng)
+    trees = place_trees(grid, dist, occupied, rng) + outskirt_trees(random.Random(SEED + 1))
     boxes = water_boxes(grid)
     print(f"houses {len(houses)}, trees {len(trees)}, water boxes {len(boxes)}")
     if "--preview" in sys.argv:

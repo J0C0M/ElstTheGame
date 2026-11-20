@@ -503,6 +503,8 @@ Verzoeken van de eigenaar na Fase 10, voor Fase 11.
   - **Kerk:** steunberen en glas-in-loodramen langs het schip, een stenen portaal met twee vuurschalen, een roosvenster en een amberkleurige ruit op de toren, klokken en galmgaten, een kerkhof met grafstenen achter een stenen muurtje, en banken, lantaarns en bestrating op het plein.
   - **Huis van Klaas:** een veranda met gouden zuilen en een gouden K, een gouden rand, een schoorsteen, bloembakken, tuinverlichting langs het pad, een buitengym ("SIGMA GYM"), een paarse auto met gouden streep, een barbecue met parasol, een brievenbus en een paars-gouden vlag. Het oefenveld voor de deur blijft vrij.
 
+- **Buiten de tornado** (vierde verzoek): Elst gebruikt nu dieptemist (van 50 m tot volledig dicht op 235 m, ook over de lucht), zodat je niet meer ver over de ring heen kijkt. Er staan 160 bomen buiten de tornado. Het spoor (ballastbed en rails) loopt 760 m lang door de tornado heen de mist in, en de hoofdwegen die de ring raken lopen 160 m door. Huizen en bomen in het dorp zijn niet verschoven: de bomen buiten krijgen een eigen random-reeks.
+
 ### Keuzes en afwijkingen (tweede verzoek)
 
 - **Inwoners verschijnen alleen als je door de deur binnenkomt**, niet bij het laden van een save in de dungeon. Zo blijft de dungeon na opnieuw laden leeg, zoals gevraagd.

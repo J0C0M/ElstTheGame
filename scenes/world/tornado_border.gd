@@ -5,11 +5,13 @@ extends Node3D
 ## solid ring behind that keeps everyone inside. After Amber the end scene
 ## calls dissolve(): the dust walls fade and sink, the debris spins away and
 ## the haze lifts. With [member gone_flag] set (also after loading) it stays
-## gone; the edge of the world is then an invisible ring with a friendly
-## message instead of wind.
+## gone. Walking out of Elst then plays a short scene instead: the player
+## says they stay to celebrate a while, and walks back a few metres.
 
 const MESSAGE: String = "De tornado is te sterk. Je kunt Elst niet ontsnappen."
-const GONE_MESSAGE: String = "Je hoeft nergens meer heen. Elst is weer van jou."
+const GONE_LINE: String = "Waar ga ik heen? Ik blijf het nog even vieren in Elst!"
+## How far back into Elst the player walks after the line, in metres.
+const WALK_BACK: float = 6.0
 ## Mist and light of a clear day once the tornado is gone.
 const CLEAR_FOG_BEGIN: float = 120.0
 const CLEAR_FOG_END: float = 520.0
@@ -35,6 +37,7 @@ const DEBRIS_COLORS: Array[Color] = [
 
 var _message_wait: float = 0.0
 var _gone: bool = false
+var _turning_back: bool = false
 
 @onready var _debris: MultiMeshInstance3D = $Debris
 @onready var _wall: StaticBody3D = $Wall
@@ -75,6 +78,33 @@ func dissolve(seconds: float = 6.0) -> void:
 	_clear_sky(seconds)
 
 
+## Elst is free and the player wants to leave: a short scene in which they
+## change their mind and walk back a few metres.
+func _turn_back(player: Player, outward: Vector3) -> void:
+	_turning_back = true
+	var scene: Cutscene = Cutscene.begin(get_parent() as Node3D)
+	var side: Vector3 = outward.cross(Vector3.UP)
+	var start: Vector3 = player.global_position
+	var home: Vector3 = start - outward * WALK_BACK
+	# First looking out, the way they wanted to go.
+	player.rotation.y = atan2(-outward.x, -outward.z)
+	player.reset_physics_interpolation()
+	scene.look(start + side * 4.5 - outward * 2.0 + Vector3.UP * 1.9, start + Vector3.UP * 1.3)
+	await scene.say("Jij", GONE_LINE, 2.8)
+	# Turn round and walk back into Elst; the model keeps moving meanwhile.
+	player.rotation.y = atan2(outward.x, outward.z)
+	player.model.process_mode = Node.PROCESS_MODE_ALWAYS
+	player.model.set_locomotion(2.6, false, true)
+	var walk: Tween = create_tween()
+	walk.tween_property(player, "global_position", Vector3(home.x, start.y, home.z), WALK_BACK / 2.6)
+	await walk.finished
+	player.model.set_locomotion(0.0, false, true)
+	player.model.process_mode = Node.PROCESS_MODE_INHERIT
+	player.reset_physics_interpolation()
+	scene.finish()
+	_turning_back = false
+
+
 ## Lifts the haze to the mist of a clear day, over [param seconds].
 func _clear_sky(seconds: float) -> void:
 	var environment: WorldEnvironment = get_parent().get_node_or_null(^"WorldEnvironment") as WorldEnvironment
@@ -105,11 +135,13 @@ func _physics_process(delta: float) -> void:
 	var distance: float = offset.length()
 	if distance <= push_start_radius:
 		return
+	if _gone:
+		if not _turning_back and not GameState.is_saving_blocked():
+			_turn_back(player, offset.normalized())
+		return
 	if _message_wait <= 0.0:
 		_message_wait = message_cooldown
-		EventBus.message_requested.emit(GONE_MESSAGE if _gone else MESSAGE)
-	if _gone:
-		return
+		EventBus.message_requested.emit(MESSAGE)
 	var strength: float = clampf(inverse_lerp(push_start_radius, radius, distance), 0.0, 1.0)
 	player.apply_wind(-offset.normalized() * max_wind_speed * strength)
 

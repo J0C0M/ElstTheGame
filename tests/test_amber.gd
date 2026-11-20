@@ -526,11 +526,19 @@ func _test_ending() -> void:
 	_main.get_node("UI/Menus/Credits").close()
 	await _frames(5)
 	_check(not paused and not ending.playing and not _state.has_flag(&"ending_pending"), "after the credits the player plays on")
-	# No more wind at the old ring, just a friendly message.
+	# No more wind at the old ring: walking out plays a short scene and the
+	# player walks back into Elst.
 	var player: Variant = _player()
-	_place(Vector3(0, 0, 230), 0.0)
-	await _frames(30)
-	_check(player.global_position.distance_to(Vector3(0, player.global_position.y, 230)) < 1.0, "the wind of the tornado is gone too")
+	_place(Vector3(0, 0, 226), 0.0)
+	await _frames(10)
+	_check(_main.get_world().find_child("Cutscene", true, false) != null, "walking out of the free Elst plays a short scene")
+	for i: int in 600:
+		await physics_frame
+		if _main.get_world().find_child("Cutscene", true, false) == null:
+			break
+	await _frames(5)
+	var radius: float = Vector2(player.global_position.x, player.global_position.z).length()
+	_check(radius < 221.0 and player.process_mode == Node.PROCESS_MODE_INHERIT, "then the player walks back into Elst and can move again (%.0f m out)" % radius)
 	# After saving and loading the tornado stays gone and the scene does not play again.
 	_place(world.get_spawn(&"KerkExit").global_position, 0.0)
 	await _frames(10)

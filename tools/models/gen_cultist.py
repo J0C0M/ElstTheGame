@@ -5,8 +5,11 @@ Run from the project root: python3 tools/models/gen_cultist.py
 A villager in a long amber-orange robe with a dark mantle, a pointed hood
 that hides the face in shadow except for two glowing eyes and a golden
 half-mask, wide sleeves, a belt with a golden buckle and a glowing amber
-pendant. The staff ends in golden claws holding an amber crystal. Same
-joints as PlayerModel.tscn, so HumanoidModel animates it.
+pendant. The staff ends in golden claws holding an amber crystal. They come
+from Zevenaar: ZEVENAAR in gold on the back of the mantle. Under the robe
+they are still a bit driller: a black puffer jacket shows at the open front,
+the collar and the wrists, and they wear white sneakers. Same joints as
+PlayerModel.tscn, so HumanoidModel animates it.
 """
 import sys
 import pathlib
@@ -25,6 +28,10 @@ SHADOW = (0.05, 0.03, 0.03)
 GLOVE = (0.16, 0.08, 0.05)
 WOOD = (0.3, 0.18, 0.09)
 EYE = (1.0, 0.8, 0.2)
+PUFFER = (0.1, 0.1, 0.11)
+PUFFER_RIDGE = (0.17, 0.17, 0.18)
+ZIP = (1.0, 0.55, 0.1)
+SNEAKER = (0.93, 0.93, 0.9)
 
 m = Model("CultistModel", script="res://scripts/characters/humanoid_model.gd")
 body = m.joint(".", "Body", (0, 0.95, 0))
@@ -33,7 +40,8 @@ for s in (-1, 1):
     tag = "L" if s < 0 else "R"
     leg = m.joint(hips, f"Leg{tag}", (s * 0.12, 0, 0))
     m.box(leg, "Leg", (0, -0.45, 0), (0.17, 0.8, 0.18), ROBE_DARK)
-    m.box(leg, "Sandal", (0, -0.89, -0.04), (0.18, 0.08, 0.28), WOOD)
+    m.box(leg, "Sneaker", (0, -0.88, -0.04), (0.2, 0.1, 0.3), SNEAKER)
+    m.box(leg, "Sole", (0, -0.935, -0.04), (0.21, 0.03, 0.31), PUFFER)
 # The lower robe hangs from the hips, with a dark hem and a golden panel.
 m.box(hips, "Skirt", (0, -0.36, 0.01), (0.6, 0.72, 0.44), ROBE)
 m.box(hips, "SkirtFlare", (0, -0.66, 0.01), (0.68, 0.14, 0.5), ROBE)
@@ -48,10 +56,18 @@ m.box(torso, "MantleBack", (0, 0.38, 0.24), (0.66, 0.42, 0.06), TRIM)
 m.box(torso, "Collar", (0, 0.66, -0.06), (0.36, 0.1, 0.3), ROBE_DARK)
 m.box(torso, "Belt", (0, 0.02, 0), (0.64, 0.08, 0.44), TRIM)
 m.box(torso, "Buckle", (0, 0.02, -0.225), (0.12, 0.1, 0.02), GOLD, metal=True)
-m.box(torso, "Chain", (0, 0.5, -0.205), (0.22, 0.03, 0.02), GOLD, metal=True)
-m.box(torso, "Pendant", (0, 0.4, -0.215), (0.12, 0.15, 0.04), CRYSTAL, glow=2.5)
-m.box(torso, "PendantFrame", (0, 0.4, -0.205), (0.16, 0.19, 0.02), GOLD, metal=True)
-m.prism(torso, "Emblem", (0, 0.34, 0.275), (0.3, 0.3, 0.02), CRYSTAL, glow=1.0)
+m.box(torso, "Chain", (0, 0.5, -0.226), (0.22, 0.03, 0.02), GOLD, metal=True)
+m.box(torso, "Pendant", (0, 0.4, -0.24), (0.12, 0.15, 0.04), CRYSTAL, glow=2.5)
+m.box(torso, "PendantFrame", (0, 0.4, -0.23), (0.16, 0.19, 0.02), GOLD, metal=True)
+m.prism(torso, "Emblem", (0, 0.5, 0.275), (0.16, 0.14, 0.02), CRYSTAL, glow=1.0)
+m.label(torso, "Zevenaar", (0, 0.3, 0.282), "ZEVENAAR", GOLD, size=48, pixel=0.0024)
+# The puffer jacket under the robe: an open front with ridges and an orange
+# zip, a puffy collar.
+m.box(torso, "Puffer", (0, 0.24, -0.205), (0.2, 0.5, 0.02), PUFFER)
+for n, y in enumerate((0.08, 0.22, 0.36)):
+    m.box(torso, f"PufferRidge{n}", (0, y, -0.215), (0.21, 0.04, 0.02), PUFFER_RIDGE)
+m.box(torso, "Zip", (0, 0.24, -0.222), (0.025, 0.48, 0.01), ZIP)
+m.box(torso, "PufferCollar", (0, 0.7, -0.02), (0.32, 0.1, 0.28), PUFFER)
 
 head = m.joint(torso, "Head", (0, 0.62, 0))
 m.box(head, "Face", (0, 0.15, -0.02), (0.24, 0.28, 0.24), SHADOW)
@@ -74,6 +90,7 @@ for s in (-1, 1):
     m.box(arm, "Sleeve", (0, -0.17, 0), (0.2, 0.34, 0.2), ROBE)
     m.box(arm, "Cuff", (0, -0.43, 0), (0.28, 0.22, 0.28), ROBE)
     m.box(arm, "CuffTrim", (0, -0.535, 0), (0.3, 0.05, 0.3), TRIM)
+    m.box(arm, "PufferCuff", (0, -0.555, 0), (0.17, 0.08, 0.17), PUFFER)
     m.box(arm, "Glove", (0, -0.6, 0), (0.12, 0.12, 0.12), GLOVE)
     if s > 0:
         hand = m.joint(arm, "Hand", (0, -0.56, 0))

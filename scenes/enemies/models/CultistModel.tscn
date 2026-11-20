@@ -10,186 +10,222 @@ material = SubResource("Mat_1")
 size = Vector3(0.17, 0.8, 0.18)
 
 [sub_resource type="StandardMaterial3D" id="Mat_2"]
-albedo_color = Color(0.3, 0.18, 0.09, 1)
+albedo_color = Color(0.93, 0.93, 0.9, 1)
 
 [sub_resource type="BoxMesh" id="Mesh_2"]
 material = SubResource("Mat_2")
-size = Vector3(0.18, 0.08, 0.28)
+size = Vector3(0.2, 0.1, 0.3)
 
 [sub_resource type="StandardMaterial3D" id="Mat_3"]
-albedo_color = Color(0.88, 0.45, 0.1, 1)
+albedo_color = Color(0.1, 0.1, 0.11, 1)
 
 [sub_resource type="BoxMesh" id="Mesh_3"]
 material = SubResource("Mat_3")
-size = Vector3(0.6, 0.72, 0.44)
-
-[sub_resource type="BoxMesh" id="Mesh_4"]
-material = SubResource("Mat_3")
-size = Vector3(0.68, 0.14, 0.5)
+size = Vector3(0.21, 0.03, 0.31)
 
 [sub_resource type="StandardMaterial3D" id="Mat_4"]
-albedo_color = Color(0.3, 0.1, 0.05, 1)
+albedo_color = Color(0.88, 0.45, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_4"]
+material = SubResource("Mat_4")
+size = Vector3(0.6, 0.72, 0.44)
 
 [sub_resource type="BoxMesh" id="Mesh_5"]
 material = SubResource("Mat_4")
-size = Vector3(0.7, 0.06, 0.52)
+size = Vector3(0.68, 0.14, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="Mat_5"]
-albedo_color = Color(0.95, 0.76, 0.25, 1)
+albedo_color = Color(0.3, 0.1, 0.05, 1)
 
 [sub_resource type="BoxMesh" id="Mesh_6"]
 material = SubResource("Mat_5")
-size = Vector3(0.2, 0.68, 0.02)
+size = Vector3(0.7, 0.06, 0.52)
+
+[sub_resource type="StandardMaterial3D" id="Mat_6"]
+albedo_color = Color(0.95, 0.76, 0.25, 1)
 
 [sub_resource type="BoxMesh" id="Mesh_7"]
-material = SubResource("Mat_4")
-size = Vector3(0.08, 0.08, 0.01)
+material = SubResource("Mat_6")
+size = Vector3(0.2, 0.68, 0.02)
 
 [sub_resource type="BoxMesh" id="Mesh_8"]
-material = SubResource("Mat_3")
-size = Vector3(0.6, 0.66, 0.4)
+material = SubResource("Mat_5")
+size = Vector3(0.08, 0.08, 0.01)
 
 [sub_resource type="BoxMesh" id="Mesh_9"]
 material = SubResource("Mat_4")
-size = Vector3(0.8, 0.16, 0.5)
+size = Vector3(0.6, 0.66, 0.4)
 
 [sub_resource type="BoxMesh" id="Mesh_10"]
-material = SubResource("Mat_4")
-size = Vector3(0.66, 0.42, 0.06)
+material = SubResource("Mat_5")
+size = Vector3(0.8, 0.16, 0.5)
 
 [sub_resource type="BoxMesh" id="Mesh_11"]
+material = SubResource("Mat_5")
+size = Vector3(0.66, 0.42, 0.06)
+
+[sub_resource type="BoxMesh" id="Mesh_12"]
 material = SubResource("Mat_1")
 size = Vector3(0.36, 0.1, 0.3)
 
-[sub_resource type="BoxMesh" id="Mesh_12"]
-material = SubResource("Mat_4")
+[sub_resource type="BoxMesh" id="Mesh_13"]
+material = SubResource("Mat_5")
 size = Vector3(0.64, 0.08, 0.44)
 
-[sub_resource type="StandardMaterial3D" id="Mat_6"]
+[sub_resource type="StandardMaterial3D" id="Mat_7"]
 albedo_color = Color(0.95, 0.76, 0.25, 1)
 metallic = 0.6
 roughness = 0.35
 
-[sub_resource type="BoxMesh" id="Mesh_13"]
-material = SubResource("Mat_6")
-size = Vector3(0.12, 0.1, 0.02)
-
 [sub_resource type="BoxMesh" id="Mesh_14"]
-material = SubResource("Mat_6")
-size = Vector3(0.22, 0.03, 0.02)
-
-[sub_resource type="StandardMaterial3D" id="Mat_7"]
-albedo_color = Color(1, 0.62, 0.12, 1)
-emission_enabled = true
-emission = Color(1, 0.62, 0.12, 1)
-emission_energy_multiplier = 2.5
+material = SubResource("Mat_7")
+size = Vector3(0.12, 0.1, 0.02)
 
 [sub_resource type="BoxMesh" id="Mesh_15"]
 material = SubResource("Mat_7")
-size = Vector3(0.12, 0.15, 0.04)
-
-[sub_resource type="BoxMesh" id="Mesh_16"]
-material = SubResource("Mat_6")
-size = Vector3(0.16, 0.19, 0.02)
+size = Vector3(0.22, 0.03, 0.02)
 
 [sub_resource type="StandardMaterial3D" id="Mat_8"]
 albedo_color = Color(1, 0.62, 0.12, 1)
 emission_enabled = true
 emission = Color(1, 0.62, 0.12, 1)
-emission_energy_multiplier = 1
+emission_energy_multiplier = 2.5
 
-[sub_resource type="PrismMesh" id="Mesh_17"]
+[sub_resource type="BoxMesh" id="Mesh_16"]
 material = SubResource("Mat_8")
-size = Vector3(0.3, 0.3, 0.02)
+size = Vector3(0.12, 0.15, 0.04)
+
+[sub_resource type="BoxMesh" id="Mesh_17"]
+material = SubResource("Mat_7")
+size = Vector3(0.16, 0.19, 0.02)
 
 [sub_resource type="StandardMaterial3D" id="Mat_9"]
-albedo_color = Color(0.05, 0.03, 0.03, 1)
+albedo_color = Color(1, 0.62, 0.12, 1)
+emission_enabled = true
+emission = Color(1, 0.62, 0.12, 1)
+emission_energy_multiplier = 1
 
-[sub_resource type="BoxMesh" id="Mesh_18"]
+[sub_resource type="PrismMesh" id="Mesh_18"]
 material = SubResource("Mat_9")
-size = Vector3(0.24, 0.28, 0.24)
+size = Vector3(0.16, 0.14, 0.02)
+
+[sub_resource type="BoxMesh" id="Mesh_19"]
+material = SubResource("Mat_3")
+size = Vector3(0.2, 0.5, 0.02)
 
 [sub_resource type="StandardMaterial3D" id="Mat_10"]
+albedo_color = Color(0.17, 0.17, 0.18, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_20"]
+material = SubResource("Mat_10")
+size = Vector3(0.21, 0.04, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="Mat_11"]
+albedo_color = Color(1, 0.55, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_21"]
+material = SubResource("Mat_11")
+size = Vector3(0.025, 0.48, 0.01)
+
+[sub_resource type="BoxMesh" id="Mesh_22"]
+material = SubResource("Mat_3")
+size = Vector3(0.32, 0.1, 0.28)
+
+[sub_resource type="StandardMaterial3D" id="Mat_12"]
+albedo_color = Color(0.05, 0.03, 0.03, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_23"]
+material = SubResource("Mat_12")
+size = Vector3(0.24, 0.28, 0.24)
+
+[sub_resource type="StandardMaterial3D" id="Mat_13"]
 albedo_color = Color(1, 0.8, 0.2, 1)
 emission_enabled = true
 emission = Color(1, 0.8, 0.2, 1)
 emission_energy_multiplier = 4
 
-[sub_resource type="BoxMesh" id="Mesh_19"]
-material = SubResource("Mat_10")
+[sub_resource type="BoxMesh" id="Mesh_24"]
+material = SubResource("Mat_13")
 size = Vector3(0.06, 0.03, 0.02)
 
-[sub_resource type="BoxMesh" id="Mesh_20"]
-material = SubResource("Mat_6")
-size = Vector3(0.22, 0.1, 0.02)
-
-[sub_resource type="BoxMesh" id="Mesh_21"]
-material = SubResource("Mat_3")
-size = Vector3(0.4, 0.44, 0.3)
-
-[sub_resource type="BoxMesh" id="Mesh_22"]
-material = SubResource("Mat_3")
-size = Vector3(0.05, 0.42, 0.14)
-
-[sub_resource type="BoxMesh" id="Mesh_23"]
-material = SubResource("Mat_3")
-size = Vector3(0.4, 0.06, 0.18)
-
-[sub_resource type="PrismMesh" id="Mesh_24"]
-material = SubResource("Mat_3")
-size = Vector3(0.36, 0.22, 0.28)
-
 [sub_resource type="BoxMesh" id="Mesh_25"]
-material = SubResource("Mat_4")
-size = Vector3(0.42, 0.05, 0.03)
+material = SubResource("Mat_7")
+size = Vector3(0.22, 0.1, 0.02)
 
 [sub_resource type="BoxMesh" id="Mesh_26"]
 material = SubResource("Mat_4")
-size = Vector3(0.03, 0.42, 0.03)
+size = Vector3(0.4, 0.44, 0.3)
 
 [sub_resource type="BoxMesh" id="Mesh_27"]
-material = SubResource("Mat_3")
-size = Vector3(0.2, 0.34, 0.2)
+material = SubResource("Mat_4")
+size = Vector3(0.05, 0.42, 0.14)
 
 [sub_resource type="BoxMesh" id="Mesh_28"]
-material = SubResource("Mat_3")
-size = Vector3(0.28, 0.22, 0.28)
-
-[sub_resource type="BoxMesh" id="Mesh_29"]
 material = SubResource("Mat_4")
-size = Vector3(0.3, 0.05, 0.3)
+size = Vector3(0.4, 0.06, 0.18)
 
-[sub_resource type="StandardMaterial3D" id="Mat_11"]
-albedo_color = Color(0.16, 0.08, 0.05, 1)
+[sub_resource type="PrismMesh" id="Mesh_29"]
+material = SubResource("Mat_4")
+size = Vector3(0.36, 0.22, 0.28)
 
 [sub_resource type="BoxMesh" id="Mesh_30"]
-material = SubResource("Mat_11")
-size = Vector3(0.12, 0.12, 0.12)
+material = SubResource("Mat_5")
+size = Vector3(0.42, 0.05, 0.03)
 
 [sub_resource type="BoxMesh" id="Mesh_31"]
-material = SubResource("Mat_2")
-size = Vector3(0.06, 1.7, 0.06)
+material = SubResource("Mat_5")
+size = Vector3(0.03, 0.42, 0.03)
 
 [sub_resource type="BoxMesh" id="Mesh_32"]
-material = SubResource("Mat_6")
+material = SubResource("Mat_4")
+size = Vector3(0.2, 0.34, 0.2)
+
+[sub_resource type="BoxMesh" id="Mesh_33"]
+material = SubResource("Mat_4")
+size = Vector3(0.28, 0.22, 0.28)
+
+[sub_resource type="BoxMesh" id="Mesh_34"]
+material = SubResource("Mat_5")
+size = Vector3(0.3, 0.05, 0.3)
+
+[sub_resource type="BoxMesh" id="Mesh_35"]
+material = SubResource("Mat_3")
+size = Vector3(0.17, 0.08, 0.17)
+
+[sub_resource type="StandardMaterial3D" id="Mat_14"]
+albedo_color = Color(0.16, 0.08, 0.05, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_36"]
+material = SubResource("Mat_14")
+size = Vector3(0.12, 0.12, 0.12)
+
+[sub_resource type="StandardMaterial3D" id="Mat_15"]
+albedo_color = Color(0.3, 0.18, 0.09, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_37"]
+material = SubResource("Mat_15")
+size = Vector3(0.06, 1.7, 0.06)
+
+[sub_resource type="BoxMesh" id="Mesh_38"]
+material = SubResource("Mat_7")
 size = Vector3(0.14, 0.05, 0.14)
 
-[sub_resource type="StandardMaterial3D" id="Mat_12"]
+[sub_resource type="StandardMaterial3D" id="Mat_16"]
 albedo_color = Color(1, 0.62, 0.12, 1)
 emission_enabled = true
 emission = Color(1, 0.62, 0.12, 1)
 emission_energy_multiplier = 3
 
-[sub_resource type="PrismMesh" id="Mesh_33"]
-material = SubResource("Mat_12")
+[sub_resource type="PrismMesh" id="Mesh_39"]
+material = SubResource("Mat_16")
 size = Vector3(0.16, 0.32, 0.16)
 
-[sub_resource type="PrismMesh" id="Mesh_34"]
-material = SubResource("Mat_12")
+[sub_resource type="PrismMesh" id="Mesh_40"]
+material = SubResource("Mat_16")
 size = Vector3(0.16, 0.12, 0.16)
 
-[sub_resource type="CylinderMesh" id="Mesh_35"]
-material = SubResource("Mat_5")
+[sub_resource type="CylinderMesh" id="Mesh_41"]
+material = SubResource("Mat_6")
 top_radius = 0
 bottom_radius = 0.025
 height = 0.314
@@ -211,9 +247,13 @@ position = Vector3(-0.12, 0, 0)
 position = Vector3(0, -0.45, 0)
 mesh = SubResource("Mesh_1")
 
-[node name="Sandal" type="MeshInstance3D" parent="Body/Hips/LegL"]
-position = Vector3(0, -0.89, -0.04)
+[node name="Sneaker" type="MeshInstance3D" parent="Body/Hips/LegL"]
+position = Vector3(0, -0.88, -0.04)
 mesh = SubResource("Mesh_2")
+
+[node name="Sole" type="MeshInstance3D" parent="Body/Hips/LegL"]
+position = Vector3(0, -0.935, -0.04)
+mesh = SubResource("Mesh_3")
 
 [node name="LegR" type="Node3D" parent="Body/Hips"]
 position = Vector3(0.12, 0, 0)
@@ -222,199 +262,243 @@ position = Vector3(0.12, 0, 0)
 position = Vector3(0, -0.45, 0)
 mesh = SubResource("Mesh_1")
 
-[node name="Sandal" type="MeshInstance3D" parent="Body/Hips/LegR"]
-position = Vector3(0, -0.89, -0.04)
+[node name="Sneaker" type="MeshInstance3D" parent="Body/Hips/LegR"]
+position = Vector3(0, -0.88, -0.04)
 mesh = SubResource("Mesh_2")
+
+[node name="Sole" type="MeshInstance3D" parent="Body/Hips/LegR"]
+position = Vector3(0, -0.935, -0.04)
+mesh = SubResource("Mesh_3")
 
 [node name="Skirt" type="MeshInstance3D" parent="Body/Hips"]
 position = Vector3(0, -0.36, 0.01)
-mesh = SubResource("Mesh_3")
+mesh = SubResource("Mesh_4")
 
 [node name="SkirtFlare" type="MeshInstance3D" parent="Body/Hips"]
 position = Vector3(0, -0.66, 0.01)
-mesh = SubResource("Mesh_4")
+mesh = SubResource("Mesh_5")
 
 [node name="Hem" type="MeshInstance3D" parent="Body/Hips"]
 position = Vector3(0, -0.74, 0.01)
-mesh = SubResource("Mesh_5")
+mesh = SubResource("Mesh_6")
 
 [node name="Panel" type="MeshInstance3D" parent="Body/Hips"]
 position = Vector3(0, -0.36, -0.215)
-mesh = SubResource("Mesh_6")
+mesh = SubResource("Mesh_7")
 
 [node name="PanelRune" type="MeshInstance3D" parent="Body/Hips"]
 position = Vector3(0, -0.3, -0.228)
 rotation = Vector3(0, 0, 0.785)
-mesh = SubResource("Mesh_7")
+mesh = SubResource("Mesh_8")
 
 [node name="Torso" type="Node3D" parent="Body/Hips"]
 position = Vector3(0, 0.02, 0)
 
 [node name="Robe" type="MeshInstance3D" parent="Body/Hips/Torso"]
 position = Vector3(0, 0.3, 0)
-mesh = SubResource("Mesh_8")
+mesh = SubResource("Mesh_9")
 
 [node name="Mantle" type="MeshInstance3D" parent="Body/Hips/Torso"]
 position = Vector3(0, 0.58, 0.02)
-mesh = SubResource("Mesh_9")
+mesh = SubResource("Mesh_10")
 
 [node name="MantleBack" type="MeshInstance3D" parent="Body/Hips/Torso"]
 position = Vector3(0, 0.38, 0.24)
-mesh = SubResource("Mesh_10")
+mesh = SubResource("Mesh_11")
 
 [node name="Collar" type="MeshInstance3D" parent="Body/Hips/Torso"]
 position = Vector3(0, 0.66, -0.06)
-mesh = SubResource("Mesh_11")
+mesh = SubResource("Mesh_12")
 
 [node name="Belt" type="MeshInstance3D" parent="Body/Hips/Torso"]
 position = Vector3(0, 0.02, 0)
-mesh = SubResource("Mesh_12")
+mesh = SubResource("Mesh_13")
 
 [node name="Buckle" type="MeshInstance3D" parent="Body/Hips/Torso"]
 position = Vector3(0, 0.02, -0.225)
-mesh = SubResource("Mesh_13")
-
-[node name="Chain" type="MeshInstance3D" parent="Body/Hips/Torso"]
-position = Vector3(0, 0.5, -0.205)
 mesh = SubResource("Mesh_14")
 
-[node name="Pendant" type="MeshInstance3D" parent="Body/Hips/Torso"]
-position = Vector3(0, 0.4, -0.215)
+[node name="Chain" type="MeshInstance3D" parent="Body/Hips/Torso"]
+position = Vector3(0, 0.5, -0.226)
 mesh = SubResource("Mesh_15")
 
-[node name="PendantFrame" type="MeshInstance3D" parent="Body/Hips/Torso"]
-position = Vector3(0, 0.4, -0.205)
+[node name="Pendant" type="MeshInstance3D" parent="Body/Hips/Torso"]
+position = Vector3(0, 0.4, -0.24)
 mesh = SubResource("Mesh_16")
 
-[node name="Emblem" type="MeshInstance3D" parent="Body/Hips/Torso"]
-position = Vector3(0, 0.34, 0.275)
+[node name="PendantFrame" type="MeshInstance3D" parent="Body/Hips/Torso"]
+position = Vector3(0, 0.4, -0.23)
 mesh = SubResource("Mesh_17")
+
+[node name="Emblem" type="MeshInstance3D" parent="Body/Hips/Torso"]
+position = Vector3(0, 0.5, 0.275)
+mesh = SubResource("Mesh_18")
+
+[node name="Zevenaar" type="Label3D" parent="Body/Hips/Torso"]
+position = Vector3(0, 0.3, 0.282)
+pixel_size = 0.0024
+modulate = Color(0.95, 0.76, 0.25, 1)
+text = "ZEVENAAR"
+font_size = 48
+outline_size = 0
+
+[node name="Puffer" type="MeshInstance3D" parent="Body/Hips/Torso"]
+position = Vector3(0, 0.24, -0.205)
+mesh = SubResource("Mesh_19")
+
+[node name="PufferRidge0" type="MeshInstance3D" parent="Body/Hips/Torso"]
+position = Vector3(0, 0.08, -0.215)
+mesh = SubResource("Mesh_20")
+
+[node name="PufferRidge1" type="MeshInstance3D" parent="Body/Hips/Torso"]
+position = Vector3(0, 0.22, -0.215)
+mesh = SubResource("Mesh_20")
+
+[node name="PufferRidge2" type="MeshInstance3D" parent="Body/Hips/Torso"]
+position = Vector3(0, 0.36, -0.215)
+mesh = SubResource("Mesh_20")
+
+[node name="Zip" type="MeshInstance3D" parent="Body/Hips/Torso"]
+position = Vector3(0, 0.24, -0.222)
+mesh = SubResource("Mesh_21")
+
+[node name="PufferCollar" type="MeshInstance3D" parent="Body/Hips/Torso"]
+position = Vector3(0, 0.7, -0.02)
+mesh = SubResource("Mesh_22")
 
 [node name="Head" type="Node3D" parent="Body/Hips/Torso"]
 position = Vector3(0, 0.62, 0)
 
 [node name="Face" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
 position = Vector3(0, 0.15, -0.02)
-mesh = SubResource("Mesh_18")
+mesh = SubResource("Mesh_23")
 
 [node name="EyeL" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
 position = Vector3(-0.06, 0.19, -0.145)
-mesh = SubResource("Mesh_19")
+mesh = SubResource("Mesh_24")
 
 [node name="EyeR" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
 position = Vector3(0.06, 0.19, -0.145)
-mesh = SubResource("Mesh_19")
+mesh = SubResource("Mesh_24")
 
 [node name="Mask" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
 position = Vector3(0, 0.08, -0.145)
-mesh = SubResource("Mesh_20")
+mesh = SubResource("Mesh_25")
 
 [node name="HoodBack" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
 position = Vector3(0, 0.2, 0.06)
-mesh = SubResource("Mesh_21")
+mesh = SubResource("Mesh_26")
 
 [node name="HoodL" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
 position = Vector3(-0.19, 0.18, -0.09)
-mesh = SubResource("Mesh_22")
+mesh = SubResource("Mesh_27")
 
 [node name="HoodR" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
 position = Vector3(0.19, 0.18, -0.09)
-mesh = SubResource("Mesh_22")
+mesh = SubResource("Mesh_27")
 
 [node name="HoodTop" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
 position = Vector3(0, 0.4, -0.06)
-mesh = SubResource("Mesh_23")
+mesh = SubResource("Mesh_28")
 
 [node name="HoodPeak" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
 position = Vector3(0, 0.52, 0.06)
-mesh = SubResource("Mesh_24")
+mesh = SubResource("Mesh_29")
 
 [node name="HoodRim" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
 position = Vector3(0, 0.39, -0.155)
-mesh = SubResource("Mesh_25")
+mesh = SubResource("Mesh_30")
 
 [node name="HoodRimL" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
 position = Vector3(-0.205, 0.18, -0.155)
-mesh = SubResource("Mesh_26")
+mesh = SubResource("Mesh_31")
 
 [node name="HoodRimR" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
 position = Vector3(0.205, 0.18, -0.155)
-mesh = SubResource("Mesh_26")
+mesh = SubResource("Mesh_31")
 
 [node name="ArmL" type="Node3D" parent="Body/Hips/Torso"]
 position = Vector3(-0.365, 0.56, 0)
 
 [node name="Sleeve" type="MeshInstance3D" parent="Body/Hips/Torso/ArmL"]
 position = Vector3(0, -0.17, 0)
-mesh = SubResource("Mesh_27")
+mesh = SubResource("Mesh_32")
 
 [node name="Cuff" type="MeshInstance3D" parent="Body/Hips/Torso/ArmL"]
 position = Vector3(0, -0.43, 0)
-mesh = SubResource("Mesh_28")
+mesh = SubResource("Mesh_33")
 
 [node name="CuffTrim" type="MeshInstance3D" parent="Body/Hips/Torso/ArmL"]
 position = Vector3(0, -0.535, 0)
-mesh = SubResource("Mesh_29")
+mesh = SubResource("Mesh_34")
+
+[node name="PufferCuff" type="MeshInstance3D" parent="Body/Hips/Torso/ArmL"]
+position = Vector3(0, -0.555, 0)
+mesh = SubResource("Mesh_35")
 
 [node name="Glove" type="MeshInstance3D" parent="Body/Hips/Torso/ArmL"]
 position = Vector3(0, -0.6, 0)
-mesh = SubResource("Mesh_30")
+mesh = SubResource("Mesh_36")
 
 [node name="ArmR" type="Node3D" parent="Body/Hips/Torso"]
 position = Vector3(0.365, 0.56, 0)
 
 [node name="Sleeve" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR"]
 position = Vector3(0, -0.17, 0)
-mesh = SubResource("Mesh_27")
+mesh = SubResource("Mesh_32")
 
 [node name="Cuff" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR"]
 position = Vector3(0, -0.43, 0)
-mesh = SubResource("Mesh_28")
+mesh = SubResource("Mesh_33")
 
 [node name="CuffTrim" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR"]
 position = Vector3(0, -0.535, 0)
-mesh = SubResource("Mesh_29")
+mesh = SubResource("Mesh_34")
+
+[node name="PufferCuff" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR"]
+position = Vector3(0, -0.555, 0)
+mesh = SubResource("Mesh_35")
 
 [node name="Glove" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR"]
 position = Vector3(0, -0.6, 0)
-mesh = SubResource("Mesh_30")
+mesh = SubResource("Mesh_36")
 
 [node name="Hand" type="Node3D" parent="Body/Hips/Torso/ArmR"]
 position = Vector3(0, -0.56, 0)
 
 [node name="Staff" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
 position = Vector3(0, -0.15, -0.05)
-mesh = SubResource("Mesh_31")
+mesh = SubResource("Mesh_37")
 
 [node name="Ring" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
 position = Vector3(0, 0.62, -0.05)
-mesh = SubResource("Mesh_32")
+mesh = SubResource("Mesh_38")
 
 [node name="Crystal" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
 position = Vector3(0, 0.86, -0.05)
-mesh = SubResource("Mesh_33")
+mesh = SubResource("Mesh_39")
 
 [node name="CrystalBase" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
 position = Vector3(0, 0.66, -0.05)
 rotation = Vector3(3.1416, 0, 0)
-mesh = SubResource("Mesh_34")
+mesh = SubResource("Mesh_40")
 
 [node name="Claw0" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
 position = Vector3(0.085, 0.795, -0.05)
 rotation = Vector3(0.1599, 1.5708, 0)
-mesh = SubResource("Mesh_35")
+mesh = SubResource("Mesh_41")
 
 [node name="Claw1" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
 position = Vector3(-0.085, 0.795, -0.05)
 rotation = Vector3(0.1599, -1.5708, 0)
-mesh = SubResource("Mesh_35")
+mesh = SubResource("Mesh_41")
 
 [node name="Claw2" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
 position = Vector3(0, 0.795, 0.035)
 rotation = Vector3(0.1599, 0, 0)
-mesh = SubResource("Mesh_35")
+mesh = SubResource("Mesh_41")
 
 [node name="Claw3" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
 position = Vector3(0, 0.795, -0.135)
 rotation = Vector3(0.1599, 3.1416, 0)
-mesh = SubResource("Mesh_35")
+mesh = SubResource("Mesh_41")

@@ -1,0 +1,680 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/models/DragonRiderModel.tscn" id="3_rider"]
+[ext_resource type="Script" path="res://scripts/characters/membrane_mesh.gd" id="2_membrane"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_1"]
+albedo_color = Color(0.92, 0.5, 0.12, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_1"]
+material = SubResource("Mat_1")
+size = Vector3(0.9, 0.8, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_2"]
+material = SubResource("Mat_1")
+size = Vector3(0.8, 0.7, 0.9)
+
+[sub_resource type="StandardMaterial3D" id="Mat_2"]
+albedo_color = Color(0.95, 0.78, 0.45, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_3"]
+material = SubResource("Mat_2")
+size = Vector3(0.6, 0.08, 0.32)
+
+[sub_resource type="StandardMaterial3D" id="Mat_3"]
+albedo_color = Color(0.36, 0.15, 0.06, 1)
+
+[sub_resource type="PrismMesh" id="Mesh_4"]
+material = SubResource("Mat_3")
+size = Vector3(0.28, 0.22, 0.08)
+
+[sub_resource type="PrismMesh" id="Mesh_5"]
+material = SubResource("Mat_3")
+size = Vector3(0.28, 0.2, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="Mat_4"]
+albedo_color = Color(0.3, 0.17, 0.08, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_6"]
+material = SubResource("Mat_4")
+size = Vector3(0.62, 0.12, 0.62)
+
+[sub_resource type="BoxMesh" id="Mesh_7"]
+material = SubResource("Mat_4")
+size = Vector3(0.5, 0.18, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="Mat_5"]
+albedo_color = Color(0.95, 0.76, 0.25, 1)
+metallic = 0.6
+roughness = 0.35
+
+[sub_resource type="BoxMesh" id="Mesh_8"]
+material = SubResource("Mat_5")
+size = Vector3(0.12, 0.16, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_6"]
+albedo_color = Color(0.18, 0.1, 0.05, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_9"]
+material = SubResource("Mat_6")
+size = Vector3(0.94, 0.84, 0.1)
+
+[sub_resource type="BoxMesh" id="Mesh_10"]
+material = SubResource("Mat_6")
+size = Vector3(0.04, 0.5, 0.04)
+
+[sub_resource type="BoxMesh" id="Mesh_11"]
+material = SubResource("Mat_1")
+size = Vector3(0.46, 0.46, 0.5)
+
+[sub_resource type="BoxMesh" id="Mesh_12"]
+material = SubResource("Mat_1")
+size = Vector3(0.38, 0.38, 0.5)
+
+[sub_resource type="BoxMesh" id="Mesh_13"]
+material = SubResource("Mat_2")
+size = Vector3(0.28, 0.06, 0.8)
+
+[sub_resource type="BoxMesh" id="Mesh_14"]
+material = SubResource("Mat_6")
+size = Vector3(0.5, 0.03, 0.03)
+
+[sub_resource type="BoxMesh" id="Mesh_15"]
+material = SubResource("Mat_1")
+size = Vector3(0.5, 0.42, 0.5)
+
+[sub_resource type="BoxMesh" id="Mesh_16"]
+material = SubResource("Mat_1")
+size = Vector3(0.36, 0.26, 0.55)
+
+[sub_resource type="StandardMaterial3D" id="Mat_7"]
+albedo_color = Color(0.72, 0.32, 0.08, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_17"]
+material = SubResource("Mat_7")
+size = Vector3(0.24, 0.08, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="Mat_8"]
+albedo_color = Color(1, 0.86, 0.22, 1)
+emission_enabled = true
+emission = Color(1, 0.86, 0.22, 1)
+emission_energy_multiplier = 3
+
+[sub_resource type="BoxMesh" id="Mesh_18"]
+material = SubResource("Mat_8")
+size = Vector3(0.12, 0.05, 0.04)
+
+[sub_resource type="BoxMesh" id="Mesh_19"]
+material = SubResource("Mat_3")
+size = Vector3(0.2, 0.08, 0.24)
+
+[sub_resource type="StandardMaterial3D" id="Mat_9"]
+albedo_color = Color(0.88, 0.82, 0.68, 1)
+
+[sub_resource type="CylinderMesh" id="Mesh_20"]
+material = SubResource("Mat_9")
+top_radius = 0
+bottom_radius = 0.08
+height = 0.5309
+radial_segments = 5
+rings = 0
+
+[sub_resource type="CylinderMesh" id="Mesh_21"]
+material = SubResource("Mat_9")
+top_radius = 0
+bottom_radius = 0.05
+height = 0.3628
+radial_segments = 5
+rings = 0
+
+[sub_resource type="StandardMaterial3D" id="Mat_10"]
+albedo_color = Color(0.97, 0.94, 0.83, 1)
+
+[sub_resource type="PrismMesh" id="Mesh_22"]
+material = SubResource("Mat_10")
+size = Vector3(0.05, 0.1, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_23"]
+material = SubResource("Mat_7")
+size = Vector3(0.32, 0.1, 0.65)
+
+[sub_resource type="BoxMesh" id="Mesh_24"]
+material = SubResource("Mat_1")
+size = Vector3(0.4, 0.36, 0.74)
+
+[sub_resource type="PrismMesh" id="Mesh_25"]
+material = SubResource("Mat_3")
+size = Vector3(0.35, 0.14, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_26"]
+material = SubResource("Mat_1")
+size = Vector3(0.3, 0.27, 0.69)
+
+[sub_resource type="PrismMesh" id="Mesh_27"]
+material = SubResource("Mat_3")
+size = Vector3(0.325, 0.14, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_28"]
+material = SubResource("Mat_1")
+size = Vector3(0.2, 0.18, 0.64)
+
+[sub_resource type="PrismMesh" id="Mesh_29"]
+material = SubResource("Mat_3")
+size = Vector3(0.3, 0.14, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_30"]
+material = SubResource("Mat_7")
+size = Vector3(0.3, 0.04, 0.3)
+
+[sub_resource type="BoxMesh" id="Mesh_31"]
+material = SubResource("Mat_1")
+size = Vector3(0.2, 0.42, 0.24)
+
+[sub_resource type="BoxMesh" id="Mesh_32"]
+material = SubResource("Mat_3")
+size = Vector3(0.24, 0.08, 0.26)
+
+[sub_resource type="PrismMesh" id="Mesh_33"]
+material = SubResource("Mat_9")
+size = Vector3(0.05, 0.1, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_34"]
+material = SubResource("Mat_1")
+size = Vector3(0.26, 0.42, 0.3)
+
+[sub_resource type="BoxMesh" id="Mesh_35"]
+material = SubResource("Mat_3")
+size = Vector3(0.3, 0.08, 0.26)
+
+[sub_resource type="BoxMesh" id="Mesh_36"]
+material = SubResource("Mat_7")
+size = Vector3(0.12, 0.1, 0.8124)
+
+[sub_resource type="BoxMesh" id="Mesh_37"]
+material = SubResource("Mat_7")
+size = Vector3(0.09, 0.08, 0.9138)
+
+[sub_resource type="BoxMesh" id="Mesh_38"]
+material = SubResource("Mat_7")
+size = Vector3(0.05, 0.05, 1.1597)
+
+[sub_resource type="BoxMesh" id="Mesh_39"]
+material = SubResource("Mat_7")
+size = Vector3(0.05, 0.05, 1.2104)
+
+[sub_resource type="BoxMesh" id="Mesh_40"]
+material = SubResource("Mat_7")
+size = Vector3(0.05, 0.05, 1.1853)
+
+[sub_resource type="BoxMesh" id="Mesh_41"]
+material = SubResource("Mat_7")
+size = Vector3(0.05, 0.05, 1.1102)
+
+[sub_resource type="StandardMaterial3D" id="Mat_11"]
+albedo_color = Color(0.6, 0.19, 0.07, 1)
+cull_mode = 2
+
+[node name="DragonlingModel" type="Node3D"]
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="Chest" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0, -0.3)
+mesh = SubResource("Mesh_1")
+
+[node name="Hips" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, -0.02, 0.55)
+mesh = SubResource("Mesh_2")
+
+[node name="BellyPlate0" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, -0.4, -0.55)
+mesh = SubResource("Mesh_3")
+
+[node name="BellyPlate1" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, -0.4, -0.15)
+mesh = SubResource("Mesh_3")
+
+[node name="BellyPlate2" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, -0.4, 0.25)
+mesh = SubResource("Mesh_3")
+
+[node name="BellyPlate3" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, -0.4, 0.65)
+mesh = SubResource("Mesh_3")
+
+[node name="Spine0" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.51, -0.75)
+rotation = Vector3(0, 1.5708, 0)
+mesh = SubResource("Mesh_4")
+
+[node name="Spine1" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.5, 0.95)
+rotation = Vector3(0, 1.5708, 0)
+mesh = SubResource("Mesh_5")
+
+[node name="Saddle" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.45, 0.12)
+mesh = SubResource("Mesh_6")
+
+[node name="SaddleBack" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.56, 0.42)
+mesh = SubResource("Mesh_7")
+
+[node name="Pommel" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.58, -0.17)
+mesh = SubResource("Mesh_8")
+
+[node name="Girth" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0, 0.12)
+mesh = SubResource("Mesh_9")
+
+[node name="StirrupL" type="MeshInstance3D" parent="Body"]
+position = Vector3(-0.48, -0.05, 0)
+mesh = SubResource("Mesh_10")
+
+[node name="StirrupR" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.48, -0.05, 0)
+mesh = SubResource("Mesh_10")
+
+[node name="Rider" parent="Body" instance=ExtResource("3_rider")]
+position = Vector3(0, 0.08, 0.14)
+scale = Vector3(0.85, 0.85, 0.85)
+seated = true
+straddle = true
+
+[node name="Neck" type="Node3D" parent="Body"]
+position = Vector3(0, 0.2, -0.75)
+rotation = Vector3(0.55, 0, 0)
+
+[node name="NeckPart0" type="MeshInstance3D" parent="Body/Neck"]
+position = Vector3(0, 0, -0.25)
+mesh = SubResource("Mesh_11")
+
+[node name="NeckPart1" type="MeshInstance3D" parent="Body/Neck"]
+position = Vector3(0, 0, -0.7)
+mesh = SubResource("Mesh_12")
+
+[node name="Throat" type="MeshInstance3D" parent="Body/Neck"]
+position = Vector3(0, -0.21, -0.48)
+mesh = SubResource("Mesh_13")
+
+[node name="Rein" type="MeshInstance3D" parent="Body/Neck"]
+position = Vector3(0, 0.32, -0.15)
+mesh = SubResource("Mesh_14")
+
+[node name="Head" type="Node3D" parent="Body/Neck"]
+position = Vector3(0, 0.05, -1)
+rotation = Vector3(-0.4, 0, 0)
+
+[node name="Skull" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(0, 0.08, -0.15)
+mesh = SubResource("Mesh_15")
+
+[node name="Snout" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(0, 0, -0.6)
+mesh = SubResource("Mesh_16")
+
+[node name="SnoutRidge" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(0, 0.15, -0.55)
+mesh = SubResource("Mesh_17")
+
+[node name="EyeL" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(-0.19, 0.16, -0.38)
+rotation = Vector3(0, 0.35, -0.3)
+mesh = SubResource("Mesh_18")
+
+[node name="BrowL" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(-0.17, 0.27, -0.33)
+rotation = Vector3(0, 0, -0.35)
+mesh = SubResource("Mesh_19")
+
+[node name="HornL" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(-0.215, 0.375, 0.175)
+rotation = Vector3(1.0805, -0.2812, 0)
+mesh = SubResource("Mesh_20")
+
+[node name="CheekHornL" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(-0.35, 0.04, 0.1)
+rotation = Vector3(1.4603, -0.588, 0)
+mesh = SubResource("Mesh_21")
+
+[node name="FangL0" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(-0.15, -0.14, -0.55)
+rotation = Vector3(3.1416, 0, 0)
+mesh = SubResource("Mesh_22")
+
+[node name="FangL1" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(-0.15, -0.14, -0.75)
+rotation = Vector3(3.1416, 0, 0)
+mesh = SubResource("Mesh_22")
+
+[node name="EyeR" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(0.19, 0.16, -0.38)
+rotation = Vector3(0, -0.35, 0.3)
+mesh = SubResource("Mesh_18")
+
+[node name="BrowR" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(0.17, 0.27, -0.33)
+rotation = Vector3(0, 0, 0.35)
+mesh = SubResource("Mesh_19")
+
+[node name="HornR" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(0.215, 0.375, 0.175)
+rotation = Vector3(1.0805, 0.2812, 0)
+mesh = SubResource("Mesh_20")
+
+[node name="CheekHornR" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(0.35, 0.04, 0.1)
+rotation = Vector3(1.4603, 0.588, 0)
+mesh = SubResource("Mesh_21")
+
+[node name="FangR0" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(0.15, -0.14, -0.55)
+rotation = Vector3(3.1416, 0, 0)
+mesh = SubResource("Mesh_22")
+
+[node name="FangR1" type="MeshInstance3D" parent="Body/Neck/Head"]
+position = Vector3(0.15, -0.14, -0.75)
+rotation = Vector3(3.1416, 0, 0)
+mesh = SubResource("Mesh_22")
+
+[node name="Mouth" type="Node3D" parent="Body/Neck/Head"]
+position = Vector3(0, -0.05, -0.92)
+
+[node name="Jaw" type="Node3D" parent="Body/Neck/Head"]
+position = Vector3(0, -0.12, -0.15)
+
+[node name="JawMesh" type="MeshInstance3D" parent="Body/Neck/Head/Jaw"]
+position = Vector3(0, -0.04, -0.35)
+mesh = SubResource("Mesh_23")
+
+[node name="Tail" type="Node3D" parent="Body"]
+position = Vector3(0, 0.05, 1)
+
+[node name="TailMesh" type="MeshInstance3D" parent="Body/Tail"]
+position = Vector3(0, 0, 0.35)
+mesh = SubResource("Mesh_24")
+
+[node name="TailSpine" type="MeshInstance3D" parent="Body/Tail"]
+position = Vector3(0, 0.25, 0.35)
+rotation = Vector3(0, 1.5708, 0)
+mesh = SubResource("Mesh_25")
+
+[node name="Tail2" type="Node3D" parent="Body/Tail"]
+position = Vector3(0, 0, 0.7)
+
+[node name="Tail2Mesh" type="MeshInstance3D" parent="Body/Tail/Tail2"]
+position = Vector3(0, 0, 0.325)
+mesh = SubResource("Mesh_26")
+
+[node name="Tail2Spine" type="MeshInstance3D" parent="Body/Tail/Tail2"]
+position = Vector3(0, 0.205, 0.325)
+rotation = Vector3(0, 1.5708, 0)
+mesh = SubResource("Mesh_27")
+
+[node name="Tail3" type="Node3D" parent="Body/Tail/Tail2"]
+position = Vector3(0, 0, 0.65)
+
+[node name="Tail3Mesh" type="MeshInstance3D" parent="Body/Tail/Tail2/Tail3"]
+position = Vector3(0, 0, 0.3)
+mesh = SubResource("Mesh_28")
+
+[node name="Tail3Spine" type="MeshInstance3D" parent="Body/Tail/Tail2/Tail3"]
+position = Vector3(0, 0.16, 0.3)
+rotation = Vector3(0, 1.5708, 0)
+mesh = SubResource("Mesh_29")
+
+[node name="Spade" type="MeshInstance3D" parent="Body/Tail/Tail2/Tail3"]
+position = Vector3(0, 0, 0.75)
+rotation = Vector3(0, 0.7854, 0)
+mesh = SubResource("Mesh_30")
+
+[node name="LegFL" type="Node3D" parent="Body"]
+position = Vector3(-0.3, -0.3, -0.55)
+
+[node name="Thigh" type="MeshInstance3D" parent="Body/LegFL"]
+position = Vector3(0, -0.2, 0)
+mesh = SubResource("Mesh_31")
+
+[node name="Foot" type="MeshInstance3D" parent="Body/LegFL"]
+position = Vector3(0, -0.42, -0.08)
+mesh = SubResource("Mesh_32")
+
+[node name="Claw0" type="MeshInstance3D" parent="Body/LegFL"]
+position = Vector3(-0.07, -0.43, -0.25)
+rotation = Vector3(-1.5708, 0, 0)
+mesh = SubResource("Mesh_33")
+
+[node name="Claw1" type="MeshInstance3D" parent="Body/LegFL"]
+position = Vector3(0.07, -0.43, -0.25)
+rotation = Vector3(-1.5708, 0, 0)
+mesh = SubResource("Mesh_33")
+
+[node name="LegFR" type="Node3D" parent="Body"]
+position = Vector3(0.3, -0.3, -0.55)
+
+[node name="Thigh" type="MeshInstance3D" parent="Body/LegFR"]
+position = Vector3(0, -0.2, 0)
+mesh = SubResource("Mesh_31")
+
+[node name="Foot" type="MeshInstance3D" parent="Body/LegFR"]
+position = Vector3(0, -0.42, -0.08)
+mesh = SubResource("Mesh_32")
+
+[node name="Claw0" type="MeshInstance3D" parent="Body/LegFR"]
+position = Vector3(-0.07, -0.43, -0.25)
+rotation = Vector3(-1.5708, 0, 0)
+mesh = SubResource("Mesh_33")
+
+[node name="Claw1" type="MeshInstance3D" parent="Body/LegFR"]
+position = Vector3(0.07, -0.43, -0.25)
+rotation = Vector3(-1.5708, 0, 0)
+mesh = SubResource("Mesh_33")
+
+[node name="LegBL" type="Node3D" parent="Body"]
+position = Vector3(-0.32, -0.25, 0.65)
+
+[node name="Thigh" type="MeshInstance3D" parent="Body/LegBL"]
+position = Vector3(0, -0.2, 0)
+mesh = SubResource("Mesh_34")
+
+[node name="Foot" type="MeshInstance3D" parent="Body/LegBL"]
+position = Vector3(0, -0.42, -0.08)
+mesh = SubResource("Mesh_35")
+
+[node name="Claw0" type="MeshInstance3D" parent="Body/LegBL"]
+position = Vector3(-0.07, -0.43, -0.25)
+rotation = Vector3(-1.5708, 0, 0)
+mesh = SubResource("Mesh_33")
+
+[node name="Claw1" type="MeshInstance3D" parent="Body/LegBL"]
+position = Vector3(0.07, -0.43, -0.25)
+rotation = Vector3(-1.5708, 0, 0)
+mesh = SubResource("Mesh_33")
+
+[node name="LegBR" type="Node3D" parent="Body"]
+position = Vector3(0.32, -0.25, 0.65)
+
+[node name="Thigh" type="MeshInstance3D" parent="Body/LegBR"]
+position = Vector3(0, -0.2, 0)
+mesh = SubResource("Mesh_34")
+
+[node name="Foot" type="MeshInstance3D" parent="Body/LegBR"]
+position = Vector3(0, -0.42, -0.08)
+mesh = SubResource("Mesh_35")
+
+[node name="Claw0" type="MeshInstance3D" parent="Body/LegBR"]
+position = Vector3(-0.07, -0.43, -0.25)
+rotation = Vector3(-1.5708, 0, 0)
+mesh = SubResource("Mesh_33")
+
+[node name="Claw1" type="MeshInstance3D" parent="Body/LegBR"]
+position = Vector3(0.07, -0.43, -0.25)
+rotation = Vector3(-1.5708, 0, 0)
+mesh = SubResource("Mesh_33")
+
+[node name="WingL" type="Node3D" parent="Body"]
+position = Vector3(-0.42, 0.3, -0.35)
+
+[node name="UpperArm" type="MeshInstance3D" parent="Body/WingL"]
+position = Vector3(-0.4, 0.05, 0.05)
+rotation = Vector3(-0.1234, -1.4464, 0)
+mesh = SubResource("Mesh_36")
+
+[node name="Root" type="Node3D" parent="Body/WingL"]
+
+[node name="Fore" type="Node3D" parent="Body/WingL"]
+position = Vector3(-0.8, 0.1, 0.1)
+
+[node name="Forearm" type="MeshInstance3D" parent="Body/WingL/Fore"]
+position = Vector3(-0.45, 0.025, 0.075)
+rotation = Vector3(-0.0547, -1.4056, 0)
+mesh = SubResource("Mesh_37")
+
+[node name="Elbow" type="Node3D" parent="Body/WingL/Fore"]
+
+[node name="Hand" type="Node3D" parent="Body/WingL/Fore"]
+position = Vector3(-0.9, 0.05, 0.15)
+
+[node name="Wrist" type="Node3D" parent="Body/WingL/Fore/Hand"]
+
+[node name="Finger1" type="Node3D" parent="Body/WingL/Fore/Hand"]
+
+[node name="Bone" type="MeshInstance3D" parent="Body/WingL/Fore/Hand/Finger1"]
+position = Vector3(-0.575, 0, 0.075)
+rotation = Vector3(0, -1.4411, 0)
+mesh = SubResource("Mesh_38")
+
+[node name="Tip" type="Node3D" parent="Body/WingL/Fore/Hand/Finger1"]
+position = Vector3(-1.15, 0, 0.15)
+
+[node name="Scallop" type="Node3D" parent="Body/WingL/Fore/Hand/Finger1"]
+position = Vector3(-0.84, 0, 0.36)
+
+[node name="Finger2" type="Node3D" parent="Body/WingL/Fore/Hand"]
+
+[node name="Bone" type="MeshInstance3D" parent="Body/WingL/Fore/Hand/Finger2"]
+position = Vector3(-0.475, 0, 0.375)
+rotation = Vector3(0, -0.9025, 0)
+mesh = SubResource("Mesh_39")
+
+[node name="Tip" type="Node3D" parent="Body/WingL/Fore/Hand/Finger2"]
+position = Vector3(-0.95, 0, 0.75)
+
+[node name="Scallop" type="Node3D" parent="Body/WingL/Fore/Hand/Finger2"]
+position = Vector3(-0.6, 0, 0.72)
+
+[node name="Finger3" type="Node3D" parent="Body/WingL/Fore/Hand"]
+
+[node name="Bone" type="MeshInstance3D" parent="Body/WingL/Fore/Hand/Finger3"]
+position = Vector3(-0.275, 0, 0.525)
+rotation = Vector3(0, -0.4825, 0)
+mesh = SubResource("Mesh_40")
+
+[node name="Tip" type="Node3D" parent="Body/WingL/Fore/Hand/Finger3"]
+position = Vector3(-0.55, 0, 1.05)
+
+[node name="Scallop" type="Node3D" parent="Body/WingL/Fore/Hand/Finger3"]
+position = Vector3(-0.28, 0, 0.86)
+
+[node name="Finger4" type="Node3D" parent="Body/WingL/Fore/Hand"]
+
+[node name="Bone" type="MeshInstance3D" parent="Body/WingL/Fore/Hand/Finger4"]
+position = Vector3(-0.075, 0, 0.55)
+rotation = Vector3(0, -0.1355, 0)
+mesh = SubResource("Mesh_41")
+
+[node name="Tip" type="Node3D" parent="Body/WingL/Fore/Hand/Finger4"]
+position = Vector3(-0.15, 0, 1.1)
+
+[node name="FlankLMarker" type="Node3D" parent="Body"]
+position = Vector3(-0.4, 0.2, 0.8)
+
+[node name="WingSkinL" type="MeshInstance3D" parent="."]
+script = ExtResource("2_membrane")
+points = Array[NodePath]([NodePath("../Body/WingL/Root"), NodePath("../Body/WingL/Fore/Elbow"), NodePath("../Body/WingL/Fore/Hand/Wrist"), NodePath("../Body/WingL/Fore/Hand/Finger1/Tip"), NodePath("../Body/WingL/Fore/Hand/Finger1/Scallop"), NodePath("../Body/WingL/Fore/Hand/Finger2/Tip"), NodePath("../Body/WingL/Fore/Hand/Finger2/Scallop"), NodePath("../Body/WingL/Fore/Hand/Finger3/Tip"), NodePath("../Body/WingL/Fore/Hand/Finger3/Scallop"), NodePath("../Body/WingL/Fore/Hand/Finger4/Tip"), NodePath("../Body/FlankLMarker")])
+triangles = PackedInt32Array(2, 4, 3, 2, 5, 4, 2, 6, 5, 2, 7, 6, 2, 8, 7, 2, 9, 8, 2, 10, 9, 1, 10, 2, 0, 10, 1)
+material_override = SubResource("Mat_11")
+
+[node name="WingR" type="Node3D" parent="Body"]
+position = Vector3(0.42, 0.3, -0.35)
+
+[node name="UpperArm" type="MeshInstance3D" parent="Body/WingR"]
+position = Vector3(0.4, 0.05, 0.05)
+rotation = Vector3(-0.1234, 1.4464, 0)
+mesh = SubResource("Mesh_36")
+
+[node name="Root" type="Node3D" parent="Body/WingR"]
+
+[node name="Fore" type="Node3D" parent="Body/WingR"]
+position = Vector3(0.8, 0.1, 0.1)
+
+[node name="Forearm" type="MeshInstance3D" parent="Body/WingR/Fore"]
+position = Vector3(0.45, 0.025, 0.075)
+rotation = Vector3(-0.0547, 1.4056, 0)
+mesh = SubResource("Mesh_37")
+
+[node name="Elbow" type="Node3D" parent="Body/WingR/Fore"]
+
+[node name="Hand" type="Node3D" parent="Body/WingR/Fore"]
+position = Vector3(0.9, 0.05, 0.15)
+
+[node name="Wrist" type="Node3D" parent="Body/WingR/Fore/Hand"]
+
+[node name="Finger1" type="Node3D" parent="Body/WingR/Fore/Hand"]
+
+[node name="Bone" type="MeshInstance3D" parent="Body/WingR/Fore/Hand/Finger1"]
+position = Vector3(0.575, 0, 0.075)
+rotation = Vector3(0, 1.4411, 0)
+mesh = SubResource("Mesh_38")
+
+[node name="Tip" type="Node3D" parent="Body/WingR/Fore/Hand/Finger1"]
+position = Vector3(1.15, 0, 0.15)
+
+[node name="Scallop" type="Node3D" parent="Body/WingR/Fore/Hand/Finger1"]
+position = Vector3(0.84, 0, 0.36)
+
+[node name="Finger2" type="Node3D" parent="Body/WingR/Fore/Hand"]
+
+[node name="Bone" type="MeshInstance3D" parent="Body/WingR/Fore/Hand/Finger2"]
+position = Vector3(0.475, 0, 0.375)
+rotation = Vector3(0, 0.9025, 0)
+mesh = SubResource("Mesh_39")
+
+[node name="Tip" type="Node3D" parent="Body/WingR/Fore/Hand/Finger2"]
+position = Vector3(0.95, 0, 0.75)
+
+[node name="Scallop" type="Node3D" parent="Body/WingR/Fore/Hand/Finger2"]
+position = Vector3(0.6, 0, 0.72)
+
+[node name="Finger3" type="Node3D" parent="Body/WingR/Fore/Hand"]
+
+[node name="Bone" type="MeshInstance3D" parent="Body/WingR/Fore/Hand/Finger3"]
+position = Vector3(0.275, 0, 0.525)
+rotation = Vector3(0, 0.4825, 0)
+mesh = SubResource("Mesh_40")
+
+[node name="Tip" type="Node3D" parent="Body/WingR/Fore/Hand/Finger3"]
+position = Vector3(0.55, 0, 1.05)
+
+[node name="Scallop" type="Node3D" parent="Body/WingR/Fore/Hand/Finger3"]
+position = Vector3(0.28, 0, 0.86)
+
+[node name="Finger4" type="Node3D" parent="Body/WingR/Fore/Hand"]
+
+[node name="Bone" type="MeshInstance3D" parent="Body/WingR/Fore/Hand/Finger4"]
+position = Vector3(0.075, 0, 0.55)
+rotation = Vector3(0, 0.1355, 0)
+mesh = SubResource("Mesh_41")
+
+[node name="Tip" type="Node3D" parent="Body/WingR/Fore/Hand/Finger4"]
+position = Vector3(0.15, 0, 1.1)
+
+[node name="FlankRMarker" type="Node3D" parent="Body"]
+position = Vector3(0.4, 0.2, 0.8)
+
+[node name="WingSkinR" type="MeshInstance3D" parent="."]
+script = ExtResource("2_membrane")
+points = Array[NodePath]([NodePath("../Body/WingR/Root"), NodePath("../Body/WingR/Fore/Elbow"), NodePath("../Body/WingR/Fore/Hand/Wrist"), NodePath("../Body/WingR/Fore/Hand/Finger1/Tip"), NodePath("../Body/WingR/Fore/Hand/Finger1/Scallop"), NodePath("../Body/WingR/Fore/Hand/Finger2/Tip"), NodePath("../Body/WingR/Fore/Hand/Finger2/Scallop"), NodePath("../Body/WingR/Fore/Hand/Finger3/Tip"), NodePath("../Body/WingR/Fore/Hand/Finger3/Scallop"), NodePath("../Body/WingR/Fore/Hand/Finger4/Tip"), NodePath("../Body/FlankRMarker")])
+triangles = PackedInt32Array(2, 3, 4, 2, 4, 5, 2, 5, 6, 2, 6, 7, 2, 7, 8, 2, 8, 9, 2, 9, 10, 1, 2, 10, 0, 1, 10)
+material_override = SubResource("Mat_11")

@@ -1,12 +1,16 @@
 class_name AmberChanter
 extends Node3D
 ## Makes an Amber cultist chant while he fights. Every few seconds his song
-## fires up every enemy close by, of any faction: they hit harder for a while.
+## fires up every enemy close by, of any faction: they hit harder for a
+## while, and their wounds close a little (his own too). Kill the cultists
+## first.
 
 @export var chant_interval: float = 6.0
 @export var radius: float = 10.0
 @export var buff_factor: float = 1.25
 @export var buff_time: float = 5.0
+## Health the song gives back to every enemy in the radius.
+@export var heal_amount: int = 12
 
 const SHOW_TIME: float = 1.6
 
@@ -35,7 +39,8 @@ func _physics_process(delta: float) -> void:
 		chant()
 
 
-## Sings to Amber: enemies within the radius hit harder for a while.
+## Sings to Amber: enemies within the radius hit harder for a while and
+## heal a little.
 func chant() -> void:
 	chants += 1
 	_label.visible = true
@@ -44,3 +49,4 @@ func chant() -> void:
 		var other: Enemy = node as Enemy
 		if other != null and not other.health.is_dead() and other.global_position.distance_to(global_position) <= radius:
 			other.buff_damage(buff_factor, buff_time, "WOEST!")
+			other.health.heal(heal_amount)

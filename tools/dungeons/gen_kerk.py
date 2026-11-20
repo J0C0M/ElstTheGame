@@ -38,8 +38,11 @@ GOLD = (0.95, 0.78, 0.25)
 WHITE = (0.92, 0.9, 0.85)
 GLASS = [(0.95, 0.55, 0.12), (0.8, 0.2, 0.15), (0.25, 0.4, 0.9), (0.6, 0.3, 0.8), (0.95, 0.85, 0.3)]
 
-ARENA_CENTRE = (12, -228)
-ARENA_RADIUS = 22
+# The wall of the arena meets the gate at z = -206; Amber needs room to run a
+# lap between the pillars and the wall.
+ARENA_CENTRE = (12, -233)
+ARENA_RADIUS = 27
+PILLAR_RING = 13.5
 ARENA_FLOOR = -15
 
 # Arcades between the nave and the side aisles: (centre z, width, top).
@@ -139,11 +142,11 @@ LIGHTS = [
     ("LightTunnel2", 12, -6, -160, (1.0, 0.5, 0.15), 2.5, 18),
     ("LightTrap3", 12, -10, -180, (1.0, 0.55, 0.2), 1.8, 14),
     ("LightVoorkamer", 12, -10.5, -196, (1.0, 0.8, 0.5), 3.2, 18),
-    ("LightArena1", 12, -3, -228, (1.0, 0.45, 0.1), 3.0, 30),
+    ("LightArena1", 12, -3, -233, (1.0, 0.45, 0.1), 3.0, 34),
     ("LightArena2", 12, -12, -214, (1.0, 0.5, 0.15), 1.6, 16),
-    ("LightArena3", 0, -8, -228, (1.0, 0.6, 0.3), 2.2, 20),
-    ("LightArena4", 24, -8, -228, (1.0, 0.6, 0.3), 2.2, 20),
-    ("LightArena5", 12, -8, -244, (1.0, 0.6, 0.3), 2.2, 20),
+    ("LightArena3", -3, -8, -233, (1.0, 0.6, 0.3), 2.2, 22),
+    ("LightArena4", 27, -8, -233, (1.0, 0.6, 0.3), 2.2, 22),
+    ("LightArena5", 12, -8, -251, (1.0, 0.6, 0.3), 2.2, 22),
     ("LightCataCrystal", 6, -7, -128, (1.0, 0.6, 0.15), 1.6, 10),
     ("LightTunnel3", 12, -6, -150, (1.0, 0.45, 0.1), 2.0, 16),
     ("LightGateWest", 6, -12, -201, (1.0, 0.5, 0.15), 1.8, 9),
@@ -258,18 +261,23 @@ def build_lower_details(d):
         d.visual("Structure", f"VoorkamerBanner{n}", (x, -10.5, -196), (0.08, 4, 1.8), AMBER)
 
 
+def pillar_spots():
+    """The five pillars of the arena, PILLAR_RING m from its middle."""
+    cx, cz = ARENA_CENTRE
+    return [(cx + PILLAR_RING * math.cos(-math.pi / 2 + i * math.tau / 5), cz + PILLAR_RING * math.sin(-math.pi / 2 + i * math.tau / 5))
+            for i in range(5)]
+
+
 def build_arena(d):
     cx, cz = ARENA_CENTRE
-    d.round_room("Arena", ARENA_CENTRE, ARENA_RADIUS, ARENA_FLOOR, 16, DARK_STONE, segments=40, gaps=(math.pi / 2,), gap_width=4)
-    for i in range(5):
-        angle = -math.pi / 2 + i * math.tau / 5
-        x, z = cx + 12 * math.cos(angle), cz + 12 * math.sin(angle)
+    d.round_room("Arena", ARENA_CENTRE, ARENA_RADIUS, ARENA_FLOOR, 16, DARK_STONE, segments=48, gaps=(math.pi / 2,), gap_width=4)
+    for i, (x, z) in enumerate(pillar_spots()):
         d.solid("Structure", f"Pillar{i}", (x, ARENA_FLOOR + 8, z), (2.6, 16, 2.6), STONE)
         d.visual("Structure", f"PillarTurn{i}", (x, ARENA_FLOOR + 8, z), (2.6, 16, 2.6), STONE, rot=(0, math.pi / 4))
         d.visual("Structure", f"PillarBand{i}", (x, ARENA_FLOOR + 3, z), (2.9, 0.4, 2.9), AMBER)
     for n in range(10):
         angle = n * math.tau / 10 + 0.3
-        r = 6 + (n % 3) * 4
+        r = 6 + (n % 3) * 5.5
         d.visual("Structure", f"ArenaCrack{n}", (cx + r * math.cos(angle), ARENA_FLOOR + 0.02, cz + r * math.sin(angle)),
                  (0.3, 0.02, 5 + n % 4), ORANGE, rot=(0, angle), glow=True)
     d.visual("Structure", "ArenaHeart", (cx, ARENA_FLOOR + 0.03, cz), (5, 0.02, 5), AMBER, rot=(0, math.pi / 4), glow=True)
@@ -324,9 +332,10 @@ def main():
              "rotation = Vector3(0, 3.14159, 0)", 'dialogue = ExtResource("36_dialogue")', 'leave_on_flag = &"klaas_ready"', "",
              '[node name="KlaasAlly" parent="." instance=ExtResource("38_ally")]', f"position = {vec(KLAAS_SPOT[0], -15, KLAAS_SPOT[1])}",
              "rotation = Vector3(0, 3.14159, 0)", "",
-             '[node name="Amber" parent="." instance=ExtResource("39_amber")]', f"position = {vec(ARENA_CENTRE[0], ARENA_FLOOR, ARENA_CENTRE[1] - 6)}",
+             '[node name="Amber" parent="." instance=ExtResource("39_amber")]', f"position = {vec(ARENA_CENTRE[0], ARENA_FLOOR, ARENA_CENTRE[1] + 1.5)}",
              "rotation = Vector3(0, 3.14159, 0)", 'gate_path = NodePath("../ArenaGate")', 'klaas_path = NodePath("../KlaasAlly")',
-             f"arena_centre = {vec(ARENA_CENTRE[0], ARENA_FLOOR, ARENA_CENTRE[1])}", "",
+             f"arena_centre = {vec(ARENA_CENTRE[0], ARENA_FLOOR, ARENA_CENTRE[1])}",
+             "pillars = Array[Vector3]([" + ", ".join(vec(x, ARENA_FLOOR, z) for x, z in pillar_spots()) + "])", "",
              '[node name="MarkerKlaas" type="Marker3D" parent="."]', f"position = {vec(KLAAS_SPOT[0], -14, KLAAS_SPOT[1])}",
              'script = ExtResource("4_marker")', 'ids = Array[StringName]([&"klaas_church"])', "",
              '[node name="MarkerArena" type="Marker3D" parent="."]', f"position = {vec(ARENA_CENTRE[0], -14, ARENA_CENTRE[1])}",
@@ -343,7 +352,7 @@ def main():
                   f"position = {vec(x, floor_at(x, z), z)}", f"rotation = {vec(0, yaw, 0)}", ""]
     d.subs.append(['[sub_resource type="BoxShape3D" id="Shape_voorkamer"]', "size = Vector3(20, 6, 16)"])
     world = {"root": "KerkDungeon", "location_name": "De Kerk van Amber", "location_id": "kerk_dungeon",
-             "ambient": (0.4, 0.34, 0.3), "nav_id": "NavigationMesh_kerk", "nav_aabb": (-42, -17, -252, 78, 31, 254),
+             "ambient": (0.4, 0.34, 0.3), "nav_id": "NavigationMesh_kerk", "nav_aabb": (-42, -17, -262, 84, 31, 264),
              "cleared_flag": "boss_amber",
              "residents": ([(0, -6), (-3, -24), (3, -34), (12, -196)],
                            ["Amber is weg! Feest in de kerk!", "Hoor je dat orgel? Eindelijk weer muziek.", "Klaas heeft ons gered. Nou ja, jij ook."]),

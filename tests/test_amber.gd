@@ -2,8 +2,9 @@ extends SceneTree
 ## Headless test for Quest 6 and the church: the church opens after the three
 ## faction bosses (also for a save made before the church could open) and
 ## Quest 6 starts by itself; Klaas is away from home; the church dungeon has
-## enemies of every faction, chanting Amber cultists, flying dragonlings that
-## spit fire and fire grates, a checkpoint in the antechamber, and Klaas with
+## enemies of every faction, chanting Amber cultists that heal and cast
+## amber orbs, flying dragonlings that spit fire and whose driller rider
+## fights on when they fall, fire grates, a checkpoint in the antechamber, and Klaas with
 ## his last talk and shop, who opens the arena gate. Then the fight: Klaas
 ## follows and fights along, Amber's breath burns but not behind a pillar,
 ## her head takes double damage while she pants, her tail and wings, her
@@ -30,7 +31,12 @@ const CRASH: int = 10
 const DAZED: int = 11
 const TRANSITION: int = 13
 const DEAD: int = 14
+const ROAR: int = 15
+const LAP: int = 16
+const STOMP: int = 17
+const INHALE: int = 2
 const ALLY_FOLLOW: int = 1
+const CENTRE: Vector3 = Vector3(12, -15, -233)
 const ALLY_FALLEN: int = 4
 
 var _failures: int = 0
@@ -60,6 +66,7 @@ func _run() -> void:
 	await _test_klaas_at_the_gate()
 	await _test_fight_starts()
 	await _test_first_bar()
+	await _test_lap()
 	await _test_flight()
 	await _test_klaas_falls()
 	await _test_second_bar_and_death()
@@ -139,6 +146,23 @@ func _test_church_enemies() -> void:
 	var enemies: Variant = _main.get_world().get_node("Enemies")
 	enemies.get_node("Cultist3/Chanter").chant()
 	_check(enemies.get_node("VapeDriller4").damage_multiplier > 1.0, "an Amber cultist's chant fires up the enemies around him")
+	var vape: Variant = enemies.get_node("VapeDriller4")
+	vape.health.take_damage(10)
+	var wounded: int = vape.health.current_health
+	enemies.get_node("Cultist3/Chanter").chant()
+	_check(vape.health.current_health > wounded, "the chant also heals the enemies around him")
+	var cultist: Variant = enemies.get_node("Cultist3")
+	_check(cultist.health.max_health >= 70 and cultist.data.is_ranged(), "a cultist is tougher now and casts from a distance")
+	_place(cultist.global_position + Vector3(0, 0, 9), 0.0)
+	var orb: bool = false
+	for i: int in 400:
+		await physics_frame
+		for node: Node in enemies.get_children():
+			orb = orb or node.scene_file_path.ends_with("AmberOrb.tscn")
+		if orb:
+			break
+	_check(orb, "he casts amber orbs at the player")
+	_player().health.set_health(100)
 	var dragon: Variant = enemies.get_node("Dragonling3")
 	_place(Vector3(12, -10, -138), PI)
 	for i: int in 240:
@@ -154,9 +178,13 @@ func _test_church_enemies() -> void:
 		if fireball:
 			break
 	_check(fireball, "it spits fireballs")
+	_check(dragon.get_node("Model/Body/Rider").visible, "a driller rides the dragonling")
 	dragon.health.take_damage(100)
 	await _frames(5)
 	_check(dragon.mode == 3 and not dragon.is_in_group(&"enemies"), "a dragonling can be shot down")
+	var rider: Variant = dragon.fallen_rider
+	_check(rider != null and rider.is_in_group(&"enemies") and rider.data.id == &"dragon_rider" and not dragon.get_node("Model/Body/Rider").visible,
+		"its rider tumbles off and fights on, on foot")
 	var grate: Variant = _main.get_world().get_node("FireGrate1")
 	var burned: bool = false
 	for i: int in 300:
@@ -191,7 +219,7 @@ func _test_fight_starts() -> void:
 	_place(Vector3(12, -15, -208), PI)
 	await _frames(10)
 	_check(amber.mode == WAITING, "Amber waits in the middle of her arena")
-	_place(Vector3(12, -15, -216), PI)
+	_place(Vector3(12, -15, -219), PI)
 	await _frames(5)
 	_check(amber.mode != WAITING and _state.is_saving_blocked() and world.get_node("ArenaGate").visible, "near her the fight starts: no saving, the gate shuts")
 	_check(_main.get_node("UI/HUD/BossBar/BossName").text.ends_with("1/2"), "the boss bar shows her first of two bars")
@@ -203,17 +231,27 @@ func _test_first_bar() -> void:
 	var amber: Variant = _main.get_world().get_node("Amber")
 	var player: Variant = _player()
 	player.is_invulnerable = false
-	# Breath at the player in front of her.
-	amber.global_position = Vector3(12, -15, -234)
-	amber.rotation.y = PI
-	_place(Vector3(12, -15, -224), 0.0)
+	# The warning: a red fan on the floor before the fire, with no damage yet.
+	_put_amber(amber, CENTRE, 108.0)
+	_place(_spot(108.0, 13.0), 0.0)
 	var health: int = _fresh_health()
-	await _force(amber, BREATH, 1.0)
-	_check(player.health.current_health < health, "her fire breath burns in a cone in front of her")
-	# The same, but with a pillar in between.
-	amber.global_position = Vector3(8, -15, -232)
-	amber.rotation.y = PI / 2
-	_place(Vector3(-2.6, -15, -231.6), PI / 2)
+	amber.target = player
+	amber.mode = INHALE
+	amber.set("_timer", 1.0)
+	await _frames(20)
+	var fan: Variant = amber.get_node("Breath/Fan")
+	_check(fan.visible and player.health.current_health == health, "before her breath a red fan on the floor shows where the fire goes")
+	await _frames(50)
+	_check(amber.mode == BREATH and amber.breath.flames_alive() > 5, "then flames pour from her mouth")
+	await _frames(70)
+	_check(player.health.current_health < health, "her fire breath burns in the fan in front of her")
+	# The same, but with a pillar in between: the fan has a shadow there.
+	_put_amber(amber, CENTRE, 126.0)
+	_place(_spot(126.0, 16.5), 0.0)
+	await _frames(3)
+	var mouth: Vector3 = amber.model.get_mouth()
+	_check(amber.breath.reach(mouth, _spot(126.0, 16.5) + Vector3.UP * 1.2, amber.get("_excluded")) < mouth.distance_to(_spot(126.0, 16.5)) - 3.0,
+		"a pillar casts a shadow in the fan: the fire stops there")
 	health = _fresh_health()
 	await _force(amber, BREATH, 1.0)
 	_check(player.health.current_health == health, "a pillar between her and the player stops the flames")
@@ -225,15 +263,15 @@ func _test_first_bar() -> void:
 	amber.get_node("Model/Body/Neck/Head/HeadHurtbox").receive_hit(_hit(20))
 	_check(before - amber.health.current_health == 40, "while she pants her head takes double damage")
 	# Tail at whoever stands behind her.
-	amber.global_position = Vector3(12, -15, -234)
-	amber.rotation.y = PI
-	_place(Vector3(12, -15, -240), 0.0)
+	_put_amber(amber, CENTRE, 108.0)
+	_place(_spot(288.0, 5.0), 0.0)
 	health = _fresh_health()
 	await _force(amber, TAIL_WINDUP, 0.05)
 	await _frames(50)
 	_check(player.health.current_health < health, "her tail swipes whoever stands behind her")
 	# Wings blow the player away.
-	_place(Vector3(12, -15, -229), 0.0)
+	_put_amber(amber, CENTRE, 108.0)
+	_place(_spot(108.0, 6.0), 0.0)
 	await _frames(2)
 	var distance: float = _player().global_position.distance_to(amber.global_position)
 	await _force(amber, WINGS, 1.0)
@@ -241,10 +279,28 @@ func _test_first_bar() -> void:
 	_check(_player().global_position.distance_to(amber.global_position) > distance + 2.0, "her wings blow the player away")
 	player.is_invulnerable = true
 	_fresh_health()
+	# She keeps her distance and circles, instead of running straight at you.
+	_put_amber(amber, CENTRE, 90.0)
+	_place(_spot(90.0, 12.0), PI)
+	amber.mode = CHASE
+	amber.target = _player()
+	var start_angle: float = _angle_around(_player().global_position, amber.global_position)
+	var closest: float = INF
+	var overlap: float = 0.0
+	var turned: float = 0.0
+	for i: int in 240:
+		await physics_frame
+		amber.set("_attack_wait", 9.0)
+		amber.set("_flight_wait", 999.0)
+		closest = minf(closest, amber.global_position.distance_to(_player().global_position))
+		overlap = maxf(overlap, amber.body_overlap())
+		turned = maxf(turned, absf(wrapf(_angle_around(_player().global_position, amber.global_position) - start_angle, -180.0, 180.0)))
+	_check(closest > 8.0 and turned > 10.0, "she keeps her distance and circles her target (closest %.1f m, %.0f degrees around)" % [closest, turned])
+	_check(overlap < 0.1, "while she walks no part of her goes into a pillar or the wall (%.2f m)" % overlap)
 	# Klaas hits her too.
 	amber.mode = CHASE
-	amber.global_position = Vector3(12, -15, -234)
-	_place(Vector3(12, -15, -214), PI)
+	_put_amber(amber, CENTRE, 90.0)
+	_place(_spot(90.0, 14.0), PI)
 	before = amber.health.current_health
 	for i: int in 400:
 		await physics_frame
@@ -252,6 +308,41 @@ func _test_first_bar() -> void:
 		if amber.health.current_health < before:
 			break
 	_check(amber.health.current_health < before, "Klaas walks up to her and hits her")
+
+
+func _test_lap() -> void:
+	var amber: Variant = _main.get_world().get_node("Amber")
+	_put_amber(amber, CENTRE, 90.0)
+	_place(_spot(90.0, 7.0), PI)
+	amber.mode = CHASE
+	amber.set("_flight_wait", 999.0)
+	await _frames(2)
+	for i: int in 4:
+		amber.get_node("BodyHurtbox").receive_hit(_hit(5))
+		await _frames(8)
+	amber.set("_attack_wait", 0.0)
+	var roared: bool = false
+	for i: int in 30:
+		await physics_frame
+		roared = roared or amber.mode == ROAR
+	_check(roared, "hit her a few times in a row and she roars")
+	var farthest: float = 0.0
+	var overlap: float = 0.0
+	var lapped: bool = false
+	for i: int in 1200:
+		await physics_frame
+		amber.set("_flight_wait", 999.0)
+		lapped = lapped or amber.mode == LAP
+		farthest = maxf(farthest, Vector2(amber.global_position.x - CENTRE.x, amber.global_position.z - CENTRE.z).length())
+		overlap = maxf(overlap, amber.body_overlap())
+		if lapped and amber.mode != LAP:
+			break
+	_check(lapped and amber.laps == 1 and farthest > 18.0, "then she runs a lap along the arena wall (%.1f m out)" % farthest)
+	_check(amber.mode != LAP and Vector2(amber.global_position.x - CENTRE.x, amber.global_position.z - CENTRE.z).length() < 10.0,
+		"and comes back in between the pillars")
+	_check(overlap < 0.1, "on her lap her body stays clear of the pillars and the wall (%.2f m)" % overlap)
+	amber.mode = CHASE
+	amber.set("_flight_wait", 999.0)
 
 
 func _test_flight() -> void:
@@ -291,7 +382,7 @@ func _test_klaas_falls() -> void:
 		if amber.phase == 2:
 			break
 	_check(ally.mode == ALLY_FALLEN and _state.has_flag(&"klaas_fallen"), "Klaas takes her fireball for the player and falls")
-	_check(amber.phase == 2 and amber.health.current_health == 800 and _main.get_node("UI/HUD/BossBar/BossName").text.ends_with("2/2"),
+	_check(amber.phase == 2 and amber.health.current_health == 900 and _main.get_node("UI/HUD/BossBar/BossName").text.ends_with("2/2"),
 		"then her second bar starts")
 	_check(_player().process_mode == Node.PROCESS_MODE_INHERIT and _state.is_saving_blocked(), "the player fights on, still without saving")
 
@@ -300,9 +391,26 @@ func _test_second_bar_and_death() -> void:
 	var amber: Variant = _main.get_world().get_node("Amber")
 	amber.set("_flight_wait", 999.0)
 	var enemies: int = get_nodes_in_group(&"enemies").size()
-	amber.health.take_damage(300)
+	amber.health.take_damage(320)
 	await _frames(5)
 	_check(amber.helps == 1 and get_nodes_in_group(&"enemies").size() == enemies + 2, "furious, she calls two drillers")
+	# Her new attack: she rears up and stamps, rings of fire run over the floor.
+	_put_amber(amber, CENTRE, 90.0)
+	_place(_spot(90.0, 13.0), PI)
+	_player().is_invulnerable = false
+	var health: int = _fresh_health()
+	amber.mode = STOMP
+	amber.set("_timer", 0.3)
+	amber.set("_waves_left", 2)
+	var waves: int = 0
+	for i: int in 150:
+		await physics_frame
+		var count: int = _count_scene("FireWave.tscn")
+		waves = maxi(waves, count)
+	_check(amber.stamps == 1 and waves == 2, "furious, she stamps and two rings of fire run over the floor")
+	_check(_player().health.current_health < health, "a ring of fire burns a player who does not jump")
+	_player().is_invulnerable = true
+	_fresh_health()
 	amber.global_position = Vector3(12, -15, -234)
 	await _force(amber, BREATH, 0.3)
 	await _frames(30)
@@ -328,9 +436,25 @@ func _force(amber: Variant, mode: int, seconds: float) -> void:
 	amber.mode = mode
 	amber.set("_timer", seconds)
 	amber.set("_tick", 0.0)
-	if mode == BREATH:
-		amber.get_node("Model/Body/Neck/Head/BreathStream").visible = true
+	amber.set("_breath_yaw", amber.rotation.y)
 	await _frames(int(seconds * 60.0) + 5)
+
+
+## A point in the arena: [param angle] degrees around its middle (0 is +X,
+## 90 is +Z, towards the gate), [param radius] metres out.
+func _spot(angle: float, radius: float) -> Vector3:
+	return CENTRE + Vector3(cos(deg_to_rad(angle)), 0.0, sin(deg_to_rad(angle))) * radius
+
+
+func _put_amber(amber: Variant, at: Vector3, facing: float) -> void:
+	amber.global_position = at
+	amber.rotation.y = atan2(-cos(deg_to_rad(facing)), -sin(deg_to_rad(facing)))
+	amber.velocity = Vector3.ZERO
+	amber.reset_physics_interpolation()
+
+
+func _angle_around(centre: Vector3, point: Vector3) -> float:
+	return rad_to_deg(atan2(point.z - centre.z, point.x - centre.x))
 
 
 func _fresh_health() -> int:

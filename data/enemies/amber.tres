@@ -11,5 +11,5 @@ display_name = "Amber de Draak"
 faction = &"amber"
 model_scene = ExtResource("2_model")
 loot = ExtResource("3_loot")
-max_health = 800
+max_health = 900
 damage = 20

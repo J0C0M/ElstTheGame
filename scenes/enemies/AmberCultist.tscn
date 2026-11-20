@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/Enemy.tscn" id="1_enemy"]
+[ext_resource type="Resource" path="res://data/enemies/amber_cultist.tres" id="2_data"]
+[ext_resource type="Script" path="res://scenes/enemies/amber_chanter.gd" id="3_chanter"]
+
+[node name="AmberCultist" instance=ExtResource("1_enemy")]
+data = ExtResource("2_data")
+
+[node name="Chanter" type="Node3D" parent="."]
+script = ExtResource("3_chanter")
+
+[node name="Label" type="Label3D" parent="Chanter"]
+position = Vector3(0, 2.5, 0)
+pixel_size = 0.008
+billboard = 1
+modulate = Color(1, 0.65, 0.15, 1)
+outline_modulate = Color(0.2, 0.05, 0, 1)
+text = "AMBER! AMBER!"
+font_size = 48
+outline_size = 10

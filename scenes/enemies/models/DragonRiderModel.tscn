@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/models/DrillerModel.tscn" id="1_driller"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_orange"]
+albedo_color = Color(1, 0.5, 0.1, 1)
+specular_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="Mat_plank"]
+albedo_color = Color(0.55, 0.4, 0.25, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="Mesh_zip"]
+material = SubResource("Mat_orange")
+size = Vector3(0.04, 0.58, 0.02)
+
+[sub_resource type="BoxMesh" id="Mesh_stripe"]
+material = SubResource("Mat_orange")
+size = Vector3(0.18, 0.04, 0.19)
+
+[sub_resource type="BoxMesh" id="Mesh_beanie_band"]
+material = SubResource("Mat_orange")
+size = Vector3(0.32, 0.04, 0.32)
+
+[sub_resource type="BoxMesh" id="Mesh_plank"]
+material = SubResource("Mat_plank")
+size = Vector3(0.06, 0.1, 0.85)
+
+[node name="DragonRiderModel" instance=ExtResource("1_driller")]
+
+[node name="Zipper" parent="Body/Hips/Torso"]
+mesh = SubResource("Mesh_zip")
+
+[node name="BeanieBand" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
+position = Vector3(0, 0.26, 0.01)
+mesh = SubResource("Mesh_beanie_band")
+
+[node name="StripeL" type="MeshInstance3D" parent="Body/Hips/Torso/ArmL"]
+position = Vector3(0, -0.12, 0)
+mesh = SubResource("Mesh_stripe")
+
+[node name="StripeR" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR"]
+position = Vector3(0, -0.12, 0)
+mesh = SubResource("Mesh_stripe")
+
+[node name="Weapon" type="Node3D" parent="Body/Hips/Torso/ArmR/Hand"]
+
+[node name="Plank" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand/Weapon"]
+position = Vector3(0, 0, -0.42)
+mesh = SubResource("Mesh_plank")

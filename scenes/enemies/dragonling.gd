@@ -1,6 +1,6 @@
 class_name Dragonling
 extends CharacterBody3D
-## A little dragon of Amber with a low driller on its back, in the church.
+## A little dragon of Amber with a driller on its back, in the church.
 ## It flies a few metres up (lower under a low ceiling), circles the player
 ## and spits fireballs. Now and then it dives to bite while its rider swings
 ## his plank: only then can a sword reach it. A crossbow bolt reaches it

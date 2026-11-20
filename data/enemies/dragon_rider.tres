@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/models/DragonRiderModel.tscn" id="2_model"]
+[ext_resource type="Resource" path="res://data/loot/enemy_common.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_enemy")
+id = &"dragon_rider"
+display_name = "Drakenrijder"
+faction = &"amber"
+model_scene = ExtResource("2_model")
+loot = ExtResource("3_loot")
+max_health = 20
+damage = 6
+attack_range = 1.8
+attack_windup = 0.55
+strike_time = 0.2
+attack_cooldown = 1.6
+parry_stagger_duration = 1.4
+attack_action = &"swing_light_1"
+walk_speed = 1.6
+run_speed = 4.0
+sight_range = 14.0
+sight_angle_degrees = 110.0
+hearing_range = 6.0
+alert_radius = 7.0
+leash_range = 26.0
+patrol_radius = 8.0

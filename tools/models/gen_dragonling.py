@@ -7,7 +7,8 @@ A dragon of about 3.5 m from snout to tail, in Amber's colours: a chest and
 hips with spines, a short neck, a horned head with glowing eyes and a jaw,
 a tail in three parts with a spade, four legs tucked up, and bat wings with
 the same joints as Amber's (DragonWingRig moves them). On its back sits a
-saddle with a low driller (LowDrillerModel, seated) holding the reins.
+saddle with a driller of Amber's army in a black puffer jacket with orange
+stripes (DragonRiderModel, seated) holding the reins.
 dragonling.gd animates it. It faces -Z.
 """
 import sys
@@ -30,7 +31,7 @@ LEATHER = (0.3, 0.17, 0.08)
 STRAP = (0.18, 0.1, 0.05)
 GOLD = (0.95, 0.76, 0.25)
 
-m = Model("DragonlingModel", extra_ext=[("PackedScene", "res://scenes/enemies/models/LowDrillerModel.tscn", "3_rider")])
+m = Model("DragonlingModel", extra_ext=[("PackedScene", "res://scenes/enemies/models/DragonRiderModel.tscn", "3_rider")])
 
 body = m.joint(".", "Body")
 m.box(body, "Chest", (0, 0, -0.3), (0.9, 0.8, 1.0), SCALE)

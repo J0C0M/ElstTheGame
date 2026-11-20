@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://scripts/components/loot_dropper.gd" id="7_loot"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HealthBar3D.tscn" id="8_bar"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/models/DragonlingModel.tscn" id="9_model"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/LowDriller.tscn" id="10_rider"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/DragonRider.tscn" id="10_rider"]
 
 [sub_resource type="SphereShape3D" id="Shape_body"]
 radius = 0.6

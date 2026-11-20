@@ -17,7 +17,7 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 8 | `Add-Westeraam-Dungeon` | Af, gemerged naar `Development` |
 | 9 | `Add-OBC-Fort-Dungeon` | Af, gemerged naar `Development` |
 | 10 | `Add-Bingo-Cave-Dungeon` | Af, gemerged naar `Development` |
-| 11 | `Add-Amber-Final-Battle` | In aanbouw: blok A (de weg naar Amber) en B (het gevecht) af en tussentijds naar `Development` gemerged (op verzoek van de eigenaar). Verbeteringen aan blok B (Amber, cultisten, draakjes) wachten op akkoord; blok C volgt |
+| 11 | `Add-Amber-Final-Battle` | Blok A, B en C af; blok C wacht op akkoord |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
 Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voor de kruisboog) wacht op akkoord. `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
@@ -523,26 +523,19 @@ Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn
 - **Klaas is tijdens Quest 6 niet thuis,** zodat hij niet op twee plekken tegelijk staat. Zijn winkel is dan bij de arena. Hij blijft wel thuis zolang er nog een quest is om in te leveren: versla je de derde baas vóór je verslag doet, dan krijg je eerst nog je beloning en de kruisboog.
 - **Laag driller en driller** hebben andere HP dan het GDD (30 en 40); het GDD is bijgewerkt.
 
-### Nog te doen: blok C (zie ook `docs/FASE_11_PLAN.md`)
+### Wat is af (blok C, het einde)
 
-- **C1, Klaas weer tot leven:** de quest staat dan op doel `revive` (vlag `klaas_revived`, marker `klaas_fallen` op de `KlaasAlly`).
-  - Geef `KlaasAlly` een `Interactable` ("Gebruik de Tren-spuit op Klaas") die alleen werkt als hij `FALLEN` is en `tren_spuit_found` gezet is.
-  - Speel dan met `Cutscene` een korte scène: `KlaasAlly.revive()`, flexen, een droge regel. Zet `klaas_revived`; daarmee is Quest 6 af en wordt de Inwijding 6.
-- **C2, de tornado verdwijnt:** `TornadoBorder` (`scenes/world/tornado_border.gd`) krijgt een `dissolve()`.
-  - Na de eindscène, ook na laden, geen tornado en lichtere dieptemist (Environment in `Elst.tscn`). Wel een onzichtbare grens bij de oude ring met de melding "Je hoeft nergens meer heen. Elst is weer van jou."
-- **C3, einde:**
-  - **De eindscène (eigenaar, 20-11-2026)** speelt zodra je met de levende Klaas de kerk uit loopt, op het kerkplein in Elst:
-    1. De dorpelingen zijn terug: het kerkplein en de bevrijde wijken lopen vol, Elst is weer blij.
-    2. De camera kijkt naar de tornado, die in ~6 s krimpt en vervaagt; de lucht klaart op.
-    3. Klaas feliciteert je en maakt je een echte Elstenaar (Inwijding 6).
-    4. Een korte overgang naar de verte: een verdacht figuur in een mantel, zijn gezicht niet te zien, bespioneert je. Hij meldt aan zijn baas dat de held Amber heeft verslagen en dat plan B nu geactiveerd moet worden. De baas zie of hoor je niet.
-    5. Terug bij Klaas en de speler: feest in Elst (lichtjes, slingers, dansende dorpelingen op het kerkplein).
-    6. De aftiteling, en daarna speel je vrij verder.
-    - Het figuur in de mantel is een eigen modelscene (makkelijk te vervangen). Deze scène wordt in Prototype 2 sowieso opnieuw gemaakt, omdat personages erbij komen of veranderen; ik houd hem daarom eenvoudig (camera, ondertitels, simpele animaties) en goed los van de rest.
-  - Een `LiberatedArea` voor het kerkplein in `tools/map/gen_elst.py` (feest, dorpelingen, lichtjes) op `klaas_revived`. `gen_elst.py` draait nu ook zonder `kaart_elst.png` (zie hieronder).
-  - De aftiteling met "Een game van J0C0M", Godot en de CC0-bronnen uit `CREDITS.md`.
-  - Nieuwe regels voor Klaas thuis (`q6_done` in `gen_klaas_dialogue.py`).
-- **C4:** `test_amber.gd` uitbreiden met C1–C3. `PROGRESS.md`, `CLAUDE.md`, `README.md` en het GDD bijwerken. Een testchecklist, en dan akkoord en mergen.
+- **C1, Klaas weer tot leven:** bij de gevallen Klaas staat "[E] Gebruik de Tren-spuit op Klaas" (zonder spuit zegt het spel waar die ligt). Een korte scène: de speler drukt de spuit in zijn arm, een gouden flits, Klaas staat op en flext ("...Tren?", "Zie je? Mijn bril is niet eens afgevallen."). Daarna gaan ze samen naar buiten: een fade naar het kerkplein in Elst. Quest 6 heeft een laatste doel "Ga met Klaas naar buiten" (vlag `elst_saved`).
+- **C2, de tornado verdwijnt:** `TornadoBorder.dissolve()` laat de stofmuren vervagen en inzakken, het puin wegdraaien en de mist optrekken naar helder weer. Met de vlag `tornado_gone` blijft hij weg, ook na laden; bij de oude ring duwt geen wind meer, alleen de melding "Je hoeft nergens meer heen. Elst is weer van jou." Mist en muren worden als kopie aangepast, zodat een oudere save weer de tornado heeft.
+- **C3, de eindscène** (`scripts/world/ending.gd`, node `Ending` in `scenes/world/locations/Kerk.tscn`), zoals de eigenaar hem beschreef: de dorpelingen zijn terug, de tornado zakt weg, Klaas feliciteert de speler en maakt hem een echte Elstenaar, in de verte meldt een figuur in een mantel (`SpyModel.tscn`, gezicht nooit te zien, met een telefoon) aan zijn baas dat de held Amber verslagen heeft en dat plan B ingaat, en daarna feest op het kerkplein (`PartyDecor.tscn`: lichtjes, vlaggetjes, een tafel met eiwitshakes, een podium met discobal, "ELST IS VRIJ!" op de toren, acht dorpelingen). Dan rolt de aftiteling (`Credits.tscn`, overslaan met E of Esc) en speel je vrij verder. Met de vlag `ending_pending` speelt de scène opnieuw als je een save laadt die ertussenin gemaakt is.
+- **Klaas thuis** begroet je daarna als "mijn Elstenaar" en weet bij "Heb je nog een klus?" iets van een vent in een mantel. Zijn verhaal over Amber noemt nu Zevenaar.
+- **Tests:** `test_amber.gd` speelt het einde helemaal na (Klaas wekken, naar buiten, feest, tornado weg, spion, Inwijding 6, aftiteling, geen wind meer, opslaan en laden).
+
+### Keuzes en afwijkingen
+
+- **Naar buiten met een fade:** na het wekken lopen de speler en Klaas niet de hele kerk-dungeon weer omhoog; een fade brengt ze naar het kerkplein. Dat scheelt vier verdiepingen teruglopen.
+- **De eindscène is eenvoudig** (camera, ondertitels, simpele animaties) en staat los van de rest, omdat hij in Prototype 2 opnieuw gemaakt wordt.
+- **Nog niet in de editor bekeken:** de scène is alleen headless getest. Camerahoeken en de plek van de spion kunnen nog bijgesteld worden na de test van de eigenaar.
 
 ## Kaart van het spel en Elst zonder de bronkaart
 

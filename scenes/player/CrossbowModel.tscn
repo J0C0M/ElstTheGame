@@ -1,0 +1,249 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/player/crossbow_model.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/player/BoltModel.tscn" id="3_bolt"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_1"]
+albedo_color = Color(0.33, 0.2, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_1"]
+material = SubResource("Mat_1")
+size = Vector3(0.075, 0.13, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="Mat_2"]
+albedo_color = Color(0.42, 0.42, 0.46, 1)
+metallic = 0.6
+roughness = 0.35
+
+[sub_resource type="BoxMesh" id="Mesh_2"]
+material = SubResource("Mat_2")
+size = Vector3(0.08, 0.14, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="Mat_3"]
+albedo_color = Color(0.5, 0.32, 0.17, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_3"]
+material = SubResource("Mat_3")
+size = Vector3(0.065, 0.075, 0.56)
+
+[sub_resource type="BoxMesh" id="Mesh_4"]
+material = SubResource("Mat_1")
+size = Vector3(0.07, 0.03, 0.14)
+
+[sub_resource type="BoxMesh" id="Mesh_5"]
+material = SubResource("Mat_1")
+size = Vector3(0.05, 0.13, 0.06)
+
+[sub_resource type="BoxMesh" id="Mesh_6"]
+material = SubResource("Mat_2")
+size = Vector3(0.012, 0.012, 0.09)
+
+[sub_resource type="BoxMesh" id="Mesh_7"]
+material = SubResource("Mat_2")
+size = Vector3(0.012, 0.05, 0.015)
+
+[sub_resource type="BoxMesh" id="Mesh_8"]
+material = SubResource("Mat_2")
+size = Vector3(0.072, 0.082, 0.025)
+
+[sub_resource type="BoxMesh" id="Mesh_9"]
+material = SubResource("Mat_1")
+size = Vector3(0.028, 0.008, 0.48)
+
+[sub_resource type="StandardMaterial3D" id="Mat_4"]
+albedo_color = Color(0.72, 0.74, 0.78, 1)
+metallic = 0.6
+roughness = 0.35
+
+[sub_resource type="BoxMesh" id="Mesh_10"]
+material = SubResource("Mat_4")
+size = Vector3(0.05, 0.03, 0.035)
+
+[sub_resource type="BoxMesh" id="Mesh_11"]
+material = SubResource("Mat_2")
+size = Vector3(0.012, 0.05, 0.012)
+
+[sub_resource type="StandardMaterial3D" id="Mat_5"]
+albedo_color = Color(0.95, 0.76, 0.25, 1)
+metallic = 0.6
+roughness = 0.35
+
+[sub_resource type="BoxMesh" id="Mesh_12"]
+material = SubResource("Mat_5")
+size = Vector3(0.03, 0.03, 0.008)
+
+[sub_resource type="BoxMesh" id="Mesh_13"]
+material = SubResource("Mat_2")
+size = Vector3(0.09, 0.07, 0.07)
+
+[sub_resource type="StandardMaterial3D" id="Mat_6"]
+albedo_color = Color(0.72, 0.74, 0.78, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_14"]
+material = SubResource("Mat_6")
+size = Vector3(0.04, 0.035, 0.1811)
+
+[sub_resource type="BoxMesh" id="Mesh_15"]
+material = SubResource("Mat_6")
+size = Vector3(0.03, 0.028, 0.1581)
+
+[sub_resource type="BoxMesh" id="Mesh_16"]
+material = SubResource("Mat_5")
+size = Vector3(0.03, 0.04, 0.03)
+
+[sub_resource type="StandardMaterial3D" id="Mat_7"]
+albedo_color = Color(0.42, 0.42, 0.46, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_17"]
+material = SubResource("Mat_7")
+size = Vector3(0.014, 0.014, 0.1044)
+
+[sub_resource type="BoxMesh" id="Mesh_18"]
+material = SubResource("Mat_2")
+size = Vector3(0.135, 0.014, 0.014)
+
+[sub_resource type="StandardMaterial3D" id="Mat_8"]
+albedo_color = Color(0.9, 0.86, 0.72, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_19"]
+material = SubResource("Mat_8")
+size = Vector3(0.008, 0.008, 1)
+
+[node name="CrossbowModel" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Butt" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.03, 0.27)
+mesh = SubResource("Mesh_1")
+
+[node name="ButtPlate" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.03, 0.375)
+mesh = SubResource("Mesh_2")
+
+[node name="Stock" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, -0.06)
+mesh = SubResource("Mesh_3")
+
+[node name="Cheek" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.035, 0.17)
+mesh = SubResource("Mesh_4")
+
+[node name="Grip" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, 0.07)
+rotation = Vector3(0.35, 0, 0)
+mesh = SubResource("Mesh_5")
+
+[node name="TriggerGuard" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.06, -0.02)
+mesh = SubResource("Mesh_6")
+
+[node name="Trigger" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.055, -0.005)
+rotation = Vector3(0.3, 0, 0)
+mesh = SubResource("Mesh_7")
+
+[node name="Band0" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, -0.27)
+mesh = SubResource("Mesh_8")
+
+[node name="Band1" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, -0.1)
+mesh = SubResource("Mesh_8")
+
+[node name="Band2" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0.12)
+mesh = SubResource("Mesh_8")
+
+[node name="Groove" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.04, -0.12)
+mesh = SubResource("Mesh_9")
+
+[node name="Nut" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.05, 0.03)
+mesh = SubResource("Mesh_10")
+
+[node name="Sight" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.085, 0.2)
+mesh = SubResource("Mesh_11")
+
+[node name="SightRing" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.115, 0.2)
+mesh = SubResource("Mesh_12")
+
+[node name="ProdMount" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.025, -0.34)
+mesh = SubResource("Mesh_13")
+
+[node name="LimbL" type="Node3D" parent="."]
+position = Vector3(-0.04, 0.03, -0.35)
+
+[node name="Inner" type="MeshInstance3D" parent="LimbL"]
+position = Vector3(-0.09, 0, 0.01)
+rotation = Vector3(0, -1.4601, 0)
+mesh = SubResource("Mesh_14")
+
+[node name="Outer" type="MeshInstance3D" parent="LimbL"]
+position = Vector3(-0.255, 0, 0.045)
+rotation = Vector3(0, -1.249, 0)
+mesh = SubResource("Mesh_15")
+
+[node name="TipCap" type="MeshInstance3D" parent="LimbL"]
+position = Vector3(-0.335, 0, 0.072)
+mesh = SubResource("Mesh_16")
+
+[node name="Tip" type="Node3D" parent="LimbL"]
+position = Vector3(-0.335, 0, 0.075)
+
+[node name="StirrupL" type="MeshInstance3D" parent="."]
+position = Vector3(-0.045, -0.01, -0.42)
+rotation = Vector3(0, -2.8501, 0)
+mesh = SubResource("Mesh_17")
+
+[node name="LimbR" type="Node3D" parent="."]
+position = Vector3(0.04, 0.03, -0.35)
+
+[node name="Inner" type="MeshInstance3D" parent="LimbR"]
+position = Vector3(0.09, 0, 0.01)
+rotation = Vector3(0, 1.4601, 0)
+mesh = SubResource("Mesh_14")
+
+[node name="Outer" type="MeshInstance3D" parent="LimbR"]
+position = Vector3(0.255, 0, 0.045)
+rotation = Vector3(0, 1.249, 0)
+mesh = SubResource("Mesh_15")
+
+[node name="TipCap" type="MeshInstance3D" parent="LimbR"]
+position = Vector3(0.335, 0, 0.072)
+mesh = SubResource("Mesh_16")
+
+[node name="Tip" type="Node3D" parent="LimbR"]
+position = Vector3(0.335, 0, 0.075)
+
+[node name="StirrupR" type="MeshInstance3D" parent="."]
+position = Vector3(0.045, -0.01, -0.42)
+rotation = Vector3(0, 2.8501, 0)
+mesh = SubResource("Mesh_17")
+
+[node name="StirrupFront" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.01, -0.47)
+mesh = SubResource("Mesh_18")
+
+[node name="StringL" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0)
+mesh = SubResource("Mesh_19")
+
+[node name="StringR" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0)
+mesh = SubResource("Mesh_19")
+
+[node name="Drawn" type="Node3D" parent="."]
+position = Vector3(0, 0.05, 0.03)
+
+[node name="Released" type="Node3D" parent="."]
+position = Vector3(0, 0.05, -0.29)
+
+[node name="Muzzle" type="Node3D" parent="."]
+position = Vector3(0, 0.06, -0.5)
+
+[node name="LoadedBolt" parent="." instance=ExtResource("3_bolt")]
+position = Vector3(0, 0.056, -0.265)

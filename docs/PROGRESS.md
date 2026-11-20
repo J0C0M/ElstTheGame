@@ -38,7 +38,6 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 - Dialoog met geluidjes op het ritme van de tekst, zoals in *Undertale* (eigenaar, 20-11-2026).
 - Controller-ondersteuning komt in een later prototype; sidequests bespreken we bij het ontwerp van Prototype 2.
 - De oma's en opa's zijn aangepaste kopieën van het driller-model (met tasje, wandelstok of rolstoel). Een eigen model maakt ze beter herkenbaar. De benen van de rolstoel-oma zijn stijve balken en de wielen draaien niet.
-- De kruisboog is twee blokjes in de hand; een echt model en een zichtbare pijl op de boog ontbreken nog.
 
 ## Fase 0 – Fundament
 
@@ -556,7 +555,13 @@ Twee punten van de eigenaar na de verbeteringen aan blok B van Fase 11 (20-11-20
   - De HUD toont "x/30 pijlen" naast de drankjes. Op de grond liggen pijlen als een bundeltje.
   - Een oude save met de kruisboog krijgt bij het laden eenmalig de 15 pijlen.
 - **Vijanden komen op een schutter af:** een vijand die je raakt, gaat 15 s op jacht, samen met zijn groep in de buurt. Hij geeft niet op als hij je niet ziet en mag ver van huis, dus hij loopt niet meer terug om te genezen terwijl je hem van ver beschiet.
-- **Tests:** `test_bingo` controleert de nieuwe aanvallen van Grumpy Oma en de pijlen (15 bij de kruisboog, één per schot, niet schieten zonder pijlen, kopen per 5, maximaal 30); `test_enemies` controleert dat een beschoten vijand en zijn groep de schutter opzoeken.
+- **Tests:** `test_bingo` controleert de nieuwe aanvallen van Grumpy Oma en de pijlen (15 bij de kruisboog, één per schot, daarna een gespannen pees met een pijl, niet schieten zonder pijlen, kopen per 5, maximaal 30); `test_enemies` controleert dat een beschoten vijand en zijn groep de schutter opzoeken.
+
+- **Kruisboog, pijl en schieten mooier** (derde verzoek):
+  - Nieuw model (`tools/models/gen_crossbow.py`, `CrossbowModel.tscn`): een houten kolf met ijzeren kolfplaat, wangstuk, greep, trekker en ijzeren banden, een groef met noot, een vizier, een stalen boog in twee armen met gouden tippen, een voetbeugel, een pees en een pijl in de groef.
+  - Nieuwe pijl (`BoltModel.tscn`): een stalen breedkop, een ijzeren ring, een houten schacht en drie veren (één rood). In de lucht vliegt hij met de punt vooruit en een vage streep erachter. Hij blijft steken in muren (4 s) en in de vijand die hij raakt (en beweegt dan mee). Een straal per frame zorgt dat een snelle pijl niet door een dunne muur of vijand heen schiet (`bolt.gd`).
+  - Richten: de speler draait zijn romp een kwart, zoals met een geweer, houdt de kolf tegen de borst met de rechterhand aan de greep en de linker eronder, en de armen gaan mee omhoog en omlaag met de camera (`HumanoidModel.set_aim()`).
+  - Schieten: de pees schiet naar voren, de kruisboog slaat omhoog (terugslag), gaat dan omlaag terwijl de linkerhand de pees terugtrekt (de armen van de boog buigen mee) en komt weer omhoog met een nieuwe pijl in de groef (`crossbow_shoot`, 0,9 s). De pijl vertrekt bij de punt van de kruisboog.
 
 ### Keuzes en afwijkingen
 

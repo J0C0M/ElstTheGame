@@ -17,7 +17,7 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 8 | `Add-Westeraam-Dungeon` | Af, gemerged naar `Development` |
 | 9 | `Add-OBC-Fort-Dungeon` | Af, gemerged naar `Development` |
 | 10 | `Add-Bingo-Cave-Dungeon` | Af, gemerged naar `Development` |
-| 11 | `Add-Amber-Final-Battle` | Nog niet begonnen |
+| 11 | `Add-Amber-Final-Battle` | In aanbouw: blok A (de weg naar Amber) af, blok B en C volgen |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
 Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
@@ -420,6 +420,45 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 ### Aandachtspunten voor de volgende fases
 
 - Fase 10: de Bingo Club Boomer Cave wordt de zwaarste factie-dungeon (meer vijanden dan het OBC, Grumpy Oma sterker dan het fatbike-kindje), op dezelfde manier opgebouwd: groter dan het station, twee delen met een checkpoint, een `LiberatedArea` in `tools/map/gen_elst.py` en Quest 5 in `tools/data/gen_klaas_dialogue.py`. Daarna geeft Klaas de kruisboog (Quest 2 t/m 5 af).
+
+## Fase 11 – Quest 6: Amber de Draak
+
+Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn adviezen voor de open beslissingen). Het werk gaat in drie blokken.
+
+### Wat is af (blok A, de weg naar Amber)
+
+- **Kerkdeuren en Quest 6:** `GameState` zet de vlag `church_open` zodra de drie factiebazen verslagen zijn, ook bij het laden van een oudere save. De kerkdeur gaat dan open. Quest 6 (`q6_amber.tres`) start vanzelf via het nieuwe `start_flag` van `QuestData`, met een melding van Amber "door de tornado" (`start_message`).
+- **Doelen van Quest 6:** ga de kerk in, daal af naar het hart van de kerk, praat met Klaas, versla Amber samen met Klaas, en gebruik de Tren-spuit op Klaas. De laatste twee komen in blok B en C.
+- **Dungeonbouwer:** ruimtes kunnen op hun eigen vloerhoogte liggen. Er zijn hellingen tussen de niveaus, gedraaide en gloeiende blokken, en een ronde ruimte (`round_room`). De vier oude dungeons komen er byte voor byte gelijk uit.
+- **De kerk-dungeon** (`tools/dungeons/gen_kerk.py`, `scenes/dungeons/Kerk.tscn`), de grootste dungeon met 28 vijanden van alle facties:
+  - **0 m, de kerk:** het portaal, het schip met banken en een rode loper, zijbeuken achter arcades, glas-in-lood en banieren, het koor met altaar, kaarsen, preekstoel en orgel, en de sacristie met de trap.
+  - **−5 m, de crypte:** grafnissen, een grafkamer met sarcofagen, een doodlopende kamer met een kist en een hinderlaag.
+  - **−10 m, de catacomben:** een kruispunt, een lange gang naar een doodlopende kamer met een kist, en een brede tunnel waar de fatbikers kunnen chargeren. Amberkleurige scheuren en fakkels.
+  - **−15 m, de voorkamer:** checkpoint met autosave, een rustbank, Klaas en de poort naar de ronde arena (44 m doorsnee, 5 pilaren, een gloeiend hart).
+- **Vijanden:** even sterk als in hun eigen dungeon. 85% kijkt naar de deur waardoor de speler binnenkomt.
+- **Klaas bij de arena:** een eigen gesprek (`klaas_church.tres`) met tips, de winkel (kopen en verkopen) en "Ik ben er klaar voor". Dat zet `klaas_ready`, en dan gaat de arenapoort (`FlagGate`) open. Tijdens Quest 6 is Klaas niet thuis zodra er geen andere quest meer op hem wacht; op zijn plek ligt een briefje. Thuis vraag je hem "Wat nu met Amber?".
+- **Fix: balans van de drillers** (eigenaar):
+  - Laag drillers hebben 20 HP (was 30): met het roestige zwaard dood in twee slagen.
+  - Drillers hebben 58 HP (was 40), na het station 46: met het ijzeren zwaard dood in drie slagen.
+- **Fix: slimmere zintuigen, maar niet te slim** (eigenaar):
+  - Vijanden horen je binnen 6 m (was 4).
+  - Dichtbij zien ze ook vanuit hun ooghoek (160°).
+  - Ze kijken naar je hoofd én borst, zodat een bankje je niet meer verbergt.
+- **Fix: waarschuwen** (eigenaar): een vijand die je opmerkt of die je in de rug slaat, waarschuwt zijn buren één keer.
+  - Station en Westeraam: alleen binnen 7 m, zonder kettingreactie, dus geen hele kamer tegelijk.
+  - OBC en Bingo Club (`alert_chain`): de waarschuwing gaat door, zodat een hele kamer op je af kan komen, zoals eerst.
+- **Tests:** `tests/test_amber.gd` (15 checks). `test_world` loopt de route door de kerk tot Klaas. `test_enemies` controleert het waarschuwen. `test_station` gebruikt de nieuwe HP.
+
+### Keuzes en afwijkingen
+
+- **De arena ligt op −15 m,** net als de voorkamer, en niet op −18 m zoals in het plan. Een extra trap voor de arena voegde niets toe.
+- **Klaas is tijdens Quest 6 niet thuis,** zodat hij niet op twee plekken tegelijk staat. Zijn winkel is dan bij de arena. Hij blijft wel thuis zolang er nog een quest is om in te leveren: versla je de derde baas vóór je verslag doet, dan krijg je eerst nog je beloning en de kruisboog.
+- **Laag driller en driller** hebben andere HP dan het GDD (30 en 40); het GDD is bijgewerkt.
+
+### Nog te doen
+
+- Blok B: het Amber-model, Klaas als bondgenoot, levensbalk 1, de scène waarin Klaas sneuvelt, en levensbalk 2.
+- Blok C: Klaas weer tot leven, de tornado die verdwijnt, de eindscène, de aftiteling en vrij spelen, en de laatste tests en docs.
 
 ## Fase 10 – Quest 5: Bingo Club Boomer Cave
 

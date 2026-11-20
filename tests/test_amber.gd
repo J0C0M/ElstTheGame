@@ -63,14 +63,28 @@ func _test_old_save_opens_church() -> void:
 
 
 func _test_klaas_away() -> void:
+	await _enter_house()
+	_check(_main.get_world().find_child("Klaas", true, false) != null, "while a quest still waits for him, Klaas stays home")
+	await _leave_house()
+	for quest: StringName in [&"q1_tutorial", &"q2_station", &"q3_westeraam", &"q4_obc", &"q5_bingo"]:
+		_quests.complete_quest(quest)
+	await _enter_house()
+	var house: Variant = _main.get_world()
+	_check(house.find_child("Klaas", true, false) == null and house.get_node("AwayNote").visible, "with all else done, Klaas is off to the church and leaves a note")
+	await _leave_house()
+
+
+func _enter_house() -> void:
 	await _stand_at("FrontDoor", 1.6)
 	await _press(&"interact")
 	await _wait_for_world("Huis van Klaas")
-	var house: Variant = _main.get_world()
-	_check(house.find_child("Klaas", true, false) == null and house.get_node("AwayNote").visible, "during Quest 6 Klaas is not home, a note says where he went")
+
+
+func _leave_house() -> void:
 	await _stand_at("ExitDoor", 1.6)
 	await _press(&"interact")
 	await _wait_for_world("Elst")
+	await _frames(10)
 
 
 func _test_church_dungeon() -> void:

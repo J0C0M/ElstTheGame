@@ -55,6 +55,15 @@ func get_status(id: StringName) -> Status:
 	return _status.get(id, Status.NOT_STARTED)
 
 
+## True when every quest but [param except_id] is completed, so nothing is
+## waiting for Klaas any more.
+func are_others_completed(except_id: StringName) -> bool:
+	for id: StringName in _quests:
+		if id != except_id and get_status(id) != Status.COMPLETED:
+			return false
+	return true
+
+
 ## The objective the player is working on, or null when the quest is not active.
 func get_current_step(id: StringName) -> QuestStep:
 	if get_status(id) != Status.ACTIVE:

@@ -136,8 +136,8 @@ Elke factie heeft eigen vijanden, een eigen dungeon en een eindbaas met één du
 
 | Vijand | Factie / plek | HP | Schade | Gedrag |
 | --- | --- | --- | --- | --- |
-| Laag driller | Station Elst | 30 | 6 | Zwakke melee, valt aan in groepjes van 2–3 |
-| Driller | Westeraam Getho | 40 | 8 | Puffer jacket, gezicht zichtbaar. Melee, flankeert de speler |
+| Laag driller | Station Elst | 20 | 6 | Zwakke melee, valt aan in groepjes van 2–3 |
+| Driller | Westeraam Getho | 58 | 8 | Puffer jacket, gezicht zichtbaar. Melee, flankeert de speler |
 | Vape-driller (mage) | Westeraam Getho | 30 | 10 | Puffer jacket met capuchon, geen gezicht te zien. Houdt afstand en schiet langzame vape-wolkjes die even blijven hangen |
 | Kakker-voetbaljongen | OBC Elst Fort | 35 | 8 | Schiet voetballen, 60% kans om raak te schieten. Houdt afstand |
 | Fatbiker | OBC Elst Fort | 60 | 15 | Rijdt op een fatbike alsof het een paard is. Cirkelt rond en chargeert |
@@ -176,7 +176,7 @@ De game heeft 6 hoofdquests die Klaas één voor één geeft. De drie factie-dun
 
 **Regels voor de volgorde**
 
-- **Moeilijkheid:** de factie-dungeons worden steeds iets zwaarder: eerst Westeraam Getho, dan OBC Elst Fort (iets sterker) en als zwaarste de Bingo Club Boomer Cave. Dat geldt ook als de speler een andere volgorde kiest. Zwaarder betekent meer vijanden, iets meer HP en schade, en een sterkere baas. Ook kijken bij de start meer vijanden naar de deur waardoor de speler binnenkomt: in Station Elst kijken ze een willekeurige kant op, in de Bingo Club kijken bijna alle vijanden naar je.
+- **Moeilijkheid:** de factie-dungeons worden steeds iets zwaarder: eerst Westeraam Getho, dan OBC Elst Fort (iets sterker) en als zwaarste de Bingo Club Boomer Cave. Dat geldt ook als de speler een andere volgorde kiest. Zwaarder betekent meer vijanden, iets meer HP en schade, en een sterkere baas. Vroege vijanden (station, Westeraam) waarschuwen alleen hun buren vlakbij; in het OBC en de Bingo Club gaat de waarschuwing door de hele kamer. Ook kijken bij de start meer vijanden naar de deur waardoor de speler binnenkomt: in Station Elst kijken ze een willekeurige kant op, in de Bingo Club kijken bijna alle vijanden naar je.
 - Klaas geeft de quests in volgorde 1 t/m 6. Station Elst is vanaf het begin open. De drie factie-dungeons gaan pas open als Station Elst gesloopt is; Klaas zegt dat als hij Quest 2 geeft. De kerk zit op slot tot de drie factiebazen verslagen zijn.
 - Maak je een factie-dungeon af voordat Klaas die quest gegeven heeft, dan telt hij toch. Bij je volgende bezoek is Klaas trots op je (eigen tekstregel) en wordt de quest afgestreept. Je krijgt de beloning dan alsnog.
 - **Kruisboog:** krijg je van Klaas zodra Quest 2 t/m 5 allemaal af zijn.

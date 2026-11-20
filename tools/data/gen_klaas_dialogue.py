@@ -91,6 +91,9 @@ q5_early = cond(min_inwijding=4, quest_id=Q5, quest_status=0, required_flag="bos
 q5_active = cond(quest_id=Q5, quest_status=1)
 q5_report = cond(quest_id=Q5, quest_status=1, quest_step="report")
 q5_done = cond(quest_id=Q5, quest_status=2)
+Q6 = "q6_amber"
+q6_active = cond(quest_id=Q6, quest_status=1)
+q6_done = cond(quest_id=Q6, quest_status=2)
 shop_open = cond(min_inwijding=1)
 strong = cond(min_inwijding=3)
 
@@ -138,7 +141,8 @@ line("hub", "Wat wil je?", choices=[
     choice("Heb je nog een klus?", "q5_offer", q5_offer),
     choice("Heb je nog een klus?", "q5_early", q5_early),
     choice("Heb je nog een klus?", "q5_busy", q5_active),
-    choice("Heb je nog een klus?", "next_job", q5_done),
+    choice("Wat nu met Amber?", "q6_go", q6_active),
+    choice("Heb je nog een klus?", "next_job", q6_done),
     choice("Vertel over Amber.", "lore_1"),
     choice("Waarom die zonnebril?", "glasses"),
     choice("Mag ik hier slapen?", "sleep_offer"),
@@ -182,6 +186,7 @@ line("q5_busy", "Ik hoor ze nog steeds BINGO roepen. Grumpy Oma zit nog in haar 
 line("q5_early", "Het is stil in de Bingo Club. Heb jij Grumpy Oma al verslagen?", "q5_early_2", model_action="flex")
 line("q5_early_2", "Eerder klaar dan gevraagd. Ik ben trots op je. Hier, je beloning.", "q5_crossbow", action="start_quest", value=Q5)
 line("next_job", "Nog niet. Rust uit. Ik roep je als Amber weer iets flikt.", "hub")
+line("q6_go", "De kerk is open. Amber zit diep eronder. Ik ga vooruit en wacht bij haar hol. Kom zodra je klaar bent.", "hub", model_action="flex")
 line("lore_1", "Amber kwam uit Arnhem-Zuid. Groot, oranje, slecht humeur. Ze nam Elst over en zette overal haar drillers neer.", "lore_2")
 line("lore_2", "Sinds die dag draait er een tornado om het dorp. Niemand erin, niemand eruit. Station Elst is haar aanvoerlijn. Die moet kapot.", "hub")
 line("glasses", "Deze bril gaat nooit af. Nooit. Volgende vraag.", "hub")

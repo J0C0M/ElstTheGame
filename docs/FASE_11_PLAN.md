@@ -25,7 +25,9 @@ Opslaan, laden en doodgaan werken overal. Alle tests slagen, ook een nieuwe `tes
 - **Scènes** zijn eenvoudig (tekst en camera), maar wel compleet. Ze worden in Prototype 2 opnieuw gemaakt.
 - **Na de eindscène** loop je vrij rond in het bevrijde Elst.
 
-## Blok A – De weg naar Amber
+## Blok A – De weg naar Amber (af)
+
+Afwijking bij het bouwen: de arena ligt op −15 m, net als de voorkamer.
 
 ### A1. Kerkdeuren en Quest 6 (`Open the church and start Quest 6`)
 

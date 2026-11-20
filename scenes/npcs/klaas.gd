@@ -9,7 +9,8 @@ extends StaticBody3D
 const LOOK_RANGE: float = 7.0
 
 @export var dialogue: DialogueData
-## While this quest is active Klaas is away (he waits in the church).
+## While this quest is active, and no other quest still waits for him, Klaas
+## is away (he waits in the church).
 @export var away_during_quest: StringName
 ## Shown while he is away, such as a note on the table.
 @export var away_note_path: NodePath
@@ -20,7 +21,8 @@ const LOOK_RANGE: float = 7.0
 
 func _ready() -> void:
 	_interactable.interacted.connect(_on_interacted)
-	var away: bool = not away_during_quest.is_empty() and QuestManager.get_status(away_during_quest) == QuestManager.Status.ACTIVE
+	var away: bool = not away_during_quest.is_empty() and QuestManager.get_status(away_during_quest) == QuestManager.Status.ACTIVE \
+			and QuestManager.are_others_completed(away_during_quest)
 	var note: Node3D = get_node_or_null(away_note_path) as Node3D
 	if note != null:
 		note.visible = away

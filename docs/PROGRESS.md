@@ -527,6 +527,8 @@ Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn
 
 - In haar tweede balk roept ze geen drillers meer, maar twee keer twee Amber-cultisten uit Zevenaar.
 - Ze heeft 1050 HP per balk (was 900).
+- **Vijfde ronde:** de hete zone loopt nu van het midden van haar lijf tot haar bek en is 3,2 m breed naar beide kanten (eerst begon hij pas voor haar borst, waardoor je naast haar voorpoten veilig stond). Bovendien duwt de hitte je elk frame onder haar vandaan.
+- **De opoffering van Klaas opnieuw:** de scène wordt in het midden van de arena opgezet, zodat elk shot duidelijk is: een breed shot van opzij met Amber, de speler en Klaas; over de schouder van de speler zakt Ambers kop omlaag naar de speler en groeit de vuurbal in haar bek; Klaas roept "NEE!" en rent van opzij aan; in slow motion duikt hij (nieuwe actie `dive`) in de baan van de vuurbal, die hem raakt met een flits en terugwerpt; de speler wankelt; daarna close op Klaas op de grond.
 - **Onder haar nek is het niet meer veilig:** wie tijdens haar vuuradem onder haar nek staat (van haar borst tot haar bek, 2,4 m naar beide kanten), krijgt dezelfde vuurschade. De rode zone op de grond loopt daar door, en de onderkant van haar nek gloeit fel met een oranje licht eronder, al vanaf het inademen.
 
 ### Wat is af (blok C, het einde)

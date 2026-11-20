@@ -114,6 +114,12 @@ const ACTIONS: Dictionary = {
 		[0.85, {&"arm_r": Vector3(55, 28, -6), &"arm_l": Vector3(62, 38, 20), &"torso": Vector3(4, -28, 0), &"head": Vector3(4, 28, 0)}],
 		[1.0, {&"arm_r": Vector3(62, 28, -6), &"arm_l": Vector3(64, 36, 22), &"torso": Vector3(0, -28, 0), &"head": Vector3(0, 28, 0)}],
 	],
+	# A dive into the line of fire: flat forward, arms out in front.
+	&"dive": [
+		[0.0, {&"body": Vector3(0, 0, 0), &"body_offset": Vector3.ZERO, &"arm_l": Vector3(0, 0, 0), &"arm_r": Vector3(10, 0, 5), &"leg_l": Vector3(0, 0, 0), &"leg_r": Vector3(0, 0, 0)}],
+		[0.35, {&"body": Vector3(-35, 0, 0), &"body_offset": Vector3(0, 0.3, 0), &"arm_l": Vector3(150, 0, -15), &"arm_r": Vector3(150, 0, 15), &"leg_l": Vector3(-25, 0, 0), &"leg_r": Vector3(15, 0, 0)}],
+		[1.0, {&"body": Vector3(-80, 0, 0), &"body_offset": Vector3(0, 0.2, 0), &"arm_l": Vector3(170, 0, -10), &"arm_r": Vector3(170, 0, 10), &"leg_l": Vector3(-10, 0, 0), &"leg_r": Vector3(-10, 0, 0)}],
+	],
 	&"flex": [
 		[0.0, {&"arm_l": Vector3(0, 0, 0), &"arm_r": Vector3(10, 0, 5), &"torso": Vector3(0, 0, 0), &"head": Vector3(0, 0, 0)}],
 		[0.25, {&"arm_l": Vector3(20, 0, -125), &"arm_r": Vector3(20, 0, 125), &"torso": Vector3(-6, 0, 0), &"head": Vector3(-10, 0, 0)}],

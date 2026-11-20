@@ -268,6 +268,7 @@ func _test_first_bar() -> void:
 	health = _fresh_health()
 	await _force(amber, BREATH, 0.6)
 	_check(player.health.current_health < health, "standing under her neck while she breathes fire burns too")
+	_check(_player().global_position.distance_to(Vector3(under.x, CENTRE.y, under.z)) > 1.5, "and the heat pushes the player out from under her")
 	amber.mode = BREATH
 	amber.set("_timer", 0.5)
 	amber.model.pose = 2

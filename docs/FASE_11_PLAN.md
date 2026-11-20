@@ -159,7 +159,7 @@ Afwijking bij het bouwen: Klaas slaat met zijn vuisten (14 schade om de 1,6 s); 
 ### C3. Eindscène, aftiteling en vrij spelen (`Add the end scene, credits and free roaming`)
 
 - **Feest:** de kerk wordt een feestplek, met een `LiberatedArea` met dorpelingen, lichtjes en slingers op het kerkplein.
-- **Eindscène:** op het kerkplein noemt Klaas je "een echte Elstenaar". Inwijding wordt 6.
+- **Eindscène (aangevuld door de eigenaar, 20-11-2026):** zodra je met Klaas de kerk uit loopt: de dorpelingen zijn terug, de tornado verdwijnt (C2) en Elst is weer blij. Klaas feliciteert je en noemt je "een echte Elstenaar" (Inwijding 6). In de verte bespioneert een verdacht figuur in een mantel je, zonder dat je zijn gezicht ziet; hij meldt zijn baas dat de held Amber heeft verslagen en dat plan B nu geactiveerd moet worden. Daarna terug naar Klaas en de speler: feest in Elst. Deze scène wordt in Prototype 2 sowieso opnieuw gemaakt (personages komen erbij of veranderen), dus hij blijft eenvoudig en los van de rest.
 - **Aftiteling:** rolt over het scherm, met namen en de CC0-bronnen uit `CREDITS.md`. Daarna speel je verder in het bevrijde Elst.
 - **Na het einde:** Klaas in zijn huis krijgt nieuwe regels.
 

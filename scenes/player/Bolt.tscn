@@ -1,45 +1,39 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scenes/enemies/projectiles/vape_puff.gd" id="1_puff"]
+[ext_resource type="Script" path="res://scenes/player/bolt.gd" id="1_bolt"]
 [ext_resource type="Script" path="res://scripts/components/hitbox.gd" id="2_hitbox"]
+[ext_resource type="PackedScene" path="res://scenes/player/BoltModel.tscn" id="3_model"]
 
-[sub_resource type="StandardMaterial3D" id="Mat_bolt"]
+[sub_resource type="StandardMaterial3D" id="Mat_streak"]
 transparency = 1
 shading_mode = 0
-albedo_color = Color(1, 0.88, 0.5, 1)
+albedo_color = Color(1, 0.95, 0.8, 0.35)
 
-[sub_resource type="SphereMesh" id="Mesh_bolt"]
-material = SubResource("Mat_bolt")
-radius = 0.08
-height = 0.16
-radial_segments = 6
-rings = 3
-
-[sub_resource type="SphereShape3D" id="Shape_world"]
-radius = 0.08
+[sub_resource type="BoxMesh" id="Mesh_streak"]
+material = SubResource("Mat_streak")
+size = Vector3(0.014, 0.014, 1.4)
 
 [sub_resource type="SphereShape3D" id="Shape_hit"]
-radius = 0.3
+radius = 0.1
 
-[node name="Bolt" type="Area3D"]
-collision_layer = 0
-collision_mask = 1
-script = ExtResource("1_puff")
-speed = 45.0
-travel_time = 1.6
-linger_time = 0.05
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("Shape_world")
+[node name="Bolt" type="Node3D"]
+script = ExtResource("1_bolt")
 
 [node name="Visual" type="Node3D" parent="."]
 
-[node name="Tip" type="MeshInstance3D" parent="Visual"]
-mesh = SubResource("Mesh_bolt")
+[node name="Model" parent="Visual" instance=ExtResource("3_model")]
+
+[node name="Streak" type="MeshInstance3D" parent="Visual"]
+visible = false
+position = Vector3(0, 0, 0.98)
+cast_shadow = 0
+mesh = SubResource("Mesh_streak")
 
 [node name="Hitbox" type="Area3D" parent="."]
 collision_layer = 8
-collision_mask = 4
+collision_mask = 0
+monitoring = false
+monitorable = false
 script = ExtResource("2_hitbox")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]

@@ -6,7 +6,9 @@ Run from the project root:
 
 The layout (scale, locations, main roads, rail) comes from layout.py. The land
 use (streets, gardens, parks, water, open land) is read from
-docs/reference/kaart_elst.png. Parts of the scene that are not generated (sky,
+docs/reference/kaart_elst.png; without that file (it is not in the repo) the
+ground raster data/world/elst_ground.png, made from it, is used, which gives
+the same town. Parts of the scene that are not generated (sky,
 tornado, ground collider, navigation settings) are copied from the current
 Elst.tscn, so the script can run again after edits to those parts.
 """
@@ -198,6 +200,11 @@ def door_aprons():
 
 
 def build_raster():
+    if not MAP_PATH.exists():
+        # The ground raster in the repo was made from the map; without the
+        # map it is the source, so the town comes out the same.
+        print("no", MAP_PATH, "- using", RASTER_PATH)
+        return bytearray(Image.open(RASTER_PATH).convert("L").tobytes())
     classes, mw, mh = classify_map()
     seeds = {}
     grid = bytearray(SIZE * SIZE)

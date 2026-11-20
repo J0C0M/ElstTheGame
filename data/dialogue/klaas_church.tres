@@ -33,13 +33,50 @@ script = ExtResource("3_choice")
 text = "Nog even niet."
 next = &"church_wait"
 
+[sub_resource type="Resource" id="Choice_37"]
+script = ExtResource("3_choice")
+text = "Wie zijn die figuren in die oranje gewaden?"
+next = &"church_zevenaar"
+
 [sub_resource type="Resource" id="Line_church_hello"]
 script = ExtResource("4_line")
 id = &"church_hello"
 text = "Daar ben je. Amber zit achter die poort. Groot, heet en chagrijnig. Net als mijn ex."
-choices = Array[ExtResource("3_choice")]([SubResource("Choice_33"), SubResource("Choice_34"), SubResource("Choice_35"), SubResource("Choice_36")])
+choices = Array[ExtResource("3_choice")]([SubResource("Choice_33"), SubResource("Choice_34"), SubResource("Choice_35"), SubResource("Choice_36"), SubResource("Choice_37")])
 condition = SubResource("Condition_1")
 model_action = &"flex"
+
+[sub_resource type="Resource" id="Line_church_zevenaar"]
+script = ExtResource("4_line")
+id = &"church_zevenaar"
+text = "Zevenaarders. Daar komt Amber vandaan. Zevenaar was het eerste wat ze innam, lang voor Arnhem en lang voor ons."
+next = &"church_zevenaar_2"
+
+[sub_resource type="Resource" id="Choice_38"]
+script = ExtResource("3_choice")
+text = "Wat moet ik weten?"
+next = &"church_tips"
+
+[sub_resource type="Resource" id="Choice_39"]
+script = ExtResource("3_choice")
+text = "Ik wil nog wat kopen of verkopen."
+action = &"open_shop"
+
+[sub_resource type="Resource" id="Choice_40"]
+script = ExtResource("3_choice")
+text = "Ik ben er klaar voor."
+next = &"church_go"
+
+[sub_resource type="Resource" id="Choice_41"]
+script = ExtResource("3_choice")
+text = "Nog even niet."
+next = &"church_wait"
+
+[sub_resource type="Resource" id="Line_church_zevenaar_2"]
+script = ExtResource("4_line")
+id = &"church_zevenaar_2"
+text = "Wie daar bij haar bleef, is haar sindsdien trouw. Cultisten met vuurvapes, drillers op draakjes. Die houdt ze dicht bij zich, hier in haar hol. Daarom zag je ze nergens anders."
+choices = Array[ExtResource("3_choice")]([SubResource("Choice_38"), SubResource("Choice_39"), SubResource("Choice_40"), SubResource("Choice_41")])
 
 [sub_resource type="Resource" id="Line_church_tips"]
 script = ExtResource("4_line")
@@ -47,17 +84,17 @@ id = &"church_tips"
 text = "Achter een pilaar raakt haar vuur je niet. Vliegt ze, pak je kruisboog. Ligt ze op de grond of hijgt ze, sla dan op haar kop."
 next = &"church_tips_2"
 
-[sub_resource type="Resource" id="Choice_37"]
+[sub_resource type="Resource" id="Choice_42"]
 script = ExtResource("3_choice")
 text = "Ik wil nog wat kopen of verkopen."
 action = &"open_shop"
 
-[sub_resource type="Resource" id="Choice_38"]
+[sub_resource type="Resource" id="Choice_43"]
 script = ExtResource("3_choice")
 text = "Ik ben er klaar voor."
 next = &"church_go"
 
-[sub_resource type="Resource" id="Choice_39"]
+[sub_resource type="Resource" id="Choice_44"]
 script = ExtResource("3_choice")
 text = "Nog even niet."
 next = &"church_wait"
@@ -66,7 +103,7 @@ next = &"church_wait"
 script = ExtResource("4_line")
 id = &"church_tips_2"
 text = "En ik trek haar aandacht. Ik ben groter dan jij. Ze kijkt vanzelf naar mij."
-choices = Array[ExtResource("3_choice")]([SubResource("Choice_37"), SubResource("Choice_38"), SubResource("Choice_39")])
+choices = Array[ExtResource("3_choice")]([SubResource("Choice_42"), SubResource("Choice_43"), SubResource("Choice_44")])
 
 [sub_resource type="Resource" id="Line_church_go"]
 script = ExtResource("4_line")
@@ -81,12 +118,12 @@ script = ExtResource("4_line")
 id = &"church_wait"
 text = "Rust uit op die bank. Ik ga nergens heen. Amber ook niet."
 
-[sub_resource type="Resource" id="Choice_40"]
+[sub_resource type="Resource" id="Choice_45"]
 script = ExtResource("3_choice")
 text = "Ik wil nog wat kopen of verkopen."
 action = &"open_shop"
 
-[sub_resource type="Resource" id="Choice_41"]
+[sub_resource type="Resource" id="Choice_46"]
 script = ExtResource("3_choice")
 text = "Kom op, Klaas."
 next = &"church_go"
@@ -95,11 +132,11 @@ next = &"church_go"
 script = ExtResource("4_line")
 id = &"church_ready"
 text = "De poort is open. Zeg het maar als je zover bent."
-choices = Array[ExtResource("3_choice")]([SubResource("Choice_40"), SubResource("Choice_41")])
+choices = Array[ExtResource("3_choice")]([SubResource("Choice_45"), SubResource("Choice_46")])
 condition = SubResource("Condition_2")
 
 [resource]
 script = ExtResource("1_data")
 speaker = "Klaas"
 starts = Array[StringName]([&"church_hello", &"church_ready"])
-lines = Array[ExtResource("4_line")]([SubResource("Line_church_hello"), SubResource("Line_church_tips"), SubResource("Line_church_tips_2"), SubResource("Line_church_go"), SubResource("Line_church_wait"), SubResource("Line_church_ready")])
+lines = Array[ExtResource("4_line")]([SubResource("Line_church_hello"), SubResource("Line_church_zevenaar"), SubResource("Line_church_zevenaar_2"), SubResource("Line_church_tips"), SubResource("Line_church_tips_2"), SubResource("Line_church_go"), SubResource("Line_church_wait"), SubResource("Line_church_ready")])

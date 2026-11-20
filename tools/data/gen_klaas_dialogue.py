@@ -123,7 +123,7 @@ line("q4_report", "Het fatbike-kindje van zijn fiets geduwd? Dat had ik graag ge
 line("q4_reward", "Het OBC is weer van de leerlingen. Hier, 150 goud.", "hub", action="set_flag", value="q4_reported")
 line("q5_report", "Grumpy Oma verslagen? Dan wordt het vanavond eindelijk weer een gezellige bingoavond.", "q5_reward", condition=q5_report, model_action="flex")
 line("q5_reward", "Hier, 150 goud. En er is meer.", "q5_crossbow", action="set_flag", value="q5_reported")
-line("q5_crossbow", "Je hebt al mijn klussen gedaan. Daarom krijg je mijn oude kruisboog. Druk op 2 om hem te pakken en houd de rechtermuisknop vast om te richten.", "hub",
+line("q5_crossbow", "Je hebt al mijn klussen gedaan. Daarom krijg je mijn oude kruisboog. Druk op 2 om hem te pakken en houd de rechtermuisknop vast om te richten. Er zitten 15 pijlen bij. Meer koop je bij mij, of je vindt ze in kisten.", "hub",
      action="give_item", value="crossbow")
 line("greeting_strong", "Kijk eens wie er spieren krijgt. Bijna zoveel als ik. Bijna.", "hub", condition=strong, model_action="flex")
 line("greeting", "Daar is mijn favoriete niemand.", "hub")
@@ -226,7 +226,17 @@ line("church_hello", "Daar ben je. Amber zit achter die poort. Groot, heet en ch
          choice("Ik wil nog wat kopen of verkopen.", action="open_shop"),
          choice("Ik ben er klaar voor.", "church_go"),
          choice("Nog even niet.", "church_wait"),
+         choice("Wie zijn die figuren in die oranje gewaden?", "church_zevenaar"),
      ])
+line("church_zevenaar", "Zevenaarders. Daar komt Amber vandaan. Zevenaar was het eerste wat ze innam, lang voor Arnhem en lang voor ons.",
+     "church_zevenaar_2")
+line("church_zevenaar_2", "Wie daar bij haar bleef, is haar sindsdien trouw. Cultisten met vuurvapes, drillers op draakjes. "
+     "Die houdt ze dicht bij zich, hier in haar hol. Daarom zag je ze nergens anders.", choices=[
+    choice("Wat moet ik weten?", "church_tips"),
+    choice("Ik wil nog wat kopen of verkopen.", action="open_shop"),
+    choice("Ik ben er klaar voor.", "church_go"),
+    choice("Nog even niet.", "church_wait"),
+])
 line("church_tips", "Achter een pilaar raakt haar vuur je niet. Vliegt ze, pak je kruisboog. Ligt ze op de grond of hijgt ze, sla dan op haar kop.",
      "church_tips_2")
 line("church_tips_2", "En ik trek haar aandacht. Ik ben groter dan jij. Ze kijkt vanzelf naar mij.", choices=[

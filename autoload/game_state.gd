@@ -5,6 +5,11 @@ extends Node
 
 ## The most potions the player can carry.
 const MAX_POTIONS: int = 10
+## The most crossbow arrows the player can carry.
+const MAX_BOLTS: int = 30
+## Arrows that come with the crossbow.
+const START_BOLTS: int = 15
+const BOLT_ID: StringName = &"bolt"
 ## The highest Inwijding level.
 const MAX_INWIJDING: int = 6
 ## Gear a new game starts with: just clothes. Klaas hands over the first
@@ -68,11 +73,13 @@ func add_gold(amount: int) -> void:
 
 
 ## Adds up to [param count] of [param item] and returns how many fitted.
-## Potions stop at MAX_POTIONS.
+## Potions stop at MAX_POTIONS, arrows at MAX_BOLTS.
 func add_item(item: ItemData, count: int = 1) -> int:
 	var fits: int = count
 	if item.type == ItemData.ItemType.CONSUMABLE:
 		fits = clampi(MAX_POTIONS - get_potion_count(), 0, count)
+	elif item.type == ItemData.ItemType.AMMO:
+		fits = clampi(MAX_BOLTS - get_item_count(item.id), 0, count)
 	if fits > 0:
 		inventory[item.id] = get_item_count(item.id) + fits
 		EventBus.inventory_changed.emit()
@@ -103,6 +110,14 @@ func get_item_count(id: StringName) -> int:
 	return inventory.get(id, 0)
 
 
+func get_bolt_count() -> int:
+	return get_item_count(BOLT_ID)
+
+
+func has_crossbow() -> bool:
+	return get_equipped(&"crossbow") != null
+
+
 func get_potion_count() -> int:
 	var total: int = 0
 	for id: StringName in inventory:
@@ -131,6 +146,8 @@ func add_gear(item: ItemData) -> bool:
 	if has_gear(item.id):
 		return false
 	owned_gear.append(item.id)
+	if item.type == ItemData.ItemType.CROSSBOW:
+		_give_start_bolts()
 	var current: ItemData = get_equipped(item.get_slot())
 	if current == null or item.get_power() > current.get_power():
 		equip(item)
@@ -256,9 +273,22 @@ func load_data(data: Dictionary) -> void:
 			equipped[StringName(slot)] = StringName(str(saved_equipped[slot]))
 	for flag: Variant in data.get("flags", []):
 		_flags[StringName(str(flag))] = true
+	# Saves from before arrows had to be carried get a first quiver.
+	if has_gear(&"crossbow"):
+		_give_start_bolts()
 	_emit_all()
 	# Saves from before the church could open.
 	_check_church()
+
+
+## A first quiver with the crossbow, once per game.
+func _give_start_bolts() -> void:
+	if has_flag(&"bolts_started"):
+		return
+	_flags[&"bolts_started"] = true
+	var bolts: ItemData = ItemCatalog.get_item(BOLT_ID)
+	if bolts != null:
+		add_item(bolts, START_BOLTS)
 
 
 ## Opens the church once the three faction bosses are beaten.

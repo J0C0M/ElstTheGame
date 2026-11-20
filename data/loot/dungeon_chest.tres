@@ -2,14 +2,21 @@
 
 [ext_resource type="Script" path="res://scripts/data/loot_table.gd" id="1_table"]
 [ext_resource type="Script" path="res://scripts/data/loot_entry.gd" id="2_entry"]
+[ext_resource type="Resource" path="res://data/items/bolts.tres" id="9_bolts"]
 
 [sub_resource type="Resource" id="Resource_gear"]
 script = ExtResource("2_entry")
 kind = 1
 chance = 0.08
 
+[sub_resource type="Resource" id="Resource_bolts"]
+script = ExtResource("2_entry")
+item = ExtResource("9_bolts")
+chance = 0.7
+count = 4
+
 [resource]
 script = ExtResource("1_table")
 gold_min = 20
 gold_max = 40
-entries = Array[ExtResource("2_entry")]([SubResource("Resource_gear")])
+entries = Array[ExtResource("2_entry")]([SubResource("Resource_gear"), SubResource("Resource_bolts")])

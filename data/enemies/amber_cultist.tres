@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_enemy"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/models/CultistModel.tscn" id="2_model"]
 [ext_resource type="Resource" path="res://data/loot/enemy_common.tres" id="3_loot"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/projectiles/AmberOrb.tscn" id="4_orb"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/projectiles/FireVapePuff.tscn" id="4_orb"]
 
 [resource]
 script = ExtResource("1_enemy")
@@ -19,7 +19,7 @@ attack_windup = 0.7
 strike_time = 0.18
 attack_cooldown = 2.2
 parry_stagger_duration = 1.2
-attack_action = &"swing_heavy"
+attack_action = &"drink"
 walk_speed = 1.6
 run_speed = 3.4
 sight_range = 18.0

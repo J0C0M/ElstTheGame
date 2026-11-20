@@ -29,6 +29,8 @@ Amber de Draak heeft Elst overgenomen en Klaas moet de speler helpen haar macht 
 
 **Voor de game.** Elst was een vredig dorp. Klaas regeerde er min of meer: iedereen kende hem en hij beschermde het dorp. Op een dag kwam Amber de Draak met haar leger van drillers uit Arnhem-Zuid. Dat was te veel voor Klaas. Amber nam Elst over en Klaas moest onderduiken in zijn eigen huis. Alle vredige dorpelingen verdwenen. Sinds Ambers komst draait er een gigantische tornado om Elst heen, zodat niemand erin of eruit kan.
 
+**Waar Amber vandaan komt.** Amber komt uit Zevenaar. Dat was het eerste wat ze veroverde. Pas daarna trok ze naar Arnhem en Arnhem-Zuid, en vandaar naar Elst. De Zevenaarders die bij haar bleven, zijn haar sindsdien trouw: de Amber-cultisten (drillers in een pufferjack onder een amberkleurig gewaad, met vuurvapes) en de drillers op de draakjes. Ze zijn zo diep met Amber verbonden dat ze bij haar blijven, in de kerk. Daarom kom je ze nergens anders tegen.
+
 **Tijdens de game.** De speler is een niemand die in Elst terechtkomt. Klaas neemt de speler onder zijn hoede. Om Amber te verzwakken moet de speler eerst haar aanvoerlijn kapotmaken (Station Elst) en daarna de drie facties verslaan die Elst voor haar bezetten. Elke bevrijde wijk loopt weer vol met blije dorpelingen.
 
 **De Bingo Club.** Grumpy Oma is de nummer 1 bingowinnaar van Elst en een trouwe volger van Amber. Omdat niemand vaker BINGO riep dan zij, zien de oma's en opa's van de Bingo Club haar als hun leider, bijna als een messias. Onder haar is de gezellige bingoclub een grot geworden, de Boomer Cave.
@@ -104,7 +106,7 @@ De speler loopt in third person door Elst en vecht van dichtbij met het zwaard. 
 - **Zware aanval:** ingedrukt houden, langzamer, ×1,8 schade, kost 25 stamina.
 - **Blokkeren:** 70% minder schade van voren. Precies op tijd blokkeren (parry, 0,2 s) zet de vijand kort uit balans.
 - **Ontwijken:** rol met korte onkwetsbaarheid (0,3 s), kost 20 stamina.
-- **Kruisboog (na Quest 5):** richten met de rechtermuisknop, schieten met de linker. Een pijl doet 30 schade en herladen duurt 0,9 s. Je hebt onbeperkt pijlen. Handig tegen Amber als ze vliegt.
+- **Kruisboog (na Quest 5):** richten met de rechtermuisknop, schieten met de linker. Een pijl doet 30 schade en herladen duurt 0,9 s. Elke pijl is op: je krijgt er 15 bij de kruisboog en draagt er hooguit 30. Meer koop je bij Klaas (5 voor 15 goud) of vind je bij vijanden en in kisten. Handig tegen Amber als ze vliegt.
 - **Healing potion:** snel gebruiken met een sneltoets, met een korte animatie waarin je kwetsbaar bent.
 - **Vijanden** tonen een levensbalk boven hun hoofd. Bazen hebben een grote balk onderin beeld.
 
@@ -151,7 +153,7 @@ Elke factie heeft eigen vijanden, een eigen dungeon en een eindbaas met één du
 | --- | --- | --- | --- | --- |
 | De Vape-koning (rijkste vapeverkoper van Westeraam) | Westeraam Getho | 400 | Verstopt zich in één van 4 vape-wolken en schiet daaruit dodelijke vape-wolkjes (15 schade). Onder 50% schiet hij er 3 tegelijk | Ren naar zijn wolk. Hij is dan 4 s kwetsbaar en vlucht daarna naar een andere wolk |
 | Het fatbike-kindje (erg klein, wit, met blauwe ogen, op een veel te grote opgevoerde fatbike) | OBC Elst Fort | 450 | Chargeert in een rechte lijn. Je ziet het aankomen aan een gierende motor en een lijn op de grond. Onder 50% chargeert hij 2 keer achter elkaar | Ontwijk de charge. Knalt hij tegen een muur, dan staat hij 3 s versuft |
-| Grumpy Oma (nummer 1 bingowinnaar, trouwe volger van Amber, de messias van de Bingo Club; een enorme, gespierde oma die eruitziet als een woest beest) | Bingo Club Boomer Cave | 550 | Sjokt op je af en geeft een trage, goed zichtbare klap met haar handtas, daarna moet ze even op adem komen. Springt en ground slamt (schokgolf, spring eroverheen) en draait als een tornado door de arena (dan kun je haar niet raken). Op 2/3 en 1/3 van haar HP roept ze “BINGO!” en komen haar volgelingen helpen; die worden woest. Onder 30% wordt ze sneller | Na een ground slam en na de tornado staat ze 2,5 s uitgeput en krijgt ze 50% extra schade. Pareer je haar klap, dan raakt ze ook uitgeput |
+| Grumpy Oma (nummer 1 bingowinnaar, trouwe volger van Amber, de messias van de Bingo Club; een enorme, gespierde oma die eruitziet als een woest beest) | Bingo Club Boomer Cave | 650 | Sjokt op je af en geeft een trage, goed zichtbare klap met haar handtas, vaak gevolgd door een snelle tweede, daarna moet ze even op adem komen. Blijf je buiten haar bereik, dan gooit ze een waaier bingokaarten. Springt en ground slamt (schokgolf, spring eroverheen) en draait als een tornado door de arena (dan kun je haar niet raken). Op 2/3 en 1/3 van haar HP roept ze “BINGO!” en komen haar volgelingen helpen; die worden woest. Onder 30% wordt ze sneller en slamt ze twee keer achter elkaar | Na een ground slam en na de tornado staat ze 1,8 s uitgeput en krijgt ze 35% extra schade. Pareer je haar klap, dan raakt ze ook uitgeput |
 | Amber de Draak | De Kerk van Amber | 2 × 900 | Houdt afstand en cirkelt om je heen. Fase 1: vuuradem in een kegel (een rode waaier op de grond waarschuwt, met een schaduw achter elke pilaar), staartzwiep, vleugelwind die je wegduwt, opvliegen met een regen van vuurballen. Raak je haar een paar keer snel achter elkaar, dan rent ze brullend een rondje langs de muur. Fase 2: woedend en sneller, zwaait haar vuur, stampt ringen van vuur over de vloer (spring eroverheen), laat brandende plekken achter en roept 2–3 drillers op | Raak haar met de kruisboog als ze vliegt, dan stort ze neer. Op de grond is haar kop kwetsbaar na een vuuradem |
 
 **Amber, het verloop**
@@ -221,6 +223,7 @@ Goud komt uit vijanden, kisten en questbeloningen. In de dungeons heb je een kle
 | Kleine healing potion | Verbruik | +40 HP | 20 goud | 1 |
 | Grote healing potion | Verbruik | +100 HP | 50 goud | 2 |
 | Kruisboog | Wapen | 30 schade per pijl | Beloning, niet te koop | 5 |
+| Kruisboogpijlen (5) | Munitie | Maximaal 30 mee | 15 goud | 5 |
 
 **Inventaris**
 
@@ -395,4 +398,4 @@ Keuzes waar de idee-notitie niets zei of zichzelf tegensprak, met het besluit va
 **Nog open**
 
 - [ ] Welke sidequests komen er? De eigenaar komt hierop terug als we Prototype 2 gaan ontwerpen.
-- [x] Eigen vijanden in de kerk, naast die van de andere dungeons: **Amber-cultisten** uit Zevenaar, in amber-oranje gewaden met een pufferjack eronder, die Amber aanbidden. Ze schieten amberkleurige vuurbollen, en hun gezang maakt vijanden in de buurt woest en geneest ze. En **draakjes** met een driller op hun rug, die vuurballen spugen; daar oefen je de kruisboog op voordat Amber gaat vliegen. Valt een draakje, dan vecht de driller te voet verder (eigenaar, Fase 11).
+- [x] Eigen vijanden in de kerk, naast die van de andere dungeons: **Amber-cultisten** uit Zevenaar, drillers in een zwart pufferjack onder een amber-oranje gewaad, die Amber aanbidden. Ze vapen vuur met een rode vuurvape, en hun gezang maakt vijanden in de buurt woest en geneest ze. En **draakjes** met een driller op hun rug, die vuurballen spugen; daar oefen je de kruisboog op voordat Amber gaat vliegen. Valt een draakje, dan vecht de driller te voet verder (eigenaar, Fase 11).

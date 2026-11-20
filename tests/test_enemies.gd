@@ -43,6 +43,7 @@ func _run() -> void:
 	await _test_load_brings_enemies_back()
 	await _go_to("res://scenes/world/Elst.tscn", &"StationExit")
 	await _test_give_up_and_heal()
+	await _test_hunt_after_shot()
 	await _test_warnings()
 	_clear_saves()
 	DirAccess.remove_absolute(TEST_SAVE_DIR)
@@ -190,6 +191,29 @@ func _test_give_up_and_heal() -> void:
 	_check(gave_up, "an enemy gives up when the player gets away")
 	_check(enemy.global_position.distance_to(enemy.home) < 2.0, "it walks back home")
 	_check(enemy.health.current_health == enemy.health.max_health, "it heals up at home")
+
+
+func _test_hunt_after_shot() -> void:
+	# Shot from far away (as with the crossbow), an enemy and its pack come
+	# for the player and do not give up after a few seconds.
+	var start: Vector3 = _main.get_world().get_spawn(&"Start").global_position
+	var shot: Variant = _spawn("res://scenes/enemies/LowDriller.tscn", start + Vector3(0, 0, -30))
+	var mate: Variant = _spawn("res://scenes/enemies/LowDriller.tscn", start + Vector3(4, 0, -30))
+	_place(start, PI)
+	await _frames(10)
+	var distance: float = shot.global_position.distance_to(_player().global_position)
+	shot.hurtbox.receive_hit(load("res://scripts/components/hit_data.gd").new(5, _player(), null))
+	var gave_up: bool = false
+	for i: int in 420:
+		await physics_frame
+		_place(start, PI)
+		gave_up = gave_up or shot.state_machine.get_state_name() == &"Retreat"
+	_check(not gave_up and shot.global_position.distance_to(_player().global_position) < distance - 10.0,
+		"an enemy shot from afar hunts the shooter down and does not give up")
+	_check(mate.state_machine.get_state_name() in [&"Chase", &"Attack"] and mate.hunt_left > 0.0, "its pack comes along")
+	shot.queue_free()
+	mate.queue_free()
+	await _frames(5)
 
 
 func _test_warnings() -> void:

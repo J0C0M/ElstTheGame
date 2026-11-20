@@ -24,6 +24,15 @@ const GUARD_POSE: Dictionary = {
 	&"arm_l": Vector3(60, -30, 0), &"torso": Vector3(0, 10, 0),
 }
 
+## Arms while aiming a crossbow: the right hand holds the grip at the cheek,
+## the left hand supports the stock. Their pitch follows the aim.
+## The torso turns a quarter like with a rifle, the head looks ahead.
+const AIM_ARM_R: Vector3 = Vector3(62, 28, -6)
+const AIM_ARM_L: Vector3 = Vector3(64, 36, 22)
+const AIM_TORSO: Vector3 = Vector3(0, -28, 0)
+## Turn of the crossbow in the hand, so it lies level while the arm slants.
+const AIM_BOW_TURN: float = -62.0
+
 ## Keyframed actions: lists of [time from 0 to 1, pose]. A pose maps joint
 ## names to rotations in degrees; "body_offset" moves the whole body in metres.
 ## Joints an action leaves out keep their walking or idle pose.
@@ -95,6 +104,16 @@ const ACTIONS: Dictionary = {
 		[0.75, {&"arm_r": Vector3(155, 35, 0), &"hand": Vector3(-40, 0, 0), &"head": Vector3(25, 0, 0)}],
 		[1.0, {&"arm_r": Vector3(10, 0, 5), &"hand": Vector3(0, 0, 0), &"head": Vector3(0, 0, 0)}],
 	],
+	# A crossbow shot: a kick up, then the bow goes down, the left hand spans
+	# the string, and the bow comes back up to the cheek.
+	&"crossbow_shoot": [
+		[0.0, {&"arm_r": Vector3(62, 28, -6), &"arm_l": Vector3(64, 36, 22), &"torso": Vector3(0, -28, 0), &"head": Vector3(0, 28, 0)}],
+		[0.08, {&"arm_r": Vector3(80, 28, -6), &"arm_l": Vector3(88, 40, 22), &"torso": Vector3(-8, -32, 0), &"head": Vector3(-6, 30, 0)}],
+		[0.3, {&"arm_r": Vector3(30, 20, -6), &"arm_l": Vector3(40, 30, 18), &"torso": Vector3(9, -20, 0), &"head": Vector3(10, 20, 0)}],
+		[0.62, {&"arm_r": Vector3(30, 20, -6), &"arm_l": Vector3(10, 10, -4), &"torso": Vector3(10, -30, 0), &"head": Vector3(10, 25, 0)}],
+		[0.85, {&"arm_r": Vector3(55, 28, -6), &"arm_l": Vector3(62, 38, 20), &"torso": Vector3(4, -28, 0), &"head": Vector3(4, 28, 0)}],
+		[1.0, {&"arm_r": Vector3(62, 28, -6), &"arm_l": Vector3(64, 36, 22), &"torso": Vector3(0, -28, 0), &"head": Vector3(0, 28, 0)}],
+	],
 	&"flex": [
 		[0.0, {&"arm_l": Vector3(0, 0, 0), &"arm_r": Vector3(10, 0, 5), &"torso": Vector3(0, 0, 0), &"head": Vector3(0, 0, 0)}],
 		[0.25, {&"arm_l": Vector3(20, 0, -125), &"arm_r": Vector3(20, 0, 125), &"torso": Vector3(-6, 0, 0), &"head": Vector3(-10, 0, 0)}],
@@ -132,6 +151,9 @@ var _stride_phase: float = 0.0
 var _idle_time: float = 0.0
 var _guard: bool = false
 var _guard_weight: float = 0.0
+var _aim: bool = false
+var _aim_weight: float = 0.0
+var _aim_pitch: float = 0.0
 var _action: StringName = &""
 var _action_time: float = 0.0
 var _action_duration: float = 1.0
@@ -156,6 +178,11 @@ func _physics_process(delta: float) -> void:
 	_guard_weight = move_toward(_guard_weight, 1.0 if _guard else 0.0, delta * 10.0)
 	if _guard_weight > 0.0:
 		_blend_into(pose, GUARD_POSE, _guard_weight)
+	_aim_weight = move_toward(_aim_weight, 1.0 if _aim else 0.0, delta * 8.0)
+	if _aim_weight > 0.0:
+		var lift: Vector3 = Vector3(_aim_pitch, 0, 0)
+		_blend_into(pose, {&"arm_r": AIM_ARM_R + lift, &"arm_l": AIM_ARM_L + lift, &"hand": Vector3.ZERO,
+			&"torso": AIM_TORSO, &"head": Vector3(-_aim_pitch * 0.5, -AIM_TORSO.y, 0)}, _aim_weight)
 	if _action != &"":
 		_action_time += delta
 		var progress: float = _action_time / _action_duration
@@ -171,6 +198,13 @@ func set_locomotion(speed: float, sprinting: bool, on_floor: bool) -> void:
 	_speed = speed
 	_sprinting = sprinting
 	_on_floor = on_floor
+
+
+## Holds a crossbow up to aim while [param active] is true; the arms point
+## [param pitch_degrees] up (negative is down).
+func set_aim(active: bool, pitch_degrees: float = 0.0) -> void:
+	_aim = active
+	_aim_pitch = clampf(pitch_degrees, -45.0, 40.0)
 
 
 ## Holds the blocking pose while [param active] is true.
@@ -199,6 +233,8 @@ func reset_pose() -> void:
 	_action = &""
 	_guard = false
 	_guard_weight = 0.0
+	_aim = false
+	_aim_weight = 0.0
 	_apply({}, 1.0)
 
 

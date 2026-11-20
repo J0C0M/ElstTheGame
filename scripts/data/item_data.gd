@@ -3,7 +3,7 @@ extends Resource
 ## An item: a sword, armour, the crossbow or a consumable. One .tres per item
 ## in res://data/items/. Values come from the GDD.
 
-enum ItemType { SWORD, ARMOR, CROSSBOW, CONSUMABLE }
+enum ItemType { SWORD, ARMOR, CROSSBOW, CONSUMABLE, AMMO }
 
 @export var id: StringName
 ## Name the player sees.
@@ -17,6 +17,8 @@ enum ItemType { SWORD, ARMOR, CROSSBOW, CONSUMABLE }
 @export var heal_amount: int = 0
 ## Price at Klaas' shop. 0 means it is not for sale.
 @export var price: int = 0
+## How many one purchase gives, such as a bundle of arrows.
+@export var bundle: int = 1
 ## Inwijding level at which Klaas starts selling it.
 @export var required_inwijding: int = 0
 ## Can turn up as loot in chests and from bosses.
@@ -32,7 +34,7 @@ enum ItemType { SWORD, ARMOR, CROSSBOW, CONSUMABLE }
 
 
 func is_gear() -> bool:
-	return type != ItemType.CONSUMABLE
+	return type in [ItemType.SWORD, ItemType.ARMOR, ItemType.CROSSBOW]
 
 
 ## The equipment slot this item goes in: sword, armor or crossbow.
@@ -60,5 +62,7 @@ func describe() -> String:
 			return "%d%% minder schade" % roundi(damage_reduction * 100.0)
 		ItemType.CONSUMABLE:
 			return "+%d HP" % heal_amount
+		ItemType.AMMO:
+			return "%d pijlen voor de kruisboog" % bundle
 		_:
 			return "%d schade" % damage

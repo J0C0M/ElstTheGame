@@ -20,7 +20,7 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 11 | `Add-Amber-Final-Battle` | In aanbouw: blok A (de weg naar Amber) en B (het gevecht) af en tussentijds naar `Development` gemerged (op verzoek van de eigenaar). Verbeteringen aan blok B (Amber, cultisten, draakjes) wachten op akkoord; blok C volgt |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
-Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
+Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voor de kruisboog) wacht op akkoord. `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
 
 ## Prototypes
 
@@ -34,11 +34,10 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 - Paden en wegen zijn erg blokkerig en visueel slecht uitgewerkt: de grond is een raster van 1 m (eigenaar, 19-11-2026).
 - Straten zijn op deze schaal maar 2 tot 3 m breed; daardoor zijn de huizen laag gehouden (zie *Kaart verwerken*).
 - Fatbikers en het fatbike-kindje zitten op hun fiets met lopende benen; een echte rijhouding en draaiende wielen ontbreken nog.
-- Scènes (Klaas die sneuvelt, de tornado die verdwijnt, de eindscène) worden in Prototype 1 eenvoudig maar compleet, en na de grafische overhaul opnieuw gemaakt (eigenaar, 20-11-2026).
+- Scènes (Klaas die sneuvelt, de tornado die verdwijnt, de eindscène) worden in Prototype 1 eenvoudig maar compleet, en na de grafische overhaul opnieuw gemaakt (eigenaar, 20-11-2026). De eindscène met het figuur in de mantel en "plan B" moet in Prototype 2 sowieso opnieuw, omdat er personages bijkomen of veranderen.
 - Dialoog met geluidjes op het ritme van de tekst, zoals in *Undertale* (eigenaar, 20-11-2026).
 - Controller-ondersteuning komt in een later prototype; sidequests bespreken we bij het ontwerp van Prototype 2.
 - De oma's en opa's zijn aangepaste kopieën van het driller-model (met tasje, wandelstok of rolstoel). Een eigen model maakt ze beter herkenbaar. De benen van de rolstoel-oma zijn stijve balken en de wielen draaien niet.
-- De kruisboog is twee blokjes in de hand; een echt model en een zichtbare pijl op de boog ontbreken nog.
 
 ## Fase 0 – Fundament
 
@@ -513,6 +512,8 @@ Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn
   - Ze heeft 900 HP per balk (was 800), dus 1800 in totaal.
   - **Nieuwe aanval in balk 2, de vuurstamp:** staat de speler binnen 14 m, dan steigert ze 1 s en stampt ze. Twee ringen van vuur lopen na elkaar over de vloer (16 schade): spring eroverheen. Daarna kan dat 9 s niet. De eerste keer meldt het spel "Amber steigert! Spring over het vuur!".
   - **Cultisten uit Zevenaar:** "ZEVENAAR" staat in goud op de rug van hun cape. Onder de mantel zijn ze nog een beetje driller: een zwart pufferjack met ribbels en een oranje rits aan de open voorkant, een pufferkraag en pufferboordjes, en witte sneakers. Verder is het ontwerp gelijk gebleven.
+  - **Cultisten echt driller, met een vuurvape (derde ronde):** het bovenlijf is nu een zwart pufferjack met ribbels rondom, een hoge pufferkraag, een oranje rits en pufferkouwen met oranje strepen. De amberkleurige puntkap, het gouden masker, de gloeiende hanger, de cape met ZEVENAAR en het gewaad vanaf de heupen zijn gebleven. De staf is vervangen door een rode vuurvape (een rode mod met een gloeiend scherm en een tank vol vuur). Hun aanval werkt hetzelfde (twee wolkjes tegelijk, 12 schade, dezelfde snelheid), maar het zijn nu oranje vuurwolkjes (`FireVapePuff`, de vape-wolk van Westeraam in vuurkleur) en ze zetten de vape aan hun mond, zoals de vape-drillers. `AmberOrb` is weg.
+  - **Lore van Zevenaar (eigenaar):** Amber komt uit Zevenaar en veroverde dat als eerste, voordat ze in Arnhem terechtkwam. De cultisten en de drillers op de draakjes komen uit Zevenaar en zijn haar sindsdien trouw; daarom zie je ze pas in de kerk. Het staat in het GDD, en Klaas vertelt het bij de arenapoort ("Wie zijn die figuren in die oranje gewaden?").
   - **Ruiters in pufferjacks:** de driller op een draakje is nu een drakenrijder (`DragonRiderModel.tscn`): het zwarte pufferjack van de driller met een oranje rits, oranje strepen op de mouwen en een oranje band om de beanie (Ambers leger), en zijn plank. Valt het draakje, dan vecht hij te voet verder als `DragonRider.tscn` (`dragon_rider.tres`, even sterk als een laag driller).
 - **Tests:** `test_amber.gd` controleert nu ook de vuurstamp, de waarschuwing op de grond, de schaduw van een pilaar, het cirkelen, dat haar lijf nooit in een pilaar of muur komt (ook niet tijdens het rondje), het rondje zelf, het genezen en schieten van de cultisten en de ruiter van het draakje.
 
@@ -527,15 +528,59 @@ Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn
 - **C1, Klaas weer tot leven:** de quest staat dan op doel `revive` (vlag `klaas_revived`, marker `klaas_fallen` op de `KlaasAlly`).
   - Geef `KlaasAlly` een `Interactable` ("Gebruik de Tren-spuit op Klaas") die alleen werkt als hij `FALLEN` is en `tren_spuit_found` gezet is.
   - Speel dan met `Cutscene` een korte scène: `KlaasAlly.revive()`, flexen, een droge regel. Zet `klaas_revived`; daarmee is Quest 6 af en wordt de Inwijding 6.
-- **C2, de tornado verdwijnt:** `TornadoBorder` (`scenes/world/tornado_border.gd`) heeft nog geen `dissolve()`.
-  - Na `klaas_revived`: fade naar Elst, een scène waarin de tornado in ~6 s krimpt en vervaagt.
-  - Daarna, ook na laden, geen tornado en lichtere dieptemist (Environment in `Elst.tscn`). Wel een onzichtbare grens bij de oude ring met de melding "Je hoeft nergens meer heen. Elst is weer van jou."
+- **C2, de tornado verdwijnt:** `TornadoBorder` (`scenes/world/tornado_border.gd`) krijgt een `dissolve()`.
+  - Na de eindscène, ook na laden, geen tornado en lichtere dieptemist (Environment in `Elst.tscn`). Wel een onzichtbare grens bij de oude ring met de melding "Je hoeft nergens meer heen. Elst is weer van jou."
 - **C3, einde:**
-  - Een `LiberatedArea` voor het kerkplein in `tools/map/gen_elst.py` (feest, dorpelingen, lichtjes) op `klaas_revived`.
-  - De eindscène op het kerkplein, waarin Klaas je "een echte Elstenaar" noemt.
+  - **De eindscène (eigenaar, 20-11-2026)** speelt zodra je met de levende Klaas de kerk uit loopt, op het kerkplein in Elst:
+    1. De dorpelingen zijn terug: het kerkplein en de bevrijde wijken lopen vol, Elst is weer blij.
+    2. De camera kijkt naar de tornado, die in ~6 s krimpt en vervaagt; de lucht klaart op.
+    3. Klaas feliciteert je en maakt je een echte Elstenaar (Inwijding 6).
+    4. Een korte overgang naar de verte: een verdacht figuur in een mantel, zijn gezicht niet te zien, bespioneert je. Hij meldt aan zijn baas dat de held Amber heeft verslagen en dat plan B nu geactiveerd moet worden. De baas zie of hoor je niet.
+    5. Terug bij Klaas en de speler: feest in Elst (lichtjes, slingers, dansende dorpelingen op het kerkplein).
+    6. De aftiteling, en daarna speel je vrij verder.
+    - Het figuur in de mantel is een eigen modelscene (makkelijk te vervangen). Deze scène wordt in Prototype 2 sowieso opnieuw gemaakt, omdat personages erbij komen of veranderen; ik houd hem daarom eenvoudig (camera, ondertitels, simpele animaties) en goed los van de rest.
+  - Een `LiberatedArea` voor het kerkplein in `tools/map/gen_elst.py` (feest, dorpelingen, lichtjes) op `klaas_revived`. `gen_elst.py` draait nu ook zonder `kaart_elst.png` (zie hieronder).
   - De aftiteling met "Een game van J0C0M", Godot en de CC0-bronnen uit `CREDITS.md`.
-  - Nieuwe regels voor Klaas thuis (`q6_done` in `gen_klaas_dialogue.py`). Daarna speel je vrij verder.
+  - Nieuwe regels voor Klaas thuis (`q6_done` in `gen_klaas_dialogue.py`).
 - **C4:** `test_amber.gd` uitbreiden met C1–C3. `PROGRESS.md`, `CLAUDE.md`, `README.md` en het GDD bijwerken. Een testchecklist, en dan akkoord en mergen.
+
+## Kaart van het spel en Elst zonder de bronkaart
+
+- **`gen_elst.py` heeft `kaart_elst.png` niet meer nodig.** Het las de kaart alleen voor het grondraster, en dat raster (`data/world/elst_ground.png`) staat in de repo. Ontbreekt de kaart, dan gebruikt het script het raster; `Elst.tscn` komt er byte voor byte hetzelfde uit (gecontroleerd: 443 huizen, 482 bomen).
+- **Nieuwe kaart van Elst zoals in het spel** (`tools/map/render_map.py`, `docs/kaart_elst_spel.png`), in de stijl van de referentiekaart: straten, tuinen, parken, weilanden en water uit het raster, alle huizen en bomen uit dezelfde willekeurige ronde als `gen_elst.py`, de hoofdwegen, het spoor met overwegen, de zes locaties met hun deur, de tornadoring, een legenda, een schaalstok en het noorden. Draai het script opnieuw als de wereld verandert.
+- **Let op:** de kaart die de eigenaar op 20-11-2026 stuurde was de plantekening van `render_plan.py` (met "oude plekken"), niet de bronkaart van 520 × 419 pixels. Die bronkaart is nu niet meer nodig.
+
+## Grumpy Oma zwaarder en de kruisboog met pijlen (`Rebalance-Grumpy-Oma-And-Crossbow`)
+
+Twee punten van de eigenaar na de verbeteringen aan blok B van Fase 11 (20-11-2026).
+
+### Wat is af
+
+- **Grumpy Oma was te makkelijk** en deed te weinig met haar aanvallen. Nu:
+  - 650 HP (was 550) en 18 schade per klap (was 16);
+  - ze loopt sneller (3,8 m/s, was 3) en doet om de 4 s (was 5) een grondslag of tornado; de tornado duurt langer en is sneller;
+  - na haar klap komt vaak (50%, woedend altijd) een snelle tweede klap met de achterkant van haar hand;
+  - blijf je 1,2 s buiten haar bereik, dan gooit ze een waaier van vijf bingokaarten ("BINGO-KAARTEN!", 10 schade per kaart, om de 4 s), zodat je haar niet veilig van afstand kunt beschieten;
+  - woedend (onder 30%) slamt ze twee keer achter elkaar;
+  - ze is korter uitgeput (1,8 s, was 2,5) en krijgt dan 35% extra schade (was 50%).
+- **Pijlen voor de kruisboog:**
+  - Elk schot kost een pijl. Je krijgt er 15 bij de kruisboog en draagt er hooguit 30. Zijn ze op, dan schiet de kruisboog niet en zegt het spel waar je nieuwe vindt.
+  - Klaas verkoopt ze per 5 voor 15 goud (thuis en bij de arena). Vijanden laten soms 2 pijlen vallen (15%), kisten vaak 4 (70%), maar alleen als je de kruisboog hebt.
+  - De HUD toont "x/30 pijlen" naast de drankjes. Op de grond liggen pijlen als een bundeltje.
+  - Een oude save met de kruisboog krijgt bij het laden eenmalig de 15 pijlen.
+- **Vijanden komen op een schutter af:** een vijand die je raakt, gaat 15 s op jacht, samen met zijn groep in de buurt. Hij geeft niet op als hij je niet ziet en mag ver van huis, dus hij loopt niet meer terug om te genezen terwijl je hem van ver beschiet.
+- **Tests:** `test_bingo` controleert de nieuwe aanvallen van Grumpy Oma en de pijlen (15 bij de kruisboog, één per schot, daarna een gespannen pees met een pijl, niet schieten zonder pijlen, kopen per 5, maximaal 30); `test_enemies` controleert dat een beschoten vijand en zijn groep de schutter opzoeken.
+
+- **Kruisboog, pijl en schieten mooier** (derde verzoek):
+  - Nieuw model (`tools/models/gen_crossbow.py`, `CrossbowModel.tscn`): een houten kolf met ijzeren kolfplaat, wangstuk, greep, trekker en ijzeren banden, een groef met noot, een vizier, een stalen boog in twee armen met gouden tippen, een voetbeugel, een pees en een pijl in de groef.
+  - Nieuwe pijl (`BoltModel.tscn`): een stalen breedkop, een ijzeren ring, een houten schacht en drie veren (één rood). In de lucht vliegt hij met de punt vooruit en een vage streep erachter. Hij blijft steken in muren (4 s) en in de vijand die hij raakt (en beweegt dan mee). Een straal per frame zorgt dat een snelle pijl niet door een dunne muur of vijand heen schiet (`bolt.gd`).
+  - Richten: de speler draait zijn romp een kwart, zoals met een geweer, houdt de kolf tegen de borst met de rechterhand aan de greep en de linker eronder, en de armen gaan mee omhoog en omlaag met de camera (`HumanoidModel.set_aim()`).
+  - Schieten: de pees schiet naar voren, de kruisboog slaat omhoog (terugslag), gaat dan omlaag terwijl de linkerhand de pees terugtrekt (de armen van de boog buigen mee) en komt weer omhoog met een nieuwe pijl in de groef (`crossbow_shoot`, 0,9 s). De pijl vertrekt bij de punt van de kruisboog.
+
+### Keuzes en afwijkingen
+
+- **Pijlen oprapen na het schieten** zit er niet in: verschoten pijlen zijn op. Vinden doe je ze bij vijanden en in kisten.
+- **De prijs** (3 goud per pijl) is een startwaarde; drankjes kosten 20 goud.
 
 ## Fase 10 – Quest 5: Bingo Club Boomer Cave
 

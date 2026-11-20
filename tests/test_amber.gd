@@ -2,8 +2,8 @@ extends SceneTree
 ## Headless test for Quest 6 and the church: the church opens after the three
 ## faction bosses (also for a save made before the church could open) and
 ## Quest 6 starts by itself; Klaas is away from home; the church dungeon has
-## enemies of every faction, chanting Amber cultists that heal and cast
-## amber orbs, flying dragonlings that spit fire and whose driller rider
+## enemies of every faction, chanting Amber cultists from Zevenaar that heal
+## and vape fire, flying dragonlings that spit fire and whose driller rider
 ## fights on when they fall, fire grates, a checkpoint in the antechamber, and Klaas with
 ## his last talk and shop, who opens the arena gate. Then the fight: Klaas
 ## follows and fights along, Amber's breath burns but not behind a pillar,
@@ -158,10 +158,10 @@ func _test_church_enemies() -> void:
 	for i: int in 400:
 		await physics_frame
 		for node: Node in enemies.get_children():
-			orb = orb or node.scene_file_path.ends_with("AmberOrb.tscn")
+			orb = orb or node.scene_file_path.ends_with("FireVapePuff.tscn")
 		if orb:
 			break
-	_check(orb, "he casts amber orbs at the player")
+	_check(orb, "he vapes clouds of fire at the player")
 	_player().health.set_health(100)
 	var dragon: Variant = enemies.get_node("Dragonling3")
 	_place(Vector3(12, -10, -138), PI)

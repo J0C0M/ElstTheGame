@@ -150,6 +150,8 @@ func _on_gold_changed(total: int) -> void:
 
 func _on_inventory_changed() -> void:
 	_potion_label.text = "%d/%d drankjes" % [GameState.get_potion_count(), GameState.MAX_POTIONS]
+	if GameState.has_crossbow():
+		_potion_label.text += "  ·  %d/%d pijlen" % [GameState.get_bolt_count(), GameState.MAX_BOLTS]
 
 
 ## Adds a short line above the bars that fades away, such as "+7 goud".

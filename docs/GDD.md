@@ -29,6 +29,8 @@ Amber de Draak heeft Elst overgenomen en Klaas moet de speler helpen haar macht 
 
 **Voor de game.** Elst was een vredig dorp. Klaas regeerde er min of meer: iedereen kende hem en hij beschermde het dorp. Op een dag kwam Amber de Draak met haar leger van drillers uit Arnhem-Zuid. Dat was te veel voor Klaas. Amber nam Elst over en Klaas moest onderduiken in zijn eigen huis. Alle vredige dorpelingen verdwenen. Sinds Ambers komst draait er een gigantische tornado om Elst heen, zodat niemand erin of eruit kan.
 
+**Waar Amber vandaan komt.** Amber komt uit Zevenaar. Dat was het eerste wat ze veroverde. Pas daarna trok ze naar Arnhem en Arnhem-Zuid, en vandaar naar Elst. De Zevenaarders die bij haar bleven, zijn haar sindsdien trouw: de Amber-cultisten (drillers in een pufferjack onder een amberkleurig gewaad, met vuurvapes) en de drillers op de draakjes. Ze zijn zo diep met Amber verbonden dat ze bij haar blijven, in de kerk. Daarom kom je ze nergens anders tegen.
+
 **Tijdens de game.** De speler is een niemand die in Elst terechtkomt. Klaas neemt de speler onder zijn hoede. Om Amber te verzwakken moet de speler eerst haar aanvoerlijn kapotmaken (Station Elst) en daarna de drie facties verslaan die Elst voor haar bezetten. Elke bevrijde wijk loopt weer vol met blije dorpelingen.
 
 **De Bingo Club.** Grumpy Oma is de nummer 1 bingowinnaar van Elst en een trouwe volger van Amber. Omdat niemand vaker BINGO riep dan zij, zien de oma's en opa's van de Bingo Club haar als hun leider, bijna als een messias. Onder haar is de gezellige bingoclub een grot geworden, de Boomer Cave.
@@ -396,4 +398,4 @@ Keuzes waar de idee-notitie niets zei of zichzelf tegensprak, met het besluit va
 **Nog open**
 
 - [ ] Welke sidequests komen er? De eigenaar komt hierop terug als we Prototype 2 gaan ontwerpen.
-- [x] Eigen vijanden in de kerk, naast die van de andere dungeons: **Amber-cultisten** uit Zevenaar, in amber-oranje gewaden met een pufferjack eronder, die Amber aanbidden. Ze schieten amberkleurige vuurbollen, en hun gezang maakt vijanden in de buurt woest en geneest ze. En **draakjes** met een driller op hun rug, die vuurballen spugen; daar oefen je de kruisboog op voordat Amber gaat vliegen. Valt een draakje, dan vecht de driller te voet verder (eigenaar, Fase 11).
+- [x] Eigen vijanden in de kerk, naast die van de andere dungeons: **Amber-cultisten** uit Zevenaar, drillers in een zwart pufferjack onder een amber-oranje gewaad, die Amber aanbidden. Ze vapen vuur met een rode vuurvape, en hun gezang maakt vijanden in de buurt woest en geneest ze. En **draakjes** met een driller op hun rug, die vuurballen spugen; daar oefen je de kruisboog op voordat Amber gaat vliegen. Valt een draakje, dan vecht de driller te voet verder (eigenaar, Fase 11).

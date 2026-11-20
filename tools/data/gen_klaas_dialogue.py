@@ -226,7 +226,17 @@ line("church_hello", "Daar ben je. Amber zit achter die poort. Groot, heet en ch
          choice("Ik wil nog wat kopen of verkopen.", action="open_shop"),
          choice("Ik ben er klaar voor.", "church_go"),
          choice("Nog even niet.", "church_wait"),
+         choice("Wie zijn die figuren in die oranje gewaden?", "church_zevenaar"),
      ])
+line("church_zevenaar", "Zevenaarders. Daar komt Amber vandaan. Zevenaar was het eerste wat ze innam, lang voor Arnhem en lang voor ons.",
+     "church_zevenaar_2")
+line("church_zevenaar_2", "Wie daar bij haar bleef, is haar sindsdien trouw. Cultisten met vuurvapes, drillers op draakjes. "
+     "Die houdt ze dicht bij zich, hier in haar hol. Daarom zag je ze nergens anders.", choices=[
+    choice("Wat moet ik weten?", "church_tips"),
+    choice("Ik wil nog wat kopen of verkopen.", action="open_shop"),
+    choice("Ik ben er klaar voor.", "church_go"),
+    choice("Nog even niet.", "church_wait"),
+])
 line("church_tips", "Achter een pilaar raakt haar vuur je niet. Vliegt ze, pak je kruisboog. Ligt ze op de grond of hijgt ze, sla dan op haar kop.",
      "church_tips_2")
 line("church_tips_2", "En ik trek haar aandacht. Ik ben groter dan jij. Ze kijkt vanzelf naar mij.", choices=[

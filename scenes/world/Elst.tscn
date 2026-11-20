@@ -5934,16 +5934,16 @@ liberated_by_flag = &"station_cleared"
 [node name="Occupied" type="Node3D" parent="Areas/StationArea"]
 
 [node name="LowDriller1" parent="Areas/StationArea/Occupied" instance=ExtResource("90_low_driller")]
-position = Vector3(76, 0, -68)
-rotation = Vector3(0, 2.2, 0)
+position = Vector3(99, 0, -101)
+rotation = Vector3(0, 2.8, 0)
 
 [node name="LowDriller2" parent="Areas/StationArea/Occupied" instance=ExtResource("90_low_driller")]
-position = Vector3(80, 0, -62)
-rotation = Vector3(0, 2.6, 0)
+position = Vector3(93, 0, -102)
+rotation = Vector3(0, 3.5, 0)
 
 [node name="LowDriller3" parent="Areas/StationArea/Occupied" instance=ExtResource("90_low_driller")]
-position = Vector3(72, 0, -61)
-rotation = Vector3(0, 1.9, 0)
+position = Vector3(104, 0, -79)
+rotation = Vector3(0, 3, 0)
 
 [node name="Liberated" type="Node3D" parent="Areas/StationArea"]
 
@@ -5975,11 +5975,15 @@ liberated_by_flag = &"boss_vape_koning"
 [node name="Occupied" type="Node3D" parent="Areas/WesteraamArea"]
 
 [node name="Driller1" parent="Areas/WesteraamArea/Occupied" instance=ExtResource("91_driller")]
-position = Vector3(146, 0, -28)
-rotation = Vector3(0, 3.4, 0)
+position = Vector3(160, 0, -68)
+rotation = Vector3(0, 2.9, 0)
 
 [node name="Driller2" parent="Areas/WesteraamArea/Occupied" instance=ExtResource("91_driller")]
-position = Vector3(152, 0, -24)
+position = Vector3(152, 0, -69)
+rotation = Vector3(0, 3.4, 0)
+
+[node name="Driller3" parent="Areas/WesteraamArea/Occupied" instance=ExtResource("91_driller")]
+position = Vector3(157, 0, -59)
 rotation = Vector3(0, 3.1, 0)
 
 [node name="Liberated" type="Node3D" parent="Areas/WesteraamArea"]

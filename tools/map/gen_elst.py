@@ -53,14 +53,16 @@ ROOFS = [(0.3, 0.28, 0.3), (0.58, 0.24, 0.17), (0.22, 0.22, 0.24), (0.46, 0.2, 0
 MAIN_HALF_WIDTH = 4.0
 BALLAST_HALF_WIDTH = 2.5
 
-# Enemies outside: three laag drillers on the Stationsstraat, two drillers
-# south of Westeraam. (name, scene id, x, z, yaw)
+# Enemies outside: three laag drillers guard Amber's depot and the square of
+# the station, three drillers the courtyard of Westeraam, facing the way the
+# player comes in (south, yaw about pi). (name, scene id, x, z, yaw)
 ENEMIES = [
-    ("LowDriller1", "90_low_driller", 76.0, -68.0, 2.2),
-    ("LowDriller2", "90_low_driller", 80.0, -62.0, 2.6),
-    ("LowDriller3", "90_low_driller", 72.0, -61.0, 1.9),
-    ("Driller1", "91_driller", 146.0, -28.0, 3.4),
-    ("Driller2", "91_driller", 152.0, -24.0, 3.1),
+    ("LowDriller1", "90_low_driller", 99.0, -101.0, 2.8),
+    ("LowDriller2", "90_low_driller", 93.0, -102.0, 3.5),
+    ("LowDriller3", "90_low_driller", 104.0, -79.0, 3.0),
+    ("Driller1", "91_driller", 160.0, -68.0, 2.9),
+    ("Driller2", "91_driller", 152.0, -69.0, 3.4),
+    ("Driller3", "91_driller", 157.0, -59.0, 3.1),
     # Kakkers on the pitch inside OBC Elst Fort, well inside its walls.
     ("Voetballer1", "92_voetballer", -164.0, 72.0, 1.6),
     ("Voetballer2", "92_voetballer", -162.0, 84.0, 1.4),
@@ -70,6 +72,11 @@ ENEMIES = [
     ("BingoOma2", "94_oma", -22.0, -88.0, 3.0),
     ("BingoOpa1", "95_opa", -27.0, -82.0, 3.1),
 ]
+# Open spots without houses, where the first patrols stood. Fixed, because
+# the houses fill the town in one random pass: moving a spot reshuffles
+# every house and tree.
+CLEAR_SPOTS = [(76.0, -68.0), (80.0, -62.0), (72.0, -61.0), (146.0, -28.0), (152.0, -24.0), (-164.0, 72.0), (-162.0, 84.0),
+               (-168.0, 78.0), (-32.0, -86.0), (-22.0, -88.0), (-27.0, -82.0)]
 # Areas that change once liberated: node name, flag, the enemies (from ENEMIES)
 # that patrol it until then, and the villagers (x, z) that come after, with
 # their lines and a warm light in the middle.
@@ -79,7 +86,7 @@ AREAS = [
     ("StationArea", "station_cleared", ["LowDriller1", "LowDriller2", "LowDriller3"],
      [(104.0, -60.0), (112.0, -57.0), (118.0, -62.0)], (110.0, -60.0),
      ["De treinen rijden weer!", "Eindelijk weer een trein naar Nijmegen.", "Geen eiwitshakes meer voor Amber!", "Dank je wel!"]),
-    ("WesteraamArea", "boss_vape_koning", ["Driller1", "Driller2"],
+    ("WesteraamArea", "boss_vape_koning", ["Driller1", "Driller2", "Driller3"],
      [(152.0, -66.0), (160.0, -64.0), (156.0, -60.0), (162.0, -70.0)], (157.0, -66.0),
      ["Geen vapewolken meer in de portiek!", "De Vape-koning is weg. Ik kan weer ademen.", "Westeraam is weer van ons!", "Dank je wel!"]),
     ("OBCArea", "boss_fatbike_kindje", ["Voetballer1", "Voetballer2", "Fatbiker1"],
@@ -274,7 +281,7 @@ def blocked_spot(x, z, extra):
     for ax, az in door_aprons():
         if math.hypot(x - ax, z - az) < 10.0:
             return True
-    for _, _, ex, ez, _ in ENEMIES:
+    for ex, ez in CLEAR_SPOTS:
         if math.hypot(x - ex, z - ez) < 7.0 + extra:
             return True
     return False

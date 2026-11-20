@@ -8,8 +8,10 @@ The last and hardest dungeon goes down, level by level:
   and the sacristy where the stairs go down;
 - -5 m, the crypt: a corridor with grave niches, a tomb hall with
   sarcophagi and two dead ends (a chest, and an ambush);
-- -10 m, the catacombs: a junction, a long corridor west to a dead end with
-  a chest, and a wide tunnel where fatbikers can charge;
+- -10 m, the catacombs: a high cave with walls of skulls and amber crystals,
+  a corridor west to the shrine of Amber (an idol of her head, cultists and
+  a chest), and a wide tunnel with fire grates where fatbikers charge and
+  little dragons fly;
 - -15 m, the antechamber: quiet, with Klaas, a checkpoint and a bench, and
   the gate to the round arena of Amber with five long pillars.
 Stairs are ramps, so the player can walk back up. No two rooms lie above
@@ -20,7 +22,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from dungeon_builder import Dungeon, aim_enemies, vec  # noqa: E402
+from dungeon_builder import Dungeon, aim_enemies, open_sides, vec  # noqa: E402
 
 OUT = pathlib.Path("scenes/dungeons/Kerk.tscn")
 
@@ -43,31 +45,34 @@ ARENA_FLOOR = -15
 # Arcades between the nave and the side aisles: (centre z, width, top).
 ARCADES = [(-14, 5, 6), (-22, 5, 6), (-30, 5, 6), (-38, 5, 6)]
 ROOMS = {
-    # Level 0: the church.
-    "Portaal": ((-6, 6, -10, 0), STONE, 5.0, {"N": [(0, 4)], "S": [], "W": [], "E": []}),
-    "Schip": ((-8, 8, -46, -10), STONE, 12.0, {"N": [(0, 14)], "S": None, "W": ARCADES, "E": ARCADES},
+    # Level 0: the church. The higher or wider room of two neighbours builds
+    # the wall between them; open_sides() checks that none is left open.
+    "Portaal": ((-6, 6, -10, 0), STONE, 5.0, {"N": None, "S": [], "W": [], "E": []}),
+    "Schip": ((-8, 8, -46, -10), STONE, 12.0, {"N": [(0, 14)], "S": [(0, 4)], "W": ARCADES, "E": ARCADES},
               {"floor_color": (0.5, 0.42, 0.36)}),
     "ZijbeukWest": ((-16, -8, -46, -10), STONE, 7.0, {"N": [], "S": [], "W": [], "E": None}),
     "ZijbeukOost": ((8, 16, -46, -10), STONE, 7.0, {"N": [], "S": [], "W": None, "E": []}),
     "Koor": ((-8, 8, -58, -46), STONE, 12.0, {"N": [], "S": None, "W": [], "E": [(-54, 3)]}, {"floor_color": (0.5, 0.42, 0.36)}),
-    "Sacristie": ((8, 16, -58, -50), DARK_STONE, 4.0, {"N": [(12, 4)], "S": [], "W": None, "E": []}),
-    "Trap1": ((10, 14, -76, -58), CRYPT, 9.0, {"N": [(12, 4)], "S": None, "W": [], "E": []}, {"floor": -5}),
+    "Sacristie": ((8, 16, -58, -50), DARK_STONE, 4.0, {"N": [(12, 6)], "S": [], "W": None, "E": []}),
+    # Stairs are 6 m wide rooms with a ramp, as wide as the doorways they join.
+    "Trap1": ((9, 15, -76, -58), CRYPT, 9.0, {"N": [(12, 6)], "S": None, "W": [], "E": []}, {"floor": -5}),
     # Level -5: the crypt.
-    "Cryptegang": ((9, 15, -100, -76), CRYPT, 4.0, {"N": [(12, 4)], "S": None, "W": [(-88, 4)], "E": [(-88, 3)]}, {"floor": -5}),
-    "Grafkamer": ((-10, 9, -96, -80), CRYPT, 5.0, {"N": [], "S": [], "W": [(-88, 3)], "E": None}, {"floor": -5}),
+    "Cryptegang": ((9, 15, -100, -76), CRYPT, 4.0, {"N": [(12, 6)], "S": None, "W": [(-88, 4)], "E": [(-88, 3)]}, {"floor": -5}),
+    "Grafkamer": ((-10, 9, -96, -80), CRYPT, 4.0, {"N": [], "S": [], "W": [(-88, 3)], "E": None}, {"floor": -5}),
     "Doodlopend1": ((15, 25, -92, -84), CRYPT, 3.6, {"N": [], "S": [], "W": None, "E": []}, {"floor": -5}),
     "Doodlopend2": ((-20, -10, -94, -82), CRYPT, 3.6, {"N": [], "S": [], "W": [], "E": None}, {"floor": -5}),
-    "Trap2": ((9, 15, -118, -100), CATACOMB, 9.0, {"N": [(12, 4)], "S": None, "W": [], "E": []}, {"floor": -10}),
-    # Level -10: the catacombs.
-    "Catacomben": ((4, 20, -130, -118), CATACOMB, 4.5, {"N": [(12, 6)], "S": None, "W": [(-124, 4)], "E": []}, {"floor": -10}),
-    "GangWest": ((-30, 4, -127, -121), CATACOMB, 4.0, {"N": [], "S": [], "W": [(-124, 4)], "E": None}, {"floor": -10}),
-    "Doodlopend3": ((-40, -30, -132, -116), CATACOMB, 4.0, {"N": [], "S": [], "W": [], "E": None}, {"floor": -10}),
-    "Fietstunnel": ((6, 18, -170, -130), CATACOMB, 5.0, {"N": [(12, 4)], "S": None, "W": [], "E": []}, {"floor": -10}),
-    "Trap3": ((9, 15, -188, -170), DARK_STONE, 9.0, {"N": [(12, 4)], "S": None, "W": [], "E": []}, {"floor": -15}),
+    "Trap2": ((9, 15, -118, -100), CATACOMB, 9.0, {"N": None, "S": None, "W": [], "E": []}, {"floor": -10}),
+    # Level -10: the catacombs, a high cave, the shrine of Amber and the tunnel.
+    "Catacomben": ((4, 20, -130, -118), CATACOMB, 9.0, {"N": [(12, 12, 5)], "S": [(12, 6)], "W": [(-124, 4)], "E": []}, {"floor": -10}),
+    "GangWest": ((-30, 4, -127, -121), CATACOMB, 4.0, {"N": [], "S": [], "W": None, "E": None}, {"floor": -10}),
+    "Heiligdom": ((-46, -30, -136, -112), (0.32, 0.22, 0.16), 7.0, {"N": [], "S": [], "W": [], "E": [(-124, 4)]}, {"floor": -10}),
+    "Fietstunnel": ((6, 18, -170, -130), CATACOMB, 5.0, {"N": [(12, 6)], "S": None, "W": [], "E": []}, {"floor": -10}),
+    "Trap3": ((9, 15, -188, -170), DARK_STONE, 9.0, {"N": None, "S": None, "W": [], "E": []}, {"floor": -15}),
     # Level -15: the antechamber and the way into the arena.
-    "Voorkamer": ((2, 22, -204, -188), DARK_STONE, 6.0, {"N": [(12, 6)], "S": None, "W": [], "E": []}, {"floor": -15}),
-    "Poort": ((8, 16, -208, -204), DARK_STONE, 6.0, {"N": None, "S": None, "W": [], "E": []}, {"floor": -15}),
+    "Voorkamer": ((2, 22, -204, -188), DARK_STONE, 9.0, {"N": [(12, 6)], "S": [(12, 6)], "W": [], "E": []}, {"floor": -15}),
+    "Poort": ((9, 15, -210, -204), DARK_STONE, 6.0, {"N": None, "S": None, "W": [], "E": []}, {"floor": -15}),
 }
+
 
 # (name, x, z, size, colour, solid, floor height)
 PROPS = [
@@ -89,7 +94,6 @@ PROPS = [
     ("Sarcophagus5", 6, -92, (1.2, 0.9, 2.4), DARK_STONE, True, -5),
     ("AmbushCoffin", -18, -88, (1.2, 0.7, 2.2), WOOD, True, -5),
     # The catacombs: bone heaps and old bikes in the tunnel.
-    ("BoneHeap1", -36, -128, (2.4, 0.8, 1.6), WHITE, True, -10),
     ("BoneHeap2", -24, -126, (1.6, 0.6, 1.0), WHITE, True, -10),
     ("BikeWreck", 16.5, -150, (1.0, 1.0, 2.2), (0.3, 0.1, 0.1), True, -10),
     ("Barrels", 7.2, -138, (1.2, 1.2, 1.2), AMBER, True, -10),
@@ -103,7 +107,8 @@ for row, z in enumerate(range(-16, -41, -3)):
 for i in range(9):
     PROPS.append((f"OrganPipe{i}", -3.6 + i * 0.9, -57.4, (0.4, 4 + abs(4 - i) * -0.5 + 3, 0.4), GOLD, False, 3))
 for n, (x, z) in enumerate([(9.6, -80), (9.6, -86), (9.6, -92), (9.6, -98), (14.4, -80), (14.4, -96)]):
-    PROPS.append((f"Niche{n}", x, z, (0.3, 1.2, 1.6), (0.15, 0.13, 0.12), False, -4))
+    PROPS.append((f"Niche{n}", x, z, (0.3, 1.2, 1.6), (0.3, 0.22, 0.16), False, -4))
+    PROPS.append((f"Skull{n}", x + (0.18 if x < 12 else -0.18), z, (0.25, 0.25, 0.28), WHITE, False, -3.8))
 
 # (name, x, y, z, yaw, text, colour)
 LABELS = [
@@ -120,22 +125,26 @@ LIGHTS = [
     ("LightOost", 12, 5.5, -28, (1.0, 0.8, 0.55), 1.4, 14),
     ("LightAltar", 0, 6, -51, (1.0, 0.55, 0.15), 3.0, 14),
     ("LightSacristie", 12, 3, -54, (1.0, 0.75, 0.5), 1.0, 8),
-    ("LightTrap1", 12, 0, -68, (1.0, 0.7, 0.4), 1.0, 10),
-    ("LightCrypte1", 12, -2, -82, (1.0, 0.65, 0.35), 1.2, 10),
-    ("LightCrypte2", 12, -2, -96, (1.0, 0.65, 0.35), 1.2, 10),
-    ("LightGraf", -1, -1.5, -88, (1.0, 0.6, 0.3), 1.4, 14),
-    ("LightDood1", 20, -2.5, -88, (1.0, 0.6, 0.3), 0.8, 8),
-    ("LightDood2", -15, -2.5, -88, (1.0, 0.4, 0.2), 0.8, 8),
-    ("LightTrap2", 12, -5, -110, (1.0, 0.6, 0.3), 1.0, 10),
-    ("LightCata", 12, -6.5, -124, (1.0, 0.5, 0.15), 1.4, 12),
-    ("LightGangWest", -12, -6.5, -124, (1.0, 0.5, 0.15), 1.0, 12),
-    ("LightDood3", -35, -6.5, -124, (1.0, 0.5, 0.15), 0.9, 10),
-    ("LightTunnel1", 12, -6, -140, (1.0, 0.5, 0.15), 1.4, 14),
-    ("LightTunnel2", 12, -6, -160, (1.0, 0.5, 0.15), 1.4, 14),
-    ("LightTrap3", 12, -10, -180, (1.0, 0.55, 0.2), 1.0, 10),
-    ("LightVoorkamer", 12, -10.5, -196, (1.0, 0.8, 0.5), 1.8, 14),
+    ("LightTrap1", 12, 0, -68, (1.0, 0.7, 0.4), 1.8, 14),
+    ("LightCrypte1", 12, -2, -82, (1.0, 0.65, 0.35), 2.2, 14),
+    ("LightCrypte2", 12, -2, -96, (1.0, 0.65, 0.35), 2.2, 14),
+    ("LightGraf", -1, -1.5, -88, (1.0, 0.6, 0.3), 2.5, 18),
+    ("LightDood1", 20, -2.5, -88, (1.0, 0.6, 0.3), 1.4, 12),
+    ("LightDood2", -15, -2.5, -88, (1.0, 0.4, 0.2), 1.4, 12),
+    ("LightTrap2", 12, -5, -110, (1.0, 0.6, 0.3), 1.8, 14),
+    ("LightCata", 12, -6.5, -124, (1.0, 0.5, 0.15), 2.5, 16),
+    ("LightGangWest", -12, -6.5, -124, (1.0, 0.5, 0.15), 1.8, 16),
+    ("LightHeiligdom", -38, -5, -124, (1.0, 0.45, 0.1), 2.6, 16),
+    ("LightTunnel1", 12, -6, -140, (1.0, 0.5, 0.15), 2.5, 18),
+    ("LightTunnel2", 12, -6, -160, (1.0, 0.5, 0.15), 2.5, 18),
+    ("LightTrap3", 12, -10, -180, (1.0, 0.55, 0.2), 1.8, 14),
+    ("LightVoorkamer", 12, -10.5, -196, (1.0, 0.8, 0.5), 3.2, 18),
     ("LightArena1", 12, -3, -228, (1.0, 0.45, 0.1), 3.0, 30),
     ("LightArena2", 12, -12, -214, (1.0, 0.5, 0.15), 1.6, 16),
+    ("LightCataCrystal", 6, -7, -128, (1.0, 0.6, 0.15), 1.6, 10),
+    ("LightTunnel3", 12, -6, -150, (1.0, 0.45, 0.1), 2.0, 16),
+    ("LightGateWest", 6, -12, -201, (1.0, 0.5, 0.15), 1.8, 9),
+    ("LightGateEast", 18, -12, -201, (1.0, 0.5, 0.15), 1.8, 9),
 ]
 # Enemies of every faction, as strong as in their own dungeon. (name, scene id, x, z, yaw)
 ENEMIES = [
@@ -149,13 +158,17 @@ ENEMIES = [
     ("Rolstoel1", "27_rolstoel", 3, -94, 0), ("LowDriller4", "20_low", -7, -92, 0), ("Oma3", "25_oma", -15, -85, 0),
     ("Oma4", "25_oma", -15, -91, 0), ("Opa3", "26_opa", -17, -88, 0),
     # The catacombs.
-    ("VapeDriller4", "22_vape", 8, -126, 0), ("Voetballer1", "23_voetballer", 16, -122, 0), ("LowDriller5", "20_low", -10, -124, 0),
-    ("Rolstoel2", "27_rolstoel", -35, -120, 0), ("Fatbiker1", "24_fatbiker", 12, -140, 0), ("Fatbiker2", "24_fatbiker", 9, -155, 0),
-    ("Voetballer2", "23_voetballer", 15, -160, 0), ("Voetballer3", "23_voetballer", 10, -165, 0),
+    ("VapeDriller4", "22_vape", 8, -126, 0), ("Voetballer1", "23_voetballer", 16, -122, 0),     ("Rolstoel2", "27_rolstoel", -34, -116, 0), ("Fatbiker1", "24_fatbiker", 12, -140, 0), ("Fatbiker2", "24_fatbiker", 9, -155, 0),
+    ("Voetballer2", "23_voetballer", 15, -160, 0),
+    # Amber's own: cultists who chant and little dragons who fly and spit fire.
+    ("Cultist1", "28_cultist", 0, -49.5, 0), ("Cultist2", "28_cultist", -1, -81.5, 0), ("Cultist3", "28_cultist", 12, -121, 0),
+    ("Cultist4", "28_cultist", -38, -118, 0), ("Cultist5", "28_cultist", -38, -130, 0), ("Cultist6", "28_cultist", -39.5, -124, 0),
+    ("Dragonling1", "29_dragonling", 8, -127, 0), ("Dragonling2", "29_dragonling", -34, -124, 0),
+    ("Dragonling3", "29_dragonling", 12, -148, 0), ("Dragonling4", "29_dragonling", 12, -163, 0),
 ]
 # The hardest dungeon: nearly all of them face the player coming in.
 ENEMIES = aim_enemies(ENEMIES, ROOMS, (0, -4), 0.85, seed=11)
-CHESTS = [("ChestCrypte", 23, -88, -1.5708), ("ChestCatacomben", -38, -124, 1.5708)]
+CHESTS = [("ChestCrypte", 23, -88, -1.5708), ("ChestHeiligdom", -44.5, -132.5, 0.7854)]
 CHECKPOINT = (8, -196)
 BENCH = (21.15, -196, 1.5708)
 KLAAS_SPOT = (12, -199)
@@ -195,9 +208,56 @@ def build_crypt_and_catacomb_details(d):
         d.visual("Structure", f"Crack{n}", (x, -9.97, z), (0.25, 0.02, length), ORANGE, rot=(0, yaw), glow=True)
 
 
+def build_lower_details(d):
+    """The catacomb cave, the shrine of Amber, the tunnel and the gate."""
+    # Walls of skulls on both sides of the cave, and amber crystals.
+    for x in (4.55, 19.45):
+        for row in range(4):
+            for col in range(6):
+                z = -128.5 + col * 1.6 + (0.8 if row % 2 else 0)
+                if -126 < z < -122 and x < 10:
+                    continue
+                d.visual("Structure", f"CaveSkull{int(x)}_{row}_{col}", (x, -9 + row * 0.9, z), (0.22, 0.24, 0.26), WHITE)
+    for n, (x, z, h, yaw) in enumerate([(5.5, -129, 2.4, 0.3), (6.3, -128.4, 1.6, 1.0), (18.6, -119, 2.0, 0.6), (19, -120, 1.2, 1.4),
+                                        (5.2, -119.2, 1.4, 0.8)]):
+        d.visual("Structure", f"Crystal{n}", (x, -10 + h / 2, z), (0.5, h, 0.5), AMBER, rot=(0.2, yaw), glow=True)
+    for n, (x, z, length) in enumerate([(8, -122, 1.6), (15, -127, 2.2), (11, -125, 1.2), (17, -121, 1.8), (6, -125, 1.4)]):
+        d.visual("Structure", f"Stalactite{n}", (x, -1 - length / 2, z), (0.5, length, 0.5), CATACOMB)
+    # The shrine of Amber: her head as an idol, small pews and candles.
+    d.solid("Structure", "IdolPedestal", (-43.5, -9.25, -124), (3, 1.5, 4), DARK_STONE)
+    d.solid("Structure", "IdolHead", (-43.5, -7.2, -124), (2.6, 2.4, 2.4), AMBER)
+    d.visual("Structure", "IdolSnout", (-41.7, -7.6, -124), (1.4, 1.2, 1.6), AMBER)
+    d.visual("Structure", "IdolJaw", (-41.9, -8.5, -124), (1.2, 0.3, 1.4), (0.55, 0.25, 0.08))
+    for dz in (-0.7, 0.7):
+        d.visual("Structure", f"IdolHorn{int(dz * 10)}", (-44.3, -5.4, -124 + dz), (0.4, 1.4, 0.4), (0.3, 0.15, 0.05), rot=(dz * 0.5, 0))
+        d.visual("Structure", f"IdolEye{int(dz * 10)}", (-42.18, -6.8, -124 + dz * 0.8), (0.06, 0.3, 0.4), (1.0, 0.9, 0.2), glow=True)
+    for row, x in enumerate((-37, -34.5)):
+        for z in (-128, -120):
+            d.solid("Structure", f"ShrinePew{row}{abs(z)}", (x, -9.75, z), (0.6, 0.5, 3.4), WOOD)
+    for n, (x, z) in enumerate([(-42, -128.5), (-42, -119.5), (-45, -128.5), (-45, -119.5)]):
+        d.visual("Structure", f"ShrineCandle{n}", (x, -9.3, z), (0.25, 1.4, 0.25), WHITE)
+        d.visual("Structure", f"ShrineFlame{n}", (x, -8.45, z), (0.22, 0.3, 0.22), ORANGE, glow=True)
+    for n, z in enumerate((-133, -115)):
+        d.visual("Structure", f"ShrineBanner{n}", (-45.4, -6, z), (0.08, 3.5, 1.6), AMBER)
+    # The tunnel: rubble, wrecked bikes and skull niches.
+    for n, (x, z, w) in enumerate([(7.4, -146, 1.4), (16.8, -152, 1.2), (8, -166, 1.0), (16.5, -137, 1.6)]):
+        d.solid("Structure", f"Rubble{n}", (x, -10 + w * 0.3, z), (w, w * 0.6, w * 1.3), CATACOMB, rot=(0, n * 0.7))
+    for n, z in enumerate(range(-136, -168, -6)):
+        for x in (6.45, 17.55):
+            d.visual("Structure", f"TunnelSkull{n}{int(x)}", (x, -8.6, z), (0.2, 0.24, 0.26), WHITE)
+    # The gate of the arena: two dragon heads on pedestals and braziers.
+    for x in (6, 18):
+        d.solid("Structure", f"GateStatue{x}", (x, -14, -201.5), (2, 2, 2), DARK_STONE)
+        d.visual("Structure", f"GateHead{x}", (x, -12, -201.6), (1.6, 1.8, 1.8), AMBER)
+        d.visual("Structure", f"GateEyes{x}", (x, -11.7, -200.68), (1.0, 0.18, 0.06), (1.0, 0.85, 0.2), glow=True)
+        d.visual("Structure", f"GateFire{x}", (x + (2 if x < 12 else -2), -14.2, -202.5), (0.7, 0.6, 0.7), ORANGE, glow=True)
+    for n, x in enumerate((2.6, 21.4)):
+        d.visual("Structure", f"VoorkamerBanner{n}", (x, -10.5, -196), (0.08, 4, 1.8), AMBER)
+
+
 def build_arena(d):
     cx, cz = ARENA_CENTRE
-    d.round_room("Arena", ARENA_CENTRE, ARENA_RADIUS, ARENA_FLOOR, 16, DARK_STONE, segments=28, gaps=(math.pi / 2,))
+    d.round_room("Arena", ARENA_CENTRE, ARENA_RADIUS, ARENA_FLOOR, 16, DARK_STONE, segments=40, gaps=(math.pi / 2,), gap_width=4)
     for i in range(5):
         angle = -math.pi / 2 + i * math.tau / 5
         x, z = cx + 12 * math.cos(angle), cz + 12 * math.sin(angle)
@@ -213,16 +273,21 @@ def build_arena(d):
 
 
 def main():
+    # The arena closes the gate's north side; every other side must be shut.
+    left_open = [side for side in open_sides(ROOMS) if side != "Poort N"]
+    if left_open:
+        sys.exit("Open walls: " + ", ".join(left_open))
     d = Dungeon()
     d.build_rooms(ROOMS, PROPS)
     for name, x, z_a, y_a, z_b, y_b in (("Stairs1", 12, -58, 0, -73, -5), ("Stairs2", 12, -100, -5, -115, -10), ("Stairs3", 12, -170, -10, -185, -15)):
-        d.ramp(name, x, 4, z_a, y_a, z_b, y_b, DARK_STONE)
+        d.ramp(name, x, 6, z_a, y_a, z_b, y_b, DARK_STONE)
     build_church_details(d)
     build_crypt_and_catacomb_details(d)
+    build_lower_details(d)
     build_arena(d)
     d.build_labels_and_lights(LABELS, LIGHTS)
     # The gate of the arena: shut until Klaas is ready.
-    d.solid(".", "ArenaGate", (12, ARENA_FLOOR + 2.5, -205.5), (8, 5, 0.6), (0.3, 0.2, 0.12))
+    d.solid(".", "ArenaGate", (12, ARENA_FLOOR + 2.5, -205.5), (7, 5, 0.6), (0.3, 0.2, 0.12))
     d.nodes[-3] += ['script = ExtResource("34_gate")', 'open_flag = &"klaas_ready"']
     d.nodes[-2][0] = d.nodes[-2][0].replace('parent="./ArenaGate"', 'parent="ArenaGate"')
     d.nodes[-1][0] = d.nodes[-1][0].replace('parent="./ArenaGate"', 'parent="ArenaGate"')
@@ -240,7 +305,10 @@ def main():
            ("Script", "res://scenes/world/location_area.gd", "33_area"),
            ("Script", "res://scripts/world/flag_gate.gd", "34_gate"),
            ("PackedScene", "res://scenes/npcs/Klaas.tscn", "35_klaas"),
-           ("Resource", "res://data/dialogue/klaas_church.tres", "36_dialogue")]
+           ("Resource", "res://data/dialogue/klaas_church.tres", "36_dialogue"),
+           ("PackedScene", "res://scenes/world/props/FireGrate.tscn", "37_grate"),
+           ("PackedScene", "res://scenes/enemies/AmberCultist.tscn", "28_cultist"),
+           ("PackedScene", "res://scenes/enemies/Dragonling.tscn", "29_dragonling")]
     extra = ['[node name="Checkpoint" parent="." instance=ExtResource("31_checkpoint")]', f"position = {vec(CHECKPOINT[0], -15, CHECKPOINT[1])}", "",
              '[node name="RestBench" parent="." instance=ExtResource("32_bench")]', f"position = {vec(BENCH[0], -15, BENCH[1])}",
              f"rotation = {vec(0, BENCH[2], 0)}", "",
@@ -253,6 +321,9 @@ def main():
              'script = ExtResource("4_marker")', 'ids = Array[StringName]([&"klaas_church"])', "",
              '[node name="MarkerArena" type="Marker3D" parent="."]', f"position = {vec(ARENA_CENTRE[0], -14, ARENA_CENTRE[1])}",
              'script = ExtResource("4_marker")', 'ids = Array[StringName]([&"amber"])', ""]
+    for n, (z, offset) in enumerate(((-143, 0.0), (-157, 2.2))):
+        extra += [f'[node name="FireGrate{n + 1}" parent="." instance=ExtResource("37_grate")]', f"position = {vec(12, -10, z)}",
+                  f"offset = {offset}", ""]
     for name, x, z, yaw in CHESTS:
         extra += [f'[node name="{name}" parent="." instance=ExtResource("30_chest")]', f"position = {vec(x, floor_at(x, z), z)}",
                   f"rotation = {vec(0, yaw, 0)}", ""]

@@ -436,6 +436,17 @@ Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn
   - **−10 m, de catacomben:** een kruispunt, een lange gang naar een doodlopende kamer met een kist, en een brede tunnel waar de fatbikers kunnen chargeren. Amberkleurige scheuren en fakkels.
   - **−15 m, de voorkamer:** checkpoint met autosave, een rustbank, Klaas en de poort naar de ronde arena (44 m doorsnee, 5 pilaren, een gloeiend hart).
 - **Vijanden:** even sterk als in hun eigen dungeon. 85% kijkt naar de deur waardoor de speler binnenkomt.
+- **Feedback van de eigenaar op blok A, verwerkt:**
+  - **Ontbrekende muren:** waar een smalle trap op een bredere ruimte uitkwam, of een lage ruimte op een hogere, bleef een stuk muur open. Nu zijn de trappen 6 m breed, net als hun deuren, en bouwt steeds de hogere of bredere ruimte de muur. `open_sides()` in `dungeon_builder.py` controleert dat geen zijde open blijft; `gen_kerk.py` stopt als dat toch gebeurt. De vier andere dungeons zijn ook gecontroleerd: alles dicht.
+  - **Het tweede deel was saai:**
+    - De Amber-cultisten en draakjes uit het plan zijn erbij.
+    - De catacomben zijn een hoge grot met schedelwanden, amberkristallen en stalactieten.
+    - Het heiligdom van Amber heeft een drakenkop als afgodsbeeld, banken, kaarsen, cultisten en een kist.
+    - In de fietstunnel staan twee vuurroosters die om de beurt opvlammen, met puin en schedels.
+    - Bij de arenapoort staan drakenbeelden met vuurschalen.
+    - De onderste lagen zijn veel lichter. Nu 36 vijanden.
+  - **Amber-cultisten** (40 HP, 8 schade, met een staf): hun gezang ("AMBER! AMBER!") maakt om de 6 s alle vijanden binnen 10 m woest (+25%, 5 s), van elke factie.
+  - **Draakjes** (30 HP): vliegen op ~3,6 m hoogte, cirkelen om je heen en spugen vuurballen. Af en toe duiken ze om te bijten, en alleen dan raakt je zwaard ze. De kruisboog raakt ze altijd.
 - **Klaas bij de arena:** een eigen gesprek (`klaas_church.tres`) met tips, de winkel (kopen en verkopen) en "Ik ben er klaar voor". Dat zet `klaas_ready`, en dan gaat de arenapoort (`FlagGate`) open. Tijdens Quest 6 is Klaas niet thuis zodra er geen andere quest meer op hem wacht; op zijn plek ligt een briefje. Thuis vraag je hem "Wat nu met Amber?".
 - **Fix: balans van de drillers** (eigenaar):
   - Laag drillers hebben 20 HP (was 30): met het roestige zwaard dood in twee slagen.
@@ -447,7 +458,7 @@ Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn
 - **Fix: waarschuwen** (eigenaar): een vijand die je opmerkt of die je in de rug slaat, waarschuwt zijn buren één keer.
   - Station en Westeraam: alleen binnen 7 m, zonder kettingreactie, dus geen hele kamer tegelijk.
   - OBC en Bingo Club (`alert_chain`): de waarschuwing gaat door, zodat een hele kamer op je af kan komen, zoals eerst.
-- **Tests:** `tests/test_amber.gd` (15 checks). `test_world` loopt de route door de kerk tot Klaas. `test_enemies` controleert het waarschuwen. `test_station` gebruikt de nieuwe HP.
+- **Tests:** `tests/test_amber.gd` (20 checks). `test_world` loopt de route door de kerk tot Klaas. `test_enemies` controleert het waarschuwen. `test_station` gebruikt de nieuwe HP.
 
 ### Keuzes en afwijkingen
 

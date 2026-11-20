@@ -2,7 +2,8 @@ extends SceneTree
 ## Headless test for Quest 6 and the church: the church opens after the three
 ## faction bosses (also for a save made before the church could open) and
 ## Quest 6 starts by itself; Klaas is away from home; the church dungeon has
-## enemies of every faction, a checkpoint in the antechamber, and Klaas with
+## enemies of every faction, chanting Amber cultists, flying dragonlings that
+## spit fire and fire grates, a checkpoint in the antechamber, and Klaas with
 ## his last talk and shop, who opens the arena gate. Uses its own save folder.
 ## Run: godot --headless --path . --fixed-fps 60 -s res://tests/test_amber.gd
 ##
@@ -36,6 +37,7 @@ func _run() -> void:
 	await _test_old_save_opens_church()
 	await _test_klaas_away()
 	await _test_church_dungeon()
+	await _test_church_enemies()
 	await _test_klaas_at_the_gate()
 	_clear_saves()
 	DirAccess.remove_absolute(TEST_SAVE_DIR)
@@ -107,6 +109,36 @@ func _test_church_dungeon() -> void:
 	await _frames(60)
 	_check(_step() == &"klaas", "down in the antechamber the quest says: talk to Klaas")
 	_check(_count_saves("auto") > autosaves, "the antechamber is a checkpoint with an autosave")
+
+
+func _test_church_enemies() -> void:
+	var enemies: Variant = _main.get_world().get_node("Enemies")
+	enemies.get_node("Cultist3/Chanter").chant()
+	_check(enemies.get_node("VapeDriller4").damage_multiplier > 1.0, "an Amber cultist's chant fires up the enemies around him")
+	var dragon: Variant = enemies.get_node("Dragonling3")
+	_place(Vector3(12, -10, -138), PI)
+	for i: int in 240:
+		await physics_frame
+		if dragon.mode == 1 and dragon.global_position.y > -7.5:
+			break
+	_check(dragon.mode == 1 and dragon.global_position.y > -7.5, "a dragonling sees the player and flies above them")
+	var fireball: bool = false
+	for i: int in 300:
+		await physics_frame
+		for node: Node in _main.get_world().get_children():
+			fireball = fireball or node.scene_file_path.ends_with("Fireball.tscn")
+		if fireball:
+			break
+	_check(fireball, "it spits fireballs")
+	dragon.health.take_damage(100)
+	await _frames(5)
+	_check(dragon.mode == 3 and not dragon.is_in_group(&"enemies"), "a dragonling can be shot down")
+	var grate: Variant = _main.get_world().get_node("FireGrate1")
+	var burned: bool = false
+	for i: int in 300:
+		await physics_frame
+		burned = burned or grate.is_burning()
+	_check(burned, "the fire grates in the tunnel flare up in turns")
 
 
 func _test_klaas_at_the_gate() -> void:

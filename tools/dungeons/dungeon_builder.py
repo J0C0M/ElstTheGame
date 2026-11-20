@@ -296,3 +296,35 @@ def aim_enemies(enemies, rooms, start, toward_share, seed):
             yaw = rng.uniform(-math.pi, math.pi)
         aimed.append(tuple(enemy[:-1]) + (round(yaw, 3),))
     return aimed
+
+
+def open_sides(rooms):
+    """Sides without a wall (None) that no neighbour closes: a neighbour must
+    build a wall on that line over the whole side, at least as high. Returns
+    "room side" strings; an empty list means the rooms are closed."""
+    def walls(name):
+        (x0, x1, z0, z1), _c, height, sides = rooms[name][:4]
+        opts = rooms[name][4] if len(rooms[name]) > 4 else {}
+        top = opts.get("floor", 0) + height
+        for side, doors in sides.items():
+            if doors is not None:
+                line = {"N": z0, "S": z1, "W": x0, "E": x1}[side]
+                span = (x0, x1) if side in ("N", "S") else (z0, z1)
+                yield side, line, span, top
+    problems = []
+    for name, room in rooms.items():
+        (x0, x1, z0, z1), _c, height, sides = room[:4]
+        opts = room[4] if len(room) > 4 else {}
+        top = opts.get("floor", 0) + height
+        for side, doors in sides.items():
+            if doors is not None:
+                continue
+            line = {"N": z0, "S": z1, "W": x0, "E": x1}[side]
+            span = (x0, x1) if side in ("N", "S") else (z0, z1)
+            facing = {"N": "S", "S": "N", "W": "E", "E": "W"}[side]
+            closed = any(other != name and other_side == facing and abs(other_line - line) < 0.01
+                         and other_span[0] <= span[0] + 0.01 and other_span[1] >= span[1] - 0.01 and other_top >= top - 0.01
+                         for other in rooms for other_side, other_line, other_span, other_top in walls(other))
+            if not closed:
+                problems.append(f"{name} {side}")
+    return problems

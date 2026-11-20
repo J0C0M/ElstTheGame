@@ -23,12 +23,13 @@ extends CharacterBody3D
 ##
 ## When the first bar is empty a scene follows in which Klaas saves the
 ## player and falls. With the second bar she is furious: faster, burning
-## patches where she walks and after her breath, and twice she calls
-## drillers. When she dies she drops the golden Tren syringe. Saving is
+## patches where she walks and after her breath, twice she calls
+## drillers, and she has a new attack: she rears up and stamps, and two
+## rings of fire run over the floor (jump over them). When she dies she drops the golden Tren syringe. Saving is
 ## blocked during the fight and the gate is shut; a GameState flag keeps her
 ## beaten.
 
-enum Mode { WAITING, CHASE, INHALE, BREATH, PANT, TAIL_WINDUP, TAIL, WINGS, TAKEOFF, FLYING, CRASH, DAZED, LAND, TRANSITION, DEAD, ROAR, LAP }
+enum Mode { WAITING, CHASE, INHALE, BREATH, PANT, TAIL_WINDUP, TAIL, WINGS, TAKEOFF, FLYING, CRASH, DAZED, LAND, TRANSITION, DEAD, ROAR, LAP, STOMP }
 
 ## Health per bar, tail and trample damage.
 @export var data: EnemyData
@@ -77,7 +78,7 @@ enum Mode { WAITING, CHASE, INHALE, BREATH, PANT, TAIL_WINDUP, TAIL, WINGS, TAKE
 @export var wing_range: float = 16.0
 @export var wing_cooldown: float = 9.0
 @export_group("Flight")
-@export var flight_interval: float = 16.0
+@export var flight_interval: float = 13.0
 @export var flight_height: float = 8.0
 @export var flight_time: float = 10.0
 ## She hovers over the middle of the arena, this far off it.
@@ -96,7 +97,7 @@ enum Mode { WAITING, CHASE, INHALE, BREATH, PANT, TAIL_WINDUP, TAIL, WINGS, TAKE
 ## Distance from the middle of the arena of her lap, between the pillars
 ## and the wall.
 @export var lap_radius: float = 20.5
-@export var lap_speed: float = 10.0
+@export var lap_speed: float = 13.5
 @export var roar_time: float = 1.1
 @export_group("Second bar")
 @export var enraged_speed_factor: float = 1.3
@@ -107,6 +108,11 @@ enum Mode { WAITING, CHASE, INHALE, BREATH, PANT, TAIL_WINDUP, TAIL, WINGS, TAKE
 @export var helper_offsets: Array[Vector3] = []
 ## Health ratios of the second bar at which she calls drillers.
 @export var help_at: Array[float] = [0.66, 0.33]
+## Her stamp in the second bar: rings of fire that run over the floor.
+@export var fire_wave_scene: PackedScene
+@export var fire_wave_damage: int = 16
+@export var stamp_cooldown: float = 9.0
+@export var stamp_rear_time: float = 1.0
 @export var tren_spuit_scene: PackedScene
 
 const SAVE_BLOCK: StringName = &"boss"
@@ -133,6 +139,8 @@ var target: Node3D
 ## How many times she called drillers, laps she ran and breaths she took, for tests.
 var helps: int = 0
 var laps: int = 0
+var stamps: int = 0
+var _waves_left: int = 0
 var breaths: int = 0
 var _timer: float = 0.0
 var _attack_wait: float = 0.0
@@ -148,7 +156,7 @@ var _flight_from: Vector3
 var _land_from: Vector3
 var _clock: float = 0.0
 var _recent_hits: Dictionary = {}
-var _cooldowns: Dictionary = {&"breath": 0.0, &"tail": 0.0, &"wings": 0.0, &"lap": 0.0}
+var _cooldowns: Dictionary = {&"breath": 0.0, &"tail": 0.0, &"wings": 0.0, &"lap": 0.0, &"stamp": 0.0}
 var _hit_times: Array[float] = []
 var _strafe_side: float = 1.0
 var _strafe_wait: float = 0.0
@@ -299,6 +307,8 @@ func _physics_process(delta: float) -> void:
 				_start_lap(player)
 		Mode.LAP:
 			_run_lap(player, delta, speed_factor)
+		Mode.STOMP:
+			_stamp(player, delta)
 	if mode not in [Mode.TAKEOFF, Mode.FLYING, Mode.CRASH, Mode.LAND]:
 		_keep_clear()
 
@@ -367,6 +377,14 @@ func _stalk(player: Player, delta: float, speed_factor: float) -> void:
 		_timer = wing_time
 		model.pose = AmberModel.Pose.WINGS
 		_cooldowns[&"wings"] = wing_cooldown
+	elif phase == 2 and to_player.length() < 14.0 and _cooldowns[&"stamp"] <= 0.0:
+		mode = Mode.STOMP
+		_timer = stamp_rear_time
+		_waves_left = 2
+		model.pose = AmberModel.Pose.ROAR
+		_cooldowns[&"stamp"] = stamp_cooldown
+		if stamps == 0:
+			EventBus.message_requested.emit("Amber steigert! Spring over het vuur!")
 	elif distance >= 5.0 and distance <= breath_range and target_angle < 30.0 and in_sight and _cooldowns[&"breath"] <= 0.0:
 		mode = Mode.INHALE
 		_timer = inhale_time
@@ -486,7 +504,7 @@ func _room_for_wings() -> bool:
 
 
 func _wings_spread() -> bool:
-	return mode in [Mode.WINGS, Mode.ROAR] or (mode == Mode.TAKEOFF and _timer > TAKEOFF_TIME - TAKEOFF_CROUCH)
+	return mode in [Mode.WINGS, Mode.ROAR, Mode.STOMP] or (mode == Mode.TAKEOFF and _timer > TAKEOFF_TIME - TAKEOFF_CROUCH)
 
 
 # --- Flight.
@@ -558,6 +576,31 @@ func _spit_meteor(player: Player) -> void:
 	var meteor: Node3D = meteor_scene.instantiate() as Node3D
 	get_parent().add_child(meteor)
 	meteor.call(&"launch", mouth, aim, meteor_damage, self, fire_patch_scene, fire_patch_damage)
+
+
+# --- The stamp of her second bar.
+
+## She rears up, then stamps: two rings of fire run out over the floor,
+## one after the other.
+func _stamp(player: Player, delta: float) -> void:
+	_timer -= delta
+	_turn_to(player.global_position, delta, 1.5)
+	if _timer > 0.0:
+		return
+	if _waves_left == 0:
+		_back_to_chase()
+		return
+	if _waves_left == 2:
+		stamps += 1
+		model.pose = AmberModel.Pose.PANT
+	_waves_left -= 1
+	_timer = 0.55 if _waves_left > 0 else 0.9
+	if fire_wave_scene != null:
+		var wave: Node3D = fire_wave_scene.instantiate() as Node3D
+		get_parent().add_child(wave)
+		var chest: Vector3 = (model.get_node("Body/ProbeChest") as Node3D).global_position
+		wave.global_position = Vector3(chest.x, _ground_y, chest.z)
+		wave.call(&"start", fire_wave_damage, self)
 
 
 # --- The lap along the arena wall.

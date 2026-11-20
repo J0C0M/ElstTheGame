@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/Driller.tscn" id="9_driller"]
 [ext_resource type="PackedScene" path="res://scenes/world/props/TrenSpuit.tscn" id="10_spuit"]
 [ext_resource type="Script" path="res://scenes/bosses/amber_breath.gd" id="11_breath"]
+[ext_resource type="PackedScene" path="res://scenes/bosses/FireWave.tscn" id="12_wave"]
 
 [sub_resource type="BoxShape3D" id="Shape_body"]
 size = Vector3(3.0, 3.6, 6.2)
@@ -43,6 +44,7 @@ fire_patch_scene = ExtResource("8_fire")
 helper_scene = ExtResource("9_driller")
 helper_offsets = Array[Vector3]([Vector3(-15, 0, 4), Vector3(15, 0, 4), Vector3(-15, 0, -4), Vector3(15, 0, -4)])
 tren_spuit_scene = ExtResource("10_spuit")
+fire_wave_scene = ExtResource("12_wave")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 2.2, 0)

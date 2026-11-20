@@ -6,6 +6,8 @@ extends Node3D
 ## finish(). Prototype 2 will remake the scenes after the graphics overhaul.
 
 const SAVE_BLOCK: StringName = &"scene"
+## How far the camera stays in front of a wall or pillar it would be behind.
+const WALL_GAP: float = 0.6
 
 var _camera: Camera3D
 var _player: Player
@@ -32,9 +34,10 @@ func _start() -> void:
 	_camera.make_current()
 
 
-## Puts the camera at [param from], looking at [param at].
+## Puts the camera at [param from], looking at [param at]. A wall or pillar
+## in between pulls the camera in front of it, so the shot is never blocked.
 func look(from: Vector3, at: Vector3) -> void:
-	_camera.global_position = from
+	_camera.global_position = _clear_spot(from, at)
 	_camera.look_at(at)
 
 
@@ -44,7 +47,7 @@ func glide(from: Vector3, at: Vector3, seconds: float) -> void:
 	var time: float = 0.0
 	while time < seconds:
 		time += get_physics_process_delta_time()
-		_camera.global_position = start.lerp(from, smoothstep(0.0, 1.0, time / seconds))
+		_camera.global_position = _clear_spot(start.lerp(from, smoothstep(0.0, 1.0, time / seconds)), at)
 		_camera.look_at(at)
 		await get_tree().physics_frame
 
@@ -53,6 +56,17 @@ func glide(from: Vector3, at: Vector3, seconds: float) -> void:
 func say(speaker: String, text: String, seconds: float = 2.6) -> void:
 	EventBus.subtitle_requested.emit(speaker, text, seconds)
 	await wait(seconds)
+
+
+## [param from], or the nearest spot towards [param at] that is in front of
+## any world geometry between the two.
+func _clear_spot(from: Vector3, at: Vector3) -> Vector3:
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(at, from, PhysicsLayers.WORLD)
+	var hit: Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return from
+	var spot: Vector3 = hit["position"] as Vector3
+	return spot + (at - spot).normalized() * WALL_GAP
 
 
 func wait(seconds: float) -> void:

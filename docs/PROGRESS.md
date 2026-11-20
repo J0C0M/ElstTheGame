@@ -34,7 +34,7 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 - Paden en wegen zijn erg blokkerig en visueel slecht uitgewerkt: de grond is een raster van 1 m (eigenaar, 19-11-2026).
 - Straten zijn op deze schaal maar 2 tot 3 m breed; daardoor zijn de huizen laag gehouden (zie *Kaart verwerken*).
 - Fatbikers en het fatbike-kindje zitten op hun fiets met lopende benen; een echte rijhouding en draaiende wielen ontbreken nog.
-- Scènes (Klaas die sneuvelt, de tornado die verdwijnt, de eindscène) worden in Prototype 1 eenvoudig maar compleet, en na de grafische overhaul opnieuw gemaakt (eigenaar, 20-11-2026).
+- Scènes (Klaas die sneuvelt, de tornado die verdwijnt, de eindscène) worden in Prototype 1 eenvoudig maar compleet, en na de grafische overhaul opnieuw gemaakt (eigenaar, 20-11-2026). De eindscène met het figuur in de mantel en "plan B" moet in Prototype 2 sowieso opnieuw, omdat er personages bijkomen of veranderen.
 - Dialoog met geluidjes op het ritme van de tekst, zoals in *Undertale* (eigenaar, 20-11-2026).
 - Controller-ondersteuning komt in een later prototype; sidequests bespreken we bij het ontwerp van Prototype 2.
 - De oma's en opa's zijn aangepaste kopieën van het driller-model (met tasje, wandelstok of rolstoel). Een eigen model maakt ze beter herkenbaar. De benen van de rolstoel-oma zijn stijve balken en de wielen draaien niet.
@@ -528,15 +528,27 @@ Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn
 - **C1, Klaas weer tot leven:** de quest staat dan op doel `revive` (vlag `klaas_revived`, marker `klaas_fallen` op de `KlaasAlly`).
   - Geef `KlaasAlly` een `Interactable` ("Gebruik de Tren-spuit op Klaas") die alleen werkt als hij `FALLEN` is en `tren_spuit_found` gezet is.
   - Speel dan met `Cutscene` een korte scène: `KlaasAlly.revive()`, flexen, een droge regel. Zet `klaas_revived`; daarmee is Quest 6 af en wordt de Inwijding 6.
-- **C2, de tornado verdwijnt:** `TornadoBorder` (`scenes/world/tornado_border.gd`) heeft nog geen `dissolve()`.
-  - Na `klaas_revived`: fade naar Elst, een scène waarin de tornado in ~6 s krimpt en vervaagt.
-  - Daarna, ook na laden, geen tornado en lichtere dieptemist (Environment in `Elst.tscn`). Wel een onzichtbare grens bij de oude ring met de melding "Je hoeft nergens meer heen. Elst is weer van jou."
+- **C2, de tornado verdwijnt:** `TornadoBorder` (`scenes/world/tornado_border.gd`) krijgt een `dissolve()`.
+  - Na de eindscène, ook na laden, geen tornado en lichtere dieptemist (Environment in `Elst.tscn`). Wel een onzichtbare grens bij de oude ring met de melding "Je hoeft nergens meer heen. Elst is weer van jou."
 - **C3, einde:**
-  - Een `LiberatedArea` voor het kerkplein in `tools/map/gen_elst.py` (feest, dorpelingen, lichtjes) op `klaas_revived`.
-  - De eindscène op het kerkplein, waarin Klaas je "een echte Elstenaar" noemt.
+  - **De eindscène (eigenaar, 20-11-2026)** speelt zodra je met de levende Klaas de kerk uit loopt, op het kerkplein in Elst:
+    1. De dorpelingen zijn terug: het kerkplein en de bevrijde wijken lopen vol, Elst is weer blij.
+    2. De camera kijkt naar de tornado, die in ~6 s krimpt en vervaagt; de lucht klaart op.
+    3. Klaas feliciteert je en maakt je een echte Elstenaar (Inwijding 6).
+    4. Een korte overgang naar de verte: een verdacht figuur in een mantel, zijn gezicht niet te zien, bespioneert je. Hij meldt aan zijn baas dat de held Amber heeft verslagen en dat plan B nu geactiveerd moet worden. De baas zie of hoor je niet.
+    5. Terug bij Klaas en de speler: feest in Elst (lichtjes, slingers, dansende dorpelingen op het kerkplein).
+    6. De aftiteling, en daarna speel je vrij verder.
+    - Het figuur in de mantel is een eigen modelscene (makkelijk te vervangen). Deze scène wordt in Prototype 2 sowieso opnieuw gemaakt, omdat personages erbij komen of veranderen; ik houd hem daarom eenvoudig (camera, ondertitels, simpele animaties) en goed los van de rest.
+  - Een `LiberatedArea` voor het kerkplein in `tools/map/gen_elst.py` (feest, dorpelingen, lichtjes) op `klaas_revived`. `gen_elst.py` draait nu ook zonder `kaart_elst.png` (zie hieronder).
   - De aftiteling met "Een game van J0C0M", Godot en de CC0-bronnen uit `CREDITS.md`.
-  - Nieuwe regels voor Klaas thuis (`q6_done` in `gen_klaas_dialogue.py`). Daarna speel je vrij verder.
+  - Nieuwe regels voor Klaas thuis (`q6_done` in `gen_klaas_dialogue.py`).
 - **C4:** `test_amber.gd` uitbreiden met C1–C3. `PROGRESS.md`, `CLAUDE.md`, `README.md` en het GDD bijwerken. Een testchecklist, en dan akkoord en mergen.
+
+## Kaart van het spel en Elst zonder de bronkaart
+
+- **`gen_elst.py` heeft `kaart_elst.png` niet meer nodig.** Het las de kaart alleen voor het grondraster, en dat raster (`data/world/elst_ground.png`) staat in de repo. Ontbreekt de kaart, dan gebruikt het script het raster; `Elst.tscn` komt er byte voor byte hetzelfde uit (gecontroleerd: 443 huizen, 482 bomen).
+- **Nieuwe kaart van Elst zoals in het spel** (`tools/map/render_map.py`, `docs/kaart_elst_spel.png`), in de stijl van de referentiekaart: straten, tuinen, parken, weilanden en water uit het raster, alle huizen en bomen uit dezelfde willekeurige ronde als `gen_elst.py`, de hoofdwegen, het spoor met overwegen, de zes locaties met hun deur, de tornadoring, een legenda, een schaalstok en het noorden. Draai het script opnieuw als de wereld verandert.
+- **Let op:** de kaart die de eigenaar op 20-11-2026 stuurde was de plantekening van `render_plan.py` (met "oude plekken"), niet de bronkaart van 520 × 419 pixels. Die bronkaart is nu niet meer nodig.
 
 ## Grumpy Oma zwaarder en de kruisboog met pijlen (`Rebalance-Grumpy-Oma-And-Crossbow`)
 

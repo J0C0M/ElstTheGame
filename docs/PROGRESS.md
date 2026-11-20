@@ -20,7 +20,7 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 11 | `Add-Amber-Final-Battle` | In aanbouw: blok A (de weg naar Amber) en B (het gevecht) af en tussentijds naar `Development` gemerged (op verzoek van de eigenaar). Verbeteringen aan blok B (Amber, cultisten, draakjes) wachten op akkoord; blok C volgt |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
-Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
+Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voor de kruisboog) wacht op akkoord. `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
 
 ## Prototypes
 
@@ -536,6 +536,32 @@ Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn
   - De aftiteling met "Een game van J0C0M", Godot en de CC0-bronnen uit `CREDITS.md`.
   - Nieuwe regels voor Klaas thuis (`q6_done` in `gen_klaas_dialogue.py`). Daarna speel je vrij verder.
 - **C4:** `test_amber.gd` uitbreiden met C1–C3. `PROGRESS.md`, `CLAUDE.md`, `README.md` en het GDD bijwerken. Een testchecklist, en dan akkoord en mergen.
+
+## Grumpy Oma zwaarder en de kruisboog met pijlen (`Rebalance-Grumpy-Oma-And-Crossbow`)
+
+Twee punten van de eigenaar na de verbeteringen aan blok B van Fase 11 (20-11-2026).
+
+### Wat is af
+
+- **Grumpy Oma was te makkelijk** en deed te weinig met haar aanvallen. Nu:
+  - 650 HP (was 550) en 18 schade per klap (was 16);
+  - ze loopt sneller (3,8 m/s, was 3) en doet om de 4 s (was 5) een grondslag of tornado; de tornado duurt langer en is sneller;
+  - na haar klap komt vaak (50%, woedend altijd) een snelle tweede klap met de achterkant van haar hand;
+  - blijf je 1,2 s buiten haar bereik, dan gooit ze een waaier van vijf bingokaarten ("BINGO-KAARTEN!", 10 schade per kaart, om de 4 s), zodat je haar niet veilig van afstand kunt beschieten;
+  - woedend (onder 30%) slamt ze twee keer achter elkaar;
+  - ze is korter uitgeput (1,8 s, was 2,5) en krijgt dan 35% extra schade (was 50%).
+- **Pijlen voor de kruisboog:**
+  - Elk schot kost een pijl. Je krijgt er 15 bij de kruisboog en draagt er hooguit 30. Zijn ze op, dan schiet de kruisboog niet en zegt het spel waar je nieuwe vindt.
+  - Klaas verkoopt ze per 5 voor 15 goud (thuis en bij de arena). Vijanden laten soms 2 pijlen vallen (15%), kisten vaak 4 (70%), maar alleen als je de kruisboog hebt.
+  - De HUD toont "x/30 pijlen" naast de drankjes. Op de grond liggen pijlen als een bundeltje.
+  - Een oude save met de kruisboog krijgt bij het laden eenmalig de 15 pijlen.
+- **Vijanden komen op een schutter af:** een vijand die je raakt, gaat 15 s op jacht, samen met zijn groep in de buurt. Hij geeft niet op als hij je niet ziet en mag ver van huis, dus hij loopt niet meer terug om te genezen terwijl je hem van ver beschiet.
+- **Tests:** `test_bingo` controleert de nieuwe aanvallen van Grumpy Oma en de pijlen (15 bij de kruisboog, één per schot, niet schieten zonder pijlen, kopen per 5, maximaal 30); `test_enemies` controleert dat een beschoten vijand en zijn groep de schutter opzoeken.
+
+### Keuzes en afwijkingen
+
+- **Pijlen oprapen na het schieten** zit er niet in: verschoten pijlen zijn op. Vinden doe je ze bij vijanden en in kisten.
+- **De prijs** (3 goud per pijl) is een startwaarde; drankjes kosten 20 goud.
 
 ## Fase 10 – Quest 5: Bingo Club Boomer Cave
 

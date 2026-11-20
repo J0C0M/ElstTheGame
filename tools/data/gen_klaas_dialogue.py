@@ -191,14 +191,48 @@ line("sleep_offer", "Het bed staat achterin. Schoenen uit. Slapen is ook trainen
 ])
 line("bye", "Train hard. Of in elk geval een beetje.")
 
-out = ['[gd_resource type="Resource" script_class="DialogueData" format=3]', '',
-       '[ext_resource type="Script" path="res://scripts/data/dialogue_data.gd" id="1_data"]',
-       '[ext_resource type="Script" path="res://scripts/data/dialogue_condition.gd" id="2_condition"]',
-       '[ext_resource type="Script" path="res://scripts/data/dialogue_choice.gd" id="3_choice"]',
-       '[ext_resource type="Script" path="res://scripts/data/dialogue_line.gd" id="4_line"]', '']
-for block in subs:
-    out += block + [""]
-out += ['[resource]', 'script = ExtResource("1_data")', 'speaker = "Klaas"',
-        'starts = Array[StringName]([&"first_meeting", &"tutorial_report", &"tutorial_busy", &"q2_report", &"q3_report", &"q4_report", &"q5_report", &"greeting_strong", &"greeting"])',
-        'lines = Array[ExtResource("4_line")]([' + ", ".join(f'SubResource("{l}")' for l in line_ids) + "])"]
-pathlib.Path("data/dialogue/klaas.tres").write_text("\n".join(out) + "\n")
+def write(path, starts):
+    """Writes the lines made so far as one DialogueData, then starts afresh."""
+    out = ['[gd_resource type="Resource" script_class="DialogueData" format=3]', '',
+           '[ext_resource type="Script" path="res://scripts/data/dialogue_data.gd" id="1_data"]',
+           '[ext_resource type="Script" path="res://scripts/data/dialogue_condition.gd" id="2_condition"]',
+           '[ext_resource type="Script" path="res://scripts/data/dialogue_choice.gd" id="3_choice"]',
+           '[ext_resource type="Script" path="res://scripts/data/dialogue_line.gd" id="4_line"]', '']
+    for block in subs:
+        out += block + [""]
+    out += ['[resource]', 'script = ExtResource("1_data")', 'speaker = "Klaas"',
+            "starts = Array[StringName]([" + ", ".join(f'&"{s}"' for s in starts) + "])",
+            'lines = Array[ExtResource("4_line")]([' + ", ".join(f'SubResource("{l}")' for l in line_ids) + "])"]
+    pathlib.Path(path).write_text("\n".join(out) + "\n")
+    subs.clear()
+    line_ids.clear()
+    conditions.clear()
+
+
+write("data/dialogue/klaas.tres", ["first_meeting", "tutorial_report", "tutorial_busy", "q2_report", "q3_report", "q4_report", "q5_report",
+                                   "greeting_strong", "greeting"])
+
+# Klaas in the church, at the gate of Amber's arena (Quest 6).
+not_ready = cond(forbidden_flag="klaas_ready")
+ready = cond(required_flag="klaas_ready")
+line("church_hello", "Daar ben je. Amber zit achter die poort. Groot, heet en chagrijnig. Net als mijn ex.", condition=not_ready,
+     model_action="flex", choices=[
+         choice("Wat moet ik weten?", "church_tips"),
+         choice("Ik wil nog wat kopen of verkopen.", action="open_shop"),
+         choice("Ik ben er klaar voor.", "church_go"),
+         choice("Nog even niet.", "church_wait"),
+     ])
+line("church_tips", "Achter een pilaar raakt haar vuur je niet. Vliegt ze, pak je kruisboog. Ligt ze op de grond of hijgt ze, sla dan op haar kop.",
+     "church_tips_2")
+line("church_tips_2", "En ik trek haar aandacht. Ik ben groter dan jij. Ze kijkt vanzelf naar mij.", choices=[
+    choice("Ik wil nog wat kopen of verkopen.", action="open_shop"),
+    choice("Ik ben er klaar voor.", "church_go"),
+    choice("Nog even niet.", "church_wait"),
+])
+line("church_go", "Dan gaan we. Blijf naast me en sla. Voor Elst.", action="set_flag", value="klaas_ready", model_action="flex")
+line("church_wait", "Rust uit op die bank. Ik ga nergens heen. Amber ook niet.")
+line("church_ready", "De poort is open. Zeg het maar als je zover bent.", condition=ready, choices=[
+    choice("Ik wil nog wat kopen of verkopen.", action="open_shop"),
+    choice("Kom op, Klaas.", "church_go"),
+])
+write("data/dialogue/klaas_church.tres", ["church_hello", "church_ready"])

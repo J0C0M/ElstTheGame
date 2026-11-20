@@ -1,7 +1,9 @@
 extends SceneTree
 ## Headless test for Quest 6 and the church: the church opens after the three
 ## faction bosses (also for a save made before the church could open) and
-## Quest 6 starts by itself. Uses its own save folder.
+## Quest 6 starts by itself; Klaas is away from home; the church dungeon has
+## enemies of every faction, a checkpoint in the antechamber, and Klaas with
+## his last talk and shop, who opens the arena gate. Uses its own save folder.
 ## Run: godot --headless --path . --fixed-fps 60 -s res://tests/test_amber.gd
 ##
 ## The main script of -s is compiled before the autoloads exist, so project
@@ -32,6 +34,9 @@ func _run() -> void:
 	await _wait_for_world("Elst")
 	await _test_church_opens()
 	await _test_old_save_opens_church()
+	await _test_klaas_away()
+	await _test_church_dungeon()
+	await _test_klaas_at_the_gate()
 	_clear_saves()
 	DirAccess.remove_absolute(TEST_SAVE_DIR)
 	print("test_amber: %d failed" % _failures)
@@ -55,6 +60,104 @@ func _test_old_save_opens_church() -> void:
 	_state.load_data({"flags": ["boss_vape_koning", "boss_fatbike_kindje", "boss_grumpy_oma"]})
 	_quests.load_data({})
 	_check(_state.has_flag(&"church_open") and _quests.get_status(QUEST) == ACTIVE, "a save from before the church opened gets the open church and Quest 6")
+
+
+func _test_klaas_away() -> void:
+	await _stand_at("FrontDoor", 1.6)
+	await _press(&"interact")
+	await _wait_for_world("Huis van Klaas")
+	var house: Variant = _main.get_world()
+	_check(house.find_child("Klaas", true, false) == null and house.get_node("AwayNote").visible, "during Quest 6 Klaas is not home, a note says where he went")
+	await _stand_at("ExitDoor", 1.6)
+	await _press(&"interact")
+	await _wait_for_world("Elst")
+
+
+func _test_church_dungeon() -> void:
+	await _frames(10)
+	await _stand_at("ChurchDoor", 1.8)
+	await _press(&"interact")
+	await _wait_for_world("De Kerk van Amber")
+	await _frames(10)
+	_player().is_invulnerable = true
+	_check(_step() == &"descend", "inside the church the quest says: go down")
+	var factions: Dictionary = {}
+	for enemy: Node in _main.get_world().get_node("Enemies").get_children():
+		factions[enemy.data.faction] = true
+	_check(_main.get_world().get_node("Enemies").get_child_count() >= 25 and factions.size() == 4,
+		"the church has enemies of every faction (%d factions)" % factions.size())
+	var autosaves: int = _count_saves("auto")
+	_place(Vector3(12, -15, -191), PI)
+	await _frames(30)
+	_place(Vector3(8, -15, -196), PI)
+	await _frames(60)
+	_check(_step() == &"klaas", "down in the antechamber the quest says: talk to Klaas")
+	_check(_count_saves("auto") > autosaves, "the antechamber is a checkpoint with an autosave")
+
+
+func _test_klaas_at_the_gate() -> void:
+	var gate: Variant = _main.get_world().get_node("ArenaGate")
+	_check(gate.visible, "the arena gate is shut")
+	var box: Variant = await _talk_to_klaas()
+	_check(box.get_current_line().id == &"church_hello", "Klaas waits at the gate of the arena")
+	box.choose(1)
+	await _frames(3)
+	_check(_main.get_node("UI/Menus/ShopMenu").visible, "one last time to buy and sell with Klaas")
+	await _press(&"pause")
+	await _frames(5)
+	box = await _talk_to_klaas()
+	box.choose(2)
+	_check(_state.has_flag(&"klaas_ready") and _step() == &"amber", "ready: the quest says fight Amber with Klaas")
+	await _press(&"pause")
+	await _frames(5)
+	_check(not gate.visible, "Klaas opens the arena gate")
+
+
+func _talk_to_klaas() -> Variant:
+	var klaas: Node3D = _main.get_world().get_node("Klaas")
+	_place(klaas.global_position + Vector3(0, 0, 1.6), 0.0)
+	await _frames(10)
+	await _press(&"interact")
+	return _main.get_node("UI/Menus/DialogueBox")
+
+
+func _count_saves(save_type: String) -> int:
+	var count: int = 0
+	for meta: Dictionary in root.get_node("SaveManager").list_saves():
+		if meta.get("type") == save_type:
+			count += 1
+	return count
+
+
+func _stand_at(node_name: String, distance: float) -> void:
+	var target: Node3D = _main.get_world().find_child(node_name, true, false)
+	_place(target.global_position - target.global_basis.z * distance, target.global_rotation.y + PI)
+	await _frames(5)
+
+
+func _place(position: Vector3, yaw: float) -> void:
+	var player: Variant = _player()
+	player.teleport(Transform3D(Basis(Vector3.UP, yaw), position))
+	player.camera.yaw = yaw
+
+
+func _player() -> Variant:
+	return _main.get_world().get_player()
+
+
+func _act(action: StringName, pressed: bool) -> void:
+	var event: InputEventAction = InputEventAction.new()
+	event.action = action
+	event.pressed = pressed
+	Input.parse_input_event(event)
+
+
+func _press(action: StringName) -> void:
+	_act(action, true)
+	await process_frame
+	await process_frame
+	_act(action, false)
+	await process_frame
 
 
 func _step() -> StringName:

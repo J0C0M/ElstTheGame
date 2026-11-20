@@ -221,6 +221,11 @@ def main():
     build_crypt_and_catacomb_details(d)
     build_arena(d)
     d.build_labels_and_lights(LABELS, LIGHTS)
+    # The gate of the arena: shut until Klaas is ready.
+    d.solid(".", "ArenaGate", (12, ARENA_FLOOR + 2.5, -205.5), (8, 5, 0.6), (0.3, 0.2, 0.12))
+    d.nodes[-3] += ['script = ExtResource("34_gate")', 'open_flag = &"klaas_ready"']
+    d.nodes[-2][0] = d.nodes[-2][0].replace('parent="./ArenaGate"', 'parent="ArenaGate"')
+    d.nodes[-1][0] = d.nodes[-1][0].replace('parent="./ArenaGate"', 'parent="ArenaGate"')
     ext = [("PackedScene", "res://scenes/enemies/LowDriller.tscn", "20_low"),
            ("PackedScene", "res://scenes/enemies/Driller.tscn", "21_driller"),
            ("PackedScene", "res://scenes/enemies/VapeDriller.tscn", "22_vape"),
@@ -232,13 +237,18 @@ def main():
            ("PackedScene", "res://scenes/world/props/Chest.tscn", "30_chest"),
            ("PackedScene", "res://scenes/world/props/Checkpoint.tscn", "31_checkpoint"),
            ("PackedScene", "res://scenes/world/props/RestBench.tscn", "32_bench"),
-           ("Script", "res://scenes/world/location_area.gd", "33_area")]
+           ("Script", "res://scenes/world/location_area.gd", "33_area"),
+           ("Script", "res://scripts/world/flag_gate.gd", "34_gate"),
+           ("PackedScene", "res://scenes/npcs/Klaas.tscn", "35_klaas"),
+           ("Resource", "res://data/dialogue/klaas_church.tres", "36_dialogue")]
     extra = ['[node name="Checkpoint" parent="." instance=ExtResource("31_checkpoint")]', f"position = {vec(CHECKPOINT[0], -15, CHECKPOINT[1])}", "",
              '[node name="RestBench" parent="." instance=ExtResource("32_bench")]', f"position = {vec(BENCH[0], -15, BENCH[1])}",
              f"rotation = {vec(0, BENCH[2], 0)}", "",
              '[node name="Voorkamer" type="Area3D" parent="."]', f"position = {vec(12, -12, -196)}", "collision_layer = 0",
              "collision_mask = 2", 'script = ExtResource("33_area")', 'id = &"kerk_voorkamer"', 'display_name = "Het hart van de kerk"', "",
              '[node name="CollisionShape3D" type="CollisionShape3D" parent="Voorkamer"]', 'shape = SubResource("Shape_voorkamer")', "",
+             '[node name="Klaas" parent="." instance=ExtResource("35_klaas")]', f"position = {vec(KLAAS_SPOT[0], -15, KLAAS_SPOT[1])}",
+             "rotation = Vector3(0, 3.14159, 0)", 'dialogue = ExtResource("36_dialogue")', "",
              '[node name="MarkerKlaas" type="Marker3D" parent="."]', f"position = {vec(KLAAS_SPOT[0], -14, KLAAS_SPOT[1])}",
              'script = ExtResource("4_marker")', 'ids = Array[StringName]([&"klaas_church"])', "",
              '[node name="MarkerArena" type="Marker3D" parent="."]', f"position = {vec(ARENA_CENTRE[0], -14, ARENA_CENTRE[1])}",

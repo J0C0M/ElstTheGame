@@ -17,6 +17,9 @@
 [ext_resource type="PackedScene" path="res://scenes/world/props/Checkpoint.tscn" id="31_checkpoint"]
 [ext_resource type="PackedScene" path="res://scenes/world/props/RestBench.tscn" id="32_bench"]
 [ext_resource type="Script" path="res://scenes/world/location_area.gd" id="33_area"]
+[ext_resource type="Script" path="res://scripts/world/flag_gate.gd" id="34_gate"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/Klaas.tscn" id="35_klaas"]
+[ext_resource type="Resource" path="res://data/dialogue/klaas_church.tres" id="36_dialogue"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/Villager.tscn" id="29_villager"]
 
 [sub_resource type="Environment" id="Environment_dungeon"]
@@ -937,6 +940,17 @@ size = Vector3(0.3, 0.02, 8)
 [sub_resource type="BoxMesh" id="Box_143"]
 material = SubResource("Mat_16")
 size = Vector3(5, 0.02, 5)
+
+[sub_resource type="BoxShape3D" id="Shape_80"]
+size = Vector3(8, 5, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="Mat_22"]
+albedo_color = Color(0.3, 0.2, 0.12, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Box_144"]
+material = SubResource("Mat_22")
+size = Vector3(8, 5, 0.6)
 
 [sub_resource type="BoxShape3D" id="Shape_voorkamer"]
 size = Vector3(20, 6, 16)
@@ -3469,6 +3483,17 @@ light_color = Color(1, 0.5, 0.15, 1)
 light_energy = 1.6
 omni_range = 16
 
+[node name="ArenaGate" type="StaticBody3D" parent="."]
+position = Vector3(12, -12.5, -205.5)
+script = ExtResource("34_gate")
+open_flag = &"klaas_ready"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ArenaGate"]
+shape = SubResource("Shape_80")
+
+[node name="Mesh" type="MeshInstance3D" parent="ArenaGate"]
+mesh = SubResource("Box_144")
+
 [node name="ExitDoor" parent="." instance=ExtResource("3_door")]
 position = Vector3(0, 0, -0.75)
 target_scene = "res://scenes/world/Elst.tscn"
@@ -3530,6 +3555,11 @@ display_name = "Het hart van de kerk"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Voorkamer"]
 shape = SubResource("Shape_voorkamer")
+
+[node name="Klaas" parent="." instance=ExtResource("35_klaas")]
+position = Vector3(12, -15, -199)
+rotation = Vector3(0, 3.14159, 0)
+dialogue = ExtResource("36_dialogue")
 
 [node name="MarkerKlaas" type="Marker3D" parent="."]
 position = Vector3(12, -14, -199)

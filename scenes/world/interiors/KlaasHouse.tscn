@@ -296,6 +296,21 @@ omni_range = 9.0
 [node name="Klaas" parent="." instance=ExtResource("4_klaas")]
 position = Vector3(0, 0, -3.2)
 rotation = Vector3(0, 3.14159, 0)
+away_during_quest = &"q6_amber"
+away_note_path = NodePath("../AwayNote")
+
+[node name="AwayNote" type="Label3D" parent="."]
+visible = false
+position = Vector3(0, 1.6, -3.2)
+rotation = Vector3(0, 3.14159, 0)
+pixel_size = 0.006
+modulate = Color(1, 0.95, 0.8, 1)
+outline_modulate = Color(0.15, 0.1, 0.25, 1)
+text = "Ben naar de kerk.
+Amber wacht niet, ik ook niet.
+Kom naar beneden. - K"
+font_size = 48
+outline_size = 10
 
 [node name="Bed" parent="." instance=ExtResource("5_bed")]
 position = Vector3(6, 0, -4.2)

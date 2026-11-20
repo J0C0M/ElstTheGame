@@ -8,6 +8,9 @@ extends CharacterBody3D
 ## to the camera.
 ## Speed an unblocked hit pushes the player back with.
 const KNOCKBACK_SPEED: float = 3.0
+## With dev powers: how much faster the player walks, and the flying speed.
+const DEV_SPEED_FACTOR: float = 3.0
+const DEV_FLY_SPEED: float = 10.0
 ## Seconds to load the next bolt.
 const RELOAD_TIME: float = 0.9
 ## Camera field of view while aiming the crossbow.
@@ -91,7 +94,10 @@ func _physics_process(delta: float) -> void:
 	camera.camera.fov = lerpf(camera.camera.fov, AIM_FOV if aiming else _normal_fov, minf(10.0 * delta, 1.0))
 	_no_sword_message_wait = maxf(_no_sword_message_wait - delta, 0.0)
 	state_machine.physics_update(delta)
-	if not is_on_floor():
+	if GameState.dev_powers:
+		# Dev powers fly: Space goes up, Ctrl goes down.
+		velocity.y = Input.get_axis(&"dev_fly_down", &"jump") * DEV_FLY_SPEED
+	elif not is_on_floor():
 		velocity.y -= _gravity * delta
 	# The wind moves the body but is not kept in the velocity, so it stops
 	# as soon as nothing pushes any more.
@@ -270,7 +276,7 @@ func load_data(data: Dictionary) -> void:
 
 
 func _on_hit_received(hit: HitData) -> void:
-	if health.is_dead() or is_invulnerable:
+	if health.is_dead() or is_invulnerable or GameState.dev_powers:
 		return
 	var damage: float = hit.damage
 	var guarded: bool = false

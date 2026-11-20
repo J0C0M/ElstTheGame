@@ -36,6 +36,7 @@ func _run() -> void:
 	await _test_attacks()
 	await _test_block_and_parry()
 	await _test_death_and_respawn()
+	await _test_dev_powers()
 	print("test_player_combat: %d failed" % _failures)
 	quit(1 if _failures > 0 else 0)
 
@@ -160,6 +161,35 @@ func _test_death_and_respawn() -> void:
 	_check(_player.health.current_health == 100, "the player respawns with full health")
 	_check(_player.state_machine.get_state_name() == &"Move", "the player can move again")
 	_check(_player.global_position.distance_to(Vector3(0, 0, 9)) < 0.5, "the player respawns at the spawn point")
+
+
+func _test_dev_powers() -> void:
+	var state: Variant = root.get_node("GameState")
+	state.set_dev_powers(true)
+	await _refill()
+	_teleport(Vector3(0, 0, 9))
+	_act(&"move_forward", true)
+	await _frames(60)
+	_check(_horizontal_speed() > _player.stats.walk_speed * 2.5, "dev powers: much faster (%.1f m/s)" % _horizontal_speed())
+	_act(&"move_forward", false)
+	_act(&"jump", true)
+	await _frames(60)
+	_act(&"jump", false)
+	var height: float = _player.global_position.y
+	await _frames(30)
+	_check(height > 3.0 and absf(_player.global_position.y - height) < 0.3, "dev powers: fly up with Space and hover (%.1f, %.1f)" % [height, _player.global_position.y])
+	_act(&"dev_fly_down", true)
+	await _frames(120)
+	_act(&"dev_fly_down", false)
+	_check(_player.global_position.y < 0.5, "dev powers: fly down with Ctrl")
+	var health_before: int = _player.health.current_health
+	_player.get_node("Hurtbox").receive_hit(load("res://scripts/components/hit_data.gd").new(10, _sparring, null))
+	_check(_player.health.current_health == health_before, "dev powers: no damage")
+	_teleport(Vector3(-3, 0, 1.6))
+	await _tap(&"attack")
+	await _frames(30)
+	_check(_training.get("_mode") == DUMMY_BROKEN, "dev powers: one hit kills")
+	state.set_dev_powers(false)
 
 
 func _wait_for_hit() -> void:

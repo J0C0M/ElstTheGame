@@ -36,6 +36,7 @@ func _run() -> void:
 	await _test_autosave_slots()
 	await _test_version_check()
 	await _test_play_time()
+	await _test_beaten_dungeon()
 	_clear_saves()
 	DirAccess.remove_absolute(TEST_SAVE_DIR)
 	print("test_save: %d failed" % _failures)
@@ -133,6 +134,24 @@ func _test_play_time() -> void:
 	await _frames(30)
 	_check(is_equal_approx(_game_state.play_time, paused_at), "play time stops while paused")
 	_main.resume()
+
+
+func _test_beaten_dungeon() -> void:
+	_game_state.set_flag(&"station_cleared")
+	root.get_node("EventBus").world_change_requested.emit("res://scenes/dungeons/Station.tscn", &"Entrance")
+	await _frames(60)
+	var world: Variant = _main.get_world()
+	_check(world.location_name == "Station Elst" and world.get_node("Enemies").get_child_count() == 0, "a beaten dungeon stays empty of enemies")
+	var residents: Variant = world.get_node_or_null("Residents")
+	_check(residents != null and residents.get_child_count() == 4, "coming back in through the door, a few residents walk around")
+	_place(world.get_spawn(&"Entrance").global_position + Vector3(3, 0, -4), PI)
+	await _frames(5)
+	await _press(&"quicksave")
+	await _press(&"quickload")
+	await _frames(60)
+	world = _main.get_world()
+	_check(world.get_node("Enemies").get_child_count() == 0 and world.get_node_or_null("Residents") == null,
+		"loading a save made inside keeps the dungeon empty")
 
 
 func _count_saves(save_type: String) -> int:

@@ -6,7 +6,9 @@ floor, a ceiling and walls with door gaps; north and south walls cover the
 corners, west and east walls fit in between. A side set to None has no wall:
 the neighbouring room builds it. +x is east, -z is north (deeper in).
 """
+import math
 import pathlib
+import random
 
 FLOOR = (0.42, 0.42, 0.4)
 CEILING = (0.17, 0.17, 0.19)
@@ -147,7 +149,9 @@ class Dungeon:
     def write(self, out_path, world, ext, extra):
         """world: root name, location name and id, ambient colour, navigation id
         and AABB, and the exit (door z, marker z, entrance z, Elst spawn, door
-        colour). ext: extra ext_resources (type, path, id). extra: lines added
+        colour). Optional: the cleared flag of the beaten dungeon and its
+        residents (spots (x, z) and lines), who show up when the player comes
+        back. ext: extra ext_resources (type, path, id). extra: lines added
         after the navigation region (enemies, chests, bosses)."""
         out = ['[gd_scene format=3]', '',
                '[ext_resource type="Script" path="res://scenes/world/game_world.gd" id="1_world"]',
@@ -155,6 +159,8 @@ class Dungeon:
                '[ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="3_door"]',
                '[ext_resource type="Script" path="res://scripts/quests/quest_marker.gd" id="4_marker"]',
                '[ext_resource type="Script" path="res://scenes/world/runtime_navigation_region.gd" id="20_nav"]']
+        if "residents" in world:
+            ext = list(ext) + [("PackedScene", "res://scenes/npcs/Villager.tscn", "29_villager")]
         for kind, path, rid in ext:
             out.append(f'[ext_resource type="{kind}" path="{path}" id="{rid}"]')
         out += ['', '[sub_resource type="Environment" id="Environment_dungeon"]', 'background_mode = 1',
@@ -168,7 +174,10 @@ class Dungeon:
         for block in self.subs:
             out += block + [""]
         out += [f'[node name="{world["root"]}" type="Node3D"]', 'script = ExtResource("1_world")', f'location_name = "{world["location_name"]}"',
-                f'location_id = &"{world["location_id"]}"', 'default_spawn = &"Entrance"', "autosave_on_enter = true", "",
+                f'location_id = &"{world["location_id"]}"', 'default_spawn = &"Entrance"', "autosave_on_enter = true"]
+        if "cleared_flag" in world:
+            out.append(f'cleared_flag = &"{world["cleared_flag"]}"')
+        out += ["",
                 '[node name="WorldEnvironment" type="WorldEnvironment" parent="."]', 'environment = SubResource("Environment_dungeon")', ""]
         for block in self.nodes:
             out += block + [""]
@@ -182,5 +191,63 @@ class Dungeon:
                 '[node name="Player" parent="." instance=ExtResource("2_player")]', f"position = Vector3(0, 0, {f(entrance_z)})", "",
                 '[node name="Navigation" type="NavigationRegion3D" parent="."]', f'navigation_mesh = SubResource("{world["nav_id"]}")',
                 'script = ExtResource("20_nav")', ""]
+        if "residents" in world:
+            spots, lines = world["residents"]
+            out += ['[node name="Residents" type="Node3D" parent="."]', ""]
+            said = ", ".join('"' + line + '"' for line in lines)
+            for n, (x, z) in enumerate(spots, 1):
+                out += [f'[node name="Resident{n}" parent="Residents" instance=ExtResource("29_villager")]', f"position = {vec(x, 0, z)}",
+                        f"lines = PackedStringArray({said})", f"look_seed = {n * 7}", ""]
         out += extra
         pathlib.Path(out_path).write_text("\n".join(out).rstrip("\n") + "\n")
+
+
+def _room_at(rooms, x, z, skip=None, margin=0.6):
+    for name, ((x0, x1, z0, z1), *_rest) in rooms.items():
+        if name != skip and x0 - margin <= x <= x1 + margin and z0 - margin <= z <= z1 + margin:
+            return name
+    return None
+
+
+def entry_points(rooms, start):
+    """For each room, the doorway the player first comes in through, found by
+    walking through the doors from the room that holds [start] (x, z). A side
+    without a wall (None) counts as one wide doorway in its middle."""
+    first = _room_at(rooms, *start, margin=0)
+    entry = {first: start}
+    queue = [first]
+    while queue:
+        name = queue.pop(0)
+        (x0, x1, z0, z1), _colour, _height, sides = rooms[name]
+        points = []
+        for side, doors in sides.items():
+            centres = [(x0 + x1) / 2 if side in ("N", "S") else (z0 + z1) / 2] if doors is None else [door[0] for door in doors]
+            for c in centres:
+                points.append({"N": (c, z0), "S": (c, z1), "W": (x0, c), "E": (x1, c)}[side])
+        for point in points:
+            other = _room_at(rooms, *point, skip=name)
+            if other is not None and other not in entry:
+                entry[other] = point
+                queue.append(other)
+    return entry
+
+
+def aim_enemies(enemies, rooms, start, toward_share, seed):
+    """Turns the enemies at the start, so not all of them look the same way:
+    about [toward_share] of them face the doorway the player comes in through
+    (a little off), the others look a random way. Enemies are tuples that end
+    in x, z, yaw; the same seed gives the same result every run."""
+    rng = random.Random(seed)
+    entry = entry_points(rooms, start)
+    aimed = []
+    for enemy in enemies:
+        x, z = enemy[-3], enemy[-2]
+        target = entry.get(_room_at(rooms, x, z))
+        toward = rng.random() < toward_share
+        jitter = rng.uniform(-0.45, 0.45)
+        if toward and target is not None:
+            yaw = math.atan2(-(target[0] - x), -(target[1] - z)) + jitter
+        else:
+            yaw = rng.uniform(-math.pi, math.pi)
+        aimed.append(tuple(enemy[:-1]) + (round(yaw, 3),))
+    return aimed

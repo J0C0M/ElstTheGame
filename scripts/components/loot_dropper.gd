@@ -18,7 +18,7 @@ func drop() -> void:
 	if gold > 0:
 		var pile: GoldPickup = GOLD_SCENE.instantiate()
 		pile.amount = gold
-		_spawn(pile, parent)
+		_spawn.call_deferred(pile, parent)
 	for entry: LootEntry in loot.roll_items():
 		var item: ItemData = entry.item
 		if entry.kind == LootEntry.Kind.NEXT_GEAR:
@@ -28,9 +28,11 @@ func drop() -> void:
 		var pickup: ItemPickup = ITEM_SCENE.instantiate()
 		pickup.item = item
 		pickup.count = entry.count
-		_spawn(pickup, parent)
+		_spawn.call_deferred(pickup, parent)
 
 
+# Deferred: a kill happens inside a physics callback, where new areas may not
+# enter the world yet.
 func _spawn(pickup: Pickup, parent: Node) -> void:
 	parent.add_child(pickup)
 	pickup.global_position = global_position

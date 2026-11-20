@@ -15,7 +15,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from dungeon_builder import Dungeon, vec  # noqa: E402
+from dungeon_builder import Dungeon, aim_enemies, vec  # noqa: E402
 
 OUT = pathlib.Path("scenes/dungeons/BingoCave.tscn")
 
@@ -112,6 +112,8 @@ ENEMIES = [
     ("Rolstoel4", "25_rolstoel", -4, -122, 1.0), ("Rolstoel5", "25_rolstoel", 30, -116, -1.0), ("Rolstoel6", "25_rolstoel", 12, -131, 0),
     ("Opa10", "22_opa", 12, -142, 0), ("Oma9", "21_oma", 12, -150, 0.2),
 ]
+# Nearly all of them face the player coming in; the yaws above are replaced.
+ENEMIES = aim_enemies(ENEMIES, ROOMS, (0, -4), 0.85, seed=10)
 CHESTS = [("ChestKeuken", -32.5, -44.5, 0.7854), ("ChestGrot", -8, -98, 3.14159)]
 CHECKPOINT = (12, -88)
 BENCH = (21.15, -84, 1.5708)
@@ -152,6 +154,7 @@ def main():
                   f"position = {vec(x, 0, z)}", f"rotation = {vec(0, yaw, 0)}", ""]
     world = {"root": "BingoCaveDungeon", "location_name": "Bingo Club Boomer Cave", "location_id": "bingo_dungeon",
              "ambient": (0.42, 0.42, 0.5), "nav_id": "NavigationMesh_bingo", "nav_aabb": (-36, -2, -188, 72, 12, 190),
+             "cleared_flag": "boss_grumpy_oma", "residents": ([(-14, -20), (14, -20), (6, -84), (12, -168)], ['BINGO! En deze keer eerlijk.', 'Koffie en een kaartje, zo hoort het.', 'Grumpy Oma? Nooit van gehoord.']),
              "exit": (-0.75, -2, -4, "BingoExit", (0.4, 0.55, 0.95))}
     d.write(OUT, world, ext, extra)
     print("wrote", OUT, "with", len(ENEMIES), "enemies")

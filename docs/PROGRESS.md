@@ -16,11 +16,11 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 7 | `Add-Station-Dungeon` | Af, gemerged naar `Development` |
 | 8 | `Add-Westeraam-Dungeon` | Af, gemerged naar `Development` |
 | 9 | `Add-OBC-Fort-Dungeon` | Af, gemerged naar `Development` |
-| 10 | `Add-Bingo-Cave-Dungeon` | Gebouwd, wacht op akkoord |
+| 10 | `Add-Bingo-Cave-Dungeon` | Af, gemerged naar `Development` |
 | 11 | `Add-Amber-Final-Battle` | Nog niet begonnen |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
-Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`.
+Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
 
 ## Prototypes
 
@@ -464,8 +464,59 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 
 ### Aandachtspunten voor de volgende fases
 
-- Fase 11: de kerk gaat open als `boss_vape_koning`, `boss_fatbike_kindje` en `boss_grumpy_oma` gezet zijn. Klaas vecht mee; de kruisboog is handig tegen Amber in de lucht.
+- Fase 11: de kerk gaat open als `boss_vape_koning`, `boss_fatbike_kindje` en `boss_grumpy_oma` gezet zijn. Volg het kerkplan in het GDD (*De Kerk van Amber*): boven in het kerkgebouw beginnen, dan trappen en gangen ondergronds met doodlopende kamers en vijanden van alle facties, Klaas voor de arena (praten en winkel) en een ronde arena met 5 pilaren. Klaas vecht mee tot hij sneuvelt; de kruisboog is handig tegen Amber in de lucht.
 - Fase 12: geluid voor de bingonummers, de schokgolf, de rolstoel en de kruisboog.
+
+## Dev powers, vijanden en locaties (`Add-Dev-Powers-And-Enemy-Facing`)
+
+Verzoeken van de eigenaar na Fase 10, voor Fase 11.
+
+### Wat is af
+
+- **Dev powers** voor het testen. De backtick-toets (`` ` ``) zet ze aan en uit, alleen in debug builds (de editor en debug-exports, niet in een release). Je ziet "DEV POWERS" rechtsboven in beeld.
+  - Je krijgt geen schade.
+  - Je vliegt: Spatie gaat omhoog, Ctrl omlaag, en loslaten houdt je op hoogte.
+  - Je loopt drie keer zo snel, en sprinten kost geen stamina.
+  - Elke treffer van de speler (zwaard of kruisboog) doodt meteen, ook bij bazen en generators, wat de baas ook normaal met een treffer doet.
+  - De dev powers worden niet opgeslagen.
+- **Kijkrichting van vijanden in de dungeons.** Eerst keken bijna alle vijanden van de ingang af, vooral in het station. `aim_enemies()` in `dungeon_builder.py` draait ze nu bij het genereren. Een deel kijkt naar de deur waardoor de speler hun kamer binnenkomt (een beetje schuin), de rest kijkt een willekeurige kant op. Die deur wordt per kamer gevonden door vanaf de ingang door de deuren te lopen. Een vaste seed geeft elke run dezelfde stand.
+
+| Dungeon | Kijkt naar de speler |
+|---|---|
+| Station | 8 van de 15, de rest willekeurig |
+| Westeraam | 10 van de 18 |
+| OBC | 17 van de 20 |
+| Bingo Club | 21 van de 25 |
+
+- **Tests:** `test_player_combat` controleert nu ook de dev powers. Alle tests slagen.
+- **Verslagen dungeons blijven leeg** (tweede verzoek, 20-11-2026). Een dungeon met de vlag van zijn baas (Station Elst: `station_cleared`) haalt bij het laden zijn vijanden weg, ook na opnieuw laden. Kom je door de deur weer binnen, dan lopen er vier inwoners met eigen zinnen ("De treinen rijden weer!"). Laad je een save die in de dungeon gemaakt is, dan blijft hij helemaal leeg. `test_save` controleert beide.
+- **Bugfix:** een vijand die doodging tijdens een treffer liet zijn buit vallen midden in een botsing, en dan gaf Godot een foutmelding. Dat gebeurde vooral met dev powers, maar ook bij gewone kills met buit. De buit verschijnt nu een frame later.
+- **Dev powers en schade:** gecontroleerd in de Bingo-dungeon met echte vijanden. Je krijgt geen schade, en elke klap doodt.
+- **Vijanden buiten** bij het station en Westeraam stonden ergens in de straat. Nu bewaken drie laag drillers het depot van Amber en het stationsplein, en drie drillers (één extra) de binnenplaats van Westeraam, met hun gezicht naar de ingang.
+- **Nieuwe buitenkant van vier locaties** (`tools/map/gen_locations.py`, met `BoxCluster` voor de details):
+  - **Station:** een stationshal met glazen pui, luifel en glazen dakrand, een klok op een paal, en het perron met overkapping, banken, vertrekbord, naamborden en een kaartautomaat. Op het plein staan fietsenrekken vol fietsen, een bushokje, een broodjeskiosk, bomen in bakken en lantaarns. Het depot van Amber is een golfplaten hal met een oranje band, "AMBER LOGISTIEK", rolluiken, banieren, pallets eiwitshakes, vaten, een container, schijnwerpers en een hek met prikkeldraad. Het spoor en het perron liggen precies waar ze lagen.
+  - **Westeraam:** drie gele galerijflats met op elke verdieping een galerij met zwart-geel hek, wasgoed en schotelantennes, en een geel-zwarte plint. Op de binnenplaats staan een uitgebrande auto, een brandende ton met vuurlicht, containers, winkelwagens, een oude bank, een kapotte schommel, een basketbalpaal en scooters. Verder: graffiti, een portiek met gestreepte luifel en vapewolken, een neon-vapeshop, en een zwart hek met poort onder een "WESTERAAM GETHO"-bord.
+  - **OBC Elst Fort:** het fort is behouden en versterkt met hogere rode bakstenen muren met kantelen en banieren, vier torens met kantelen, schietgaten en rood-navy vlaggen, en een poortgebouw met een opgetrokken valhek en een "OBC ELST FORT"-bord. Binnen staan de school met rode band, navy luifel en fietsen, en het voetbalveld met lijnen, doelen met netten, dug-outs, lichtmasten en een scorebord.
+  - **Bingo Club:** het blauwe clubhuis met een grotmond van rotsen en stalactieten om de deur, een "BOOMER CAVE"-bordje en een groot BINGO-bord met lampjes. Verder gestreepte luifels, bloembakken, banken en rollators, en een parkeerplaats met vakken, drie scootmobielen met vlaggetje, de Bingo Express (minibus), een reuzen-bingobal (B-12), hagen en lantaarns.
+
+- **Kerk en Huis van Klaas mooier** (derde verzoek): `gen_locations.py` maakt voor beide een decoratie-scene (`KerkDecor.tscn`, `KlaasHouseDecor.tscn`), die als `Decor` in de met de hand gemaakte scenes hangt. Zo blijven deuren, markers en de vergrendeling van de kerk ongemoeid.
+  - **Kerk:** steunberen en glas-in-loodramen langs het schip, een stenen portaal met twee vuurschalen, een roosvenster en een amberkleurige ruit op de toren, klokken en galmgaten, een kerkhof met grafstenen achter een stenen muurtje, en banken, lantaarns en bestrating op het plein.
+  - **Huis van Klaas:** een veranda met gouden zuilen en een gouden K, een gouden rand, een schoorsteen, bloembakken, tuinverlichting langs het pad, een buitengym ("SIGMA GYM"), een paarse auto met gouden streep, een barbecue met parasol, een brievenbus en een paars-gouden vlag. Het oefenveld voor de deur blijft vrij.
+
+- **Buiten de tornado** (vierde verzoek): Elst gebruikt nu dieptemist (van 50 m tot volledig dicht op 235 m, ook over de lucht), zodat je niet meer ver over de ring heen kijkt. Er staan 160 bomen buiten de tornado. Het spoor (ballastbed en rails) loopt 760 m lang door de tornado heen de mist in, en de hoofdwegen die de ring raken lopen 160 m door. Huizen en bomen in het dorp zijn niet verschoven: de bomen buiten krijgen een eigen random-reeks.
+
+### Keuzes en afwijkingen (tweede verzoek)
+
+- **Inwoners verschijnen alleen als je door de deur binnenkomt**, niet bij het laden van een save in de dungeon. Zo blijft de dungeon na opnieuw laden leeg, zoals gevraagd.
+- **Mooiere locaties in Prototype 1:** CLAUDE.md zegt geen tijd in mooiere modellen te steken, maar de eigenaar vroeg er nu zelf om. Het blijft low poly met platte kleuren.
+- **De huizen in Elst zijn niet verschoven:** huizen blijven weg van vaste plekken (`CLEAR_SPOTS`, de oude patrouilleplekken), anders zou het verplaatsen van de vijanden het hele dorp opnieuw schudden.
+- **Plan voor de kerk (eigenaar, 20-11-2026)** staat in het GDD en in de fasetabel van `CLAUDE.md`. Je begint boven in het kerkgebouw en gaat via trappen en gangen steeds dieper ondergronds, langs doodlopende kamers en vijanden van alle facties. Aan het eind wacht Klaas voor de arena (praten, kopen en verkopen), en de arena is een ronde ruimte met 5 pilaren.
+- **GDD bijgewerkt** met de dev powers, de kijkrichting van vijanden, de bron van de kaart en de herlaadtijd van de kruisboog (0,9 s, zoals gebouwd).
+
+### Keuzes en afwijkingen
+
+- **Ctrl om omlaag te vliegen** is een nieuwe actie (`dev_fly_down`), net als `toggle_dev_powers`.
+- **Westeraam** (geen wens genoemd) zit tussen het station en het OBC in, zodat de moeilijkheid oploopt.
 
 ## Factie-dungeons op slot en een groter Westeraam (`Lock-Faction-Dungeons-And-Expand-Westeraam`)
 
@@ -576,7 +627,7 @@ Status: af, gemerged naar `Development`.
 
 ### Open punten
 
-- [ ] **Bron van de kaart** (Google Maps of OpenStreetMap). Tot dat duidelijk is, staat `kaart_elst.png` niet in de repo en kan het script alleen draaien als de kaart lokaal in `docs/reference/` staat. Ook het raster `elst_ground.png` is van de kaart afgeleid.
+- [x] **Bron van de kaart:** `kaart_elst.png` is de kaart die de eigenaar heeft aangeleverd (19-11-2026). Hij staat lokaal in `docs/reference/` en nog niet in de repo. `gen_elst.py` kan dus alleen draaien als de kaart daar staat. Het raster `elst_ground.png` is van de kaart afgeleid en staat wel in de repo.
 - [ ] **Ligging van het spoor** bevestigen.
 - [x] **`test_enemies` faalde af en toe** in de stationsdungeon, omdat de vijanden willekeurig patrouilleren. Sinds Fase 7 speelt de test in een eigen, langere testkamer. In Fase 8 faalde de groepscheck nog één keer, omdat een patrouille te ver weg liep; nu staan de vijanden voor die check eerst op hun beginplek.
 

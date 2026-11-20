@@ -13,6 +13,10 @@ const START_GEAR: Array[StringName] = [&"plain_clothes"]
 ## Selling gear back to Klaas gives this share of its price.
 const SELL_RATE: float = 0.4
 
+## Dev powers for testing (` in debug builds): no damage, flying, much
+## faster and every hit kills. Not saved.
+var dev_powers: bool = false
+
 ## Name of the place the player is in, for the save metadata.
 var current_location: String = ""
 var gold: int = 0
@@ -271,3 +275,10 @@ func _emit_all() -> void:
 	EventBus.inventory_changed.emit()
 	EventBus.equipment_changed.emit()
 	EventBus.inwijding_changed.emit(inwijding)
+
+
+## Turns the dev powers on or off and tells the player.
+func set_dev_powers(enabled: bool) -> void:
+	dev_powers = enabled
+	EventBus.dev_powers_changed.emit(enabled)
+	EventBus.message_requested.emit("Dev powers aan" if enabled else "Dev powers uit")

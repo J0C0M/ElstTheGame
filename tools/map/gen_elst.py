@@ -53,14 +53,16 @@ ROOFS = [(0.3, 0.28, 0.3), (0.58, 0.24, 0.17), (0.22, 0.22, 0.24), (0.46, 0.2, 0
 MAIN_HALF_WIDTH = 4.0
 BALLAST_HALF_WIDTH = 2.5
 
-# Enemies outside: three laag drillers on the Stationsstraat, two drillers
-# south of Westeraam. (name, scene id, x, z, yaw)
+# Enemies outside: three laag drillers guard Amber's depot and the square of
+# the station, three drillers the courtyard of Westeraam, facing the way the
+# player comes in (south, yaw about pi). (name, scene id, x, z, yaw)
 ENEMIES = [
-    ("LowDriller1", "90_low_driller", 76.0, -68.0, 2.2),
-    ("LowDriller2", "90_low_driller", 80.0, -62.0, 2.6),
-    ("LowDriller3", "90_low_driller", 72.0, -61.0, 1.9),
-    ("Driller1", "91_driller", 146.0, -28.0, 3.4),
-    ("Driller2", "91_driller", 152.0, -24.0, 3.1),
+    ("LowDriller1", "90_low_driller", 99.0, -101.0, 2.8),
+    ("LowDriller2", "90_low_driller", 93.0, -102.0, 3.5),
+    ("LowDriller3", "90_low_driller", 104.0, -79.0, 3.0),
+    ("Driller1", "91_driller", 160.0, -68.0, 2.9),
+    ("Driller2", "91_driller", 152.0, -69.0, 3.4),
+    ("Driller3", "91_driller", 157.0, -59.0, 3.1),
     # Kakkers on the pitch inside OBC Elst Fort, well inside its walls.
     ("Voetballer1", "92_voetballer", -164.0, 72.0, 1.6),
     ("Voetballer2", "92_voetballer", -162.0, 84.0, 1.4),
@@ -70,6 +72,11 @@ ENEMIES = [
     ("BingoOma2", "94_oma", -22.0, -88.0, 3.0),
     ("BingoOpa1", "95_opa", -27.0, -82.0, 3.1),
 ]
+# Open spots without houses, where the first patrols stood. Fixed, because
+# the houses fill the town in one random pass: moving a spot reshuffles
+# every house and tree.
+CLEAR_SPOTS = [(76.0, -68.0), (80.0, -62.0), (72.0, -61.0), (146.0, -28.0), (152.0, -24.0), (-164.0, 72.0), (-162.0, 84.0),
+               (-168.0, 78.0), (-32.0, -86.0), (-22.0, -88.0), (-27.0, -82.0)]
 # Areas that change once liberated: node name, flag, the enemies (from ENEMIES)
 # that patrol it until then, and the villagers (x, z) that come after, with
 # their lines and a warm light in the middle.
@@ -79,7 +86,7 @@ AREAS = [
     ("StationArea", "station_cleared", ["LowDriller1", "LowDriller2", "LowDriller3"],
      [(104.0, -60.0), (112.0, -57.0), (118.0, -62.0)], (110.0, -60.0),
      ["De treinen rijden weer!", "Eindelijk weer een trein naar Nijmegen.", "Geen eiwitshakes meer voor Amber!", "Dank je wel!"]),
-    ("WesteraamArea", "boss_vape_koning", ["Driller1", "Driller2"],
+    ("WesteraamArea", "boss_vape_koning", ["Driller1", "Driller2", "Driller3"],
      [(152.0, -66.0), (160.0, -64.0), (156.0, -60.0), (162.0, -70.0)], (157.0, -66.0),
      ["Geen vapewolken meer in de portiek!", "De Vape-koning is weg. Ik kan weer ademen.", "Westeraam is weer van ons!", "Dank je wel!"]),
     ("OBCArea", "boss_fatbike_kindje", ["Voetballer1", "Voetballer2", "Fatbiker1"],
@@ -274,7 +281,7 @@ def blocked_spot(x, z, extra):
     for ax, az in door_aprons():
         if math.hypot(x - ax, z - az) < 10.0:
             return True
-    for _, _, ex, ez, _ in ENEMIES:
+    for ex, ez in CLEAR_SPOTS:
         if math.hypot(x - ex, z - ez) < 7.0 + extra:
             return True
     return False
@@ -443,6 +450,34 @@ def block(text, header):
     return text[start:end if end >= 0 else len(text)].rstrip("\n")
 
 
+def outskirt_trees(rng):
+    """Trees beyond the tornado, on the skirt of the ground, so the land seems
+    to go on into the fog. A rng of its own keeps the town as it is."""
+    trees = []
+    while len(trees) < 160:
+        angle, radius = rng.uniform(0, math.tau), rng.uniform(250.0, 340.0)
+        x, z = math.cos(angle) * radius, math.sin(angle) * radius
+        if abs(x - L.RAIL_X) < 9.0:
+            continue
+        trees.append({"pos": (x, z), "yaw": rng.uniform(0, math.tau), "scale": rng.uniform(1.0, 1.6), "pine": rng.random() < 0.5})
+    return trees
+
+
+def outskirt_roads():
+    """Main roads that reach the tornado go on beyond it: (centre, yaw, length)."""
+    roads = []
+    for pts in L.MAIN_ROADS.values():
+        for end, prev in ((pts[0], pts[1]), (pts[-1], pts[-2])):
+            if math.hypot(*end) < 200.0:
+                continue
+            dx, dz = end[0] - prev[0], end[1] - prev[1]
+            n = math.hypot(dx, dz)
+            dx, dz = dx / n, dz / n
+            length = 160.0
+            roads.append(((end[0] + dx * length / 2, end[1] + dz * length / 2), math.atan2(dx, dz), length))
+    return roads
+
+
 def write_scene(houses, trees, boxes):
     old = SCENE_PATH.read_text()
     keep_sub = [block(old, h) for h in (
@@ -489,7 +524,7 @@ def write_scene(houses, trees, boxes):
     out.append("")
     for b in keep_sub:
         out += [b, ""]
-    rail_len = 420.0
+    rail_len = 760.0  # on through the tornado, into the fog
     out += ['[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ballast"]', "albedo_color = " + col(PALETTE[BALLAST]), "",
             '[sub_resource type="BoxMesh" id="BoxMesh_ballast"]', 'material = SubResource("StandardMaterial3D_ballast")',
             f"size = {vec(4.4, 0.24, rail_len)}", "",
@@ -499,7 +534,10 @@ def write_scene(houses, trees, boxes):
             f"size = {vec(0.12, 0.16, rail_len)}", "",
             '[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_planks"]', "albedo_color = Color(0.45, 0.33, 0.22, 1)", "",
             '[sub_resource type="BoxMesh" id="BoxMesh_crossing"]', 'material = SubResource("StandardMaterial3D_planks")',
-            f"size = {vec(5.0, 0.12, 2 * MAIN_HALF_WIDTH)}", ""]
+            f"size = {vec(5.0, 0.12, 2 * MAIN_HALF_WIDTH)}", "",
+            '[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_road"]', "albedo_color = " + col(PALETTE[MAIN]), "",
+            '[sub_resource type="BoxMesh" id="BoxMesh_road"]', 'material = SubResource("StandardMaterial3D_road")',
+            f"size = {vec(2 * MAIN_HALF_WIDTH, 0.06, 1)}", ""]
     for n, (_, size) in enumerate(boxes):
         out += [f'[sub_resource type="BoxShape3D" id="BoxShape3D_water{n}"]', f"size = {vec(size[0], 2, size[1])}", ""]
     out += [keep_nodes["root"], "", keep_nodes["env"], "", keep_nodes["sun"], "", keep_nodes["tornado"], "",
@@ -536,6 +574,10 @@ def write_scene(houses, trees, boxes):
         if t["pine"]:
             lines.append("kind = 0")
         out += lines + [""]
+    out += ['[node name="OutskirtRoads" type="Node3D" parent="."]', ""]
+    for n, ((x, z), yaw, length) in enumerate(outskirt_roads(), 1):
+        out += [f'[node name="Road{n}" type="MeshInstance3D" parent="OutskirtRoads"]', f"position = {vec(x, 0.03, z)}",
+                f"rotation = {vec(0, yaw, 0)}", f"scale = {vec(1, 1, length)}", 'mesh = SubResource("BoxMesh_road")', ""]
     out += ['[node name="Locations" type="Node3D" parent="." groups=["navigation_source"]]', ""]
     for name, loc in L.LOCATIONS.items():
         out += [f'[node name="{name}" parent="Locations" instance=ExtResource("{LOCATION_SCENES[name]}")]',
@@ -622,7 +664,7 @@ def main():
     grid = build_raster()
     dist = road_distance(grid)
     houses, occupied = place_houses(grid, dist, rng)
-    trees = place_trees(grid, dist, occupied, rng)
+    trees = place_trees(grid, dist, occupied, rng) + outskirt_trees(random.Random(SEED + 1))
     boxes = water_boxes(grid)
     print(f"houses {len(houses)}, trees {len(trees)}, water boxes {len(boxes)}")
     if "--preview" in sys.argv:

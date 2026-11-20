@@ -11,7 +11,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from dungeon_builder import Dungeon, STEEL, vec  # noqa: E402
+from dungeon_builder import Dungeon, aim_enemies, STEEL, vec  # noqa: E402
 
 OUT = pathlib.Path("scenes/dungeons/Station.tscn")
 HEIGHT = 5.0
@@ -116,6 +116,8 @@ ENEMIES = [
     ("Depot1", 2, -76, 0), ("Depot2", 6, -78, 0.3), ("Depot3", -1, -80, -0.3),
     ("Depot4", 13, -82, 0.2), ("Depot5", 18, -77, 0.6), ("Depot6", 10, -86, 0),
 ]
+# Turned a random way, some towards the player; the yaws above are replaced.
+ENEMIES = aim_enemies(ENEMIES, ROOMS, (0, 16), 0.4, seed=7)
 CHESTS = [("ChestWorkshop", -28.5, -14, -1.5708), ("ChestDepot", -4, -92, 0.7854)]
 
 
@@ -143,6 +145,7 @@ def main():
                   f"position = {vec(x, 0, z)}", f"rotation = {vec(0, yaw, 0)}", ""]
     world = {"root": "StationDungeon", "location_name": "Station Elst", "location_id": "station_dungeon",
              "ambient": (0.3, 0.42, 0.35), "nav_id": "NavigationMesh_station", "nav_aabb": (-32, -2, -96, 60, 10, 118),
+             "cleared_flag": "station_cleared", "residents": ([(-3, 4), (4, 4), (-10, -4), (8, -72)], ['De treinen rijden weer!', 'Eindelijk weer op tijd op mijn werk.', 'Waar is mijn OV-chipkaart nou?']),
              "exit": (19.25, 18, 16, "StationExit", (0.3, 0.7, 0.4))}
     d.write(OUT, world, ext, extra)
     print("wrote", OUT, "with", len(GENERATORS), "generators and", len(ENEMIES), "enemies")

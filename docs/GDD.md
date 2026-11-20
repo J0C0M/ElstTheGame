@@ -49,11 +49,11 @@ Amber de Draak heeft Elst overgenomen en Klaas moet de speler helpen haar macht 
 - Woont in zijn huis (paars op de kaart). Dat huis is de hub: quests ophalen, winkel, opslaan en slapen.
 - Zijn relatie met de speler loopt via de **Inwijding** (zie Quests, Inwijding & progressie).
 - In Quest 6 vecht hij mee als door de AI bestuurde bondgenoot. Hij kan niet doodgaan door gewone schade, alleen in de geschreven scène.
-- Referentiefoto: `Klaas_sigma.png` (uit de idee-notitie, moet nog in de repo).
+- Referentiefoto: `Klaas_sigma.png`, aangeleverd door de eigenaar. Hij staat lokaal in `docs/reference/` en niet in de openbare repo, omdat het een foto van een echt persoon is.
 
 ## Wereld & kaart van Elst
 
-De wereld is één compacte kaart van Elst. De kerk staat in het midden en vijf andere kernlocaties liggen eromheen. Bij de indeling volgen we de kaart uit de idee-notitie (`kaart_elst.png`, moet nog in de repo).
+De wereld is één compacte kaart van Elst. De kerk staat in het midden en vijf andere kernlocaties liggen eromheen. Bij de indeling volgen we de kaart die de eigenaar heeft aangeleverd (`kaart_elst.png`, lokaal in `docs/reference/`). `tools/map/gen_elst.py` bouwt de wereld daaruit.
 
 | Kleur op kaart | Locatie | Functie | Bewoners voor bevrijding | Na bevrijding |
 | --- | --- | --- | --- | --- |
@@ -62,14 +62,21 @@ De wereld is één compacte kaart van Elst. De kerk staat in het midden en vijf 
 | Geel | Westeraam Getho | Dungeon Quest 3 | Driller army, vape-drillers | Dorpelingen in de wijk |
 | Rood | OBC Elst Fort | Dungeon Quest 4 | Kakker-voetbaljongens, fatbikers | Dorpelingen op het plein |
 | Blauw | Bingo Club Boomer Cave | Dungeon Quest 5 | Bingo-opa's, boze oma's, rolstoel-oma's | Een vrolijke bingoavond |
-| Roze | De Kerk van Amber (centrum) | Eindgevecht Quest 6 | Amber (binnen) | Kerk wordt een feestplek |
+| Roze | De Kerk van Amber (centrum) | Dungeon en eindgevecht Quest 6 | Vijanden van alle facties, Amber (binnen) | Kerk wordt een feestplek |
 
 **Opbouw van de wereld**
 
 - **Buiten:** straten, huizen, weilanden, de spoorlijn en wat herkenbare Elster details. Alles bestaat uit low-poly blokken.
 - **Dungeons:** elke dungeon is een aparte scene (een interieur). Je gaat erin via een deur of ingang in de open wereld. Laden gebeurt met een korte overgang.
 - **Factie-dungeons** (Westeraam Getho, OBC Elst Fort, Bingo Club Boomer Cave) zijn groter dan Station Elst en hebben twee delen: eerst het eerste gedeelte, dan een checkpoint binnen in de dungeon (een rustige ruimte met een autosave en een bank om uit te rusten), en daarna het tweede gedeelte met de baas.
+- **De Kerk van Amber** is de laatste en zwaarste dungeon. Hij gaat van boven naar beneden:
+  1. **Boven, in het kerkgebouw:** je begint in de kerk zelf. Het interieur is dat van een echte kerk: een middenpad met kerkbanken, een altaar, een preekstoel, een orgel en glas-in-loodramen, met Ambers kleuren (amber en oranje).
+  2. **Ondergronds:** via een trap ga je naar beneden, een gangenstelsel in. Met nog meer trappen ga je steeds dieper onder de grond. Onderweg zijn er een paar doodlopende kamers.
+  3. **Vijanden:** door de hele dungeon kom je de vijanden van alle andere dungeons door elkaar tegen: laag drillers, drillers, vape-drillers, kakker-voetbaljongens, fatbikers, bingo-opa's, boze oma's en rolstoel-oma's.
+  4. **Klaas bij de arena:** aan het einde van de gangen staat Klaas voor de ingang van de baasarena. Je kunt hier nog één keer met hem praten en spullen kopen en verkopen.
+  5. **De baasarena:** een enorme ronde ruimte met 5 lange pilaren. Hier vecht je tegen Amber de Draak. Klaas vecht de eerste helft mee, tot hij sneuvelt (zie *Amber, het verloop*); de tweede helft doe je alleen.
 - **Vijanden buiten:** rond elke factielocatie zwerven patrouilles van die factie. Na het verslaan van de dungeon spawnen ze daar niet meer.
+- **Verslagen dungeons:** is de baas verslagen (of in Station Elst de laatste generator), dan blijft de dungeon leeg: de vijanden komen niet terug, ook niet na opnieuw laden. Ga je eruit en weer naar binnen, dan lopen er een paar inwoners rond, net als buiten in een bevrijd gebied.
 - **Wereldstaat:** per gebied wordt bijgehouden of het bezet of bevrijd is. Een bevrijd gebied krijgt dorpelingen, andere muziek en een warmere kleur.
 
 **De tornado-grens**
@@ -97,7 +104,7 @@ De speler loopt in third person door Elst en vecht van dichtbij met het zwaard. 
 - **Zware aanval:** ingedrukt houden, langzamer, ×1,8 schade, kost 25 stamina.
 - **Blokkeren:** 70% minder schade van voren. Precies op tijd blokkeren (parry, 0,2 s) zet de vijand kort uit balans.
 - **Ontwijken:** rol met korte onkwetsbaarheid (0,3 s), kost 20 stamina.
-- **Kruisboog (na Quest 5):** richten met de rechtermuisknop, schieten met de linker. Een pijl doet 30 schade en herladen duurt 1,2 s. Je hebt onbeperkt pijlen. Handig tegen Amber als ze vliegt.
+- **Kruisboog (na Quest 5):** richten met de rechtermuisknop, schieten met de linker. Een pijl doet 30 schade en herladen duurt 0,9 s. Je hebt onbeperkt pijlen. Handig tegen Amber als ze vliegt.
 - **Healing potion:** snel gebruiken met een sneltoets, met een korte animatie waarin je kwetsbaar bent.
 - **Vijanden** tonen een levensbalk boven hun hoofd. Bazen hebben een grote balk onderin beeld.
 
@@ -117,6 +124,7 @@ De speler loopt in third person door Elst en vecht van dichtbij met het zwaard. 
 | Inventaris / questlog | Tab / J |
 | Quicksave / quickload | F5 / F9 |
 | Pauzemenu | Esc |
+| Dev powers aan/uit (alleen in debug builds, voor het testen) | ` (vliegen: Spatie omhoog, Ctrl omlaag) |
 
 Doodgaan stuurt je terug naar het laatste save- of autosavemoment.
 
@@ -164,11 +172,11 @@ De game heeft 6 hoofdquests die Klaas één voor één geeft. De drie factie-dun
 | 3 | Westeraam Getho | Westeraam Getho | Versla de vijanden en de Vape-koning | 150 goud, kans op loot, Inwijding +1 |
 | 4 | OBC Elst Fort | OBC Elst Fort | Versla de vijanden en het fatbike-kindje | 150 goud, kans op loot, Inwijding +1 |
 | 5 | Bingo Club Boomer Cave | Bingo Club Boomer Cave | Versla de vijanden en Grumpy Oma | 150 goud, kans op loot, Inwijding +1 |
-| 6 | Versla Amber de Draak | De Kerk van Amber | Eindgevecht samen met Klaas | Gouden Tren-spuit, einde van de game |
+| 6 | Versla Amber de Draak | De Kerk van Amber | Vecht je vanuit de kerk door de gangen eronder naar beneden, praat met Klaas bij de arena en versla Amber samen met hem | Gouden Tren-spuit, einde van de game |
 
 **Regels voor de volgorde**
 
-- **Moeilijkheid:** de factie-dungeons worden steeds iets zwaarder: eerst Westeraam Getho, dan OBC Elst Fort (iets sterker) en als zwaarste de Bingo Club Boomer Cave. Dat geldt ook als de speler een andere volgorde kiest. Zwaarder betekent meer vijanden, iets meer HP en schade, en een sterkere baas.
+- **Moeilijkheid:** de factie-dungeons worden steeds iets zwaarder: eerst Westeraam Getho, dan OBC Elst Fort (iets sterker) en als zwaarste de Bingo Club Boomer Cave. Dat geldt ook als de speler een andere volgorde kiest. Zwaarder betekent meer vijanden, iets meer HP en schade, en een sterkere baas. Ook kijken bij de start meer vijanden naar de deur waardoor de speler binnenkomt: in Station Elst kijken ze een willekeurige kant op, in de Bingo Club kijken bijna alle vijanden naar je.
 - Klaas geeft de quests in volgorde 1 t/m 6. Station Elst is vanaf het begin open. De drie factie-dungeons gaan pas open als Station Elst gesloopt is; Klaas zegt dat als hij Quest 2 geeft. De kerk zit op slot tot de drie factiebazen verslagen zijn.
 - Maak je een factie-dungeon af voordat Klaas die quest gegeven heeft, dan telt hij toch. Bij je volgende bezoek is Klaas trots op je (eigen tekstregel) en wordt de quest afgestreept. Je krijgt de beloning dan alsnog.
 - **Kruisboog:** krijg je van Klaas zodra Quest 2 t/m 5 allemaal af zijn.
@@ -314,6 +322,7 @@ tests/             headless tests
 - Collision layers krijgen een vaste naam in de projectinstellingen: wereld, speler, vijand, hitbox, interactie.
 - Inputacties staan in de InputMap (`attack`, `block`, `dodge`, `interact`, `quicksave`, …) en niet als vaste toetsen in de code.
 - Elke fase moet na afloop starten zonder fouten in de console.
+- **Dev powers** (alleen in debug builds, niet opgeslagen): met `` ` `` wordt de speler onkwetsbaar, kan de speler vliegen en drie keer zo snel lopen, en doodt elke treffer meteen. Bedoeld om snel door de game te testen.
 
 ## Ontwikkelfases
 
@@ -355,7 +364,7 @@ Het project wordt in 13 fases gebouwd. Na elke fase moet de game speelbaar zijn.
     - Dungeon, bingo-opa's, boze oma's, rolstoel-oma's, Grumpy Oma en de kruisboog als beloning.
     - Klaar als: alle drie de dungeons na Station Elst in elke volgorde te doen zijn, ook voordat Klaas ze geeft.
 11. **Quest 6: Amber de Draak** — `Add-Amber-Final-Battle`
-    - Kerkdeuren, Klaas als bondgenoot, Amber met 2 levensbalken, de scène met Klaas, de gouden Tren-spuit, de tornado die verdwijnt, de eindscène en credits.
+    - Kerkdeuren, de kerk-dungeon (boven in het kerkgebouw, dan trappen en gangen ondergronds met doodlopende kamers, vijanden van alle facties door elkaar), Klaas voor de arena (praten, winkel), de ronde arena met 5 pilaren, Klaas als bondgenoot, Amber met 2 levensbalken, de scène met Klaas, de gouden Tren-spuit, de tornado die verdwijnt, de eindscène en credits.
 12. **Afwerking & build** — `Polish-And-Release-Build`
     - Audio, balans, bugfixes, laadschermen, export presets voor Windows en Linux.
     - Klaar als: de game van begin tot eind uit te spelen is zonder blokkerende bugs.
@@ -369,13 +378,16 @@ Deze keuzes heb ik zelf gemaakt waar de idee-notitie niets zei of zichzelf tegen
 - Quest 5 in de notitie zegt “Je valt OBC Elst Fort Dungeon aan”. Ik ga ervan uit dat dit Bingo Club Boomer Cave moet zijn.
 - De kerk gaat open na de drie factiebazen. Daarvoor is Station Elst ook nodig, want zonder het station gaan de factie-dungeons niet open.
 - Station Elst slopen maakt de vijanden van Westeraam en OBC zwakker (20% minder HP). Zo heeft Quest 2 ook een effect in het spel.
-- Alle dungeons zijn vanaf het begin toegankelijk. Alleen de kerk zit op slot.
+- Station Elst is vanaf het begin open, de factie-dungeons na het station en de kerk na de drie factiebazen (besluit eigenaar).
+- In de kerk zijn de vijanden op volle sterkte: de verzwakking door het station geldt daar niet (voorstel, beslissen in Fase 11).
+- Bij Klaas voor de arena is ook een checkpoint met autosave, zodat je na doodgaan in het baasgevecht daar terugkomt (voorstel).
 - Na de eindscène mag de speler vrij door het bevrijde Elst blijven lopen.
 - Alle getallen (HP, schade, prijzen, kansen) zijn startwaarden voor het testen.
 
 **Open punten**
 
-- [ ] `kaart_elst.png` en `Klaas_sigma.png` in `docs/reference/` zetten. Ze werden in de notitie genoemd, maar zaten niet bij de upload.
+- [x] `kaart_elst.png` en `Klaas_sigma.png` zijn aangeleverd door de eigenaar en staan lokaal in `docs/reference/`.
+- [ ] Geven de 5 pilaren in de arena dekking tegen Ambers vuuradem en vuurballen? (Voorstel: ja.)
 - [ ] Is een controller nodig in de eerste versie?
 - [ ] Komen er stemmen of alleen tekstballonnen? (Voorstel: alleen tekst plus korte geluidjes.)
 - [ ] Welke sidequests komen er na versie 1?

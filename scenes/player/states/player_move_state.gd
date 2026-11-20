@@ -59,12 +59,14 @@ func physics_update(delta: float) -> void:
 		and direction.length_squared() > 0.01 and not player.stamina.is_empty())
 	if player.is_sprinting and not was_sprinting:
 		EventBus.player_action.emit(&"sprint")
-	if player.is_sprinting:
+	if player.is_sprinting and not GameState.dev_powers:
 		player.stamina.drain(stats.sprint_stamina_per_second * delta)
 		if player.stamina.is_empty():
 			_sprint_locked = true
 			player.stamina.insufficient.emit()
 	var speed: float = stats.sprint_speed if player.is_sprinting else stats.walk_speed
+	if GameState.dev_powers:
+		speed *= Player.DEV_SPEED_FACTOR
 	var acceleration: float = stats.acceleration if player.is_on_floor() else stats.air_acceleration
 	player.move_horizontally(direction, speed, acceleration, delta)
 	player.turn_towards(direction, delta)

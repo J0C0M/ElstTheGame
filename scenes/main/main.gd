@@ -105,6 +105,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed(&"quickload"):
 		get_viewport().set_input_as_handled()
 		SaveManager.quickload()
+	elif event.is_action_pressed(&"toggle_dev_powers") and OS.is_debug_build():
+		get_viewport().set_input_as_handled()
+		GameState.set_dev_powers(not GameState.dev_powers)
 
 
 func _notification(what: int) -> void:
@@ -196,6 +199,7 @@ func _enter_world(world: GameWorld, spawn_id: StringName, vitals: Dictionary, sa
 		SaveManager.restore_globals(save)
 	# Main decides what happens after dying, not the world itself.
 	world.respawn_on_death = false
+	world.loaded_from_save = not save.is_empty()
 	_retro_screen.set_world(world)
 	_world = world
 	SaveManager.world = world

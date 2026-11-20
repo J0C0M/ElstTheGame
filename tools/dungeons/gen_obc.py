@@ -16,7 +16,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from dungeon_builder import Dungeon, vec  # noqa: E402
+from dungeon_builder import Dungeon, aim_enemies, vec  # noqa: E402
 
 OUT = pathlib.Path("scenes/dungeons/OBC.tscn")
 
@@ -150,6 +150,8 @@ ENEMIES = [
     ("Voetballer11", "21_voetballer", -34, -118, -1.0), ("Voetballer12", "21_voetballer", -14, -130, 0),
     ("Fatbiker7", "22_fatbiker", -16, -138, 0), ("Fatbiker8", "22_fatbiker", -16, -146, 0.2),
 ]
+# Most of them face the player coming in; the yaws above are replaced.
+ENEMIES = aim_enemies(ENEMIES, ROOMS, (0, -4), 0.7, seed=9)
 CHESTS = [("ChestKantine", -33, -5, 3.14159), ("ChestPlein", -36.5, -132.5, 0.7854)]
 CHECKPOINT = (-21, -84)
 BENCH = (-27.15, -80, -1.5708)
@@ -214,6 +216,7 @@ def main():
                   f"position = {vec(x, 0, z)}", f"rotation = {vec(0, yaw, 0)}", ""]
     world = {"root": "OBCDungeon", "location_name": "OBC Elst Fort", "location_id": "obc_dungeon",
              "ambient": (0.45, 0.45, 0.48), "nav_id": "NavigationMesh_obc", "nav_aabb": (-40, -2, -188, 72, 14, 190),
+             "cleared_flag": "boss_fatbike_kindje", "residents": ([(-8, -10), (8, -14), (14, -76), (-16, -163)], ['Eindelijk weer gewoon les.', 'Geen fatbikes meer in de gang!', 'De aula is weer van ons.']),
              "exit": (-0.75, -2, -4, "OBCExit", NAVY)}
     d.write(OUT, world, ext, extra)
     print("wrote", OUT, "with", len(ENEMIES), "enemies")

@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/props/Chest.tscn" id="22_chest"]
 [ext_resource type="Script" path="res://scenes/world/props/generator_group.gd" id="23_group"]
 [ext_resource type="PackedScene" path="res://scenes/world/props/Generator.tscn" id="24_generator"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/Villager.tscn" id="29_villager"]
 
 [sub_resource type="Environment" id="Environment_dungeon"]
 background_mode = 1
@@ -420,6 +421,7 @@ location_name = "Station Elst"
 location_id = &"station_dungeon"
 default_spawn = &"Entrance"
 autosave_on_enter = true
+cleared_flag = &"station_cleared"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_dungeon")
@@ -1166,6 +1168,28 @@ position = Vector3(0, 0, 16)
 navigation_mesh = SubResource("NavigationMesh_station")
 script = ExtResource("20_nav")
 
+[node name="Residents" type="Node3D" parent="."]
+
+[node name="Resident1" parent="Residents" instance=ExtResource("29_villager")]
+position = Vector3(-3, 0, 4)
+lines = PackedStringArray("De treinen rijden weer!", "Eindelijk weer op tijd op mijn werk.", "Waar is mijn OV-chipkaart nou?")
+look_seed = 7
+
+[node name="Resident2" parent="Residents" instance=ExtResource("29_villager")]
+position = Vector3(4, 0, 4)
+lines = PackedStringArray("De treinen rijden weer!", "Eindelijk weer op tijd op mijn werk.", "Waar is mijn OV-chipkaart nou?")
+look_seed = 14
+
+[node name="Resident3" parent="Residents" instance=ExtResource("29_villager")]
+position = Vector3(-10, 0, -4)
+lines = PackedStringArray("De treinen rijden weer!", "Eindelijk weer op tijd op mijn werk.", "Waar is mijn OV-chipkaart nou?")
+look_seed = 21
+
+[node name="Resident4" parent="Residents" instance=ExtResource("29_villager")]
+position = Vector3(8, 0, -72)
+lines = PackedStringArray("De treinen rijden weer!", "Eindelijk weer op tijd op mijn werk.", "Waar is mijn OV-chipkaart nou?")
+look_seed = 28
+
 [node name="Generators" type="Node3D" parent="." groups=["navigation_source"]]
 script = ExtResource("23_group")
 completion_flag = &"station_cleared"
@@ -1203,60 +1227,60 @@ rotation = Vector3(0, 0.7854, 0)
 
 [node name="LowDrillerHall1" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(-4, 0, 3)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, -3.157, 0)
 
 [node name="LowDrillerHall2" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(3.5, 0, 2)
-rotation = Vector3(0, 0.3, 0)
+rotation = Vector3(0, 0.225, 0)
 
 [node name="LowDrillerPlatform1" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(-3, 0, -21)
-rotation = Vector3(0, 0.4, 0)
+rotation = Vector3(0, -3.397, 0)
 
 [node name="LowDrillerPlatform2" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(0, 0, -25)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, -0.417, 0)
 
 [node name="LowDrillerPlatform3" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(-8, 0, -26)
-rotation = Vector3(0, -0.3, 0)
+rotation = Vector3(0, -3.211, 0)
 
 [node name="LowDrillerWorkshop1" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(-21, 0, -17)
-rotation = Vector3(0, 1.2, 0)
+rotation = Vector3(0, -2.364, 0)
 
 [node name="LowDrillerWorkshop2" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(-24, 0, -14)
-rotation = Vector3(0, 1.6, 0)
+rotation = Vector3(0, -0.916, 0)
 
 [node name="LowDrillerTunnel1" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(8, 0, -44)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, -0.649, 0)
 
 [node name="LowDrillerTunnel2" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(8, 0, -60)
-rotation = Vector3(0, 3.1416, 0)
+rotation = Vector3(0, 2.252, 0)
 
 [node name="LowDrillerDepot1" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(2, 0, -76)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, -2.921, 0)
 
 [node name="LowDrillerDepot2" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(6, 0, -78)
-rotation = Vector3(0, 0.3, 0)
+rotation = Vector3(0, -3.149, 0)
 
 [node name="LowDrillerDepot3" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(-1, 0, -80)
-rotation = Vector3(0, -0.3, 0)
+rotation = Vector3(0, 0.513, 0)
 
 [node name="LowDrillerDepot4" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(13, 0, -82)
-rotation = Vector3(0, 0.2, 0)
+rotation = Vector3(0, 0.3, 0)
 
 [node name="LowDrillerDepot5" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(18, 0, -77)
-rotation = Vector3(0, 0.6, 0)
+rotation = Vector3(0, 2.007, 0)
 
 [node name="LowDrillerDepot6" parent="Enemies" instance=ExtResource("21_enemy")]
 position = Vector3(10, 0, -86)
-rotation = Vector3(0, 0, 0)
+rotation = Vector3(0, 3.204, 0)

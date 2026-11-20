@@ -10,6 +10,8 @@ var _flash_tween: Tween
 var _parry_tween: Tween
 var _message_tween: Tween
 var _banner_tween: Tween
+## Seconds the subtitle of a scene stays.
+var _subtitle_left: float = 0.0
 
 @onready var _health_bar: ProgressBar = $Bars/HealthBar
 @onready var _stamina_bar: ProgressBar = $Bars/StaminaBar
@@ -44,6 +46,7 @@ func _ready() -> void:
 	EventBus.boss_started.connect(_on_boss_started)
 	EventBus.crosshair_changed.connect(func(shown: bool) -> void: ($Crosshair as Label).visible = shown)
 	EventBus.dev_powers_changed.connect(func(enabled: bool) -> void: ($DevPowers as Label).visible = enabled)
+	EventBus.subtitle_requested.connect(_on_subtitle_requested)
 	($DevPowers as Label).visible = GameState.dev_powers
 	EventBus.boss_health_changed.connect(_on_boss_health_changed)
 	EventBus.boss_ended.connect(func() -> void: _boss_bar.visible = false)
@@ -103,6 +106,20 @@ func _on_respawned() -> void:
 func _on_interaction_prompt_changed(prompt: String) -> void:
 	_prompt_label.text = "[E] " + prompt
 	_prompt_label.visible = not prompt.is_empty()
+
+
+func _process(delta: float) -> void:
+	if _subtitle_left > 0.0:
+		_subtitle_left -= delta
+		if _subtitle_left <= 0.0:
+			($Subtitle as Label).visible = false
+
+
+func _on_subtitle_requested(speaker: String, text: String, seconds: float) -> void:
+	var subtitle: Label = $Subtitle
+	subtitle.text = "%s: %s" % [speaker, text] if not speaker.is_empty() else text
+	subtitle.visible = true
+	_subtitle_left = seconds
 
 
 func _on_message_requested(text: String) -> void:

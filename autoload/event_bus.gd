@@ -70,3 +70,6 @@ signal rest_requested(message: String)
 signal crosshair_changed(shown: bool)
 ## Dev powers went on or off (` in debug builds): the HUD shows it.
 signal dev_powers_changed(enabled: bool)
+## A line in a scene: the HUD shows [param speaker] and [param text] at the
+## bottom for [param seconds].
+signal subtitle_requested(speaker: String, text: String, seconds: float)

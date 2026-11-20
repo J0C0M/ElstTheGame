@@ -9,8 +9,9 @@ extends SceneTree
 ## follows and fights along, Amber's breath burns but not behind a pillar,
 ## her head takes double damage while she pants, her tail and wings, her
 ## flight and three bolts that bring her down, the scene where Klaas falls,
-## her furious second bar with drillers and fire, and the golden Tren
-## syringe she drops. Uses its own save folder.
+## her furious second bar with drillers and fire, the golden Tren syringe
+## she drops, waking Klaas with it, and the end scene outside the church:
+## the party, the tornado that goes, the spy, Inwijding 6 and the credits. Uses its own save folder.
 ## Run: godot --headless --path . --fixed-fps 60 -s res://tests/test_amber.gd
 ##
 ## The main script of -s is compiled before the autoloads exist, so project
@@ -38,6 +39,7 @@ const INHALE: int = 2
 const ALLY_FOLLOW: int = 1
 const CENTRE: Vector3 = Vector3(12, -15, -233)
 const ALLY_FALLEN: int = 4
+const ALLY_STANDING: int = 5
 
 var _failures: int = 0
 var _main: Variant
@@ -70,6 +72,8 @@ func _run() -> void:
 	await _test_flight()
 	await _test_klaas_falls()
 	await _test_second_bar_and_death()
+	await _test_revive_klaas()
+	await _test_ending()
 	_clear_saves()
 	DirAccess.remove_absolute(TEST_SAVE_DIR)
 	print("test_amber: %d failed" % _failures)
@@ -255,6 +259,23 @@ func _test_first_bar() -> void:
 	health = _fresh_health()
 	await _force(amber, BREATH, 1.0)
 	_check(player.health.current_health == health, "a pillar between her and the player stops the flames")
+	# Under her neck is no safe spot: it burns there too, and it glows.
+	_put_amber(amber, CENTRE, 108.0)
+	await _frames(3)
+	var neck: Array = amber.call(&"_neck_zone")
+	var under: Vector3 = (neck[0] + neck[1]) * 0.5
+	_place(Vector3(under.x, CENTRE.y, under.z), 0.0)
+	health = _fresh_health()
+	await _force(amber, BREATH, 0.6)
+	_check(player.health.current_health < health, "standing under her neck while she breathes fire burns too")
+	_check(_player().global_position.distance_to(Vector3(under.x, CENTRE.y, under.z)) > 1.5, "and the heat pushes the player out from under her")
+	amber.mode = BREATH
+	amber.set("_timer", 0.5)
+	amber.model.pose = 2
+	await _frames(15)
+	_check(amber.get_node("Model/Body/Neck/ThroatGlow").visible and amber.get_node("Model/Body/Neck/NeckHeat").visible,
+		"the underside of her neck glows hot")
+	await _frames(40)
 	# Panting with her head low after the breath.
 	amber.mode = PANT
 	amber.set("_timer", 3.0)
@@ -329,10 +350,16 @@ func _test_lap() -> void:
 	var farthest: float = 0.0
 	var overlap: float = 0.0
 	var lapped: bool = false
+	var lap_start: int = -1
+	var out_at: int = -1
 	for i: int in 1200:
 		await physics_frame
 		amber.set("_flight_wait", 999.0)
 		lapped = lapped or amber.mode == LAP
+		if lapped and lap_start < 0:
+			lap_start = i
+		if lap_start >= 0 and out_at < 0 and Vector2(amber.global_position.x - CENTRE.x, amber.global_position.z - CENTRE.z).length() > 14.0:
+			out_at = i
 		farthest = maxf(farthest, Vector2(amber.global_position.x - CENTRE.x, amber.global_position.z - CENTRE.z).length())
 		overlap = maxf(overlap, amber.body_overlap())
 		if lapped and amber.mode != LAP:
@@ -341,6 +368,31 @@ func _test_lap() -> void:
 	_check(amber.mode != LAP and Vector2(amber.global_position.x - CENTRE.x, amber.global_position.z - CENTRE.z).length() < 10.0,
 		"and comes back in between the pillars")
 	_check(overlap < 0.1, "on her lap her body stays clear of the pillars and the wall (%.2f m)" % overlap)
+	_check(out_at >= 0 and out_at - lap_start < 150, "she gets going at once: past the pillars within 2.5 s (%.1f s)" % ((out_at - lap_start) / 60.0))
+	# Also from a hard spot: close to a pillar and facing it.
+	amber.mode = CHASE
+	_put_amber(amber, _spot(270.0, 4.0), 270.0)
+	_place(_spot(90.0, 8.0), PI)
+	amber.get("_cooldowns")[&"lap"] = 0.0
+	amber.set("_attack_wait", 0.0)
+	for i: int in 4:
+		amber.get("_hit_times").append(amber.get("_clock"))
+	var started: int = -1
+	var escaped: int = -1
+	for i: int in 600:
+		await physics_frame
+		amber.set("_flight_wait", 999.0)
+		if amber.mode == LAP and started < 0:
+			started = i
+		if started >= 0 and Vector2(amber.global_position.x - CENTRE.x, amber.global_position.z - CENTRE.z).length() > 14.0:
+			escaped = i
+			break
+	_check(started >= 0 and escaped >= 0 and escaped - started < 180, "even facing a pillar she gets going quickly (%.1f s)" % ((escaped - started) / 60.0))
+	for i: int in 1200:
+		await physics_frame
+		amber.set("_flight_wait", 999.0)
+		if amber.mode != LAP:
+			break
 	amber.mode = CHASE
 	amber.set("_flight_wait", 999.0)
 
@@ -382,7 +434,7 @@ func _test_klaas_falls() -> void:
 		if amber.phase == 2:
 			break
 	_check(ally.mode == ALLY_FALLEN and _state.has_flag(&"klaas_fallen"), "Klaas takes her fireball for the player and falls")
-	_check(amber.phase == 2 and amber.health.current_health == 900 and _main.get_node("UI/HUD/BossBar/BossName").text.ends_with("2/2"),
+	_check(amber.phase == 2 and amber.health.current_health == 1050 and _main.get_node("UI/HUD/BossBar/BossName").text.ends_with("2/2"),
 		"then her second bar starts")
 	_check(_player().process_mode == Node.PROCESS_MODE_INHERIT and _state.is_saving_blocked(), "the player fights on, still without saving")
 
@@ -391,9 +443,9 @@ func _test_second_bar_and_death() -> void:
 	var amber: Variant = _main.get_world().get_node("Amber")
 	amber.set("_flight_wait", 999.0)
 	var enemies: int = get_nodes_in_group(&"enemies").size()
-	amber.health.take_damage(320)
+	amber.health.take_damage(370)
 	await _frames(5)
-	_check(amber.helps == 1 and get_nodes_in_group(&"enemies").size() == enemies + 2, "furious, she calls two drillers")
+	_check(amber.helps == 1 and get_nodes_in_group(&"enemies").size() == enemies + 2, "furious, she calls two cultists")
 	# Her new attack: she rears up and stamps, rings of fire run over the floor.
 	_put_amber(amber, CENTRE, 90.0)
 	_place(_spot(90.0, 13.0), PI)
@@ -430,6 +482,74 @@ func _test_second_bar_and_death() -> void:
 		await _frames(10)
 		await _press(&"interact")
 		_check(_state.has_flag(&"tren_spuit_found"), "the player picks up the syringe")
+
+
+func _test_revive_klaas() -> void:
+	var ally: Variant = _main.get_world().get_node("KlaasAlly")
+	_place(ally.global_position + Vector3(1.2, 0, 0), -PI / 2)
+	await _frames(10)
+	_check(ally.get_node("Revive").enabled, "fallen Klaas can be woken with the syringe")
+	await _press(&"interact")
+	await _frames(5)
+	_check(_main.get_world().find_child("Cutscene", true, false) != null, "a short scene plays")
+	for i: int in 1200:
+		await physics_frame
+		if _state.has_flag(&"klaas_revived"):
+			break
+	_check(ally.mode == ALLY_STANDING and _state.has_flag(&"klaas_revived"), "the golden Tren syringe wakes Klaas up")
+	_check(_step() == &"outside", "the quest says: go outside with Klaas")
+	await _wait_for_world("Elst")
+	_check(_main.get_world().location_name == "Elst", "then the two go outside, to the church square of Elst")
+
+
+func _test_ending() -> void:
+	var world: Variant = _main.get_world()
+	var ending: Variant = world.find_child("Ending", true, false)
+	var tornado: Variant = world.find_child("Tornado", true, false)
+	await _frames(60)
+	_check(ending != null and ending.playing, "outside the church the end scene starts")
+	_check(world.find_child("Feest", true, false).get_node("Liberated").visible, "the villagers are back: a party on the church square")
+	var saw_spy: bool = false
+	for i: int in 4000:
+		await physics_frame
+		saw_spy = saw_spy or (ending.part == 4 and ending.find_child("SpyModel", true, false) != null)
+		if _state.has_flag(&"elst_saved"):
+			break
+	_check(tornado.is_gone() and _state.has_flag(&"tornado_gone"), "the tornado is gone")
+	_check(saw_spy, "a figure in a cloak watches from afar and reports to his boss")
+	_check(_quests.get_status(QUEST) == 2 and _state.inwijding == 6, "Klaas makes the player a real Elstenaar: Quest 6 is done, Inwijding 6")
+	for i: int in 900:
+		await physics_frame
+		if _main.get_node("UI/Menus/Credits").visible:
+			break
+	_check(_main.get_node("UI/Menus/Credits").visible and paused, "the credits roll")
+	_main.get_node("UI/Menus/Credits").close()
+	await _frames(5)
+	_check(not paused and not ending.playing and not _state.has_flag(&"ending_pending"), "after the credits the player plays on")
+	# No more wind at the old ring: walking out plays a short scene and the
+	# player walks back into Elst.
+	var player: Variant = _player()
+	_place(Vector3(0, 0, 226), 0.0)
+	await _frames(10)
+	_check(_main.get_world().find_child("Cutscene", true, false) != null, "walking out of the free Elst plays a short scene")
+	for i: int in 600:
+		await physics_frame
+		if _main.get_world().find_child("Cutscene", true, false) == null:
+			break
+	await _frames(5)
+	var radius: float = Vector2(player.global_position.x, player.global_position.z).length()
+	_check(radius < 221.0 and player.process_mode == Node.PROCESS_MODE_INHERIT, "then the player walks back into Elst and can move again (%.0f m out)" % radius)
+	# After saving and loading the tornado stays gone and the scene does not play again.
+	_place(world.get_spawn(&"KerkExit").global_position, 0.0)
+	await _frames(10)
+	root.get_node("SaveManager").quicksave()
+	await _frames(10)
+	root.get_node("SaveManager").load_save(root.get_node("SaveManager").get_latest_save_id())
+	await _wait_for_world("Elst")
+	await _frames(60)
+	var loaded: Variant = _main.get_world()
+	_check(loaded.find_child("Tornado", true, false).is_gone() and not loaded.find_child("Ending", true, false).playing,
+		"after loading the tornado stays gone and the end does not play again")
 
 
 func _force(amber: Variant, mode: int, seconds: float) -> void:

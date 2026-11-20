@@ -194,7 +194,7 @@ Verder:
    Advies: beide, met de draakjes alleen in de catacomben.
 2. **Quest 6 start vanzelf** als de kerk opengaat, met een toespraak van Amber via de tornado en een nieuwe regel van Klaas in zijn huis. (Advies: ja, zo staat het in het GDD.)
 3. **Klaas loopt niet mee door de dungeon.** Hij wacht voor de arena, zoals het GDD zegt. (Advies: ja.)
-4. **De rand van de wereld na het einde:** een onzichtbare grens bij de oude ring met een melding als "Je hoeft nergens meer heen. Elst is weer van jou." (Advies: ja. Het alternatief is lopen tot de grond ophoudt.)
+4. **De rand van de wereld na het einde:** een korte scène bij de oude ring ("Waar ga ik heen? Ik blijf het nog even vieren in Elst!"), waarna de speler een paar meter terugloopt (besluit eigenaar).
 5. **Aftiteling:** welke naam of namen wil je erin? Bijvoorbeeld "Een game van J0C0M", plus Godot en de CC0-bronnen.
 6. **Getallen:** de startwaarden staan in de tabel van B3 en in `amber.tres`. Balans stellen we bij in Fase 12.
 

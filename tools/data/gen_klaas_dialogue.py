@@ -125,6 +125,8 @@ line("q5_report", "Grumpy Oma verslagen? Dan wordt het vanavond eindelijk weer e
 line("q5_reward", "Hier, 150 goud. En er is meer.", "q5_crossbow", action="set_flag", value="q5_reported")
 line("q5_crossbow", "Je hebt al mijn klussen gedaan. Daarom krijg je mijn oude kruisboog. Druk op 2 om hem te pakken en houd de rechtermuisknop vast om te richten. Er zitten 15 pijlen bij. Meer koop je bij mij, of je vindt ze in kisten.", "hub",
      action="give_item", value="crossbow")
+line("greeting_hero", "Daar is mijn Elstenaar. Blauwe lucht, koude shakes. Het leven is goed.", "hub", condition=q6_done,
+     model_action="flex")
 line("greeting_strong", "Kijk eens wie er spieren krijgt. Bijna zoveel als ik. Bijna.", "hub", condition=strong, model_action="flex")
 line("greeting", "Daar is mijn favoriete niemand.", "hub")
 line("hub", "Wat wil je?", choices=[
@@ -185,9 +187,11 @@ line("q5_go", "De Bingo Club ligt vlak bij de kerk. Neem veel drankjes mee, en v
 line("q5_busy", "Ik hoor ze nog steeds BINGO roepen. Grumpy Oma zit nog in haar grot.", "hub")
 line("q5_early", "Het is stil in de Bingo Club. Heb jij Grumpy Oma al verslagen?", "q5_early_2", model_action="flex")
 line("q5_early_2", "Eerder klaar dan gevraagd. Ik ben trots op je. Hier, je beloning.", "q5_crossbow", action="start_quest", value=Q5)
-line("next_job", "Nog niet. Rust uit. Ik roep je als Amber weer iets flikt.", "hub")
+line("next_job", "Een klus? Elst is vrij. Geniet ervan.", "next_job_2")
+line("next_job_2", "Al hoorde ik wel iets over een vent in een lange mantel die rondhangt bij de kerk. Ach. Vast niks.", "hub")
 line("q6_go", "De kerk is open. Amber zit diep eronder. Ik ga vooruit en wacht bij haar hol. Kom zodra je klaar bent.", "hub", model_action="flex")
-line("lore_1", "Amber kwam uit Arnhem-Zuid. Groot, oranje, slecht humeur. Ze nam Elst over en zette overal haar drillers neer.", "lore_2")
+line("lore_1", "Amber komt uit Zevenaar. Dat nam ze als eerste in. Daarna Arnhem, en vanuit Arnhem-Zuid kwam ze met haar drillers naar Elst.", "lore_1b")
+line("lore_1b", "Groot, oranje, slecht humeur. Ze nam Elst over en zette overal haar drillers neer.", "lore_2")
 line("lore_2", "Sinds die dag draait er een tornado om het dorp. Niemand erin, niemand eruit. Station Elst is haar aanvoerlijn. Die moet kapot.", "hub")
 line("glasses", "Deze bril gaat nooit af. Nooit. Volgende vraag.", "hub")
 line("sleep_offer", "Het bed staat achterin. Schoenen uit. Slapen is ook trainen.", choices=[
@@ -215,7 +219,7 @@ def write(path, starts):
 
 
 write("data/dialogue/klaas.tres", ["first_meeting", "tutorial_report", "tutorial_busy", "q2_report", "q3_report", "q4_report", "q5_report",
-                                   "greeting_strong", "greeting"])
+                                   "greeting_hero", "greeting_strong", "greeting"])
 
 # Klaas in the church, at the gate of Amber's arena (Quest 6).
 not_ready = cond(forbidden_flag="klaas_ready")

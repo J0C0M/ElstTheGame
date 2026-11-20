@@ -24,7 +24,7 @@ extends CharacterBody3D
 ## When the first bar is empty a scene follows in which Klaas saves the
 ## player and falls. With the second bar she is furious: faster, burning
 ## patches where she walks and after her breath, twice she calls
-## drillers, and she has a new attack: she rears up and stamps, and two
+## cultists from Zevenaar, and she has a new attack: she rears up and stamps, and two
 ## rings of fire run over the floor (jump over them). When she dies she drops the golden Tren syringe. Saving is
 ## blocked during the fight and the gate is shut; a GameState flag keeps her
 ## beaten.
@@ -104,9 +104,9 @@ enum Mode { WAITING, CHASE, INHALE, BREATH, PANT, TAIL_WINDUP, TAIL, WINGS, TAKE
 @export var fire_patch_scene: PackedScene
 @export var fire_patch_damage: int = 6
 @export var helper_scene: PackedScene
-## Where the drillers come in, from the arena centre; two per call.
+## Where the cultists come in, from the arena centre; two per call.
 @export var helper_offsets: Array[Vector3] = []
-## Health ratios of the second bar at which she calls drillers.
+## Health ratios of the second bar at which she calls cultists.
 @export var help_at: Array[float] = [0.66, 0.33]
 ## Her stamp in the second bar: rings of fire that run over the floor.
 @export var fire_wave_scene: PackedScene
@@ -129,6 +129,10 @@ const LAND_TIME: float = 1.4
 const LAP_SPAN: float = 288.0
 const TRAMPLE_REACH: float = 3.2
 const WING_REACH: float = 9.0
+## Half the width of the hot zone under her neck while she breathes fire.
+const NECK_HEAT: float = 3.2
+## The heat under her neck pushes the player out, in metres per second.
+const NECK_PUSH: float = 7.0
 const ROARS: Array[String] = ["GRAAAAH!", "Uit mijn buurt, insecten!", "Jullie krijgen me niet te pakken!"]
 
 var mode: Mode = Mode.WAITING
@@ -136,7 +140,7 @@ var mode: Mode = Mode.WAITING
 var phase: int = 1
 ## The player or Klaas: whom her next attack is for.
 var target: Node3D
-## How many times she called drillers, laps she ran and breaths she took, for tests.
+## How many times she called cultists, laps she ran and breaths she took, for tests.
 var helps: int = 0
 var laps: int = 0
 var stamps: int = 0
@@ -169,6 +173,7 @@ var _lap_side: float = 1.0
 var _lap_angle: float = 0.0
 var _lap_travelled: float = 0.0
 var _lap_time: float = 0.0
+var _lap_check_at: Vector3
 var _trampled: Array[Node3D] = []
 var _gate: FlagGate
 var _klaas: KlaasAlly
@@ -432,7 +437,8 @@ func _inhale(player: Player, delta: float, speed_factor: float) -> void:
 	if _timer > inhale_time * 0.4:
 		_turn_to(_target_position(player), delta, speed_factor * 1.5)
 	var urgency: float = 1.0 - clampf(_timer / inhale_time, 0.0, 1.0)
-	breath.show_warning(model.get_mouth(), _forward(), _breath_half_angle(), breath_range, _ground_y, urgency, _excluded)
+	var neck: Array[Vector3] = _neck_zone()
+	breath.show_warning(model.get_mouth(), _forward(), _breath_half_angle(), breath_range, _ground_y, urgency, _excluded, neck[0], neck[1], NECK_HEAT)
 	if _timer <= 0.0:
 		mode = Mode.BREATH
 		breaths += 1
@@ -450,8 +456,10 @@ func _breathe(player: Player, delta: float) -> void:
 		rotation.y = _breath_yaw + deg_to_rad(breath_sweep) * _sweep_side * lerpf(-1.0, 1.0, progress)
 	var mouth: Vector3 = model.get_mouth()
 	var shown: Vector3 = _forward().rotated(Vector3.UP, _breath_yaw - rotation.y) if phase == 2 else _forward()
-	breath.show_warning(mouth, shown, _breath_half_angle(), breath_range, _ground_y, 1.0, _excluded)
+	var neck: Array[Vector3] = _neck_zone()
+	breath.show_warning(mouth, shown, _breath_half_angle(), breath_range, _ground_y, 1.0, _excluded, neck[0], neck[1], NECK_HEAT)
 	breath.pour(mouth, _forward(), breath_angle, breath_range, _ground_y, delta, _excluded)
+	_push_from_neck(player)
 	_tick -= delta
 	if _tick <= 0.0:
 		_tick = BREATH_TICK
@@ -466,9 +474,35 @@ func _breathe(player: Player, delta: float) -> void:
 		model.pose = AmberModel.Pose.PANT
 
 
+## The floor under her neck, from the middle of her body to her mouth: it
+## burns too, so running in under her head or chest is no way out of the
+## breath.
+func _neck_zone() -> Array[Vector3]:
+	return [_flat(global_position), _flat(model.get_mouth())]
+
+
+## The heat drives the player out from under her neck, sideways, every frame.
+func _push_from_neck(player: Player) -> void:
+	var neck: Array[Vector3] = _neck_zone()
+	var feet: Vector3 = _flat(player.global_position)
+	var nearest: Vector3 = Geometry3D.get_closest_point_to_segment(feet, neck[0], neck[1])
+	if nearest.distance_to(feet) > NECK_HEAT:
+		return
+	var out: Vector3 = feet - nearest
+	if out.length() < 0.2:
+		out = _forward().cross(Vector3.UP)
+	player.apply_wind(out.normalized() * NECK_PUSH)
+
+
 func _breath_tick(player: Player) -> void:
 	var mouth: Vector3 = model.get_mouth()
+	var neck: Array[Vector3] = _neck_zone()
 	for victim: Node3D in _victims(player):
+		var feet: Vector3 = _flat(victim.global_position)
+		var nearest: Vector3 = Geometry3D.get_closest_point_to_segment(feet, neck[0], neck[1])
+		if nearest.distance_to(feet) <= NECK_HEAT:
+			_hurt(victim, breath_damage)
+			continue
 		var chest: Vector3 = victim.global_position + Vector3.UP * CHEST
 		var to: Vector3 = _flat(chest - mouth)
 		if to.length() > breath_range or rad_to_deg(_forward().angle_to(to)) > breath_angle:
@@ -620,7 +654,9 @@ func _start_lap(player: Player) -> void:
 	laps += 1
 	_trampled.clear()
 	var own: float = _angle_of(global_position)
-	_lap_gap = _nearest_gap(own)
+	# The gap she is already heading for, so she does not turn round first.
+	_lap_gap = _nearest_gap(_angle_of(global_position + _forward() * 8.0))
+	_lap_check_at = global_position
 	# She runs away from the player first.
 	_lap_side = -1.0 if wrapf(_angle_of(player.global_position) - _lap_gap, -180.0, 180.0) > 0.0 else 1.0
 	_lap_stage = 0
@@ -648,8 +684,13 @@ func _run_lap(player: Player, delta: float, speed_factor: float) -> void:
 	var turned: float = smoothstep(10.0, 17.0, radius)
 	match _lap_stage:
 		0:
-			wanted = _flat(_ring_point(_lap_gap, 11.0) - global_position)
-			if wanted.length() < 1.5 or _lap_time > 5.0:
+			wanted = _flat(_ring_point(_lap_gap, 11.0) - global_position).normalized() + _pillar_push() * 0.35
+			# Out of the middle, or not getting anywhere: go on to the ring.
+			var stuck: bool = false
+			if fmod(_lap_time, 0.5) < delta:
+				stuck = _lap_time > 0.4 and _flat(global_position - _lap_check_at).length() < 0.6
+				_lap_check_at = global_position
+			if radius > 9.5 or stuck or _lap_time > 3.0:
 				_lap_stage = 1
 				_lap_travelled = 0.0
 				_lap_time = 0.0
@@ -835,7 +876,7 @@ func _on_health_changed(current: int, maximum: int) -> void:
 
 
 func _call_helpers() -> void:
-	EventBus.message_requested.emit("Amber roept haar drillers!")
+	EventBus.message_requested.emit("Amber roept haar cultisten uit Zevenaar!")
 	var parent: Node3D = get_parent() as Node3D
 	for i: int in [helps * 2, helps * 2 + 1]:
 		if helper_scene == null or i >= helper_offsets.size():
@@ -856,47 +897,138 @@ func _on_bar_empty() -> void:
 
 
 ## Klaas saves the player from her deadly fireball and falls. Then the second
-## bar starts.
+## bar starts. The scene is staged in the middle of the arena, so every shot
+## shows it clearly: Amber lowers her head at the player and gathers a
+## fireball in her mouth; Klaas runs in from the side and, in slow motion,
+## dives into its path; the fireball hits him and throws him back.
 func _transition() -> void:
 	mode = Mode.TRANSITION
 	breath.hide_warning()
 	model.tail_sweep = 0.0
 	model.walk_speed = 0.0
-	global_position.y = _ground_y
 	var player: Player = get_tree().get_first_node_in_group(&"player") as Player
 	var scene: Cutscene = Cutscene.begin(get_parent() as Node3D)
-	var away: Vector3 = _flat(player.global_position - global_position).normalized()
-	if away.length() < 0.5:
-		away = -_forward()
-	_face_now(player.global_position)
-	var middle: Vector3 = (global_position + player.global_position) * 0.5
-	var side: Vector3 = away.cross(Vector3.UP).normalized()
-	# Over the player's shoulder: Amber in front, room for Klaas in between.
-	scene.look(_inside_arena(player.global_position + away * 7.0 + side * 5.0) + Vector3.UP * 5.0, global_position + Vector3.UP * 3.0)
-	model.pose = AmberModel.Pose.INHALE
-	await scene.say("Amber", "Genoeg! Jij en je opgepompte vriend zijn klaar.")
-	_charge_ball.visible = true
-	var tween: Tween = create_tween()
-	tween.tween_property(_charge_ball, "scale", Vector3.ONE * 2.5, 1.4).from(Vector3.ONE * 0.3)
-	await scene.say("Amber", "Verbrand, niemand!", 1.6)
+	# Staged near the middle, between the pillars: Amber just behind the
+	# middle facing the gate, the player in front of her head, Klaas to the
+	# side. Positions are in metres from the middle (x to the side, z ahead).
+	var ahead: Vector3 = Vector3(0, 0, 1)
+	var side: Vector3 = Vector3(1, 0, 0)
+	var centre: Vector3 = Vector3(arena_centre.x, _ground_y, arena_centre.z)
+	global_position = centre - ahead * 2.0
+	_face_now(global_position + ahead)
+	reset_physics_interpolation()
+	var spot: Vector3 = centre + ahead * 10.0
+	player.global_position = spot
+	player.rotation.y = atan2(ahead.x, ahead.z)
+	player.reset_physics_interpolation()
+	var cover: Vector3 = centre + ahead * 7.6
 	if _klaas != null:
-		_klaas.global_position = player.global_position - away * 1.6
-		_klaas.rotation.y = atan2(away.x, away.z)
+		_klaas.set_physics_process(false)
+		_klaas.global_position = centre + ahead * 8.5 + side * 5.0
+		_klaas.rotation.y = atan2(side.x, side.z)
+		_klaas.reset_physics_interpolation()
+	model.pose = AmberModel.Pose.IDLE
+	model.look_pitch = 0.0
+	# 1. Wide, from the side: Amber, the player and Klaas.
+	_scene_look(scene, centre + Vector3(-11.5, 4.0, 4.0), centre + Vector3(0, 2.2, 4.5))
+	await scene.say("Amber", "Genoeg! Jij en je opgepompte vriend zijn klaar.", 2.8)
+	# 2. Over the player's shoulder, at eye height: her head comes down at
+	# them, with fire in her mouth.
+	model.pose = AmberModel.Pose.BREATH
+	var lower: Tween = create_tween()
+	lower.tween_property(model, "look_pitch", -0.6, 1.4).set_trans(Tween.TRANS_SINE)
+	_charge_ball.visible = true
+	var grow: Tween = create_tween()
+	grow.tween_property(_charge_ball, "scale", Vector3.ONE * 2.2, 2.2).from(Vector3.ONE * 0.2)
+	_scene_look(scene, spot + ahead * 2.8 + side * 0.9 + Vector3.UP * 1.9, centre + ahead * 5.0 + Vector3.UP * 2.6)
+	await scene.wait(1.0)
+	await scene.say("Amber", "Verbrand, niemand!", 2.0)
+	# 3. From the other side, level: Klaas runs in.
+	_scene_look(scene, centre + Vector3(-7.5, 1.9, 6.5), centre + Vector3(1.5, 1.2, 7.8))
+	if _klaas != null:
 		_klaas.say("NEE!")
-	await scene.wait(0.8)
+		_klaas.model.set_locomotion(7.5, true, true)
+		var run: Tween = create_tween()
+		run.tween_property(_klaas, "global_position", cover + side * 2.2, 0.8)
+		await run.finished
+	# 4. Slow motion: he dives into the path as the fireball flies.
+	Engine.time_scale = 0.35
+	var ball: MeshInstance3D = MeshInstance3D.new()
+	ball.mesh = (_charge_ball as MeshInstance3D).mesh
+	ball.scale = Vector3.ONE * 1.6
+	get_parent().add_child(ball)
+	ball.global_position = model.get_mouth()
 	_charge_ball.visible = false
+	var shot: Tween = create_tween()
+	shot.tween_property(ball, "global_position", cover + Vector3.UP * 1.3, 0.6)
+	if _klaas != null:
+		_klaas.model.set_locomotion(0.0, false, true)
+		_klaas.model.play_action(&"dive", 0.6, true)
+		var dive: Tween = create_tween()
+		dive.tween_property(_klaas, "global_position", cover + Vector3.UP * 0.4, 0.6).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	await shot.finished
+	# 5. The hit: a flash, Klaas is thrown back and falls; the player stumbles.
+	var flash: OmniLight3D = OmniLight3D.new()
+	flash.light_color = Color(1.0, 0.55, 0.15)
+	flash.omni_range = 16.0
+	flash.light_energy = 12.0
+	get_parent().add_child(flash)
+	flash.global_position = cover + Vector3.UP * 1.5
+	ball.queue_free()
 	if _klaas != null:
 		_klaas.fall()
-	player.global_position += away * 3.0
-	player.reset_physics_interpolation()
+		var thrown: Tween = create_tween()
+		thrown.tween_property(_klaas, "global_position", cover + ahead * 1.4, 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	player.model.play_action(&"hurt", 0.6)
+	var fade: Tween = create_tween()
+	fade.tween_property(flash, "light_energy", 0.0, 0.8)
+	fade.tween_callback(flash.queue_free)
+	await scene.wait(0.6)
+	Engine.time_scale = 1.0
 	model.pose = AmberModel.Pose.IDLE
-	await scene.glide(_inside_arena(player.global_position + away * 5.0) + Vector3.UP * 3.0, _klaas.global_position if _klaas != null else middle, 1.2)
+	var raise: Tween = create_tween()
+	raise.tween_property(model, "look_pitch", 0.0, 1.0)
+	# 6. Close on Klaas on the floor.
+	var lying: Vector3 = _klaas.global_position if _klaas != null else cover
+	var close: Vector3 = _scene_spot(lying + side * 3.0 - ahead * 1.0 + Vector3.UP * 1.5, lying + Vector3.UP * 0.4)
+	await scene.glide(close, lying + Vector3.UP * 0.4, 1.4)
 	await scene.say("Klaas", "Niet... op mijn... maatje...", 2.8)
 	await scene.say("Klaas", "Pak haar. Voor Elst.", 2.4)
+	_scene_look(scene, spot + ahead * 2.8 + side * 0.9 + Vector3.UP * 2.0, global_position + ahead * 5.0 + Vector3.UP * 4.0)
 	await scene.say("Amber", "Eén minder. Nu jij.", 2.2)
+	if _klaas != null:
+		_klaas.set_physics_process(true)
 	scene.finish()
 	GameState.set_flag(&"klaas_fallen")
 	_start_phase_two()
+
+
+## Points the scene camera from a spot near [param from] at [param at].
+func _scene_look(scene: Cutscene, from: Vector3, at: Vector3) -> void:
+	scene.look(_scene_spot(from, at), at)
+
+
+## [param from], or a spot near it from where no pillar blocks the view of
+## [param at] and that is inside the wall: tried on the other side, then
+## closer in.
+func _scene_spot(from: Vector3, at: Vector3) -> Vector3:
+	var mirrored: Vector3 = Vector3(2.0 * at.x - from.x, from.y, from.z)
+	for base: Vector3 in [from, mirrored]:
+		for step: int in 6:
+			var spot: Vector3 = base.lerp(at, step * 0.12)
+			if _view_is_clear(spot, at):
+				return spot
+	return from.lerp(at, 0.7)
+
+
+func _view_is_clear(from: Vector3, at: Vector3) -> bool:
+	if _flat(from - arena_centre).length() > wall_radius - 1.0:
+		return false
+	for pillar: Vector3 in pillars:
+		var nearest: Vector3 = Geometry3D.get_closest_point_to_segment(_flat(pillar), _flat(from), _flat(at))
+		if nearest.distance_to(_flat(pillar)) < pillar_radius + 1.2:
+			return false
+	return true
 
 
 func _start_phase_two() -> void:

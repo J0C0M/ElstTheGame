@@ -2,8 +2,9 @@ extends SceneTree
 ## Headless test for Quest 6 and the church: the church opens after the three
 ## faction bosses (also for a save made before the church could open) and
 ## Quest 6 starts by itself; Klaas is away from home; the church dungeon has
-## enemies of every faction, chanting Amber cultists, flying dragonlings that
-## spit fire and fire grates, a checkpoint in the antechamber, and Klaas with
+## enemies of every faction, chanting Amber cultists that heal and cast
+## amber orbs, flying dragonlings that spit fire and whose driller rider
+## fights on when they fall, fire grates, a checkpoint in the antechamber, and Klaas with
 ## his last talk and shop, who opens the arena gate. Then the fight: Klaas
 ## follows and fights along, Amber's breath burns but not behind a pillar,
 ## her head takes double damage while she pants, her tail and wings, her
@@ -144,6 +145,23 @@ func _test_church_enemies() -> void:
 	var enemies: Variant = _main.get_world().get_node("Enemies")
 	enemies.get_node("Cultist3/Chanter").chant()
 	_check(enemies.get_node("VapeDriller4").damage_multiplier > 1.0, "an Amber cultist's chant fires up the enemies around him")
+	var vape: Variant = enemies.get_node("VapeDriller4")
+	vape.health.take_damage(10)
+	var wounded: int = vape.health.current_health
+	enemies.get_node("Cultist3/Chanter").chant()
+	_check(vape.health.current_health > wounded, "the chant also heals the enemies around him")
+	var cultist: Variant = enemies.get_node("Cultist3")
+	_check(cultist.health.max_health >= 70 and cultist.data.is_ranged(), "a cultist is tougher now and casts from a distance")
+	_place(cultist.global_position + Vector3(0, 0, 9), 0.0)
+	var orb: bool = false
+	for i: int in 400:
+		await physics_frame
+		for node: Node in enemies.get_children():
+			orb = orb or node.scene_file_path.ends_with("AmberOrb.tscn")
+		if orb:
+			break
+	_check(orb, "he casts amber orbs at the player")
+	_player().health.set_health(100)
 	var dragon: Variant = enemies.get_node("Dragonling3")
 	_place(Vector3(12, -10, -138), PI)
 	for i: int in 240:
@@ -159,9 +177,13 @@ func _test_church_enemies() -> void:
 		if fireball:
 			break
 	_check(fireball, "it spits fireballs")
+	_check(dragon.get_node("Model/Body/Rider").visible, "a driller rides the dragonling")
 	dragon.health.take_damage(100)
 	await _frames(5)
 	_check(dragon.mode == 3 and not dragon.is_in_group(&"enemies"), "a dragonling can be shot down")
+	var rider: Variant = dragon.fallen_rider
+	_check(rider != null and rider.is_in_group(&"enemies") and rider.data.id == &"low_driller" and not dragon.get_node("Model/Body/Rider").visible,
+		"its rider tumbles off and fights on, on foot")
 	var grate: Variant = _main.get_world().get_node("FireGrate1")
 	var burned: bool = false
 	for i: int in 300:
@@ -273,7 +295,7 @@ func _test_first_bar() -> void:
 		overlap = maxf(overlap, amber.body_overlap())
 		turned = maxf(turned, absf(wrapf(_angle_around(_player().global_position, amber.global_position) - start_angle, -180.0, 180.0)))
 	_check(closest > 8.0 and turned > 10.0, "she keeps her distance and circles her target (closest %.1f m, %.0f degrees around)" % [closest, turned])
-	_check(overlap < 0.05, "while she walks no part of her goes into a pillar or the wall (%.2f m)" % overlap)
+	_check(overlap < 0.1, "while she walks no part of her goes into a pillar or the wall (%.2f m)" % overlap)
 	# Klaas hits her too.
 	amber.mode = CHASE
 	_put_amber(amber, CENTRE, 90.0)

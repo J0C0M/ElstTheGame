@@ -169,6 +169,7 @@ def main():
                   f"position = {vec(x, 0, z)}", f"rotation = {vec(0, yaw, 0)}", ""]
     world = {"root": "WesteraamDungeon", "location_name": "Westeraam Getho", "location_id": "westeraam_dungeon",
              "ambient": (0.42, 0.38, 0.3), "nav_id": "NavigationMesh_westeraam", "nav_aabb": (-48, -2, -148, 70, 12, 162),
+             "cleared_flag": "boss_vape_koning", "residents": ([(0, 4), (-6, -48), (6, -40), (-27, -130)], ['Je kunt hier weer ademen zonder vapewolk.', 'Westeraam is weer gewoon Westeraam.', 'Wie ruimt al die vapes op?']),
              "exit": (11.25, 10, 8, "WesteraamExit", BLACK)}
     d.write(OUT, world, ext, extra)
     print("wrote", OUT, "with", len(ENEMIES), "enemies")

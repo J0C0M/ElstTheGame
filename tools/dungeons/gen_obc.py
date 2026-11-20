@@ -216,6 +216,7 @@ def main():
                   f"position = {vec(x, 0, z)}", f"rotation = {vec(0, yaw, 0)}", ""]
     world = {"root": "OBCDungeon", "location_name": "OBC Elst Fort", "location_id": "obc_dungeon",
              "ambient": (0.45, 0.45, 0.48), "nav_id": "NavigationMesh_obc", "nav_aabb": (-40, -2, -188, 72, 14, 190),
+             "cleared_flag": "boss_fatbike_kindje", "residents": ([(-8, -10), (8, -14), (14, -76), (-16, -163)], ['Eindelijk weer gewoon les.', 'Geen fatbikes meer in de gang!', 'De aula is weer van ons.']),
              "exit": (-0.75, -2, -4, "OBCExit", NAVY)}
     d.write(OUT, world, ext, extra)
     print("wrote", OUT, "with", len(ENEMIES), "enemies")

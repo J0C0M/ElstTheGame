@@ -149,7 +149,9 @@ class Dungeon:
     def write(self, out_path, world, ext, extra):
         """world: root name, location name and id, ambient colour, navigation id
         and AABB, and the exit (door z, marker z, entrance z, Elst spawn, door
-        colour). ext: extra ext_resources (type, path, id). extra: lines added
+        colour). Optional: the cleared flag of the beaten dungeon and its
+        residents (spots (x, z) and lines), who show up when the player comes
+        back. ext: extra ext_resources (type, path, id). extra: lines added
         after the navigation region (enemies, chests, bosses)."""
         out = ['[gd_scene format=3]', '',
                '[ext_resource type="Script" path="res://scenes/world/game_world.gd" id="1_world"]',
@@ -157,6 +159,8 @@ class Dungeon:
                '[ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="3_door"]',
                '[ext_resource type="Script" path="res://scripts/quests/quest_marker.gd" id="4_marker"]',
                '[ext_resource type="Script" path="res://scenes/world/runtime_navigation_region.gd" id="20_nav"]']
+        if "residents" in world:
+            ext = list(ext) + [("PackedScene", "res://scenes/npcs/Villager.tscn", "29_villager")]
         for kind, path, rid in ext:
             out.append(f'[ext_resource type="{kind}" path="{path}" id="{rid}"]')
         out += ['', '[sub_resource type="Environment" id="Environment_dungeon"]', 'background_mode = 1',
@@ -170,7 +174,10 @@ class Dungeon:
         for block in self.subs:
             out += block + [""]
         out += [f'[node name="{world["root"]}" type="Node3D"]', 'script = ExtResource("1_world")', f'location_name = "{world["location_name"]}"',
-                f'location_id = &"{world["location_id"]}"', 'default_spawn = &"Entrance"', "autosave_on_enter = true", "",
+                f'location_id = &"{world["location_id"]}"', 'default_spawn = &"Entrance"', "autosave_on_enter = true"]
+        if "cleared_flag" in world:
+            out.append(f'cleared_flag = &"{world["cleared_flag"]}"')
+        out += ["",
                 '[node name="WorldEnvironment" type="WorldEnvironment" parent="."]', 'environment = SubResource("Environment_dungeon")', ""]
         for block in self.nodes:
             out += block + [""]
@@ -184,6 +191,13 @@ class Dungeon:
                 '[node name="Player" parent="." instance=ExtResource("2_player")]', f"position = Vector3(0, 0, {f(entrance_z)})", "",
                 '[node name="Navigation" type="NavigationRegion3D" parent="."]', f'navigation_mesh = SubResource("{world["nav_id"]}")',
                 'script = ExtResource("20_nav")', ""]
+        if "residents" in world:
+            spots, lines = world["residents"]
+            out += ['[node name="Residents" type="Node3D" parent="."]', ""]
+            said = ", ".join('"' + line + '"' for line in lines)
+            for n, (x, z) in enumerate(spots, 1):
+                out += [f'[node name="Resident{n}" parent="Residents" instance=ExtResource("29_villager")]', f"position = {vec(x, 0, z)}",
+                        f"lines = PackedStringArray({said})", f"look_seed = {n * 7}", ""]
         out += extra
         pathlib.Path(out_path).write_text("\n".join(out).rstrip("\n") + "\n")
 

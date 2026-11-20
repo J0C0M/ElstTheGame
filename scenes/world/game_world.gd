@@ -17,15 +17,27 @@ extends Node3D
 ## test scenes such as the arena, where you want a sword straight away.
 @export var test_gear: Array[ItemData] = []
 
+## GameState flag of a beaten dungeon. Once it is set the enemies stay away,
+## and the few residents in the Residents node show up when the player comes
+## back in through the door (not when a save made inside loads).
+@export var cleared_flag: StringName
+
 ## Main turns this off, because it loads the last save after dying.
 var respawn_on_death: bool = true
+## Main sets this when the world comes from a save instead of through a door.
+var loaded_from_save: bool = false
 
 
 func _ready() -> void:
 	EventBus.player_died.connect(_on_player_died)
+	_apply_cleared()
 	for item: ItemData in test_gear:
 		if not GameState.has_gear(item.id):
 			GameState.add_gear(item)
+
+
+func is_cleared() -> bool:
+	return not cleared_flag.is_empty() and GameState.has_flag(cleared_flag)
 
 
 func get_player() -> Player:
@@ -83,3 +95,14 @@ func _on_player_died() -> void:
 	await get_tree().create_timer(respawn_delay).timeout
 	if is_inside_tree():
 		respawn_player()
+
+
+func _apply_cleared() -> void:
+	var cleared: bool = is_cleared()
+	var enemies: Node = get_node_or_null(^"Enemies")
+	if cleared and enemies != null:
+		for enemy: Node in enemies.get_children():
+			enemy.queue_free()
+	var residents: Node = get_node_or_null(^"Residents")
+	if residents != null and not (cleared and not loaded_from_save):
+		residents.queue_free()

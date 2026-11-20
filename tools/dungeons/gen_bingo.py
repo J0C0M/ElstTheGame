@@ -154,6 +154,7 @@ def main():
                   f"position = {vec(x, 0, z)}", f"rotation = {vec(0, yaw, 0)}", ""]
     world = {"root": "BingoCaveDungeon", "location_name": "Bingo Club Boomer Cave", "location_id": "bingo_dungeon",
              "ambient": (0.42, 0.42, 0.5), "nav_id": "NavigationMesh_bingo", "nav_aabb": (-36, -2, -188, 72, 12, 190),
+             "cleared_flag": "boss_grumpy_oma", "residents": ([(-14, -20), (14, -20), (6, -84), (12, -168)], ['BINGO! En deze keer eerlijk.', 'Koffie en een kaartje, zo hoort het.', 'Grumpy Oma? Nooit van gehoord.']),
              "exit": (-0.75, -2, -4, "BingoExit", (0.4, 0.55, 0.95))}
     d.write(OUT, world, ext, extra)
     print("wrote", OUT, "with", len(ENEMIES), "enemies")

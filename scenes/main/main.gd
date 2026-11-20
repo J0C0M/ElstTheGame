@@ -199,6 +199,7 @@ func _enter_world(world: GameWorld, spawn_id: StringName, vitals: Dictionary, sa
 		SaveManager.restore_globals(save)
 	# Main decides what happens after dying, not the world itself.
 	world.respawn_on_death = false
+	world.loaded_from_save = not save.is_empty()
 	_retro_screen.set_world(world)
 	_world = world
 	SaveManager.world = world

@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" path="res://scenes/bosses/VapeHideout.tscn" id="25_hideout"]
 [ext_resource type="PackedScene" path="res://scenes/world/props/Checkpoint.tscn" id="26_checkpoint"]
 [ext_resource type="PackedScene" path="res://scenes/world/props/RestBench.tscn" id="27_bench"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/Villager.tscn" id="29_villager"]
 
 [sub_resource type="Environment" id="Environment_dungeon"]
 background_mode = 1
@@ -722,6 +723,7 @@ location_name = "Westeraam Getho"
 location_id = &"westeraam_dungeon"
 default_spawn = &"Entrance"
 autosave_on_enter = true
+cleared_flag = &"boss_vape_koning"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_dungeon")
@@ -1954,6 +1956,28 @@ position = Vector3(0, 0, 8)
 [node name="Navigation" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_westeraam")
 script = ExtResource("20_nav")
+
+[node name="Residents" type="Node3D" parent="."]
+
+[node name="Resident1" parent="Residents" instance=ExtResource("29_villager")]
+position = Vector3(0, 0, 4)
+lines = PackedStringArray("Je kunt hier weer ademen zonder vapewolk.", "Westeraam is weer gewoon Westeraam.", "Wie ruimt al die vapes op?")
+look_seed = 7
+
+[node name="Resident2" parent="Residents" instance=ExtResource("29_villager")]
+position = Vector3(-6, 0, -48)
+lines = PackedStringArray("Je kunt hier weer ademen zonder vapewolk.", "Westeraam is weer gewoon Westeraam.", "Wie ruimt al die vapes op?")
+look_seed = 14
+
+[node name="Resident3" parent="Residents" instance=ExtResource("29_villager")]
+position = Vector3(6, 0, -40)
+lines = PackedStringArray("Je kunt hier weer ademen zonder vapewolk.", "Westeraam is weer gewoon Westeraam.", "Wie ruimt al die vapes op?")
+look_seed = 21
+
+[node name="Resident4" parent="Residents" instance=ExtResource("29_villager")]
+position = Vector3(-27, 0, -130)
+lines = PackedStringArray("Je kunt hier weer ademen zonder vapewolk.", "Westeraam is weer gewoon Westeraam.", "Wie ruimt al die vapes op?")
+look_seed = 28
 
 [node name="Checkpoint" parent="." instance=ExtResource("26_checkpoint")]
 position = Vector3(-33, 0, -48)

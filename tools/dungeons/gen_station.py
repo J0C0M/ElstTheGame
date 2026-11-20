@@ -145,6 +145,7 @@ def main():
                   f"position = {vec(x, 0, z)}", f"rotation = {vec(0, yaw, 0)}", ""]
     world = {"root": "StationDungeon", "location_name": "Station Elst", "location_id": "station_dungeon",
              "ambient": (0.3, 0.42, 0.35), "nav_id": "NavigationMesh_station", "nav_aabb": (-32, -2, -96, 60, 10, 118),
+             "cleared_flag": "station_cleared", "residents": ([(-3, 4), (4, 4), (-10, -4), (8, -72)], ['De treinen rijden weer!', 'Eindelijk weer op tijd op mijn werk.', 'Waar is mijn OV-chipkaart nou?']),
              "exit": (19.25, 18, 16, "StationExit", (0.3, 0.7, 0.4))}
     d.write(OUT, world, ext, extra)
     print("wrote", OUT, "with", len(GENERATORS), "generators and", len(ENEMIES), "enemies")

@@ -4,7 +4,9 @@ extends CharacterBody3D
 ## follows the player; in the fight he walks up to Amber and hits her, and
 ## she aims part of her attacks at him. Normal damage cannot kill him: he
 ## falls only in the scene where he saves the player, and lies there until
-## the golden Tren syringe wakes him up.
+## the golden Tren syringe wakes him up: E next to him plays a short scene
+## in which he gets up, and then the two of them go outside, where the end
+## scene of the game plays (Ending, in the church square of Elst).
 
 enum Mode { WAITING, FOLLOW, FIGHT, STAGGER, FALLEN, STANDING }
 
@@ -14,6 +16,9 @@ enum Mode { WAITING, FOLLOW, FIGHT, STAGGER, FALLEN, STANDING }
 @export var walk_speed: float = 5.0
 ## How close to the middle of Amber he stands to hit her; she is big.
 @export var reach: float = 5.0
+## Where the two go after he wakes up: outside the church in Elst.
+@export_file("*.tscn") var exit_scene: String = "res://scenes/world/Elst.tscn"
+@export var exit_spawn: StringName = &"KerkExit"
 
 const FOLLOW_DISTANCE: float = 3.5
 const SAY_TIME: float = 2.5
@@ -31,12 +36,14 @@ var _gravity: float = 9.8
 @onready var model: HumanoidModel = $Model
 @onready var _label: Label3D = $Say
 @onready var _collision: CollisionShape3D = $CollisionShape3D
+@onready var _revive_spot: Interactable = $Revive
 
 
 func _ready() -> void:
 	_gravity = float(ProjectSettings.get_setting("physics/3d/default_gravity"))
 	_label.visible = false
 	EventBus.flag_set.connect(_on_flag_set)
+	_revive_spot.interacted.connect(_on_revive_used)
 	if GameState.has_flag(&"klaas_revived"):
 		mode = Mode.STANDING
 	elif GameState.has_flag(&"boss_amber"):
@@ -75,6 +82,7 @@ func fall() -> void:
 	mode = Mode.FALLEN
 	velocity = Vector3.ZERO
 	model.play_action(&"death", 1.2, true)
+	_apply_presence()
 
 
 ## The golden Tren syringe wakes him up again.
@@ -150,6 +158,49 @@ func _flat(vector: Vector3) -> Vector3:
 func _apply_presence() -> void:
 	visible = mode != Mode.WAITING
 	_collision.set_deferred(&"disabled", mode == Mode.WAITING)
+	_revive_spot.enabled = mode == Mode.FALLEN
+
+
+func _on_revive_used(player: Player) -> void:
+	if not GameState.has_flag(&"tren_spuit_found"):
+		EventBus.message_requested.emit("Je hebt de gouden Tren-spuit nodig. Amber liet hem vallen toen ze stierf.")
+		return
+	_revive_spot.enabled = false
+	_play_revive(player)
+
+
+## The player pushes the golden syringe into Klaas' arm; with a golden flash
+## he gets up and flexes. Then the two go outside, where the end begins.
+func _play_revive(player: Player) -> void:
+	var scene: Cutscene = Cutscene.begin(get_parent() as Node3D)
+	var side: Vector3 = global_basis.x.normalized()
+	player.global_position = global_position + side * 1.3
+	player.rotation.y = atan2(side.x, side.z)
+	player.reset_physics_interpolation()
+	scene.look(global_position + side * 3.6 - global_basis.z * 2.6 + Vector3.UP * 2.0, global_position + Vector3.UP * 0.4)
+	await scene.say("", "Je drukt de gouden Tren-spuit in de arm van Klaas.", 2.4)
+	player.model.play_action(&"punch", 0.6)
+	var flash: OmniLight3D = OmniLight3D.new()
+	flash.light_color = Color(1.0, 0.82, 0.3)
+	flash.omni_range = 9.0
+	flash.position = Vector3(0, 1.0, 0)
+	add_child(flash)
+	var glow: Tween = create_tween()
+	glow.tween_property(flash, "light_energy", 8.0, 0.4).from(0.0)
+	glow.tween_property(flash, "light_energy", 0.0, 1.2)
+	glow.tween_callback(flash.queue_free)
+	await scene.wait(0.9)
+	revive()
+	await scene.glide(global_position - global_basis.z * 3.2 + side * 1.5 + Vector3.UP * 1.9, global_position + Vector3.UP * 1.6, 1.0)
+	await scene.say("Klaas", "...Tren?", 1.6)
+	await scene.say("Klaas", "Zie je? Mijn bril is niet eens afgevallen.", 2.6)
+	await scene.say("Klaas", "Amber is weg? Mooi. Kom, we gaan naar buiten. Elst wacht op ons.", 3.0)
+	scene.finish()
+	# The end scene plays outside the church; the flag makes it play again
+	# after loading a save made before it was over.
+	GameState.set_flag(&"ending_pending")
+	GameState.set_flag(&"klaas_revived")
+	EventBus.world_change_requested.emit(exit_scene, exit_spawn)
 
 
 func _on_flag_set(flag: StringName) -> void:

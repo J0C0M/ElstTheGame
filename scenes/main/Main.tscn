@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/DialogueBox.tscn" id="11_dialogue_box"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ShopMenu.tscn" id="12_shop_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/InventoryMenu.tscn" id="13_inventory_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Credits.tscn" id="30_credits"]
 [ext_resource type="PackedScene" path="res://scenes/ui/QuestLog.tscn" id="14_quest_log"]
 
 [node name="Main" type="Node"]
@@ -78,6 +79,8 @@ theme = ExtResource("6_theme")
 [node name="InventoryMenu" parent="UI/Menus" instance=ExtResource("13_inventory_menu")]
 
 [node name="QuestLog" parent="UI/Menus" instance=ExtResource("14_quest_log")]
+
+[node name="Credits" parent="UI/Menus" instance=ExtResource("30_credits")]
 
 [node name="Fade" type="ColorRect" parent="UI"]
 anchors_preset = 15

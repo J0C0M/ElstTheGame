@@ -6,6 +6,12 @@
 [ext_resource type="Script" path="res://scenes/world/location_area.gd" id="4_res"]
 [ext_resource type="PackedScene" path="res://scenes/world/locations/KerkDecor.tscn" id="99_decor"]
 [ext_resource type="Script" path="res://scripts/quests/quest_marker.gd" id="98_marker"]
+[ext_resource type="Script" path="res://scripts/world/liberated_area.gd" id="90_area"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/PartyDecor.tscn" id="91_party"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/Villager.tscn" id="92_villager"]
+[ext_resource type="Script" path="res://scripts/world/ending.gd" id="93_ending"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/KlaasModel.tscn" id="94_klaas"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/SpyModel.tscn" id="95_spy"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
 albedo_color = Color(0.6, 0.58, 0.55, 1)
@@ -131,3 +137,69 @@ position = Vector3(0, 0, -21.5)
 position = Vector3(0, 0, -19.5)
 script = ExtResource("98_marker")
 ids = Array[StringName]([&"kerk"])
+
+[node name="Feest" type="Node3D" parent="."]
+script = ExtResource("90_area")
+liberated_by_flag = &"klaas_revived"
+
+[node name="Liberated" type="Node3D" parent="Feest"]
+
+[node name="PartyDecor" parent="Feest/Liberated" instance=ExtResource("91_party")]
+
+[node name="PartyLight" type="OmniLight3D" parent="Feest/Liberated"]
+position = Vector3(0, 6, -14)
+light_color = Color(1, 0.75, 0.45, 1)
+light_energy = 2.0
+omni_range = 22.0
+
+[node name="Villager1" parent="Feest/Liberated" instance=ExtResource("92_villager")]
+position = Vector3(-10, 0, -20)
+lines = PackedStringArray("Elst is vrij!", "Klaas leeft! Ik zag het zelf!", "Geen tornado meer. Ik ga morgen gewoon naar Arnhem.")
+look_seed = 40
+
+[node name="Villager2" parent="Feest/Liberated" instance=ExtResource("92_villager")]
+position = Vector3(-12, 0, -6)
+lines = PackedStringArray("Klaas leeft! Ik zag het zelf!", "Geen tornado meer. Ik ga morgen gewoon naar Arnhem.", "Een eiwitshake? Nou, vooruit dan.")
+look_seed = 41
+
+[node name="Villager3" parent="Feest/Liberated" instance=ExtResource("92_villager")]
+position = Vector3(-17, 0, -12)
+lines = PackedStringArray("Geen tornado meer. Ik ga morgen gewoon naar Arnhem.", "Een eiwitshake? Nou, vooruit dan.", "Wie heeft die draak eigenlijk verslagen? Jij?")
+look_seed = 42
+
+[node name="Villager4" parent="Feest/Liberated" instance=ExtResource("92_villager")]
+position = Vector3(10, 0, -19)
+lines = PackedStringArray("Een eiwitshake? Nou, vooruit dan.", "Wie heeft die draak eigenlijk verslagen? Jij?", "Feest in de kerk, wie had dat gedacht.")
+look_seed = 43
+
+[node name="Villager5" parent="Feest/Liberated" instance=ExtResource("92_villager")]
+position = Vector3(16, 0, -8)
+lines = PackedStringArray("Wie heeft die draak eigenlijk verslagen? Jij?", "Feest in de kerk, wie had dat gedacht.", "Eindelijk weer zon!")
+look_seed = 44
+
+[node name="Villager6" parent="Feest/Liberated" instance=ExtResource("92_villager")]
+position = Vector3(-6, 0, -25)
+lines = PackedStringArray("Feest in de kerk, wie had dat gedacht.", "Eindelijk weer zon!", "Dank je wel, Elstenaar!")
+look_seed = 45
+
+[node name="Villager7" parent="Feest/Liberated" instance=ExtResource("92_villager")]
+position = Vector3(6, 0, -25)
+lines = PackedStringArray("Eindelijk weer zon!", "Dank je wel, Elstenaar!", "Elst is vrij!")
+look_seed = 46
+
+[node name="Villager8" parent="Feest/Liberated" instance=ExtResource("92_villager")]
+position = Vector3(17, 0, -18)
+lines = PackedStringArray("Dank je wel, Elstenaar!", "Elst is vrij!", "Klaas leeft! Ik zag het zelf!")
+look_seed = 47
+
+[node name="Ending" type="Node3D" parent="."]
+script = ExtResource("93_ending")
+klaas_scene = ExtResource("94_klaas")
+spy_scene = ExtResource("95_spy")
+
+[node name="KlaasSpot" type="Marker3D" parent="Ending"]
+position = Vector3(1.4, 0, -21)
+
+[node name="SpySpot" type="Marker3D" parent="Ending"]
+position = Vector3(12, 0, -55)
+rotation = Vector3(0, 3.14159, 0)

@@ -73,3 +73,5 @@ signal dev_powers_changed(enabled: bool)
 ## A line in a scene: the HUD shows [param speaker] and [param text] at the
 ## bottom for [param seconds].
 signal subtitle_requested(speaker: String, text: String, seconds: float)
+## The end scene is over: Main rolls the credits.
+signal credits_requested

@@ -42,6 +42,7 @@ var _overlay: Control
 @onready var _shop_menu: ShopMenu = $UI/Menus/ShopMenu
 @onready var _inventory_menu: InventoryMenu = $UI/Menus/InventoryMenu
 @onready var _quest_log: QuestLog = $UI/Menus/QuestLog
+@onready var _credits: Credits = $UI/Menus/Credits
 @onready var _fade: ColorRect = $UI/Fade
 
 
@@ -66,7 +67,8 @@ func _ready() -> void:
 	EventBus.sleep_requested.connect(sleep)
 	EventBus.rest_requested.connect(rest)
 	_dialogue_box.action_chosen.connect(_on_dialogue_action)
-	for overlay: Control in [_dialogue_box, _shop_menu, _inventory_menu, _quest_log]:
+	EventBus.credits_requested.connect(_roll_credits)
+	for overlay: Control in [_dialogue_box, _shop_menu, _inventory_menu, _quest_log, _credits]:
 		overlay.connect(&"closed", _on_overlay_closed.bind(overlay))
 	if skip_main_menu:
 		start_new_game()
@@ -290,6 +292,14 @@ func _on_overlay_closed(overlay: Control) -> void:
 	if not _pause_menu.visible:
 		get_tree().paused = false
 	_update_mouse()
+
+
+## After the end scene: the credits roll while the game waits.
+func _roll_credits() -> void:
+	if _overlay != null:
+		_overlay.call("close")
+	_open_overlay(_credits)
+	_credits.open()
 
 
 func _on_dialogue_requested(dialogue: DialogueData, speaker: Node) -> void:

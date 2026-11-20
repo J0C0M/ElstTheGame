@@ -9,8 +9,9 @@ extends SceneTree
 ## follows and fights along, Amber's breath burns but not behind a pillar,
 ## her head takes double damage while she pants, her tail and wings, her
 ## flight and three bolts that bring her down, the scene where Klaas falls,
-## her furious second bar with drillers and fire, and the golden Tren
-## syringe she drops. Uses its own save folder.
+## her furious second bar with drillers and fire, the golden Tren syringe
+## she drops, waking Klaas with it, and the end scene outside the church:
+## the party, the tornado that goes, the spy, Inwijding 6 and the credits. Uses its own save folder.
 ## Run: godot --headless --path . --fixed-fps 60 -s res://tests/test_amber.gd
 ##
 ## The main script of -s is compiled before the autoloads exist, so project
@@ -38,6 +39,7 @@ const INHALE: int = 2
 const ALLY_FOLLOW: int = 1
 const CENTRE: Vector3 = Vector3(12, -15, -233)
 const ALLY_FALLEN: int = 4
+const ALLY_STANDING: int = 5
 
 var _failures: int = 0
 var _main: Variant
@@ -70,6 +72,8 @@ func _run() -> void:
 	await _test_flight()
 	await _test_klaas_falls()
 	await _test_second_bar_and_death()
+	await _test_revive_klaas()
+	await _test_ending()
 	_clear_saves()
 	DirAccess.remove_absolute(TEST_SAVE_DIR)
 	print("test_amber: %d failed" % _failures)
@@ -430,6 +434,66 @@ func _test_second_bar_and_death() -> void:
 		await _frames(10)
 		await _press(&"interact")
 		_check(_state.has_flag(&"tren_spuit_found"), "the player picks up the syringe")
+
+
+func _test_revive_klaas() -> void:
+	var ally: Variant = _main.get_world().get_node("KlaasAlly")
+	_place(ally.global_position + Vector3(1.2, 0, 0), -PI / 2)
+	await _frames(10)
+	_check(ally.get_node("Revive").enabled, "fallen Klaas can be woken with the syringe")
+	await _press(&"interact")
+	await _frames(5)
+	_check(_main.get_world().find_child("Cutscene", true, false) != null, "a short scene plays")
+	for i: int in 1200:
+		await physics_frame
+		if _state.has_flag(&"klaas_revived"):
+			break
+	_check(ally.mode == ALLY_STANDING and _state.has_flag(&"klaas_revived"), "the golden Tren syringe wakes Klaas up")
+	_check(_step() == &"outside", "the quest says: go outside with Klaas")
+	await _wait_for_world("Elst")
+	_check(_main.get_world().location_name == "Elst", "then the two go outside, to the church square of Elst")
+
+
+func _test_ending() -> void:
+	var world: Variant = _main.get_world()
+	var ending: Variant = world.find_child("Ending", true, false)
+	var tornado: Variant = world.find_child("Tornado", true, false)
+	await _frames(60)
+	_check(ending != null and ending.playing, "outside the church the end scene starts")
+	_check(world.find_child("Feest", true, false).get_node("Liberated").visible, "the villagers are back: a party on the church square")
+	var saw_spy: bool = false
+	for i: int in 4000:
+		await physics_frame
+		saw_spy = saw_spy or (ending.part == 4 and ending.find_child("SpyModel", true, false) != null)
+		if _state.has_flag(&"elst_saved"):
+			break
+	_check(tornado.is_gone() and _state.has_flag(&"tornado_gone"), "the tornado is gone")
+	_check(saw_spy, "a figure in a cloak watches from afar and reports to his boss")
+	_check(_quests.get_status(QUEST) == 2 and _state.inwijding == 6, "Klaas makes the player a real Elstenaar: Quest 6 is done, Inwijding 6")
+	for i: int in 900:
+		await physics_frame
+		if _main.get_node("UI/Menus/Credits").visible:
+			break
+	_check(_main.get_node("UI/Menus/Credits").visible and paused, "the credits roll")
+	_main.get_node("UI/Menus/Credits").close()
+	await _frames(5)
+	_check(not paused and not ending.playing and not _state.has_flag(&"ending_pending"), "after the credits the player plays on")
+	# No more wind at the old ring, just a friendly message.
+	var player: Variant = _player()
+	_place(Vector3(0, 0, 230), 0.0)
+	await _frames(30)
+	_check(player.global_position.distance_to(Vector3(0, player.global_position.y, 230)) < 1.0, "the wind of the tornado is gone too")
+	# After saving and loading the tornado stays gone and the scene does not play again.
+	_place(world.get_spawn(&"KerkExit").global_position, 0.0)
+	await _frames(10)
+	root.get_node("SaveManager").quicksave()
+	await _frames(10)
+	root.get_node("SaveManager").load_save(root.get_node("SaveManager").get_latest_save_id())
+	await _wait_for_world("Elst")
+	await _frames(60)
+	var loaded: Variant = _main.get_world()
+	_check(loaded.find_child("Tornado", true, false).is_gone() and not loaded.find_child("Ending", true, false).playing,
+		"after loading the tornado stays gone and the end does not play again")
 
 
 func _force(amber: Variant, mode: int, seconds: float) -> void:

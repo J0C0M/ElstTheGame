@@ -316,6 +316,14 @@ next = &"hub"
 action = &"give_item"
 action_value = "crossbow"
 
+[sub_resource type="Resource" id="Line_greeting_hero"]
+script = ExtResource("4_line")
+id = &"greeting_hero"
+text = "Daar is mijn Elstenaar. Blauwe lucht, koude shakes. Het leven is goed."
+next = &"hub"
+condition = SubResource("Condition_25")
+model_action = &"flex"
+
 [sub_resource type="Resource" id="Line_greeting_strong"]
 script = ExtResource("4_line")
 id = &"greeting_strong"
@@ -659,7 +667,13 @@ action_value = "q5_bingo"
 [sub_resource type="Resource" id="Line_next_job"]
 script = ExtResource("4_line")
 id = &"next_job"
-text = "Nog niet. Rust uit. Ik roep je als Amber weer iets flikt."
+text = "Een klus? Elst is vrij. Geniet ervan."
+next = &"next_job_2"
+
+[sub_resource type="Resource" id="Line_next_job_2"]
+script = ExtResource("4_line")
+id = &"next_job_2"
+text = "Al hoorde ik wel iets over een vent in een lange mantel die rondhangt bij de kerk. Ach. Vast niks."
 next = &"hub"
 
 [sub_resource type="Resource" id="Line_q6_go"]
@@ -672,7 +686,13 @@ model_action = &"flex"
 [sub_resource type="Resource" id="Line_lore_1"]
 script = ExtResource("4_line")
 id = &"lore_1"
-text = "Amber kwam uit Arnhem-Zuid. Groot, oranje, slecht humeur. Ze nam Elst over en zette overal haar drillers neer."
+text = "Amber komt uit Zevenaar. Dat nam ze als eerste in. Daarna Arnhem, en vanuit Arnhem-Zuid kwam ze met haar drillers naar Elst."
+next = &"lore_1b"
+
+[sub_resource type="Resource" id="Line_lore_1b"]
+script = ExtResource("4_line")
+id = &"lore_1b"
+text = "Groot, oranje, slecht humeur. Ze nam Elst over en zette overal haar drillers neer."
 next = &"lore_2"
 
 [sub_resource type="Resource" id="Line_lore_2"]
@@ -711,5 +731,5 @@ text = "Train hard. Of in elk geval een beetje."
 [resource]
 script = ExtResource("1_data")
 speaker = "Klaas"
-starts = Array[StringName]([&"first_meeting", &"tutorial_report", &"tutorial_busy", &"q2_report", &"q3_report", &"q4_report", &"q5_report", &"greeting_strong", &"greeting"])
-lines = Array[ExtResource("4_line")]([SubResource("Line_first_meeting"), SubResource("Line_first_2"), SubResource("Line_first_3"), SubResource("Line_first_glasses"), SubResource("Line_tutorial_1"), SubResource("Line_tutorial_2"), SubResource("Line_tutorial_3"), SubResource("Line_tutorial_report"), SubResource("Line_tutorial_reward"), SubResource("Line_tutorial_busy"), SubResource("Line_q2_report"), SubResource("Line_q2_reward"), SubResource("Line_q3_report"), SubResource("Line_q3_reward"), SubResource("Line_q4_report"), SubResource("Line_q4_reward"), SubResource("Line_q5_report"), SubResource("Line_q5_reward"), SubResource("Line_q5_crossbow"), SubResource("Line_greeting_strong"), SubResource("Line_greeting"), SubResource("Line_hub"), SubResource("Line_q2_offer"), SubResource("Line_q2_offer_2"), SubResource("Line_q2_offer_3"), SubResource("Line_q2_go"), SubResource("Line_q2_busy"), SubResource("Line_q2_early"), SubResource("Line_q2_early_2"), SubResource("Line_q3_offer"), SubResource("Line_q3_offer_2"), SubResource("Line_q3_go"), SubResource("Line_q3_busy"), SubResource("Line_q3_early"), SubResource("Line_q3_early_2"), SubResource("Line_q4_offer"), SubResource("Line_q4_offer_2"), SubResource("Line_q4_go"), SubResource("Line_q4_busy"), SubResource("Line_q4_early"), SubResource("Line_q4_early_2"), SubResource("Line_q5_offer"), SubResource("Line_q5_offer_2"), SubResource("Line_q5_go"), SubResource("Line_q5_busy"), SubResource("Line_q5_early"), SubResource("Line_q5_early_2"), SubResource("Line_next_job"), SubResource("Line_q6_go"), SubResource("Line_lore_1"), SubResource("Line_lore_2"), SubResource("Line_glasses"), SubResource("Line_sleep_offer"), SubResource("Line_bye")])
+starts = Array[StringName]([&"first_meeting", &"tutorial_report", &"tutorial_busy", &"q2_report", &"q3_report", &"q4_report", &"q5_report", &"greeting_hero", &"greeting_strong", &"greeting"])
+lines = Array[ExtResource("4_line")]([SubResource("Line_first_meeting"), SubResource("Line_first_2"), SubResource("Line_first_3"), SubResource("Line_first_glasses"), SubResource("Line_tutorial_1"), SubResource("Line_tutorial_2"), SubResource("Line_tutorial_3"), SubResource("Line_tutorial_report"), SubResource("Line_tutorial_reward"), SubResource("Line_tutorial_busy"), SubResource("Line_q2_report"), SubResource("Line_q2_reward"), SubResource("Line_q3_report"), SubResource("Line_q3_reward"), SubResource("Line_q4_report"), SubResource("Line_q4_reward"), SubResource("Line_q5_report"), SubResource("Line_q5_reward"), SubResource("Line_q5_crossbow"), SubResource("Line_greeting_hero"), SubResource("Line_greeting_strong"), SubResource("Line_greeting"), SubResource("Line_hub"), SubResource("Line_q2_offer"), SubResource("Line_q2_offer_2"), SubResource("Line_q2_offer_3"), SubResource("Line_q2_go"), SubResource("Line_q2_busy"), SubResource("Line_q2_early"), SubResource("Line_q2_early_2"), SubResource("Line_q3_offer"), SubResource("Line_q3_offer_2"), SubResource("Line_q3_go"), SubResource("Line_q3_busy"), SubResource("Line_q3_early"), SubResource("Line_q3_early_2"), SubResource("Line_q4_offer"), SubResource("Line_q4_offer_2"), SubResource("Line_q4_go"), SubResource("Line_q4_busy"), SubResource("Line_q4_early"), SubResource("Line_q4_early_2"), SubResource("Line_q5_offer"), SubResource("Line_q5_offer_2"), SubResource("Line_q5_go"), SubResource("Line_q5_busy"), SubResource("Line_q5_early"), SubResource("Line_q5_early_2"), SubResource("Line_next_job"), SubResource("Line_next_job_2"), SubResource("Line_q6_go"), SubResource("Line_lore_1"), SubResource("Line_lore_1b"), SubResource("Line_lore_2"), SubResource("Line_glasses"), SubResource("Line_sleep_offer"), SubResource("Line_bye")])

@@ -33,6 +33,7 @@ const TRANSITION: int = 13
 const DEAD: int = 14
 const ROAR: int = 15
 const LAP: int = 16
+const STOMP: int = 17
 const INHALE: int = 2
 const ALLY_FOLLOW: int = 1
 const CENTRE: Vector3 = Vector3(12, -15, -233)
@@ -182,7 +183,7 @@ func _test_church_enemies() -> void:
 	await _frames(5)
 	_check(dragon.mode == 3 and not dragon.is_in_group(&"enemies"), "a dragonling can be shot down")
 	var rider: Variant = dragon.fallen_rider
-	_check(rider != null and rider.is_in_group(&"enemies") and rider.data.id == &"low_driller" and not dragon.get_node("Model/Body/Rider").visible,
+	_check(rider != null and rider.is_in_group(&"enemies") and rider.data.id == &"dragon_rider" and not dragon.get_node("Model/Body/Rider").visible,
 		"its rider tumbles off and fights on, on foot")
 	var grate: Variant = _main.get_world().get_node("FireGrate1")
 	var burned: bool = false
@@ -381,7 +382,7 @@ func _test_klaas_falls() -> void:
 		if amber.phase == 2:
 			break
 	_check(ally.mode == ALLY_FALLEN and _state.has_flag(&"klaas_fallen"), "Klaas takes her fireball for the player and falls")
-	_check(amber.phase == 2 and amber.health.current_health == 800 and _main.get_node("UI/HUD/BossBar/BossName").text.ends_with("2/2"),
+	_check(amber.phase == 2 and amber.health.current_health == 900 and _main.get_node("UI/HUD/BossBar/BossName").text.ends_with("2/2"),
 		"then her second bar starts")
 	_check(_player().process_mode == Node.PROCESS_MODE_INHERIT and _state.is_saving_blocked(), "the player fights on, still without saving")
 
@@ -390,9 +391,26 @@ func _test_second_bar_and_death() -> void:
 	var amber: Variant = _main.get_world().get_node("Amber")
 	amber.set("_flight_wait", 999.0)
 	var enemies: int = get_nodes_in_group(&"enemies").size()
-	amber.health.take_damage(300)
+	amber.health.take_damage(320)
 	await _frames(5)
 	_check(amber.helps == 1 and get_nodes_in_group(&"enemies").size() == enemies + 2, "furious, she calls two drillers")
+	# Her new attack: she rears up and stamps, rings of fire run over the floor.
+	_put_amber(amber, CENTRE, 90.0)
+	_place(_spot(90.0, 13.0), PI)
+	_player().is_invulnerable = false
+	var health: int = _fresh_health()
+	amber.mode = STOMP
+	amber.set("_timer", 0.3)
+	amber.set("_waves_left", 2)
+	var waves: int = 0
+	for i: int in 150:
+		await physics_frame
+		var count: int = _count_scene("FireWave.tscn")
+		waves = maxi(waves, count)
+	_check(amber.stamps == 1 and waves == 2, "furious, she stamps and two rings of fire run over the floor")
+	_check(_player().health.current_health < health, "a ring of fire burns a player who does not jump")
+	_player().is_invulnerable = true
+	_fresh_health()
 	amber.global_position = Vector3(12, -15, -234)
 	await _force(amber, BREATH, 0.3)
 	await _frames(30)

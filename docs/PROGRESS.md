@@ -523,6 +523,12 @@ Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn
 - **Klaas is tijdens Quest 6 niet thuis,** zodat hij niet op twee plekken tegelijk staat. Zijn winkel is dan bij de arena. Hij blijft wel thuis zolang er nog een quest is om in te leveren: versla je de derde baas vóór je verslag doet, dan krijg je eerst nog je beloning en de kruisboog.
 - **Laag driller en driller** hebben andere HP dan het GDD (30 en 40); het GDD is bijgewerkt.
 
+### Vierde ronde aan Amber (eigenaar, 20-11-2026)
+
+- In haar tweede balk roept ze geen drillers meer, maar twee keer twee Amber-cultisten uit Zevenaar.
+- Ze heeft 1050 HP per balk (was 900).
+- **Onder haar nek is het niet meer veilig:** wie tijdens haar vuuradem onder haar nek staat (van haar borst tot haar bek, 2,4 m naar beide kanten), krijgt dezelfde vuurschade. De rode zone op de grond loopt daar door, en de onderkant van haar nek gloeit fel met een oranje licht eronder, al vanaf het inademen.
+
 ### Wat is af (blok C, het einde)
 
 - **C1, Klaas weer tot leven:** bij de gevallen Klaas staat "[E] Gebruik de Tren-spuit op Klaas" (zonder spuit zegt het spel waar die ligt). Een korte scène: de speler drukt de spuit in zijn arm, een gouden flits, Klaas staat op en flext ("...Tren?", "Zie je? Mijn bril is niet eens afgevallen."). Daarna gaan ze samen naar buiten: een fade naar het kerkplein in Elst. Quest 6 heeft een laatste doel "Ga met Klaas naar buiten" (vlag `elst_saved`).

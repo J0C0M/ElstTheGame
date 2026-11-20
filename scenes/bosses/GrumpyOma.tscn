@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/BozeOma.tscn" id="9_oma"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/BingoOpa.tscn" id="10_opa"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/RolstoelOma.tscn" id="11_rolstoel"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/projectiles/BingoCard.tscn" id="12_card"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_body"]
 radius = 1.1
@@ -30,6 +31,7 @@ motion_mode = 1
 script = ExtResource("1_oma")
 data = ExtResource("2_data")
 shockwave_scene = ExtResource("8_wave")
+card_scene = ExtResource("12_card")
 follower_scenes = Array[PackedScene]([ExtResource("9_oma"), ExtResource("10_opa"), ExtResource("11_rolstoel"), ExtResource("9_oma")])
 follower_offsets = Array[Vector3]([Vector3(-11, 0, 3), Vector3(11, 0, 3), Vector3(-11, 0, 12), Vector3(11, 0, 12)])
 

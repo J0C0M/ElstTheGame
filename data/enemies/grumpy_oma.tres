@@ -9,5 +9,5 @@ id = &"grumpy_oma"
 display_name = "Grumpy Oma, bingokampioen"
 faction = &"bingo"
 loot = ExtResource("2_loot")
-max_health = 550
-damage = 16
+max_health = 650
+damage = 18

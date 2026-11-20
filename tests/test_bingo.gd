@@ -22,6 +22,7 @@ const JUMP: int = 3
 const SPIN: int = 4
 const EXHAUSTED: int = 5
 const ROAR: int = 6
+const THROW: int = 8
 
 var _failures: int = 0
 var _main: Variant
@@ -139,8 +140,9 @@ func _test_boss_fight() -> void:
 	_check(oma.mode == CHASE, "walking into her lair starts the fight")
 	_check(_state.is_saving_blocked() and gate.visible, "saving is blocked and the gate of the lair closes")
 	oma.set("_special_timer", 999.0)
+	oma.set("_throw_wait", 999.0)
 	_hit(oma, 100)
-	_check(oma.health.current_health == 450, "she takes normal damage while she walks (%d)" % oma.health.current_health)
+	_check(oma.health.current_health == 550, "she takes normal damage while she walks (%d)" % oma.health.current_health)
 	_place(oma.global_position + oma.global_basis.z * -2.5, 0.0)
 	await _wait_until(func() -> bool: return oma.mode == SLAP, 120)
 	var frames: int = 0
@@ -152,7 +154,7 @@ func _test_boss_fight() -> void:
 	oma.get_node("AttackHitbox").parried.emit()
 	_check(oma.mode == EXHAUSTED, "parrying her slap knocks the wind out of her")
 	_hit(oma, 20)
-	_check(oma.health.current_health == 420, "exhausted, she takes 50%% extra damage (%d)" % oma.health.current_health)
+	_check(oma.health.current_health == 523, "exhausted, she takes 35%% extra damage (%d)" % oma.health.current_health)
 	await _wait_until(func() -> bool: return oma.mode == CHASE, 300)
 	_place(oma.global_position + Vector3(0, 0, 8), PI)
 	oma.set("_special_timer", 0.0)
@@ -166,20 +168,38 @@ func _test_boss_fight() -> void:
 	await _frames(2)
 	_check(oma.mode == SPIN, "next she spins like a tornado")
 	_hit(oma, 100)
-	_check(oma.health.current_health == 420, "hits bounce off her tornado")
+	_check(oma.health.current_health == 523, "hits bounce off her tornado")
 	await _wait_until(func() -> bool: return oma.mode == EXHAUSTED, 300)
 	_check(oma.mode == EXHAUSTED, "after the tornado she is exhausted too")
 	var followers: int = oma.get_parent().get_child_count()
-	oma.health.take_damage(90)
+	oma.health.take_damage(110)
 	await _wait_until(func() -> bool: return oma.mode == ROAR, 300)
 	_check(oma.followers_called == 1 and oma.get_parent().get_child_count() == followers + 2, "at two thirds she roars BINGO! and two followers come")
 	var follower: Variant = oma.get_parent().get_child(oma.get_parent().get_child_count() - 1)
 	_check(follower.damage_multiplier > 1.0, "her BINGO! fires up her followers")
 	await _wait_until(func() -> bool: return oma.mode == CHASE, 300)
-	oma.health.take_damage(170)
+	oma.health.take_damage(230)
 	_check(oma.is_enraged(), "below 30% health she gets faster")
 	await _wait_until(func() -> bool: return oma.mode == ROAR, 300)
 	_check(oma.followers_called == 2, "at one third she calls her followers again")
+	await _wait_until(func() -> bool: return oma.mode == CHASE, 300)
+	# Enraged, she slams twice in a row.
+	var specials: int = oma.specials_done
+	_place(oma.global_position + Vector3(0, 0, 6), PI)
+	oma.set("_next_is_slam", true)
+	oma.set("_special_timer", 0.0)
+	await _wait_until(func() -> bool: return oma.mode == EXHAUSTED, 400)
+	_check(oma.specials_done == specials + 2, "enraged, she slams twice in a row")
+	await _wait_until(func() -> bool: return oma.mode == CHASE, 300)
+	# Keep away from her and she throws bingo cards.
+	oma.set("_special_timer", 999.0)
+	oma.set("_throw_wait", 0.0)
+	_place(oma.global_position + Vector3(0, 0, 13), PI)
+	await _wait_until(func() -> bool: return oma.mode == THROW, 200)
+	_check(oma.mode == THROW, "a player who keeps away makes her throw")
+	await _wait_until(func() -> bool: return oma.throws > 0, 120)
+	await _frames(2)
+	_check(_count_with_script("vape_puff.gd") >= 5, "she throws a fan of bingo cards")
 	oma.health.take_damage(1000)
 	await _frames(5)
 	_check(_state.has_flag(&"boss_grumpy_oma") and not _state.is_saving_blocked(), "beating her is remembered and saving works again")

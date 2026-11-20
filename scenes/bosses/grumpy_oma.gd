@@ -9,11 +9,14 @@ extends CharacterBody3D
 ## or spins through the arena like a tornado, during which hits bounce off.
 ## After a slam, a tornado or a parry she is exhausted and takes extra damage.
 ## At two thirds and one third of her health she roars BINGO! and her
-## followers come to help, fired up. Below 30% health she gets faster.
+## followers come to help, fired up. Below 30% health she gets faster and
+## slams twice in a row. Her slap often comes with a quick second backhand,
+## and a player who keeps away gets a fan of bingo cards thrown at them, so
+## shooting her from a distance is no safe way to win.
 ## Saving is blocked and the gate is closed during the fight; once beaten a
 ## GameState flag keeps her beaten.
 
-enum Mode { WAITING, CHASE, SLAP, JUMP, SPIN, EXHAUSTED, ROAR, DEAD }
+enum Mode { WAITING, CHASE, SLAP, JUMP, SPIN, EXHAUSTED, ROAR, DEAD, THROW }
 
 ## Health, slap damage and loot.
 @export var data: EnemyData
@@ -21,27 +24,31 @@ enum Mode { WAITING, CHASE, SLAP, JUMP, SPIN, EXHAUSTED, ROAR, DEAD }
 ## StaticBody3D that closes the arena while the fight lasts.
 @export var gate_path: NodePath
 @export var start_radius: float = 13.0
-@export var walk_speed: float = 3.0
+@export var walk_speed: float = 3.8
 @export var slap_range: float = 3.4
 ## Seconds the slap is telegraphed before it hits.
 @export var slap_windup: float = 0.8
 ## Seconds after the slap that she stands catching her breath.
 @export var slap_recovery: float = 1.1
 ## Seconds of chasing before she slaps again.
-@export var slap_cooldown: float = 0.6
+@export var slap_cooldown: float = 0.3
+## Chance of a quick second backhand after a slap (always when enraged).
+@export_range(0.0, 1.0) var combo_chance: float = 0.5
+## Seconds the backhand is telegraphed.
+@export var combo_windup: float = 0.45
 ## Seconds of chasing before her next slam or tornado.
-@export var special_interval: float = 5.0
+@export var special_interval: float = 4.0
 @export var jump_crouch: float = 0.5
 @export var jump_time: float = 1.0
 @export var jump_height: float = 5.0
 @export var shockwave_scene: PackedScene
 @export var shockwave_damage: int = 18
-@export var spin_time: float = 3.0
-@export var spin_speed: float = 5.5
+@export var spin_time: float = 3.5
+@export var spin_speed: float = 6.2
 @export var spin_damage: int = 12
-@export var exhausted_time: float = 2.5
+@export var exhausted_time: float = 1.8
 ## Damage multiplier while she is exhausted.
-@export var exhausted_damage_factor: float = 1.5
+@export var exhausted_damage_factor: float = 1.35
 @export_range(0.0, 1.0) var enrage_below: float = 0.3
 @export var enrage_speed_factor: float = 1.3
 ## Health ratios at which she roars BINGO! and calls followers.
@@ -51,6 +58,18 @@ enum Mode { WAITING, CHASE, SLAP, JUMP, SPIN, EXHAUSTED, ROAR, DEAD }
 ## Where the followers come in, from where she started, two per call.
 @export var follower_offsets: Array[Vector3] = []
 @export var roar_time: float = 1.6
+@export_group("Bingo cards")
+## She throws cards at a player who stays further away than this.
+@export var throw_distance: float = 4.5
+## Seconds the player must stay out of reach before she throws.
+@export var throw_patience: float = 1.2
+@export var throw_cooldown: float = 4.0
+@export var throw_windup: float = 0.6
+@export var card_scene: PackedScene
+@export var card_count: int = 5
+@export var card_spread: float = 40.0
+@export var card_damage: int = 10
+@export_group("")
 @export var follower_buff: float = 1.25
 @export var follower_buff_time: float = 6.0
 @export_multiline var intro_message: String = "Grumpy Oma: \"Ik ben de nummer 1 van de bingo! Voor Amber!\""
@@ -64,6 +83,8 @@ const SPIN_HIT_EVERY: float = 0.7
 var mode: Mode = Mode.WAITING
 ## How many slams and tornados she has done, for tests.
 var specials_done: int = 0
+## How many fans of cards she threw, for tests.
+var throws: int = 0
 ## How many times she called her followers, for tests.
 var followers_called: int = 0
 var _timer: float = 0.0
@@ -76,6 +97,10 @@ var _jumped: bool = false
 var _jump_from: Vector3
 var _jump_to: Vector3
 var _start: Vector3
+var _combo: bool = false
+var _second_jump: bool = false
+var _far_time: float = 0.0
+var _throw_wait: float = 0.0
 var _gate: StaticBody3D
 
 @onready var model: HumanoidModel = $Model
@@ -150,6 +175,8 @@ func _physics_process(delta: float) -> void:
 			if _timer <= 0.0:
 				_shout_label.visible = false
 				mode = Mode.CHASE
+		Mode.THROW:
+			_throw(to_player, player, delta)
 
 
 func _chase(to_player: Vector3, player_position: Vector3, delta: float) -> void:
@@ -159,12 +186,20 @@ func _chase(to_player: Vector3, player_position: Vector3, delta: float) -> void:
 		return
 	_special_timer -= delta * _speed_factor()
 	_slap_wait -= delta
+	_throw_wait -= delta
+	# Time the player has stayed out of reach; it resets once she gets close.
+	if to_player.length() > throw_distance:
+		_far_time += delta
+	elif to_player.length() <= slap_range:
+		_far_time = 0.0
 	if _special_timer <= 0.0:
 		if _next_is_slam:
 			_begin_jump(player_position)
 		else:
 			_begin_spin()
 		_next_is_slam = not _next_is_slam
+	elif _far_time >= throw_patience and _throw_wait <= 0.0 and card_scene != null:
+		_begin_throw()
 	elif to_player.length() <= slap_range:
 		if _slap_wait <= 0.0:
 			_begin_slap()
@@ -187,6 +222,13 @@ func _slap(to_player: Vector3, delta: float) -> void:
 		return
 	if _timer >= slap_windup + 0.25:
 		_hitbox.deactivate()
+	if _combo and _timer >= slap_windup + 0.3:
+		# A quick backhand right after the slap.
+		_combo = false
+		_swung = false
+		_timer = slap_windup - combo_windup
+		model.play_action(&"enemy_windup", combo_windup, true)
+		return
 	if _timer >= slap_windup + 0.4 and not _panting:
 		_panting = true
 		model.play_action(&"cough", slap_recovery - 0.4)
@@ -222,6 +264,7 @@ func _begin_slap() -> void:
 	_timer = 0.0
 	_swung = false
 	_panting = false
+	_combo = is_enraged() or randf() < combo_chance
 	model.play_action(&"enemy_windup", slap_windup, true)
 
 
@@ -242,7 +285,47 @@ func _land() -> void:
 		get_parent().add_child(wave)
 		wave.global_position = global_position
 		wave.call(&"start", shockwave_damage, self)
+	# Enraged, she jumps at the player once more before she is out of breath.
+	var player: Player = get_tree().get_first_node_in_group(&"player") as Player
+	if is_enraged() and not _second_jump and player != null:
+		_second_jump = true
+		_begin_jump(player.global_position)
+		return
+	_second_jump = false
 	_exhaust()
+
+
+func _begin_throw() -> void:
+	mode = Mode.THROW
+	_timer = 0.0
+	_swung = false
+	_throw_wait = throw_cooldown
+	_shout_label.text = "BINGO-KAARTEN!"
+	_shout_label.visible = true
+	model.play_action(&"enemy_windup", throw_windup, true)
+
+
+## Throws a fan of bingo cards at the player, then goes on.
+func _throw(to_player: Vector3, player: Player, delta: float) -> void:
+	_timer += delta * _speed_factor()
+	if not _swung:
+		_face(to_player)
+		if _timer >= throw_windup:
+			_swung = true
+			throws += 1
+			model.play_action(&"punch", 0.4)
+			var origin: Vector3 = global_position + Vector3.UP * 2.0 - global_basis.z * 1.0
+			var aim: Vector3 = player.global_position + Vector3.UP * 1.1 - origin
+			for n: int in card_count:
+				var angle: float = deg_to_rad(lerpf(-card_spread, card_spread, float(n) / maxf(card_count - 1, 1)) * 0.5)
+				var card: Node3D = card_scene.instantiate() as Node3D
+				get_parent().add_child(card)
+				card.call(&"launch", origin, aim.rotated(Vector3.UP, angle), card_damage, self)
+		return
+	if _timer >= throw_windup + 0.5:
+		_shout_label.visible = false
+		_far_time = 0.0
+		mode = Mode.CHASE
 
 
 func _begin_spin() -> void:
@@ -264,6 +347,7 @@ func _exhaust() -> void:
 func _roar() -> void:
 	mode = Mode.ROAR
 	_timer = roar_time
+	_shout_label.text = "BINGO!!"
 	_shout_label.visible = true
 	model.play_action(&"flex", roar_time)
 	EventBus.message_requested.emit(roar_message)

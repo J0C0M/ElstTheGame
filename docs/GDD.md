@@ -76,6 +76,7 @@ De wereld is één compacte kaart van Elst. De kerk staat in het midden en vijf 
   4. **Klaas bij de arena:** aan het einde van de gangen staat Klaas voor de ingang van de baasarena. Je kunt hier nog één keer met hem praten en spullen kopen en verkopen.
   5. **De baasarena:** een enorme ronde ruimte met 5 lange pilaren. Hier vecht je tegen Amber de Draak. Klaas vecht de eerste helft mee, tot hij sneuvelt (zie *Amber, het verloop*); de tweede helft doe je alleen.
 - **Vijanden buiten:** rond elke factielocatie zwerven patrouilles van die factie. Na het verslaan van de dungeon spawnen ze daar niet meer.
+- **Verslagen dungeons:** is de baas verslagen (of in Station Elst de laatste generator), dan blijft de dungeon leeg: de vijanden komen niet terug, ook niet na opnieuw laden. Ga je eruit en weer naar binnen, dan lopen er een paar inwoners rond, net als buiten in een bevrijd gebied.
 - **Wereldstaat:** per gebied wordt bijgehouden of het bezet of bevrijd is. Een bevrijd gebied krijgt dorpelingen, andere muziek en een warmere kleur.
 
 **De tornado-grens**

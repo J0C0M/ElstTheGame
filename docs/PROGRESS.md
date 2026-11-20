@@ -20,7 +20,7 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 11 | `Add-Amber-Final-Battle` | Nog niet begonnen |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
-Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers en de kijkrichting van vijanden) is gebouwd en wacht op akkoord.
+Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
 
 ## Prototypes
 
@@ -467,9 +467,9 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 - Fase 11: de kerk gaat open als `boss_vape_koning`, `boss_fatbike_kindje` en `boss_grumpy_oma` gezet zijn. Volg het kerkplan in het GDD (*De Kerk van Amber*): boven in het kerkgebouw beginnen, dan trappen en gangen ondergronds met doodlopende kamers en vijanden van alle facties, Klaas voor de arena (praten en winkel) en een ronde arena met 5 pilaren. Klaas vecht mee tot hij sneuvelt; de kruisboog is handig tegen Amber in de lucht.
 - Fase 12: geluid voor de bingonummers, de schokgolf, de rolstoel en de kruisboog.
 
-## Dev powers en kijkrichting van vijanden (`Add-Dev-Powers-And-Enemy-Facing`)
+## Dev powers, vijanden en locaties (`Add-Dev-Powers-And-Enemy-Facing`)
 
-Twee verzoeken van de eigenaar na Fase 10, voor Fase 11.
+Verzoeken van de eigenaar na Fase 10, voor Fase 11.
 
 ### Wat is af
 
@@ -489,6 +489,21 @@ Twee verzoeken van de eigenaar na Fase 10, voor Fase 11.
 | Bingo Club | 21 van de 25 |
 
 - **Tests:** `test_player_combat` controleert nu ook de dev powers. Alle tests slagen.
+- **Verslagen dungeons blijven leeg** (tweede verzoek, 20-11-2026). Een dungeon met de vlag van zijn baas (Station Elst: `station_cleared`) haalt bij het laden zijn vijanden weg, ook na opnieuw laden. Kom je door de deur weer binnen, dan lopen er vier inwoners met eigen zinnen ("De treinen rijden weer!"). Laad je een save die in de dungeon gemaakt is, dan blijft hij helemaal leeg. `test_save` controleert beide.
+- **Bugfix:** een vijand die doodging tijdens een treffer liet zijn buit vallen midden in een botsing, en dan gaf Godot een foutmelding. Dat gebeurde vooral met dev powers, maar ook bij gewone kills met buit. De buit verschijnt nu een frame later.
+- **Dev powers en schade:** gecontroleerd in de Bingo-dungeon met echte vijanden. Je krijgt geen schade, en elke klap doodt.
+- **Vijanden buiten** bij het station en Westeraam stonden ergens in de straat. Nu bewaken drie laag drillers het depot van Amber en het stationsplein, en drie drillers (één extra) de binnenplaats van Westeraam, met hun gezicht naar de ingang.
+- **Nieuwe buitenkant van vier locaties** (`tools/map/gen_locations.py`, met `BoxCluster` voor de details):
+  - **Station:** een stationshal met glazen pui, luifel en glazen dakrand, een klok op een paal, en het perron met overkapping, banken, vertrekbord, naamborden en een kaartautomaat. Op het plein staan fietsenrekken vol fietsen, een bushokje, een broodjeskiosk, bomen in bakken en lantaarns. Het depot van Amber is een golfplaten hal met een oranje band, "AMBER LOGISTIEK", rolluiken, banieren, pallets eiwitshakes, vaten, een container, schijnwerpers en een hek met prikkeldraad. Het spoor en het perron liggen precies waar ze lagen.
+  - **Westeraam:** drie gele galerijflats met op elke verdieping een galerij met zwart-geel hek, wasgoed en schotelantennes, en een geel-zwarte plint. Op de binnenplaats staan een uitgebrande auto, een brandende ton met vuurlicht, containers, winkelwagens, een oude bank, een kapotte schommel, een basketbalpaal en scooters. Verder: graffiti, een portiek met gestreepte luifel en vapewolken, een neon-vapeshop, en een zwart hek met poort onder een "WESTERAAM GETHO"-bord.
+  - **OBC Elst Fort:** het fort is behouden en versterkt met hogere rode bakstenen muren met kantelen en banieren, vier torens met kantelen, schietgaten en rood-navy vlaggen, en een poortgebouw met een opgetrokken valhek en een "OBC ELST FORT"-bord. Binnen staan de school met rode band, navy luifel en fietsen, en het voetbalveld met lijnen, doelen met netten, dug-outs, lichtmasten en een scorebord.
+  - **Bingo Club:** het blauwe clubhuis met een grotmond van rotsen en stalactieten om de deur, een "BOOMER CAVE"-bordje en een groot BINGO-bord met lampjes. Verder gestreepte luifels, bloembakken, banken en rollators, en een parkeerplaats met vakken, drie scootmobielen met vlaggetje, de Bingo Express (minibus), een reuzen-bingobal (B-12), hagen en lantaarns.
+
+### Keuzes en afwijkingen (tweede verzoek)
+
+- **Inwoners verschijnen alleen als je door de deur binnenkomt**, niet bij het laden van een save in de dungeon. Zo blijft de dungeon na opnieuw laden leeg, zoals gevraagd.
+- **Mooiere locaties in Prototype 1:** CLAUDE.md zegt geen tijd in mooiere modellen te steken, maar de eigenaar vroeg er nu zelf om. Het blijft low poly met platte kleuren.
+- **De huizen in Elst zijn niet verschoven:** huizen blijven weg van vaste plekken (`CLEAR_SPOTS`, de oude patrouilleplekken), anders zou het verplaatsen van de vijanden het hele dorp opnieuw schudden.
 - **Plan voor de kerk (eigenaar, 20-11-2026)** staat in het GDD en in de fasetabel van `CLAUDE.md`. Je begint boven in het kerkgebouw en gaat via trappen en gangen steeds dieper ondergronds, langs doodlopende kamers en vijanden van alle facties. Aan het eind wacht Klaas voor de arena (praten, kopen en verkopen), en de arena is een ronde ruimte met 5 pilaren.
 - **GDD bijgewerkt** met de dev powers, de kijkrichting van vijanden, de bron van de kaart en de herlaadtijd van de kruisboog (0,9 s, zoals gebouwd).
 

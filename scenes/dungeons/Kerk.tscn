@@ -23,6 +23,8 @@
 [ext_resource type="PackedScene" path="res://scenes/world/props/FireGrate.tscn" id="37_grate"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/AmberCultist.tscn" id="28_cultist"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/Dragonling.tscn" id="29_dragonling"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/KlaasAlly.tscn" id="38_ally"]
+[ext_resource type="PackedScene" path="res://scenes/bosses/Amber.tscn" id="39_amber"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/Villager.tscn" id="29_villager"]
 
 [sub_resource type="Environment" id="Environment_dungeon"]
@@ -4207,6 +4209,24 @@ light_color = Color(1, 0.5, 0.15, 1)
 light_energy = 1.6
 omni_range = 16
 
+[node name="LightArena3" type="OmniLight3D" parent="."]
+position = Vector3(0, -8, -228)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 2.2
+omni_range = 20
+
+[node name="LightArena4" type="OmniLight3D" parent="."]
+position = Vector3(24, -8, -228)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 2.2
+omni_range = 20
+
+[node name="LightArena5" type="OmniLight3D" parent="."]
+position = Vector3(12, -8, -244)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 2.2
+omni_range = 20
+
 [node name="LightCataCrystal" type="OmniLight3D" parent="."]
 position = Vector3(6, -7, -128)
 light_color = Color(1, 0.6, 0.15, 1)
@@ -4308,6 +4328,18 @@ shape = SubResource("Shape_voorkamer")
 position = Vector3(12, -15, -199)
 rotation = Vector3(0, 3.14159, 0)
 dialogue = ExtResource("36_dialogue")
+leave_on_flag = &"klaas_ready"
+
+[node name="KlaasAlly" parent="." instance=ExtResource("38_ally")]
+position = Vector3(12, -15, -199)
+rotation = Vector3(0, 3.14159, 0)
+
+[node name="Amber" parent="." instance=ExtResource("39_amber")]
+position = Vector3(12, -15, -234)
+rotation = Vector3(0, 3.14159, 0)
+gate_path = NodePath("../ArenaGate")
+klaas_path = NodePath("../KlaasAlly")
+arena_centre = Vector3(12, -15, -228)
 
 [node name="MarkerKlaas" type="Marker3D" parent="."]
 position = Vector3(12, -14, -199)

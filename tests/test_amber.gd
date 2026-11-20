@@ -4,7 +4,12 @@ extends SceneTree
 ## Quest 6 starts by itself; Klaas is away from home; the church dungeon has
 ## enemies of every faction, chanting Amber cultists, flying dragonlings that
 ## spit fire and fire grates, a checkpoint in the antechamber, and Klaas with
-## his last talk and shop, who opens the arena gate. Uses its own save folder.
+## his last talk and shop, who opens the arena gate. Then the fight: Klaas
+## follows and fights along, Amber's breath burns but not behind a pillar,
+## her head takes double damage while she pants, her tail and wings, her
+## flight and three bolts that bring her down, the scene where Klaas falls,
+## her furious second bar with drillers and fire, and the golden Tren
+## syringe she drops. Uses its own save folder.
 ## Run: godot --headless --path . --fixed-fps 60 -s res://tests/test_amber.gd
 ##
 ## The main script of -s is compiled before the autoloads exist, so project
@@ -13,6 +18,20 @@ extends SceneTree
 const TEST_SAVE_DIR: String = "user://test_saves/"
 const QUEST: StringName = &"q6_amber"
 const ACTIVE: int = 1
+# Amber.Mode and KlaasAlly.Mode values.
+const WAITING: int = 0
+const CHASE: int = 1
+const BREATH: int = 3
+const PANT: int = 4
+const TAIL_WINDUP: int = 5
+const WINGS: int = 7
+const FLYING: int = 9
+const CRASH: int = 10
+const DAZED: int = 11
+const TRANSITION: int = 13
+const DEAD: int = 14
+const ALLY_FOLLOW: int = 1
+const ALLY_FALLEN: int = 4
 
 var _failures: int = 0
 var _main: Variant
@@ -39,6 +58,11 @@ func _run() -> void:
 	await _test_church_dungeon()
 	await _test_church_enemies()
 	await _test_klaas_at_the_gate()
+	await _test_fight_starts()
+	await _test_first_bar()
+	await _test_flight()
+	await _test_klaas_falls()
+	await _test_second_bar_and_death()
 	_clear_saves()
 	DirAccess.remove_absolute(TEST_SAVE_DIR)
 	print("test_amber: %d failed" % _failures)
@@ -157,6 +181,173 @@ func _test_klaas_at_the_gate() -> void:
 	await _press(&"pause")
 	await _frames(5)
 	_check(not gate.visible, "Klaas opens the arena gate")
+
+
+func _test_fight_starts() -> void:
+	var world: Variant = _main.get_world()
+	var ally: Variant = world.get_node("KlaasAlly")
+	_check(ally.visible and ally.mode == ALLY_FOLLOW and not world.get_node("Klaas").visible, "ready, Klaas comes along as an ally")
+	var amber: Variant = world.get_node("Amber")
+	_place(Vector3(12, -15, -208), PI)
+	await _frames(10)
+	_check(amber.mode == WAITING, "Amber waits in the middle of her arena")
+	_place(Vector3(12, -15, -216), PI)
+	await _frames(5)
+	_check(amber.mode != WAITING and _state.is_saving_blocked() and world.get_node("ArenaGate").visible, "near her the fight starts: no saving, the gate shuts")
+	_check(_main.get_node("UI/HUD/BossBar/BossName").text.ends_with("1/2"), "the boss bar shows her first of two bars")
+	_check(ally.is_fighting(), "Klaas joins the fight")
+	amber.set("_flight_wait", 999.0)
+
+
+func _test_first_bar() -> void:
+	var amber: Variant = _main.get_world().get_node("Amber")
+	var player: Variant = _player()
+	player.is_invulnerable = false
+	# Breath at the player in front of her.
+	amber.global_position = Vector3(12, -15, -234)
+	amber.rotation.y = PI
+	_place(Vector3(12, -15, -224), 0.0)
+	var health: int = _fresh_health()
+	await _force(amber, BREATH, 1.0)
+	_check(player.health.current_health < health, "her fire breath burns in a cone in front of her")
+	# The same, but with a pillar in between.
+	amber.global_position = Vector3(8, -15, -232)
+	amber.rotation.y = PI / 2
+	_place(Vector3(-2.6, -15, -231.6), PI / 2)
+	health = _fresh_health()
+	await _force(amber, BREATH, 1.0)
+	_check(player.health.current_health == health, "a pillar between her and the player stops the flames")
+	# Panting with her head low after the breath.
+	amber.mode = PANT
+	amber.set("_timer", 3.0)
+	await _frames(2)
+	var before: int = amber.health.current_health
+	amber.get_node("Model/Body/Neck/Head/HeadHurtbox").receive_hit(_hit(20))
+	_check(before - amber.health.current_health == 40, "while she pants her head takes double damage")
+	# Tail at whoever stands behind her.
+	amber.global_position = Vector3(12, -15, -234)
+	amber.rotation.y = PI
+	_place(Vector3(12, -15, -240), 0.0)
+	health = _fresh_health()
+	await _force(amber, TAIL_WINDUP, 0.05)
+	await _frames(50)
+	_check(player.health.current_health < health, "her tail swipes whoever stands behind her")
+	# Wings blow the player away.
+	_place(Vector3(12, -15, -229), 0.0)
+	await _frames(2)
+	var distance: float = _player().global_position.distance_to(amber.global_position)
+	await _force(amber, WINGS, 1.0)
+	await _frames(50)
+	_check(_player().global_position.distance_to(amber.global_position) > distance + 2.0, "her wings blow the player away")
+	player.is_invulnerable = true
+	_fresh_health()
+	# Klaas hits her too.
+	amber.mode = CHASE
+	amber.global_position = Vector3(12, -15, -234)
+	_place(Vector3(12, -15, -214), PI)
+	before = amber.health.current_health
+	for i: int in 400:
+		await physics_frame
+		amber.set("_attack_wait", 9.0)
+		if amber.health.current_health < before:
+			break
+	_check(amber.health.current_health < before, "Klaas walks up to her and hits her")
+
+
+func _test_flight() -> void:
+	var amber: Variant = _main.get_world().get_node("Amber")
+	amber.call(&"_take_off")
+	for i: int in 150:
+		await physics_frame
+		if amber.mode == FLYING:
+			break
+	_check(amber.is_flying() and amber.global_position.y > -9.0, "she flies up above the arena")
+	var meteor: bool = false
+	for i: int in 120:
+		await physics_frame
+		for node: Node in _main.get_world().get_children():
+			meteor = meteor or node.scene_file_path.ends_with("AmberMeteor.tscn")
+		if meteor:
+			break
+	_check(meteor, "from the air she spits fireballs, shown by a ring on the floor")
+	for i: int in 3:
+		amber.get_node("BodyHurtbox").receive_hit(_hit(30))
+	await _frames(2)
+	_check(amber.mode == CRASH, "three crossbow bolts bring her down")
+	await _frames(60)
+	_check(amber.mode == DAZED and is_equal_approx(amber.global_position.y, -15.0), "she lies dazed on the floor")
+	await _frames(300)
+	amber.set("_flight_wait", 999.0)
+
+
+func _test_klaas_falls() -> void:
+	var amber: Variant = _main.get_world().get_node("Amber")
+	var ally: Variant = _main.get_world().get_node("KlaasAlly")
+	amber.health.take_damage(amber.health.current_health)
+	await _frames(2)
+	_check(amber.mode == TRANSITION and not _player().is_processing(), "her first bar is empty: a scene starts and the player waits")
+	for i: int in 1500:
+		await physics_frame
+		if amber.phase == 2:
+			break
+	_check(ally.mode == ALLY_FALLEN and _state.has_flag(&"klaas_fallen"), "Klaas takes her fireball for the player and falls")
+	_check(amber.phase == 2 and amber.health.current_health == 800 and _main.get_node("UI/HUD/BossBar/BossName").text.ends_with("2/2"),
+		"then her second bar starts")
+	_check(_player().process_mode == Node.PROCESS_MODE_INHERIT and _state.is_saving_blocked(), "the player fights on, still without saving")
+
+
+func _test_second_bar_and_death() -> void:
+	var amber: Variant = _main.get_world().get_node("Amber")
+	amber.set("_flight_wait", 999.0)
+	var enemies: int = get_nodes_in_group(&"enemies").size()
+	amber.health.take_damage(300)
+	await _frames(5)
+	_check(amber.helps == 1 and get_nodes_in_group(&"enemies").size() == enemies + 2, "furious, she calls two drillers")
+	amber.global_position = Vector3(12, -15, -234)
+	await _force(amber, BREATH, 0.3)
+	await _frames(30)
+	_check(_count_scene("FirePatch.tscn") >= 3, "her breath leaves burning patches now")
+	amber.health.take_damage(1000)
+	await _frames(5)
+	_check(amber.mode == DEAD and _state.has_flag(&"boss_amber") and not _state.is_saving_blocked(), "Amber is beaten and saving works again")
+	_check(not _main.get_node("UI/HUD/BossBar").visible and not _main.get_world().get_node("ArenaGate").visible, "the boss bar goes and the gate opens")
+	_check(_step() == &"revive", "the quest says: use the golden Tren syringe on Klaas")
+	var spuit: Node3D = null
+	for node: Node in _main.get_world().get_children():
+		if node.scene_file_path.ends_with("TrenSpuit.tscn"):
+			spuit = node
+	_check(spuit != null, "she drops the golden Tren syringe")
+	if spuit != null:
+		_place(spuit.global_position + Vector3(0, 0, 1.2), 0.0)
+		await _frames(10)
+		await _press(&"interact")
+		_check(_state.has_flag(&"tren_spuit_found"), "the player picks up the syringe")
+
+
+func _force(amber: Variant, mode: int, seconds: float) -> void:
+	amber.mode = mode
+	amber.set("_timer", seconds)
+	amber.set("_tick", 0.0)
+	if mode == BREATH:
+		amber.get_node("Model/Body/Neck/Head/BreathStream").visible = true
+	await _frames(int(seconds * 60.0) + 5)
+
+
+func _fresh_health() -> int:
+	_player().health.set_health(100)
+	return 100
+
+
+func _hit(damage: int) -> Variant:
+	return load("res://scripts/components/hit_data.gd").new(damage, _player(), null)
+
+
+func _count_scene(file_name: String) -> int:
+	var count: int = 0
+	for node: Node in _main.get_world().get_children():
+		if node.scene_file_path.ends_with(file_name):
+			count += 1
+	return count
 
 
 func _talk_to_klaas() -> Variant:

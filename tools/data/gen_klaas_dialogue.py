@@ -91,6 +91,9 @@ q5_early = cond(min_inwijding=4, quest_id=Q5, quest_status=0, required_flag="bos
 q5_active = cond(quest_id=Q5, quest_status=1)
 q5_report = cond(quest_id=Q5, quest_status=1, quest_step="report")
 q5_done = cond(quest_id=Q5, quest_status=2)
+Q6 = "q6_amber"
+q6_active = cond(quest_id=Q6, quest_status=1)
+q6_done = cond(quest_id=Q6, quest_status=2)
 shop_open = cond(min_inwijding=1)
 strong = cond(min_inwijding=3)
 
@@ -138,7 +141,8 @@ line("hub", "Wat wil je?", choices=[
     choice("Heb je nog een klus?", "q5_offer", q5_offer),
     choice("Heb je nog een klus?", "q5_early", q5_early),
     choice("Heb je nog een klus?", "q5_busy", q5_active),
-    choice("Heb je nog een klus?", "next_job", q5_done),
+    choice("Wat nu met Amber?", "q6_go", q6_active),
+    choice("Heb je nog een klus?", "next_job", q6_done),
     choice("Vertel over Amber.", "lore_1"),
     choice("Waarom die zonnebril?", "glasses"),
     choice("Mag ik hier slapen?", "sleep_offer"),
@@ -182,6 +186,7 @@ line("q5_busy", "Ik hoor ze nog steeds BINGO roepen. Grumpy Oma zit nog in haar 
 line("q5_early", "Het is stil in de Bingo Club. Heb jij Grumpy Oma al verslagen?", "q5_early_2", model_action="flex")
 line("q5_early_2", "Eerder klaar dan gevraagd. Ik ben trots op je. Hier, je beloning.", "q5_crossbow", action="start_quest", value=Q5)
 line("next_job", "Nog niet. Rust uit. Ik roep je als Amber weer iets flikt.", "hub")
+line("q6_go", "De kerk is open. Amber zit diep eronder. Ik ga vooruit en wacht bij haar hol. Kom zodra je klaar bent.", "hub", model_action="flex")
 line("lore_1", "Amber kwam uit Arnhem-Zuid. Groot, oranje, slecht humeur. Ze nam Elst over en zette overal haar drillers neer.", "lore_2")
 line("lore_2", "Sinds die dag draait er een tornado om het dorp. Niemand erin, niemand eruit. Station Elst is haar aanvoerlijn. Die moet kapot.", "hub")
 line("glasses", "Deze bril gaat nooit af. Nooit. Volgende vraag.", "hub")
@@ -191,14 +196,48 @@ line("sleep_offer", "Het bed staat achterin. Schoenen uit. Slapen is ook trainen
 ])
 line("bye", "Train hard. Of in elk geval een beetje.")
 
-out = ['[gd_resource type="Resource" script_class="DialogueData" format=3]', '',
-       '[ext_resource type="Script" path="res://scripts/data/dialogue_data.gd" id="1_data"]',
-       '[ext_resource type="Script" path="res://scripts/data/dialogue_condition.gd" id="2_condition"]',
-       '[ext_resource type="Script" path="res://scripts/data/dialogue_choice.gd" id="3_choice"]',
-       '[ext_resource type="Script" path="res://scripts/data/dialogue_line.gd" id="4_line"]', '']
-for block in subs:
-    out += block + [""]
-out += ['[resource]', 'script = ExtResource("1_data")', 'speaker = "Klaas"',
-        'starts = Array[StringName]([&"first_meeting", &"tutorial_report", &"tutorial_busy", &"q2_report", &"q3_report", &"q4_report", &"q5_report", &"greeting_strong", &"greeting"])',
-        'lines = Array[ExtResource("4_line")]([' + ", ".join(f'SubResource("{l}")' for l in line_ids) + "])"]
-pathlib.Path("data/dialogue/klaas.tres").write_text("\n".join(out) + "\n")
+def write(path, starts):
+    """Writes the lines made so far as one DialogueData, then starts afresh."""
+    out = ['[gd_resource type="Resource" script_class="DialogueData" format=3]', '',
+           '[ext_resource type="Script" path="res://scripts/data/dialogue_data.gd" id="1_data"]',
+           '[ext_resource type="Script" path="res://scripts/data/dialogue_condition.gd" id="2_condition"]',
+           '[ext_resource type="Script" path="res://scripts/data/dialogue_choice.gd" id="3_choice"]',
+           '[ext_resource type="Script" path="res://scripts/data/dialogue_line.gd" id="4_line"]', '']
+    for block in subs:
+        out += block + [""]
+    out += ['[resource]', 'script = ExtResource("1_data")', 'speaker = "Klaas"',
+            "starts = Array[StringName]([" + ", ".join(f'&"{s}"' for s in starts) + "])",
+            'lines = Array[ExtResource("4_line")]([' + ", ".join(f'SubResource("{l}")' for l in line_ids) + "])"]
+    pathlib.Path(path).write_text("\n".join(out) + "\n")
+    subs.clear()
+    line_ids.clear()
+    conditions.clear()
+
+
+write("data/dialogue/klaas.tres", ["first_meeting", "tutorial_report", "tutorial_busy", "q2_report", "q3_report", "q4_report", "q5_report",
+                                   "greeting_strong", "greeting"])
+
+# Klaas in the church, at the gate of Amber's arena (Quest 6).
+not_ready = cond(forbidden_flag="klaas_ready")
+ready = cond(required_flag="klaas_ready")
+line("church_hello", "Daar ben je. Amber zit achter die poort. Groot, heet en chagrijnig. Net als mijn ex.", condition=not_ready,
+     model_action="flex", choices=[
+         choice("Wat moet ik weten?", "church_tips"),
+         choice("Ik wil nog wat kopen of verkopen.", action="open_shop"),
+         choice("Ik ben er klaar voor.", "church_go"),
+         choice("Nog even niet.", "church_wait"),
+     ])
+line("church_tips", "Achter een pilaar raakt haar vuur je niet. Vliegt ze, pak je kruisboog. Ligt ze op de grond of hijgt ze, sla dan op haar kop.",
+     "church_tips_2")
+line("church_tips_2", "En ik trek haar aandacht. Ik ben groter dan jij. Ze kijkt vanzelf naar mij.", choices=[
+    choice("Ik wil nog wat kopen of verkopen.", action="open_shop"),
+    choice("Ik ben er klaar voor.", "church_go"),
+    choice("Nog even niet.", "church_wait"),
+])
+line("church_go", "Dan gaan we. Blijf naast me en sla. Voor Elst.", action="set_flag", value="klaas_ready", model_action="flex")
+line("church_wait", "Rust uit op die bank. Ik ga nergens heen. Amber ook niet.")
+line("church_ready", "De poort is open. Zeg het maar als je zover bent.", condition=ready, choices=[
+    choice("Ik wil nog wat kopen of verkopen.", action="open_shop"),
+    choice("Kom op, Klaas.", "church_go"),
+])
+write("data/dialogue/klaas_church.tres", ["church_hello", "church_ready"])

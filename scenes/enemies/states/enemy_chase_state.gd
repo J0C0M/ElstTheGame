@@ -13,7 +13,8 @@ const FLANK_DISTANCE: float = 4.0
 func enter(_data: Dictionary) -> void:
 	enemy.aware = true
 	enemy.time_since_seen = 0.0
-	enemy.alert_pack()
+	if not enemy.pack_warned:
+		enemy.alert_pack()
 
 
 func physics_update(delta: float) -> void:

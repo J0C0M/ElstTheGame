@@ -17,7 +17,7 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 8 | `Add-Westeraam-Dungeon` | Af, gemerged naar `Development` |
 | 9 | `Add-OBC-Fort-Dungeon` | Af, gemerged naar `Development` |
 | 10 | `Add-Bingo-Cave-Dungeon` | Af, gemerged naar `Development` |
-| 11 | `Add-Amber-Final-Battle` | Nog niet begonnen |
+| 11 | `Add-Amber-Final-Battle` | In aanbouw: blok A (de weg naar Amber) en B (het gevecht) af en tussentijds naar `Development` gemerged (op verzoek van de eigenaar); blok C volgt |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
 Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
@@ -420,6 +420,91 @@ Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `D
 ### Aandachtspunten voor de volgende fases
 
 - Fase 10: de Bingo Club Boomer Cave wordt de zwaarste factie-dungeon (meer vijanden dan het OBC, Grumpy Oma sterker dan het fatbike-kindje), op dezelfde manier opgebouwd: groter dan het station, twee delen met een checkpoint, een `LiberatedArea` in `tools/map/gen_elst.py` en Quest 5 in `tools/data/gen_klaas_dialogue.py`. Daarna geeft Klaas de kruisboog (Quest 2 t/m 5 af).
+
+## Fase 11 – Quest 6: Amber de Draak
+
+Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn adviezen voor de open beslissingen). Het werk gaat in drie blokken.
+
+### Wat is af (blok A, de weg naar Amber)
+
+- **Kerkdeuren en Quest 6:** `GameState` zet de vlag `church_open` zodra de drie factiebazen verslagen zijn, ook bij het laden van een oudere save. De kerkdeur gaat dan open. Quest 6 (`q6_amber.tres`) start vanzelf via het nieuwe `start_flag` van `QuestData`, met een melding van Amber "door de tornado" (`start_message`).
+- **Doelen van Quest 6:** ga de kerk in, daal af naar het hart van de kerk, praat met Klaas, versla Amber samen met Klaas, en gebruik de Tren-spuit op Klaas. De laatste twee komen in blok B en C.
+- **Dungeonbouwer:** ruimtes kunnen op hun eigen vloerhoogte liggen. Er zijn hellingen tussen de niveaus, gedraaide en gloeiende blokken, en een ronde ruimte (`round_room`). De vier oude dungeons komen er byte voor byte gelijk uit.
+- **De kerk-dungeon** (`tools/dungeons/gen_kerk.py`, `scenes/dungeons/Kerk.tscn`), de grootste dungeon met 28 vijanden van alle facties:
+  - **0 m, de kerk:** het portaal, het schip met banken en een rode loper, zijbeuken achter arcades, glas-in-lood en banieren, het koor met altaar, kaarsen, preekstoel en orgel, en de sacristie met de trap.
+  - **−5 m, de crypte:** grafnissen, een grafkamer met sarcofagen, een doodlopende kamer met een kist en een hinderlaag.
+  - **−10 m, de catacomben:** een kruispunt, een lange gang naar een doodlopende kamer met een kist, en een brede tunnel waar de fatbikers kunnen chargeren. Amberkleurige scheuren en fakkels.
+  - **−15 m, de voorkamer:** checkpoint met autosave, een rustbank, Klaas en de poort naar de ronde arena (44 m doorsnee, 5 pilaren, een gloeiend hart).
+- **Vijanden:** even sterk als in hun eigen dungeon. 85% kijkt naar de deur waardoor de speler binnenkomt.
+- **Feedback van de eigenaar op blok A, verwerkt:**
+  - **Ontbrekende muren:** waar een smalle trap op een bredere ruimte uitkwam, of een lage ruimte op een hogere, bleef een stuk muur open. Nu zijn de trappen 6 m breed, net als hun deuren, en bouwt steeds de hogere of bredere ruimte de muur. `open_sides()` in `dungeon_builder.py` controleert dat geen zijde open blijft; `gen_kerk.py` stopt als dat toch gebeurt. De vier andere dungeons zijn ook gecontroleerd: alles dicht.
+  - **Het tweede deel was saai:**
+    - De Amber-cultisten en draakjes uit het plan zijn erbij.
+    - De catacomben zijn een hoge grot met schedelwanden, amberkristallen en stalactieten.
+    - Het heiligdom van Amber heeft een drakenkop als afgodsbeeld, banken, kaarsen, cultisten en een kist.
+    - In de fietstunnel staan twee vuurroosters die om de beurt opvlammen, met puin en schedels.
+    - Bij de arenapoort staan drakenbeelden met vuurschalen.
+    - De onderste lagen zijn veel lichter. Nu 36 vijanden.
+  - **Amber-cultisten** (40 HP, 8 schade, met een staf): hun gezang ("AMBER! AMBER!") maakt om de 6 s alle vijanden binnen 10 m woest (+25%, 5 s), van elke factie.
+  - **Draakjes** (30 HP): vliegen op ~3,6 m hoogte, cirkelen om je heen en spugen vuurballen. Af en toe duiken ze om te bijten, en alleen dan raakt je zwaard ze. De kruisboog raakt ze altijd.
+- **Klaas bij de arena:** een eigen gesprek (`klaas_church.tres`) met tips, de winkel (kopen en verkopen) en "Ik ben er klaar voor". Dat zet `klaas_ready`, en dan gaat de arenapoort (`FlagGate`) open. Tijdens Quest 6 is Klaas niet thuis zodra er geen andere quest meer op hem wacht; op zijn plek ligt een briefje. Thuis vraag je hem "Wat nu met Amber?".
+- **Fix: balans van de drillers** (eigenaar):
+  - Laag drillers hebben 20 HP (was 30): met het roestige zwaard dood in twee slagen.
+  - Drillers hebben 58 HP (was 40), na het station 46: met het ijzeren zwaard dood in drie slagen.
+- **Fix: slimmere zintuigen, maar niet te slim** (eigenaar):
+  - Vijanden horen je binnen 6 m (was 4).
+  - Dichtbij zien ze ook vanuit hun ooghoek (160°).
+  - Ze kijken naar je hoofd én borst, zodat een bankje je niet meer verbergt.
+- **Fix: waarschuwen** (eigenaar): een vijand die je opmerkt of die je in de rug slaat, waarschuwt zijn buren één keer.
+  - Station en Westeraam: alleen binnen 7 m, zonder kettingreactie, dus geen hele kamer tegelijk.
+  - OBC en Bingo Club (`alert_chain`): de waarschuwing gaat door, zodat een hele kamer op je af kan komen, zoals eerst.
+- **Tests:** `tests/test_amber.gd` (20 checks na blok A). `test_world` loopt de route door de kerk tot Klaas. `test_enemies` controleert het waarschuwen. `test_station` gebruikt de nieuwe HP.
+
+### Wat is af (blok B, het gevecht)
+
+- **Amber-model** (`tools/models/gen_amber.py`, `AmberModel.tscn`, `amber_model.gd`): een draak van zo'n 12 m. Ze heeft een romp met stekels, een lange nek en een kop met hoorns, gloeiende ogen, een kaak die opengaat en een keel die gloeit. Verder vleugels met vliezen, een staart in drie delen en vier poten. Haar houdingen: rust, inademen, vuuradem, hijgen, staart, vleugels, vliegen, versuft en dood.
+- **Klaas als bondgenoot** (`KlaasAlly.tscn`, `klaas_ally.gd`):
+  - Na "Ik ben er klaar voor" stapt de Klaas bij de poort opzij (`leave_on_flag`) en volgt de bondgenoot je.
+  - In het gevecht loopt hij naar Amber en slaat haar om de 1,6 s voor 14 schade. Amber kiest hem in 35% van haar aanvallen.
+  - Raakt ze hem, dan wankelt hij en roept iets ("Is dat alles, hagedis?"). Als ze vliegt, roept hij "Pak je kruisboog!".
+- **Amber, balk 1** (`Amber.tscn`, `amber.gd`, `amber.tres`, 2 × 800 HP). Elke aanval wordt aangekondigd:
+  - **Vuuradem:** 0,8 s inademen, dan 2 s een kegel vuur tot 14 m, 8 schade per kwart seconde. Een pilaar ertussen houdt het tegen. Daarna hijgt ze 2 s met haar kop laag, en dan doet een klap op haar kop dubbele schade.
+  - **Staart:** een zwiep (20 schade) naar wie naast of achter haar staat.
+  - **Vleugels:** 2,5 s wind die je wegblaast; een pilaar beschermt je ook dan.
+  - **Vliegen:** om de 25 s vliegt ze op en spuwt ze vuurballen (`AmberMeteor`): een rode ring, 1 s later de inslag (18 schade) met een brandende plek. Een pilaar vangt ze op. Drie kruisboogpijlen (90 schade) halen haar neer; versuft ligt ze 4 s, met haar kop dubbel kwetsbaar. Anders landt ze na 12 s.
+  - Een klap die kop en lijf allebei raakt, telt één keer.
+- **De overgang** (`scripts/cutscene/cutscene.gd`, `EventBus.subtitle_requested`, ondertitels onderin de HUD):
+  1. Als balk 1 leeg is, laadt Amber een vuurbal op de speler.
+  2. Klaas springt ertussen, wordt geraakt en valt (`klaas_fallen`).
+  3. Na een paar regels tekst begint balk 2.
+  - Tijdens de scène beweegt de speler niet en kan niet opslaan.
+- **Amber, balk 2:**
+  - Ze is woedend: 30% sneller, met een rode gloed, en ze vliegt vaker.
+  - Waar ze loopt en na haar vuuradem laat ze brandende plekken achter.
+  - Op 66% en 33% roept ze telkens twee drillers op.
+- **Haar dood:** `boss_amber`, opslaan weer vrij, de poort open, en de gouden Tren-spuit (`TrenSpuit.tscn`) op de grond. Oppakken zet `tren_spuit_found`. Laad je daarna een save, dan ligt Klaas er nog en ook de spuit, zolang je die niet had.
+- **Tests:** `test_amber.gd` heeft nu 36 checks, voor de hele weg tot en met het oppakken van de spuit.
+
+### Keuzes en afwijkingen
+
+- **De arena ligt op −15 m,** net als de voorkamer, en niet op −18 m zoals in het plan. Een extra trap voor de arena voegde niets toe.
+- **Klaas is tijdens Quest 6 niet thuis,** zodat hij niet op twee plekken tegelijk staat. Zijn winkel is dan bij de arena. Hij blijft wel thuis zolang er nog een quest is om in te leveren: versla je de derde baas vóór je verslag doet, dan krijg je eerst nog je beloning en de kruisboog.
+- **Laag driller en driller** hebben andere HP dan het GDD (30 en 40); het GDD is bijgewerkt.
+
+### Nog te doen: blok C (zie ook `docs/FASE_11_PLAN.md`)
+
+- **C1, Klaas weer tot leven:** de quest staat dan op doel `revive` (vlag `klaas_revived`, marker `klaas_fallen` op de `KlaasAlly`).
+  - Geef `KlaasAlly` een `Interactable` ("Gebruik de Tren-spuit op Klaas") die alleen werkt als hij `FALLEN` is en `tren_spuit_found` gezet is.
+  - Speel dan met `Cutscene` een korte scène: `KlaasAlly.revive()`, flexen, een droge regel. Zet `klaas_revived`; daarmee is Quest 6 af en wordt de Inwijding 6.
+- **C2, de tornado verdwijnt:** `TornadoBorder` (`scenes/world/tornado_border.gd`) heeft nog geen `dissolve()`.
+  - Na `klaas_revived`: fade naar Elst, een scène waarin de tornado in ~6 s krimpt en vervaagt.
+  - Daarna, ook na laden, geen tornado en lichtere dieptemist (Environment in `Elst.tscn`). Wel een onzichtbare grens bij de oude ring met de melding "Je hoeft nergens meer heen. Elst is weer van jou."
+- **C3, einde:**
+  - Een `LiberatedArea` voor het kerkplein in `tools/map/gen_elst.py` (feest, dorpelingen, lichtjes) op `klaas_revived`.
+  - De eindscène op het kerkplein, waarin Klaas je "een echte Elstenaar" noemt.
+  - De aftiteling met "Een game van J0C0M", Godot en de CC0-bronnen uit `CREDITS.md`.
+  - Nieuwe regels voor Klaas thuis (`q6_done` in `gen_klaas_dialogue.py`). Daarna speel je vrij verder.
+- **C4:** `test_amber.gd` uitbreiden met C1–C3. `PROGRESS.md`, `CLAUDE.md`, `README.md` en het GDD bijwerken. Een testchecklist, en dan akkoord en mergen.
 
 ## Fase 10 – Quest 5: Bingo Club Boomer Cave
 

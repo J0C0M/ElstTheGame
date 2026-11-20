@@ -5,6 +5,7 @@ props, labels and lights as data and calls build(). Rooms are boxes with a
 floor, a ceiling and walls with door gaps; north and south walls cover the
 corners, west and east walls fit in between. A side set to None has no wall:
 the neighbouring room builds it. +x is east, -z is north (deeper in).
+A room can lie at its own floor height; ramps join the levels (the church).
 """
 import math
 import pathlib
@@ -50,22 +51,27 @@ class Dungeon:
         self._meshes = {}
         self._shapes = {}
 
-    def material(self, c):
-        if c not in self._materials:
+    def material(self, c, glow=False):
+        """A flat colour; glow makes it unshaded, always fully bright."""
+        key = ("glow",) + tuple(c) if glow else c
+        if key not in self._materials:
             mid = f"Mat_{len(self._materials) + 1}"
-            self._materials[c] = mid
+            self._materials[key] = mid
             lines = [f'[sub_resource type="StandardMaterial3D" id="{mid}"]']
             if len(c) > 3:
                 lines.append("transparency = 1")
+            if glow:
+                lines.append("shading_mode = 0")
             self.subs.append(lines + [f"albedo_color = {col(c)}", "roughness = 0.9"])
-        return self._materials[c]
+        return self._materials[key]
 
-    def box_mesh(self, size, c):
-        key = (tuple(round(v, 3) for v in size), c)
+    def box_mesh(self, size, c, glow=False):
+        key = (tuple(round(v, 3) for v in size), c, glow) if glow else (tuple(round(v, 3) for v in size), c)
         if key not in self._meshes:
             mid = f"Box_{len(self._meshes) + 1}"
             self._meshes[key] = mid
-            self.subs.append([f'[sub_resource type="BoxMesh" id="{mid}"]', f'material = SubResource("{self.material(c)}")', f"size = {vec(*size)}"])
+            self.subs.append([f'[sub_resource type="BoxMesh" id="{mid}"]', f'material = SubResource("{self.material(c, glow)}")',
+                              f"size = {vec(*size)}"])
         return self._meshes[key]
 
     def box_shape(self, size):
@@ -76,17 +82,50 @@ class Dungeon:
             self.subs.append([f'[sub_resource type="BoxShape3D" id="{sid}"]', f"size = {vec(*size)}"])
         return self._shapes[key]
 
-    def solid(self, parent, name, pos, size, c):
-        self.nodes.append([f'[node name="{name}" type="StaticBody3D" parent="{parent}"]', f"position = {vec(*pos)}"])
+    def solid(self, parent, name, pos, size, c, rot=None):
+        """A box that blocks. rot is (pitch, yaw) in radians, if turned."""
+        lines = [f'[node name="{name}" type="StaticBody3D" parent="{parent}"]', f"position = {vec(*pos)}"]
+        if rot:
+            lines.append(f"rotation = {vec(rot[0], rot[1], 0)}")
+        self.nodes.append(lines)
         self.nodes.append([f'[node name="CollisionShape3D" type="CollisionShape3D" parent="{parent}/{name}"]',
                            f'shape = SubResource("{self.box_shape(size)}")'])
         self.nodes.append([f'[node name="Mesh" type="MeshInstance3D" parent="{parent}/{name}"]', f'mesh = SubResource("{self.box_mesh(size, c)}")'])
 
-    def visual(self, parent, name, pos, size, c):
-        self.nodes.append([f'[node name="{name}" type="MeshInstance3D" parent="{parent}"]', f"position = {vec(*pos)}",
-                           f'mesh = SubResource("{self.box_mesh(size, c)}")'])
+    def visual(self, parent, name, pos, size, c, rot=None, glow=False):
+        lines = [f'[node name="{name}" type="MeshInstance3D" parent="{parent}"]', f"position = {vec(*pos)}"]
+        if rot:
+            lines.append(f"rotation = {vec(rot[0], rot[1], 0)}")
+        self.nodes.append(lines + [f'mesh = SubResource("{self.box_mesh(size, c, glow)}")'])
 
-    def lintel(self, room, side, n, centre, width, height, colour, along_x, top=None):
+    def ramp(self, name, x, width, z_a, y_a, z_b, y_b, c):
+        """A slope along Z from (z_a, floor y_a) to (z_b, floor y_b), to walk
+        between two levels. Keep it at 35 degrees or less for the navmesh."""
+        if z_a > z_b:
+            z_a, y_a, z_b, y_b = z_b, y_b, z_a, y_a
+        dz, dy = z_b - z_a, y_b - y_a
+        length = math.hypot(dz, dy) + 0.6
+        pitch = math.atan2(-dy, dz)
+        thick = 0.4
+        pos = (x, (y_a + y_b) / 2 - math.cos(pitch) * thick / 2, (z_a + z_b) / 2 - math.sin(pitch) * thick / 2)
+        self.solid("Structure", name, pos, (width, thick, length), c, rot=(pitch, 0))
+
+    def round_room(self, name, centre, radius, floor_y, height, wall_color, segments=24, gaps=(), gap_width=6.0):
+        """A round room of wall pieces on a square floor. gaps are angles in
+        radians (0 is east, pi/2 south) where an opening of gap_width is left."""
+        cx, cz = centre
+        size = 2 * radius + 2
+        self.solid("Structure", f"{name}Floor", (cx, floor_y - 0.5, cz), (size, 1, size), FLOOR)
+        self.solid("Structure", f"{name}Ceiling", (cx, floor_y + height + 0.5, cz), (size, 1, size), CEILING)
+        piece = 2 * radius * math.sin(math.pi / segments) + 0.5
+        for i in range(segments):
+            angle = (i + 0.5) * math.tau / segments
+            if any(abs(math.remainder(angle - gap, math.tau)) * radius < gap_width / 2 + piece / 2 - 0.5 for gap in gaps):
+                continue
+            pos = (cx + radius * math.cos(angle), floor_y + height / 2, cz + radius * math.sin(angle))
+            self.solid("Structure", f"{name}Wall{i}", pos, (piece, height, 1), wall_color, rot=(0, -angle - math.pi / 2))
+
+    def lintel(self, room, side, n, centre, width, height, colour, along_x, top=None, base=0.0):
         """The wall above a door: 3.2 m high doors, 4.5 m for wide openings.
         An opening wider than 8 m is where a whole room joins; give it a top
         (the neighbour's height) when that room is lower, to close the wall above it."""
@@ -97,16 +136,22 @@ class Dungeon:
         if top >= height:
             return
         size = (width, height - top, 1) if along_x else (1, height - top, width)
-        self.solid("Structure", f"{room}Lintel{side}{n}", (centre[0], (top + height) / 2, centre[1]), size, colour)
+        self.solid("Structure", f"{room}Lintel{side}{n}", (centre[0], base + (top + height) / 2, centre[1]), size, colour)
 
     def build_rooms(self, rooms, props):
-        """rooms: name -> ((x0, x1, z0, z1), wall colour, height, doors per side);
-        a door is (centre, width) or (centre, width, top of the opening).
-        props: (name, x, z, size, colour, solid)."""
+        """rooms: name -> ((x0, x1, z0, z1), wall colour, height, doors per side)
+        and optionally a dict with "floor" (the floor height, default 0) and
+        "floor_color"; a door is (centre, width) or (centre, width, top of the
+        opening). props: (name, x, z, size, colour, solid), and optionally the
+        height it stands on."""
         self.nodes.append(['[node name="Structure" type="Node3D" parent="." groups=["navigation_source"]]'])
-        for name, ((x0, x1, z0, z1), wall_color, height, sides) in rooms.items():
-            self.solid("Structure", f"{name}Floor", ((x0 + x1) / 2, -0.5, (z0 + z1) / 2), (x1 - x0, 1, z1 - z0), FLOOR)
-            self.solid("Structure", f"{name}Ceiling", ((x0 + x1) / 2, height + 0.5, (z0 + z1) / 2), (x1 - x0, 1, z1 - z0), CEILING)
+        for name, room in rooms.items():
+            (x0, x1, z0, z1), wall_color, height, sides = room[:4]
+            opts = room[4] if len(room) > 4 else {}
+            base = opts.get("floor", 0)
+            floor_color = opts.get("floor_color", FLOOR)
+            self.solid("Structure", f"{name}Floor", ((x0 + x1) / 2, base - 0.5, (z0 + z1) / 2), (x1 - x0, 1, z1 - z0), floor_color)
+            self.solid("Structure", f"{name}Ceiling", ((x0 + x1) / 2, base + height + 0.5, (z0 + z1) / 2), (x1 - x0, 1, z1 - z0), CEILING)
             for side, doors in sides.items():
                 if doors is None:
                     continue
@@ -115,17 +160,17 @@ class Dungeon:
                     a0 = x0 - 0.5 if sides["W"] is not None else x0 + 0.5
                     a1 = x1 + 0.5 if sides["E"] is not None else x1 - 0.5
                     for n, (lo, hi) in enumerate(wall_segments(a0, a1, doors)):
-                        self.solid("Structure", f"{name}Wall{side}{n}", ((lo + hi) / 2, height / 2, z), (hi - lo, height, 1), wall_color)
+                        self.solid("Structure", f"{name}Wall{side}{n}", ((lo + hi) / 2, base + height / 2, z), (hi - lo, height, 1), wall_color)
                     for n, door in enumerate(doors):
-                        self.lintel(name, side, n, (door[0], z), door[1], height, wall_color, True, *door[2:])
+                        self.lintel(name, side, n, (door[0], z), door[1], height, wall_color, True, *door[2:3], base=base)
                 else:
                     x = x0 if side == "W" else x1
                     for n, (lo, hi) in enumerate(wall_segments(z0 + 0.5, z1 - 0.5, doors)):
-                        self.solid("Structure", f"{name}Wall{side}{n}", (x, height / 2, (lo + hi) / 2), (1, height, hi - lo), wall_color)
+                        self.solid("Structure", f"{name}Wall{side}{n}", (x, base + height / 2, (lo + hi) / 2), (1, height, hi - lo), wall_color)
                     for n, door in enumerate(doors):
-                        self.lintel(name, side, n, (x, door[0]), door[1], height, wall_color, False, *door[2:])
-        for name, x, z, size, c, is_solid in props:
-            pos = (x, size[1] / 2 + (0.01 if not is_solid else 0), z)
+                        self.lintel(name, side, n, (x, door[0]), door[1], height, wall_color, False, *door[2:3], base=base)
+        for name, x, z, size, c, is_solid, *on in props:
+            pos = (x, (on[0] if on else 0) + size[1] / 2 + (0.01 if not is_solid else 0), z)
             (self.solid if is_solid else self.visual)("Structure", name, pos, size, c)
 
     def build_track(self, rail_x, rail_z):
@@ -218,7 +263,7 @@ def entry_points(rooms, start):
     queue = [first]
     while queue:
         name = queue.pop(0)
-        (x0, x1, z0, z1), _colour, _height, sides = rooms[name]
+        (x0, x1, z0, z1), _colour, _height, sides = rooms[name][:4]
         points = []
         for side, doors in sides.items():
             centres = [(x0 + x1) / 2 if side in ("N", "S") else (z0 + z1) / 2] if doors is None else [door[0] for door in doors]
@@ -251,3 +296,35 @@ def aim_enemies(enemies, rooms, start, toward_share, seed):
             yaw = rng.uniform(-math.pi, math.pi)
         aimed.append(tuple(enemy[:-1]) + (round(yaw, 3),))
     return aimed
+
+
+def open_sides(rooms):
+    """Sides without a wall (None) that no neighbour closes: a neighbour must
+    build a wall on that line over the whole side, at least as high. Returns
+    "room side" strings; an empty list means the rooms are closed."""
+    def walls(name):
+        (x0, x1, z0, z1), _c, height, sides = rooms[name][:4]
+        opts = rooms[name][4] if len(rooms[name]) > 4 else {}
+        top = opts.get("floor", 0) + height
+        for side, doors in sides.items():
+            if doors is not None:
+                line = {"N": z0, "S": z1, "W": x0, "E": x1}[side]
+                span = (x0, x1) if side in ("N", "S") else (z0, z1)
+                yield side, line, span, top
+    problems = []
+    for name, room in rooms.items():
+        (x0, x1, z0, z1), _c, height, sides = room[:4]
+        opts = room[4] if len(room) > 4 else {}
+        top = opts.get("floor", 0) + height
+        for side, doors in sides.items():
+            if doors is not None:
+                continue
+            line = {"N": z0, "S": z1, "W": x0, "E": x1}[side]
+            span = (x0, x1) if side in ("N", "S") else (z0, z1)
+            facing = {"N": "S", "S": "N", "W": "E", "E": "W"}[side]
+            closed = any(other != name and other_side == facing and abs(other_line - line) < 0.01
+                         and other_span[0] <= span[0] + 0.01 and other_span[1] >= span[1] - 0.01 and other_top >= top - 0.01
+                         for other in rooms for other_side, other_line, other_span, other_top in walls(other))
+            if not closed:
+                problems.append(f"{name} {side}")
+    return problems

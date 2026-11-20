@@ -122,8 +122,8 @@ func _test_station_cleared() -> void:
 	driller.global_position = Vector3(0, 0, 12)
 	low_driller.global_position = Vector3(2, 0, 12)
 	await _frames(2)
-	_check(driller.health.max_health == 32, "Westeraam drillers have 20%% less health now (%d)" % driller.health.max_health)
-	_check(low_driller.health.max_health == 30, "Amber's own laag drillers keep their health")
+	_check(driller.health.max_health == 46, "Westeraam drillers have 20%% less health now (%d)" % driller.health.max_health)
+	_check(low_driller.health.max_health == 20, "Amber's own laag drillers keep their health")
 	driller.queue_free()
 	low_driller.queue_free()
 

@@ -11,13 +11,14 @@ extends SceneTree
 const ELST: String = "Elst"
 ## Node deepest in each dungeon that a walkable route from the entrance must reach.
 const DEEPEST: Dictionary = {"Station Elst": "Generator4", "Westeraam Getho": "MarkerBoss", "OBC Elst Fort": "MarkerBoss",
-		"Bingo Club Boomer Cave": "MarkerBoss"}
+		"Bingo Club Boomer Cave": "MarkerBoss", "De Kerk van Amber": "MarkerKlaas"}
 ## Door node in Elst, dungeon name, and the spawn point you come back out at.
 const DUNGEONS: Array = [
 	["SupplyDoor", "Station Elst", "StationExit"],
 	["FlatDoor", "Westeraam Getho", "WesteraamExit"],
 	["SchoolDoor", "OBC Elst Fort", "OBCExit"],
 	["CaveDoor", "Bingo Club Boomer Cave", "BingoExit"],
+	["ChurchDoor", "De Kerk van Amber", "KerkExit"],
 ]
 
 var _failures: int = 0
@@ -46,6 +47,8 @@ func _run() -> void:
 		await _test_dungeon(dungeon[0], dungeon[1], dungeon[2])
 		# The faction dungeons open once the station is down.
 		root.get_node("GameState").set_flag(&"station_cleared")
+		# And the church once the three bosses are beaten.
+		root.get_node("GameState").set_flag(&"church_open")
 	_use_test_save_dir()
 	DirAccess.remove_absolute("user://test_saves/")
 	print("test_world: %d failed" % _failures)
@@ -103,7 +106,8 @@ func _test_route(dungeon: Variant, target_name: String) -> void:
 	var map: RID = dungeon.get_node("Navigation").get_navigation_map()
 	var start: Vector3 = dungeon.get_spawn(&"Entrance").global_position
 	var target: Vector3 = dungeon.find_child(target_name, true, false).global_position
-	target.y = 0.0
+	# Markers float about a metre above the floor, on any level.
+	target.y -= 1.0
 	var path: PackedVector3Array = PackedVector3Array()
 	for i: int in 300:
 		OS.delay_msec(10)

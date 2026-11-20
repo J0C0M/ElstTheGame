@@ -55,6 +55,15 @@ func get_status(id: StringName) -> Status:
 	return _status.get(id, Status.NOT_STARTED)
 
 
+## True when every quest but [param except_id] is completed, so nothing is
+## waiting for Klaas any more.
+func are_others_completed(except_id: StringName) -> bool:
+	for id: StringName in _quests:
+		if id != except_id and get_status(id) != Status.COMPLETED:
+			return false
+	return true
+
+
 ## The objective the player is working on, or null when the quest is not active.
 func get_current_step(id: StringName) -> QuestStep:
 	if get_status(id) != Status.ACTIVE:
@@ -91,6 +100,8 @@ func start_quest(id: StringName) -> void:
 	var quest: QuestData = _quests[id]
 	_status[id] = Status.ACTIVE
 	EventBus.message_requested.emit("Nieuwe quest: %s" % quest.title)
+	if not quest.start_message.is_empty():
+		EventBus.message_requested.emit(quest.start_message)
 	if not quest.completion_flag.is_empty() and GameState.has_flag(quest.completion_flag):
 		complete_quest(id)
 		return
@@ -145,6 +156,15 @@ func load_data(data: Dictionary) -> void:
 			done.append(StringName(str(action)))
 		_actions_done[id] = done
 	EventBus.quest_updated.emit(&"")
+	_start_flagged_quests()
+
+
+## Starts the quests whose start_flag is set and that did not start yet.
+func _start_flagged_quests() -> void:
+	for id: StringName in _quests:
+		var quest: QuestData = _quests[id]
+		if not quest.start_flag.is_empty() and get_status(id) == Status.NOT_STARTED and GameState.has_flag(quest.start_flag):
+			start_quest(id)
 
 
 func _enter_step(id: StringName, index: int) -> void:
@@ -183,6 +203,7 @@ func _check_steps(check: Callable) -> void:
 
 
 func _on_flag_set(flag: StringName) -> void:
+	_start_flagged_quests()
 	_check_steps(func(id: StringName, step: QuestStep) -> bool:
 		if step.kind == QuestStep.Kind.FLAG:
 			return step.flag == flag

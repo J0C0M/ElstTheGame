@@ -13,6 +13,11 @@ extends Resource
 ## Klaas gives the quest, the quest is finished at once, with the reward.
 ## While the quest is active its steps decide, so the player still reports back.
 @export var completion_flag: StringName
+## The quest starts by itself, without Klaas, once this GameState flag is set
+## (Quest 6 when the church opens).
+@export var start_flag: StringName
+## Shown when the quest starts, such as Amber calling through the tornado.
+@export_multiline var start_message: String = ""
 
 @export_group("Reward")
 @export var reward_gold: int = 0

@@ -1,0 +1,77 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/models/DrillerModel.tscn" id="1_driller"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_robe"]
+albedo_color = Color(0.85, 0.45, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_trim"]
+albedo_color = Color(0.35, 0.12, 0.05, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_staff"]
+albedo_color = Color(0.32, 0.2, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_orb"]
+shading_mode = 0
+albedo_color = Color(1, 0.6, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_robe"]
+material = SubResource("Mat_robe")
+size = Vector3(0.64, 0.7, 0.4)
+
+[sub_resource type="BoxMesh" id="Mesh_skirt"]
+material = SubResource("Mat_robe")
+size = Vector3(0.6, 0.8, 0.44)
+
+[sub_resource type="BoxMesh" id="Mesh_belt"]
+material = SubResource("Mat_trim")
+size = Vector3(0.66, 0.08, 0.42)
+
+[sub_resource type="BoxMesh" id="Mesh_hood"]
+material = SubResource("Mat_robe")
+size = Vector3(0.38, 0.42, 0.3)
+
+[sub_resource type="BoxMesh" id="Mesh_hood_rim"]
+material = SubResource("Mat_trim")
+size = Vector3(0.4, 0.06, 0.06)
+
+[sub_resource type="BoxMesh" id="Mesh_staff"]
+material = SubResource("Mat_staff")
+size = Vector3(0.06, 1.6, 0.06)
+
+[sub_resource type="BoxMesh" id="Mesh_orb"]
+material = SubResource("Mat_orb")
+size = Vector3(0.18, 0.18, 0.18)
+
+[node name="CultistModel" instance=ExtResource("1_driller")]
+
+[node name="Beanie" parent="Body/Hips/Torso/Head"]
+visible = false
+
+[node name="Robe" type="MeshInstance3D" parent="Body/Hips/Torso"]
+position = Vector3(0, 0.3, 0)
+mesh = SubResource("Mesh_robe")
+
+[node name="Belt" type="MeshInstance3D" parent="Body/Hips/Torso"]
+position = Vector3(0, 0.02, 0)
+mesh = SubResource("Mesh_belt")
+
+[node name="Skirt" type="MeshInstance3D" parent="Body/Hips/Torso"]
+position = Vector3(0, -0.4, 0)
+mesh = SubResource("Mesh_skirt")
+
+[node name="Hood" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
+position = Vector3(0, 0.2, 0.06)
+mesh = SubResource("Mesh_hood")
+
+[node name="HoodRim" type="MeshInstance3D" parent="Body/Hips/Torso/Head"]
+position = Vector3(0, 0.39, -0.1)
+mesh = SubResource("Mesh_hood_rim")
+
+[node name="Staff" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
+position = Vector3(0, -0.2, -0.05)
+mesh = SubResource("Mesh_staff")
+
+[node name="Orb" type="MeshInstance3D" parent="Body/Hips/Torso/ArmR/Hand"]
+position = Vector3(0, 0.62, -0.05)
+mesh = SubResource("Mesh_orb")

@@ -45,7 +45,7 @@ agent_height = 1.75
 agent_radius = 0.5
 agent_max_climb = 0.5
 agent_max_slope = 40.0
-filter_baking_aabb = AABB(-42, -17, -252, 78, 31, 254)
+filter_baking_aabb = AABB(-42, -17, -262, 84, 31, 264)
 
 [sub_resource type="BoxShape3D" id="Shape_1"]
 size = Vector3(12, 1, 10)
@@ -1038,22 +1038,22 @@ material = SubResource("Mat_12")
 size = Vector3(0.08, 4, 1.8)
 
 [sub_resource type="BoxShape3D" id="Shape_83"]
-size = Vector3(46, 1, 46)
+size = Vector3(56, 1, 56)
 
 [sub_resource type="BoxMesh" id="Box_159"]
 material = SubResource("Mat_1")
-size = Vector3(46, 1, 46)
+size = Vector3(56, 1, 56)
 
 [sub_resource type="BoxMesh" id="Box_160"]
 material = SubResource("Mat_2")
-size = Vector3(46, 1, 46)
+size = Vector3(56, 1, 56)
 
 [sub_resource type="BoxShape3D" id="Shape_84"]
-size = Vector3(3.9522, 16, 1)
+size = Vector3(4.0318, 16, 1)
 
 [sub_resource type="BoxMesh" id="Box_161"]
 material = SubResource("Mat_5")
-size = Vector3(3.9522, 16, 1)
+size = Vector3(4.0318, 16, 1)
 
 [sub_resource type="BoxShape3D" id="Shape_85"]
 size = Vector3(2.6, 16, 2.6)
@@ -3499,7 +3499,7 @@ position = Vector3(21.4, -10.5, -196)
 mesh = SubResource("Box_158")
 
 [node name="ArenaFloor" type="StaticBody3D" parent="Structure"]
-position = Vector3(12, -15.5, -228)
+position = Vector3(12, -15.5, -233)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaFloor"]
 shape = SubResource("Shape_83")
@@ -3508,7 +3508,7 @@ shape = SubResource("Shape_83")
 mesh = SubResource("Box_159")
 
 [node name="ArenaCeiling" type="StaticBody3D" parent="Structure"]
-position = Vector3(12, 1.5, -228)
+position = Vector3(12, 1.5, -233)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaCeiling"]
 shape = SubResource("Shape_83")
@@ -3517,8 +3517,8 @@ shape = SubResource("Shape_83")
 mesh = SubResource("Box_160")
 
 [node name="ArenaWall0" type="StaticBody3D" parent="Structure"]
-position = Vector3(33.9322, -7, -226.2739)
-rotation = Vector3(0, -1.6493, 0)
+position = Vector3(38.9422, -7, -231.2341)
+rotation = Vector3(0, -1.6362, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall0"]
 shape = SubResource("Shape_84")
@@ -3527,8 +3527,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall1" type="StaticBody3D" parent="Structure"]
-position = Vector3(33.3921, -7, -222.8642)
-rotation = Vector3(0, -1.8064, 0)
+position = Vector3(38.4812, -7, -227.7326)
+rotation = Vector3(0, -1.7671, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall1"]
 shape = SubResource("Shape_84")
@@ -3537,8 +3537,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall2" type="StaticBody3D" parent="Structure"]
-position = Vector3(32.3253, -7, -219.581)
-rotation = Vector3(0, -1.9635, 0)
+position = Vector3(37.5671, -7, -224.3211)
+rotation = Vector3(0, -1.898, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall2"]
 shape = SubResource("Shape_84")
@@ -3547,8 +3547,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall3" type="StaticBody3D" parent="Structure"]
-position = Vector3(30.7581, -7, -216.505)
-rotation = Vector3(0, -2.1206, 0)
+position = Vector3(36.2156, -7, -221.0582)
+rotation = Vector3(0, -2.0289, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall3"]
 shape = SubResource("Shape_84")
@@ -3557,8 +3557,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall4" type="StaticBody3D" parent="Structure"]
-position = Vector3(28.7289, -7, -213.7121)
-rotation = Vector3(0, -2.2777, 0)
+position = Vector3(34.4497, -7, -217.9996)
+rotation = Vector3(0, -2.1598, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall4"]
 shape = SubResource("Shape_84")
@@ -3567,8 +3567,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall5" type="StaticBody3D" parent="Structure"]
-position = Vector3(26.2879, -7, -211.2711)
-rotation = Vector3(0, -2.4347, 0)
+position = Vector3(32.2997, -7, -215.1977)
+rotation = Vector3(0, -2.2907, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall5"]
 shape = SubResource("Shape_84")
@@ -3577,8 +3577,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall6" type="StaticBody3D" parent="Structure"]
-position = Vector3(23.495, -7, -209.2419)
-rotation = Vector3(0, -2.5918, 0)
+position = Vector3(29.8023, -7, -212.7003)
+rotation = Vector3(0, -2.4216, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall6"]
 shape = SubResource("Shape_84")
@@ -3587,8 +3587,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall7" type="StaticBody3D" parent="Structure"]
-position = Vector3(20.419, -7, -207.6747)
-rotation = Vector3(0, -2.7489, 0)
+position = Vector3(27.0004, -7, -210.5503)
+rotation = Vector3(0, -2.5525, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall7"]
 shape = SubResource("Shape_84")
@@ -3597,8 +3597,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall8" type="StaticBody3D" parent="Structure"]
-position = Vector3(17.1358, -7, -206.6079)
-rotation = Vector3(0, -2.906, 0)
+position = Vector3(23.9418, -7, -208.7844)
+rotation = Vector3(0, -2.6834, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall8"]
 shape = SubResource("Shape_84")
@@ -3606,29 +3606,29 @@ shape = SubResource("Shape_84")
 [node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall8"]
 mesh = SubResource("Box_161")
 
-[node name="ArenaWall11" type="StaticBody3D" parent="Structure"]
-position = Vector3(6.8642, -7, -206.6079)
-rotation = Vector3(0, -3.3772, 0)
+[node name="ArenaWall9" type="StaticBody3D" parent="Structure"]
+position = Vector3(20.6789, -7, -207.4329)
+rotation = Vector3(0, -2.8143, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall11"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall9"]
 shape = SubResource("Shape_84")
 
-[node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall11"]
+[node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall9"]
 mesh = SubResource("Box_161")
 
-[node name="ArenaWall12" type="StaticBody3D" parent="Structure"]
-position = Vector3(3.581, -7, -207.6747)
-rotation = Vector3(0, -3.5343, 0)
+[node name="ArenaWall10" type="StaticBody3D" parent="Structure"]
+position = Vector3(17.2674, -7, -206.5188)
+rotation = Vector3(0, -2.9452, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall12"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall10"]
 shape = SubResource("Shape_84")
 
-[node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall12"]
+[node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall10"]
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall13" type="StaticBody3D" parent="Structure"]
-position = Vector3(0.505, -7, -209.2419)
-rotation = Vector3(0, -3.6914, 0)
+position = Vector3(6.7326, -7, -206.5188)
+rotation = Vector3(0, -3.3379, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall13"]
 shape = SubResource("Shape_84")
@@ -3637,8 +3637,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall14" type="StaticBody3D" parent="Structure"]
-position = Vector3(-2.2879, -7, -211.2711)
-rotation = Vector3(0, -3.8485, 0)
+position = Vector3(3.3211, -7, -207.4329)
+rotation = Vector3(0, -3.4688, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall14"]
 shape = SubResource("Shape_84")
@@ -3647,8 +3647,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall15" type="StaticBody3D" parent="Structure"]
-position = Vector3(-4.7289, -7, -213.7121)
-rotation = Vector3(0, -4.0055, 0)
+position = Vector3(0.0582, -7, -208.7844)
+rotation = Vector3(0, -3.5997, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall15"]
 shape = SubResource("Shape_84")
@@ -3657,8 +3657,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall16" type="StaticBody3D" parent="Structure"]
-position = Vector3(-6.7581, -7, -216.505)
-rotation = Vector3(0, -4.1626, 0)
+position = Vector3(-3.0004, -7, -210.5503)
+rotation = Vector3(0, -3.7306, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall16"]
 shape = SubResource("Shape_84")
@@ -3667,8 +3667,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall17" type="StaticBody3D" parent="Structure"]
-position = Vector3(-8.3253, -7, -219.581)
-rotation = Vector3(0, -4.3197, 0)
+position = Vector3(-5.8023, -7, -212.7003)
+rotation = Vector3(0, -3.8615, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall17"]
 shape = SubResource("Shape_84")
@@ -3677,8 +3677,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall18" type="StaticBody3D" parent="Structure"]
-position = Vector3(-9.3921, -7, -222.8642)
-rotation = Vector3(0, -4.4768, 0)
+position = Vector3(-8.2997, -7, -215.1977)
+rotation = Vector3(0, -3.9924, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall18"]
 shape = SubResource("Shape_84")
@@ -3687,8 +3687,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall19" type="StaticBody3D" parent="Structure"]
-position = Vector3(-9.9322, -7, -226.2739)
-rotation = Vector3(0, -4.6338, 0)
+position = Vector3(-10.4497, -7, -217.9996)
+rotation = Vector3(0, -4.1233, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall19"]
 shape = SubResource("Shape_84")
@@ -3697,8 +3697,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall20" type="StaticBody3D" parent="Structure"]
-position = Vector3(-9.9322, -7, -229.7261)
-rotation = Vector3(0, -4.7909, 0)
+position = Vector3(-12.2156, -7, -221.0582)
+rotation = Vector3(0, -4.2542, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall20"]
 shape = SubResource("Shape_84")
@@ -3707,8 +3707,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall21" type="StaticBody3D" parent="Structure"]
-position = Vector3(-9.3921, -7, -233.1358)
-rotation = Vector3(0, -4.948, 0)
+position = Vector3(-13.5671, -7, -224.3211)
+rotation = Vector3(0, -4.3851, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall21"]
 shape = SubResource("Shape_84")
@@ -3717,8 +3717,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall22" type="StaticBody3D" parent="Structure"]
-position = Vector3(-8.3253, -7, -236.419)
-rotation = Vector3(0, -5.1051, 0)
+position = Vector3(-14.4812, -7, -227.7326)
+rotation = Vector3(0, -4.516, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall22"]
 shape = SubResource("Shape_84")
@@ -3727,8 +3727,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall23" type="StaticBody3D" parent="Structure"]
-position = Vector3(-6.7581, -7, -239.495)
-rotation = Vector3(0, -5.2622, 0)
+position = Vector3(-14.9422, -7, -231.2341)
+rotation = Vector3(0, -4.6469, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall23"]
 shape = SubResource("Shape_84")
@@ -3737,8 +3737,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall24" type="StaticBody3D" parent="Structure"]
-position = Vector3(-4.7289, -7, -242.2879)
-rotation = Vector3(0, -5.4192, 0)
+position = Vector3(-14.9422, -7, -234.7659)
+rotation = Vector3(0, -4.7778, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall24"]
 shape = SubResource("Shape_84")
@@ -3747,8 +3747,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall25" type="StaticBody3D" parent="Structure"]
-position = Vector3(-2.2879, -7, -244.7289)
-rotation = Vector3(0, -5.5763, 0)
+position = Vector3(-14.4812, -7, -238.2674)
+rotation = Vector3(0, -4.9087, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall25"]
 shape = SubResource("Shape_84")
@@ -3757,8 +3757,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall26" type="StaticBody3D" parent="Structure"]
-position = Vector3(0.505, -7, -246.7581)
-rotation = Vector3(0, -5.7334, 0)
+position = Vector3(-13.5671, -7, -241.6789)
+rotation = Vector3(0, -5.0396, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall26"]
 shape = SubResource("Shape_84")
@@ -3767,8 +3767,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall27" type="StaticBody3D" parent="Structure"]
-position = Vector3(3.581, -7, -248.3253)
-rotation = Vector3(0, -5.8905, 0)
+position = Vector3(-12.2156, -7, -244.9418)
+rotation = Vector3(0, -5.1705, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall27"]
 shape = SubResource("Shape_84")
@@ -3777,8 +3777,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall28" type="StaticBody3D" parent="Structure"]
-position = Vector3(6.8642, -7, -249.3921)
-rotation = Vector3(0, -6.0476, 0)
+position = Vector3(-10.4497, -7, -248.0004)
+rotation = Vector3(0, -5.3014, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall28"]
 shape = SubResource("Shape_84")
@@ -3787,8 +3787,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall29" type="StaticBody3D" parent="Structure"]
-position = Vector3(10.2739, -7, -249.9322)
-rotation = Vector3(0, -6.2046, 0)
+position = Vector3(-8.2997, -7, -250.8023)
+rotation = Vector3(0, -5.4323, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall29"]
 shape = SubResource("Shape_84")
@@ -3797,8 +3797,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall30" type="StaticBody3D" parent="Structure"]
-position = Vector3(13.7261, -7, -249.9322)
-rotation = Vector3(0, -6.3617, 0)
+position = Vector3(-5.8023, -7, -253.2997)
+rotation = Vector3(0, -5.5632, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall30"]
 shape = SubResource("Shape_84")
@@ -3807,8 +3807,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall31" type="StaticBody3D" parent="Structure"]
-position = Vector3(17.1358, -7, -249.3921)
-rotation = Vector3(0, -6.5188, 0)
+position = Vector3(-3.0004, -7, -255.4497)
+rotation = Vector3(0, -5.6941, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall31"]
 shape = SubResource("Shape_84")
@@ -3817,8 +3817,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall32" type="StaticBody3D" parent="Structure"]
-position = Vector3(20.419, -7, -248.3253)
-rotation = Vector3(0, -6.6759, 0)
+position = Vector3(0.0582, -7, -257.2156)
+rotation = Vector3(0, -5.825, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall32"]
 shape = SubResource("Shape_84")
@@ -3827,8 +3827,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall33" type="StaticBody3D" parent="Structure"]
-position = Vector3(23.495, -7, -246.7581)
-rotation = Vector3(0, -6.833, 0)
+position = Vector3(3.3211, -7, -258.5671)
+rotation = Vector3(0, -5.9559, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall33"]
 shape = SubResource("Shape_84")
@@ -3837,8 +3837,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall34" type="StaticBody3D" parent="Structure"]
-position = Vector3(26.2879, -7, -244.7289)
-rotation = Vector3(0, -6.99, 0)
+position = Vector3(6.7326, -7, -259.4812)
+rotation = Vector3(0, -6.0868, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall34"]
 shape = SubResource("Shape_84")
@@ -3847,8 +3847,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall35" type="StaticBody3D" parent="Structure"]
-position = Vector3(28.7289, -7, -242.2879)
-rotation = Vector3(0, -7.1471, 0)
+position = Vector3(10.2341, -7, -259.9422)
+rotation = Vector3(0, -6.2177, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall35"]
 shape = SubResource("Shape_84")
@@ -3857,8 +3857,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall36" type="StaticBody3D" parent="Structure"]
-position = Vector3(30.7581, -7, -239.495)
-rotation = Vector3(0, -7.3042, 0)
+position = Vector3(13.7659, -7, -259.9422)
+rotation = Vector3(0, -6.3486, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall36"]
 shape = SubResource("Shape_84")
@@ -3867,8 +3867,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall37" type="StaticBody3D" parent="Structure"]
-position = Vector3(32.3253, -7, -236.419)
-rotation = Vector3(0, -7.4613, 0)
+position = Vector3(17.2674, -7, -259.4812)
+rotation = Vector3(0, -6.4795, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall37"]
 shape = SubResource("Shape_84")
@@ -3877,8 +3877,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall38" type="StaticBody3D" parent="Structure"]
-position = Vector3(33.3921, -7, -233.1358)
-rotation = Vector3(0, -7.6184, 0)
+position = Vector3(20.6789, -7, -258.5671)
+rotation = Vector3(0, -6.6104, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall38"]
 shape = SubResource("Shape_84")
@@ -3887,8 +3887,8 @@ shape = SubResource("Shape_84")
 mesh = SubResource("Box_161")
 
 [node name="ArenaWall39" type="StaticBody3D" parent="Structure"]
-position = Vector3(33.9322, -7, -229.7261)
-rotation = Vector3(0, -7.7754, 0)
+position = Vector3(23.9418, -7, -257.2156)
+rotation = Vector3(0, -6.7413, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall39"]
 shape = SubResource("Shape_84")
@@ -3896,8 +3896,88 @@ shape = SubResource("Shape_84")
 [node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall39"]
 mesh = SubResource("Box_161")
 
+[node name="ArenaWall40" type="StaticBody3D" parent="Structure"]
+position = Vector3(27.0004, -7, -255.4497)
+rotation = Vector3(0, -6.8722, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall40"]
+shape = SubResource("Shape_84")
+
+[node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall40"]
+mesh = SubResource("Box_161")
+
+[node name="ArenaWall41" type="StaticBody3D" parent="Structure"]
+position = Vector3(29.8023, -7, -253.2997)
+rotation = Vector3(0, -7.0031, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall41"]
+shape = SubResource("Shape_84")
+
+[node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall41"]
+mesh = SubResource("Box_161")
+
+[node name="ArenaWall42" type="StaticBody3D" parent="Structure"]
+position = Vector3(32.2997, -7, -250.8023)
+rotation = Vector3(0, -7.134, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall42"]
+shape = SubResource("Shape_84")
+
+[node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall42"]
+mesh = SubResource("Box_161")
+
+[node name="ArenaWall43" type="StaticBody3D" parent="Structure"]
+position = Vector3(34.4497, -7, -248.0004)
+rotation = Vector3(0, -7.2649, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall43"]
+shape = SubResource("Shape_84")
+
+[node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall43"]
+mesh = SubResource("Box_161")
+
+[node name="ArenaWall44" type="StaticBody3D" parent="Structure"]
+position = Vector3(36.2156, -7, -244.9418)
+rotation = Vector3(0, -7.3958, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall44"]
+shape = SubResource("Shape_84")
+
+[node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall44"]
+mesh = SubResource("Box_161")
+
+[node name="ArenaWall45" type="StaticBody3D" parent="Structure"]
+position = Vector3(37.5671, -7, -241.6789)
+rotation = Vector3(0, -7.5267, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall45"]
+shape = SubResource("Shape_84")
+
+[node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall45"]
+mesh = SubResource("Box_161")
+
+[node name="ArenaWall46" type="StaticBody3D" parent="Structure"]
+position = Vector3(38.4812, -7, -238.2674)
+rotation = Vector3(0, -7.6576, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall46"]
+shape = SubResource("Shape_84")
+
+[node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall46"]
+mesh = SubResource("Box_161")
+
+[node name="ArenaWall47" type="StaticBody3D" parent="Structure"]
+position = Vector3(38.9422, -7, -234.7659)
+rotation = Vector3(0, -7.7885, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/ArenaWall47"]
+shape = SubResource("Shape_84")
+
+[node name="Mesh" type="MeshInstance3D" parent="Structure/ArenaWall47"]
+mesh = SubResource("Box_161")
+
 [node name="Pillar0" type="StaticBody3D" parent="Structure"]
-position = Vector3(12, -7, -240)
+position = Vector3(12, -7, -246.5)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/Pillar0"]
 shape = SubResource("Shape_85")
@@ -3906,16 +3986,16 @@ shape = SubResource("Shape_85")
 mesh = SubResource("Box_162")
 
 [node name="PillarTurn0" type="MeshInstance3D" parent="Structure"]
-position = Vector3(12, -7, -240)
+position = Vector3(12, -7, -246.5)
 rotation = Vector3(0, 0.7854, 0)
 mesh = SubResource("Box_162")
 
 [node name="PillarBand0" type="MeshInstance3D" parent="Structure"]
-position = Vector3(12, -12, -240)
+position = Vector3(12, -12, -246.5)
 mesh = SubResource("Box_163")
 
 [node name="Pillar1" type="StaticBody3D" parent="Structure"]
-position = Vector3(23.4127, -7, -231.7082)
+position = Vector3(24.8393, -7, -237.1717)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/Pillar1"]
 shape = SubResource("Shape_85")
@@ -3924,16 +4004,16 @@ shape = SubResource("Shape_85")
 mesh = SubResource("Box_162")
 
 [node name="PillarTurn1" type="MeshInstance3D" parent="Structure"]
-position = Vector3(23.4127, -7, -231.7082)
+position = Vector3(24.8393, -7, -237.1717)
 rotation = Vector3(0, 0.7854, 0)
 mesh = SubResource("Box_162")
 
 [node name="PillarBand1" type="MeshInstance3D" parent="Structure"]
-position = Vector3(23.4127, -12, -231.7082)
+position = Vector3(24.8393, -12, -237.1717)
 mesh = SubResource("Box_163")
 
 [node name="Pillar2" type="StaticBody3D" parent="Structure"]
-position = Vector3(19.0534, -7, -218.2918)
+position = Vector3(19.9351, -7, -222.0783)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/Pillar2"]
 shape = SubResource("Shape_85")
@@ -3942,16 +4022,16 @@ shape = SubResource("Shape_85")
 mesh = SubResource("Box_162")
 
 [node name="PillarTurn2" type="MeshInstance3D" parent="Structure"]
-position = Vector3(19.0534, -7, -218.2918)
+position = Vector3(19.9351, -7, -222.0783)
 rotation = Vector3(0, 0.7854, 0)
 mesh = SubResource("Box_162")
 
 [node name="PillarBand2" type="MeshInstance3D" parent="Structure"]
-position = Vector3(19.0534, -12, -218.2918)
+position = Vector3(19.9351, -12, -222.0783)
 mesh = SubResource("Box_163")
 
 [node name="Pillar3" type="StaticBody3D" parent="Structure"]
-position = Vector3(4.9466, -7, -218.2918)
+position = Vector3(4.0649, -7, -222.0783)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/Pillar3"]
 shape = SubResource("Shape_85")
@@ -3960,16 +4040,16 @@ shape = SubResource("Shape_85")
 mesh = SubResource("Box_162")
 
 [node name="PillarTurn3" type="MeshInstance3D" parent="Structure"]
-position = Vector3(4.9466, -7, -218.2918)
+position = Vector3(4.0649, -7, -222.0783)
 rotation = Vector3(0, 0.7854, 0)
 mesh = SubResource("Box_162")
 
 [node name="PillarBand3" type="MeshInstance3D" parent="Structure"]
-position = Vector3(4.9466, -12, -218.2918)
+position = Vector3(4.0649, -12, -222.0783)
 mesh = SubResource("Box_163")
 
 [node name="Pillar4" type="StaticBody3D" parent="Structure"]
-position = Vector3(0.5873, -7, -231.7082)
+position = Vector3(-0.8393, -7, -237.1717)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Structure/Pillar4"]
 shape = SubResource("Shape_85")
@@ -3978,66 +4058,66 @@ shape = SubResource("Shape_85")
 mesh = SubResource("Box_162")
 
 [node name="PillarTurn4" type="MeshInstance3D" parent="Structure"]
-position = Vector3(0.5873, -7, -231.7082)
+position = Vector3(-0.8393, -7, -237.1717)
 rotation = Vector3(0, 0.7854, 0)
 mesh = SubResource("Box_162")
 
 [node name="PillarBand4" type="MeshInstance3D" parent="Structure"]
-position = Vector3(0.5873, -12, -231.7082)
+position = Vector3(-0.8393, -12, -237.1717)
 mesh = SubResource("Box_163")
 
 [node name="ArenaCrack0" type="MeshInstance3D" parent="Structure"]
-position = Vector3(17.732, -14.98, -226.2269)
+position = Vector3(17.732, -14.98, -231.2269)
 rotation = Vector3(0, 0.3, 0)
 mesh = SubResource("Box_164")
 
 [node name="ArenaCrack1" type="MeshInstance3D" parent="Structure"]
-position = Vector3(17.9918, -14.98, -219.9939)
+position = Vector3(18.8906, -14.98, -223.7929)
 rotation = Vector3(0, 0.9283, 0)
 mesh = SubResource("Box_165")
 
 [node name="ArenaCrack2" type="MeshInstance3D" parent="Structure"]
-position = Vector3(12.1982, -14.98, -214.0014)
+position = Vector3(12.2407, -14.98, -216.0017)
 rotation = Vector3(0, 1.5566, 0)
 mesh = SubResource("Box_166")
 
 [node name="ArenaCrack3" type="MeshInstance3D" parent="Structure"]
-position = Vector3(8.5424, -14.98, -223.0965)
+position = Vector3(8.5424, -14.98, -228.0965)
 rotation = Vector3(0, 2.185, 0)
 mesh = SubResource("Box_167")
 
 [node name="ArenaCrack4" type="MeshInstance3D" parent="Structure"]
-position = Vector3(2.5341, -14.98, -224.7755)
+position = Vector3(1.1143, -14.98, -229.2918)
 rotation = Vector3(0, 2.8133, 0)
 mesh = SubResource("Box_164")
 
 [node name="ArenaCrack5" type="MeshInstance3D" parent="Structure"]
-position = Vector3(-1.3747, -14.98, -232.1373)
+position = Vector3(-4.2407, -14.98, -238.0238)
 rotation = Vector3(0, 3.4416, 0)
 mesh = SubResource("Box_165")
 
 [node name="ArenaCrack6" type="MeshInstance3D" parent="Structure"]
-position = Vector3(8.4049, -14.98, -232.8037)
+position = Vector3(8.4049, -14.98, -237.8037)
 rotation = Vector3(0, 4.0699, 0)
 mesh = SubResource("Box_166")
 
 [node name="ArenaCrack7" type="MeshInstance3D" parent="Structure"]
-position = Vector3(11.8584, -14.98, -237.999)
+position = Vector3(11.8372, -14.98, -244.4988)
 rotation = Vector3(0, 4.6982, 0)
 mesh = SubResource("Box_167")
 
 [node name="ArenaCrack8" type="MeshInstance3D" parent="Structure"]
-position = Vector3(20.0678, -14.98, -239.4416)
+position = Vector3(21.7966, -14.98, -246.8934)
 rotation = Vector3(0, 5.3265, 0)
 mesh = SubResource("Box_164")
 
 [node name="ArenaCrack9" type="MeshInstance3D" parent="Structure"]
-position = Vector3(17.6795, -14.98, -229.9347)
+position = Vector3(17.6795, -14.98, -234.9347)
 rotation = Vector3(0, 5.9549, 0)
 mesh = SubResource("Box_165")
 
 [node name="ArenaHeart" type="MeshInstance3D" parent="Structure"]
-position = Vector3(12, -14.97, -228)
+position = Vector3(12, -14.97, -233)
 rotation = Vector3(0, 0.7854, 0)
 mesh = SubResource("Box_168")
 
@@ -4198,10 +4278,10 @@ light_energy = 3.2
 omni_range = 18
 
 [node name="LightArena1" type="OmniLight3D" parent="."]
-position = Vector3(12, -3, -228)
+position = Vector3(12, -3, -233)
 light_color = Color(1, 0.45, 0.1, 1)
 light_energy = 3
-omni_range = 30
+omni_range = 34
 
 [node name="LightArena2" type="OmniLight3D" parent="."]
 position = Vector3(12, -12, -214)
@@ -4210,22 +4290,22 @@ light_energy = 1.6
 omni_range = 16
 
 [node name="LightArena3" type="OmniLight3D" parent="."]
-position = Vector3(0, -8, -228)
+position = Vector3(-3, -8, -233)
 light_color = Color(1, 0.6, 0.3, 1)
 light_energy = 2.2
-omni_range = 20
+omni_range = 22
 
 [node name="LightArena4" type="OmniLight3D" parent="."]
-position = Vector3(24, -8, -228)
+position = Vector3(27, -8, -233)
 light_color = Color(1, 0.6, 0.3, 1)
 light_energy = 2.2
-omni_range = 20
+omni_range = 22
 
 [node name="LightArena5" type="OmniLight3D" parent="."]
-position = Vector3(12, -8, -244)
+position = Vector3(12, -8, -251)
 light_color = Color(1, 0.6, 0.3, 1)
 light_energy = 2.2
-omni_range = 20
+omni_range = 22
 
 [node name="LightCataCrystal" type="OmniLight3D" parent="."]
 position = Vector3(6, -7, -128)
@@ -4335,11 +4415,12 @@ position = Vector3(12, -15, -199)
 rotation = Vector3(0, 3.14159, 0)
 
 [node name="Amber" parent="." instance=ExtResource("39_amber")]
-position = Vector3(12, -15, -234)
+position = Vector3(12, -15, -231.5)
 rotation = Vector3(0, 3.14159, 0)
 gate_path = NodePath("../ArenaGate")
 klaas_path = NodePath("../KlaasAlly")
-arena_centre = Vector3(12, -15, -228)
+arena_centre = Vector3(12, -15, -233)
+pillars = Array[Vector3]([Vector3(12, -15, -246.5), Vector3(24.8393, -15, -237.1717), Vector3(19.9351, -15, -222.0783), Vector3(4.0649, -15, -222.0783), Vector3(-0.8393, -15, -237.1717)])
 
 [node name="MarkerKlaas" type="Marker3D" parent="."]
 position = Vector3(12, -14, -199)
@@ -4347,7 +4428,7 @@ script = ExtResource("4_marker")
 ids = Array[StringName]([&"klaas_church"])
 
 [node name="MarkerArena" type="Marker3D" parent="."]
-position = Vector3(12, -14, -228)
+position = Vector3(12, -14, -233)
 script = ExtResource("4_marker")
 ids = Array[StringName]([&"amber"])
 

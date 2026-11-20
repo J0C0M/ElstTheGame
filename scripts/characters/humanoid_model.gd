@@ -10,6 +10,9 @@ extends Node3D
 const SMOOTHING: float = 28.0
 ## Sits with the legs forward and does not walk, such as in a wheelchair.
 @export var seated: bool = false
+## When seated: astride, legs apart and hands forward on the reins, such as
+## on a dragon.
+@export var straddle: bool = false
 
 ## Stride phase speed per metre per second of movement.
 const STRIDE_RATE: float = 2.2
@@ -203,10 +206,10 @@ func _locomotion_pose(delta: float) -> Dictionary[StringName, Vector3]:
 	var pose: Dictionary[StringName, Vector3] = {}
 	_idle_time += delta
 	if seated:
-		pose[&"leg_l"] = Vector3(75, 0, 0)
-		pose[&"leg_r"] = Vector3(75, 0, 0)
-		pose[&"arm_l"] = Vector3(25, 0, -10)
-		pose[&"arm_r"] = Vector3(25, 0, 10)
+		pose[&"leg_l"] = Vector3(60, 0, -35) if straddle else Vector3(75, 0, 0)
+		pose[&"leg_r"] = Vector3(60, 0, 35) if straddle else Vector3(75, 0, 0)
+		pose[&"arm_l"] = Vector3(55, 0, -8) if straddle else Vector3(25, 0, -10)
+		pose[&"arm_r"] = Vector3(55, 0, 8) if straddle else Vector3(25, 0, 10)
 		pose[&"torso"] = Vector3(sin(_idle_time * 2.0) * 1.5, 0, 0)
 		pose[&"body_offset"] = Vector3(0, -0.42, 0)
 		return pose

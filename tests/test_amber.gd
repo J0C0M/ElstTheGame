@@ -350,10 +350,16 @@ func _test_lap() -> void:
 	var farthest: float = 0.0
 	var overlap: float = 0.0
 	var lapped: bool = false
+	var lap_start: int = -1
+	var out_at: int = -1
 	for i: int in 1200:
 		await physics_frame
 		amber.set("_flight_wait", 999.0)
 		lapped = lapped or amber.mode == LAP
+		if lapped and lap_start < 0:
+			lap_start = i
+		if lap_start >= 0 and out_at < 0 and Vector2(amber.global_position.x - CENTRE.x, amber.global_position.z - CENTRE.z).length() > 14.0:
+			out_at = i
 		farthest = maxf(farthest, Vector2(amber.global_position.x - CENTRE.x, amber.global_position.z - CENTRE.z).length())
 		overlap = maxf(overlap, amber.body_overlap())
 		if lapped and amber.mode != LAP:
@@ -362,6 +368,31 @@ func _test_lap() -> void:
 	_check(amber.mode != LAP and Vector2(amber.global_position.x - CENTRE.x, amber.global_position.z - CENTRE.z).length() < 10.0,
 		"and comes back in between the pillars")
 	_check(overlap < 0.1, "on her lap her body stays clear of the pillars and the wall (%.2f m)" % overlap)
+	_check(out_at >= 0 and out_at - lap_start < 150, "she gets going at once: past the pillars within 2.5 s (%.1f s)" % ((out_at - lap_start) / 60.0))
+	# Also from a hard spot: close to a pillar and facing it.
+	amber.mode = CHASE
+	_put_amber(amber, _spot(270.0, 4.0), 270.0)
+	_place(_spot(90.0, 8.0), PI)
+	amber.get("_cooldowns")[&"lap"] = 0.0
+	amber.set("_attack_wait", 0.0)
+	for i: int in 4:
+		amber.get("_hit_times").append(amber.get("_clock"))
+	var started: int = -1
+	var escaped: int = -1
+	for i: int in 600:
+		await physics_frame
+		amber.set("_flight_wait", 999.0)
+		if amber.mode == LAP and started < 0:
+			started = i
+		if started >= 0 and Vector2(amber.global_position.x - CENTRE.x, amber.global_position.z - CENTRE.z).length() > 14.0:
+			escaped = i
+			break
+	_check(started >= 0 and escaped >= 0 and escaped - started < 180, "even facing a pillar she gets going quickly (%.1f s)" % ((escaped - started) / 60.0))
+	for i: int in 1200:
+		await physics_frame
+		amber.set("_flight_wait", 999.0)
+		if amber.mode != LAP:
+			break
 	amber.mode = CHASE
 	amber.set("_flight_wait", 999.0)
 

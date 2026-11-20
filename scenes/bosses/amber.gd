@@ -173,6 +173,7 @@ var _lap_side: float = 1.0
 var _lap_angle: float = 0.0
 var _lap_travelled: float = 0.0
 var _lap_time: float = 0.0
+var _lap_check_at: Vector3
 var _trampled: Array[Node3D] = []
 var _gate: FlagGate
 var _klaas: KlaasAlly
@@ -653,7 +654,9 @@ func _start_lap(player: Player) -> void:
 	laps += 1
 	_trampled.clear()
 	var own: float = _angle_of(global_position)
-	_lap_gap = _nearest_gap(own)
+	# The gap she is already heading for, so she does not turn round first.
+	_lap_gap = _nearest_gap(_angle_of(global_position + _forward() * 8.0))
+	_lap_check_at = global_position
 	# She runs away from the player first.
 	_lap_side = -1.0 if wrapf(_angle_of(player.global_position) - _lap_gap, -180.0, 180.0) > 0.0 else 1.0
 	_lap_stage = 0
@@ -681,8 +684,13 @@ func _run_lap(player: Player, delta: float, speed_factor: float) -> void:
 	var turned: float = smoothstep(10.0, 17.0, radius)
 	match _lap_stage:
 		0:
-			wanted = _flat(_ring_point(_lap_gap, 11.0) - global_position)
-			if wanted.length() < 1.5 or _lap_time > 5.0:
+			wanted = _flat(_ring_point(_lap_gap, 11.0) - global_position).normalized() + _pillar_push() * 0.35
+			# Out of the middle, or not getting anywhere: go on to the ring.
+			var stuck: bool = false
+			if fmod(_lap_time, 0.5) < delta:
+				stuck = _lap_time > 0.4 and _flat(global_position - _lap_check_at).length() < 0.6
+				_lap_check_at = global_position
+			if radius > 9.5 or stuck or _lap_time > 3.0:
 				_lap_stage = 1
 				_lap_travelled = 0.0
 				_lap_time = 0.0

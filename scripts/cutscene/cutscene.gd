@@ -7,7 +7,7 @@ extends Node3D
 
 const SAVE_BLOCK: StringName = &"scene"
 ## How far the camera stays in front of a wall or pillar it would be behind.
-const WALL_GAP: float = 0.6
+const WALL_GAP: float = 1.6
 
 var _camera: Camera3D
 var _player: Player

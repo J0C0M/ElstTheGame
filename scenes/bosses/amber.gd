@@ -908,46 +908,48 @@ func _transition() -> void:
 	model.walk_speed = 0.0
 	var player: Player = get_tree().get_first_node_in_group(&"player") as Player
 	var scene: Cutscene = Cutscene.begin(get_parent() as Node3D)
-	# Amber in the middle, facing the gate; the player in front of her head,
-	# Klaas off to the side.
+	# Staged near the middle, between the pillars: Amber just behind the
+	# middle facing the gate, the player in front of her head, Klaas to the
+	# side. Positions are in metres from the middle (x to the side, z ahead).
 	var ahead: Vector3 = Vector3(0, 0, 1)
 	var side: Vector3 = Vector3(1, 0, 0)
-	global_position = Vector3(arena_centre.x, _ground_y, arena_centre.z)
+	var centre: Vector3 = Vector3(arena_centre.x, _ground_y, arena_centre.z)
+	global_position = centre - ahead * 2.0
 	_face_now(global_position + ahead)
 	reset_physics_interpolation()
-	var spot: Vector3 = global_position + ahead * 12.5
+	var spot: Vector3 = centre + ahead * 10.0
 	player.global_position = spot
 	player.rotation.y = atan2(ahead.x, ahead.z)
 	player.reset_physics_interpolation()
-	var klaas_start: Vector3 = spot - ahead * 1.0 + side * 6.0
+	var cover: Vector3 = centre + ahead * 7.6
 	if _klaas != null:
 		_klaas.set_physics_process(false)
-		_klaas.global_position = klaas_start
+		_klaas.global_position = centre + ahead * 8.5 + side * 5.0
 		_klaas.rotation.y = atan2(side.x, side.z)
 		_klaas.reset_physics_interpolation()
 	model.pose = AmberModel.Pose.IDLE
 	model.look_pitch = 0.0
 	# 1. Wide, from the side: Amber, the player and Klaas.
-	scene.look(spot - ahead * 5.0 - side * 13.0 + Vector3.UP * 4.0, spot - ahead * 5.0 + Vector3.UP * 2.0)
+	_scene_look(scene, centre + Vector3(-11.5, 4.0, 4.0), centre + Vector3(0, 2.2, 4.5))
 	await scene.say("Amber", "Genoeg! Jij en je opgepompte vriend zijn klaar.", 2.8)
-	# 2. Over the player's shoulder: her head comes down at them, fire in her mouth.
-	scene.look(spot + ahead * 3.0 + side * 1.0 + Vector3.UP * 2.0, model.get_mouth())
+	# 2. Over the player's shoulder, at eye height: her head comes down at
+	# them, with fire in her mouth.
 	model.pose = AmberModel.Pose.BREATH
 	var lower: Tween = create_tween()
 	lower.tween_property(model, "look_pitch", -0.6, 1.4).set_trans(Tween.TRANS_SINE)
 	_charge_ball.visible = true
 	var grow: Tween = create_tween()
 	grow.tween_property(_charge_ball, "scale", Vector3.ONE * 2.2, 2.2).from(Vector3.ONE * 0.2)
+	_scene_look(scene, spot + ahead * 2.8 + side * 0.9 + Vector3.UP * 1.9, centre + ahead * 5.0 + Vector3.UP * 2.6)
 	await scene.wait(1.0)
 	await scene.say("Amber", "Verbrand, niemand!", 2.0)
-	# 3. Klaas sees it and runs in.
-	scene.look(spot - ahead * 2.5 - side * 9.0 + Vector3.UP * 2.4, spot - ahead * 2.5 + side * 2.0 + Vector3.UP * 1.4)
-	var cover: Vector3 = spot - ahead * 2.6
+	# 3. From the other side, level: Klaas runs in.
+	_scene_look(scene, centre + Vector3(-7.5, 1.9, 6.5), centre + Vector3(1.5, 1.2, 7.8))
 	if _klaas != null:
 		_klaas.say("NEE!")
 		_klaas.model.set_locomotion(7.5, true, true)
 		var run: Tween = create_tween()
-		run.tween_property(_klaas, "global_position", cover + side * 2.4, 0.9)
+		run.tween_property(_klaas, "global_position", cover + side * 2.2, 0.8)
 		await run.finished
 	# 4. Slow motion: he dives into the path as the fireball flies.
 	Engine.time_scale = 0.35
@@ -976,7 +978,7 @@ func _transition() -> void:
 	if _klaas != null:
 		_klaas.fall()
 		var thrown: Tween = create_tween()
-		thrown.tween_property(_klaas, "global_position", cover + ahead * 1.6, 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		thrown.tween_property(_klaas, "global_position", cover + ahead * 1.4, 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	player.model.play_action(&"hurt", 0.6)
 	var fade: Tween = create_tween()
 	fade.tween_property(flash, "light_energy", 0.0, 0.8)
@@ -988,16 +990,45 @@ func _transition() -> void:
 	raise.tween_property(model, "look_pitch", 0.0, 1.0)
 	# 6. Close on Klaas on the floor.
 	var lying: Vector3 = _klaas.global_position if _klaas != null else cover
-	await scene.glide(lying + side * 3.0 + ahead * 1.5 + Vector3.UP * 1.6, lying + Vector3.UP * 0.4, 1.4)
+	var close: Vector3 = _scene_spot(lying + side * 3.0 - ahead * 1.0 + Vector3.UP * 1.5, lying + Vector3.UP * 0.4)
+	await scene.glide(close, lying + Vector3.UP * 0.4, 1.4)
 	await scene.say("Klaas", "Niet... op mijn... maatje...", 2.8)
 	await scene.say("Klaas", "Pak haar. Voor Elst.", 2.4)
-	scene.look(spot + ahead * 3.0 + side * 1.0 + Vector3.UP * 2.2, global_position + Vector3.UP * 4.0)
+	_scene_look(scene, spot + ahead * 2.8 + side * 0.9 + Vector3.UP * 2.0, global_position + ahead * 5.0 + Vector3.UP * 4.0)
 	await scene.say("Amber", "Eén minder. Nu jij.", 2.2)
 	if _klaas != null:
 		_klaas.set_physics_process(true)
 	scene.finish()
 	GameState.set_flag(&"klaas_fallen")
 	_start_phase_two()
+
+
+## Points the scene camera from a spot near [param from] at [param at].
+func _scene_look(scene: Cutscene, from: Vector3, at: Vector3) -> void:
+	scene.look(_scene_spot(from, at), at)
+
+
+## [param from], or a spot near it from where no pillar blocks the view of
+## [param at] and that is inside the wall: tried on the other side, then
+## closer in.
+func _scene_spot(from: Vector3, at: Vector3) -> Vector3:
+	var mirrored: Vector3 = Vector3(2.0 * at.x - from.x, from.y, from.z)
+	for base: Vector3 in [from, mirrored]:
+		for step: int in 6:
+			var spot: Vector3 = base.lerp(at, step * 0.12)
+			if _view_is_clear(spot, at):
+				return spot
+	return from.lerp(at, 0.7)
+
+
+func _view_is_clear(from: Vector3, at: Vector3) -> bool:
+	if _flat(from - arena_centre).length() > wall_radius - 1.0:
+		return false
+	for pillar: Vector3 in pillars:
+		var nearest: Vector3 = Geometry3D.get_closest_point_to_segment(_flat(pillar), _flat(from), _flat(at))
+		if nearest.distance_to(_flat(pillar)) < pillar_radius + 1.2:
+			return false
+	return true
 
 
 func _start_phase_two() -> void:

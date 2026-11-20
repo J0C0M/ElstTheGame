@@ -17,7 +17,7 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 8 | `Add-Westeraam-Dungeon` | Af, gemerged naar `Development` |
 | 9 | `Add-OBC-Fort-Dungeon` | Af, gemerged naar `Development` |
 | 10 | `Add-Bingo-Cave-Dungeon` | Af, gemerged naar `Development` |
-| 11 | `Add-Amber-Final-Battle` | In aanbouw: blok A (de weg naar Amber) en B (het gevecht) af en tussentijds naar `Development` gemerged (op verzoek van de eigenaar); blok C volgt |
+| 11 | `Add-Amber-Final-Battle` | In aanbouw: blok A (de weg naar Amber) en B (het gevecht) af en tussentijds naar `Development` gemerged (op verzoek van de eigenaar). Verbeteringen aan blok B (Amber, cultisten, draakjes) wachten op akkoord; blok C volgt |
 | 12 | `Polish-And-Release-Build` | Nog niet begonnen |
 
 Tussendoor: `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
@@ -484,6 +484,30 @@ Het plan staat in `docs/FASE_11_PLAN.md` (goedgekeurd door de eigenaar, met mijn
   - Op 66% en 33% roept ze telkens twee drillers op.
 - **Haar dood:** `boss_amber`, opslaan weer vrij, de poort open, en de gouden Tren-spuit (`TrenSpuit.tscn`) op de grond. Oppakken zet `tren_spuit_found`. Laad je daarna een save, dan ligt Klaas er nog en ook de spuit, zolang je die niet had.
 - **Tests:** `test_amber.gd` heeft nu 36 checks, voor de hele weg tot en met het oppakken van de spuit.
+
+### Verbeteringen aan blok B (feedback van de eigenaar, 20-11-2026)
+
+- **Nieuw model voor Amber** (`tools/models/gen_amber.py`, met de nieuwe gedeelde `tools/models/model_builder.py`):
+  - een diepe borst en heupen met buikplaten en een rij stekels;
+  - een nek in drie delen en een kop met wenkbrauwbogen, schuine gloeiende ogen, gebogen hoorns, wangpunten, tanden, tong en een kaak die opengaat;
+  - een staart in vier delen met een schoppunt, en vier poten met knieën en klauwen;
+  - echte vleermuisvleugels: arm, onderarm en vier vingers met een vlies ertussen (`MembraneMesh`) dat meebuigt. De vleugels vouwen langs haar rug, spreiden voor de windstoot en klappen in de lucht met een snelle neerslag en een tragere opslag met gebogen ellebogen, terwijl haar lijf op elke slag meedeint (`DragonWingRig`).
+  - Opstijgen is nu door de knieën zakken en dan afzetten, landen gaat met remmende vleugels. Ze is op 85% geschaald (zo'n 16 m lang).
+- **Niet meer in de pilaren:** markers op haar kop, bek, nek, borst, heupen en staart (en vleugeltips als die gespreid zijn) houden haar hele lijf buiten de pilaren en de muur. Haar botsingsdoos botst niet meer met de wereld, want die bleef haken terwijl haar lijf vrij was. Een windstoot doet ze alleen als haar vleugels de ruimte hebben.
+- **Nieuw vuur:**
+  - Bij het inademen verschijnt een rode waaier op de grond, met een felle rand, die laat zien waar het vuur komt (zoals de rode lijn van het fatbike-kindje). Achter een pilaar is een schaduw in de waaier: daar ben je veilig.
+  - Ze richt in het eerste deel van het inademen en zet dan vast, zodat je opzij kunt. In haar tweede balk zwaait ze de vlammen van links naar rechts; de waaier toont dan het hele gebied.
+  - De vlammen stromen uit haar bek, groeien en koelen af van geel naar donkerrood, en slaan stuk tegen een pilaar. Schade, waaier en vlammen gebruiken dezelfde straal vanuit haar bek.
+- **Slimmere AI:**
+  - Ze rent niet meer recht op je af: ze houdt 9 tot 15 m afstand en cirkelt om haar doelwit, van richting wisselend.
+  - Staat haar doelwit achter een pilaar, dan loopt ze eromheen om een vuurlijn te vinden; verstop je je langer dan 4 s, dan vliegt ze op.
+  - Elke aanval heeft een eigen cooldown (vuur 8 s, in balk 2 korter), en tussen twee aanvallen zit een pauze, dus geen vuur achter elkaar.
+- **Rondje langs de rand:** raak je haar vier keer binnen 6 s, dan brult ze en rent ze in een spiraal door een opening tussen de pilaren naar buiten, een rondje langs de muur (wie in de weg staat wordt vertrapt en weggeduwd) en door een andere opening weer naar binnen. Daarna kan dat 16 s niet.
+- **Vaker vliegen:** om de 16 s (was 25), in balk 2 om de 11 s, en wat lager (8 m) zodat ze niet tegen het plafond klapt.
+- **Grotere arena:** 27 m straal in plaats van 22 m, met de pilaren op 13,5 m. Een draak van 16 m paste niet door de openingen tussen de pilaren en de muur. De ingang ligt nog op dezelfde plek; het midden van de arena is 5 m naar het zuiden geschoven (z = −233).
+- **Amber-cultisten** zijn sterker en hebben een nieuw model (`tools/models/gen_cultist.py`): een amberkleurige mantel met een donkere cape, een puntkap met schaduw en gloeiende ogen, een gouden halfmasker, een gloeiende hanger en een staf met gouden klauwen om een amberkristal. Ze hebben 75 HP (was 40), houden afstand en schieten twee amberkleurige vuurbollen tegelijk (`AmberOrb`, 12 schade). Ze waarschuwen de hele kamer, en hun gezang geneest alle vijanden in de buurt met 12 HP, naast de woede.
+- **Draakjes met een driller erop** (`tools/models/gen_dragonling.py`): een mini-draak van zo'n 3,5 m met dezelfde vleugels als Amber, een zadel, en een laag driller met zijn plank die de teugels vasthoudt (`HumanoidModel.straddle`). Bij een duik slaat de ruiter met zijn plank. Ze hebben 45 HP. Valt het draakje, dan tuimelt de ruiter eraf en vecht hij te voet verder. Onder een laag plafond vliegen ze lager.
+- **Tests:** `test_amber.gd` controleert nu ook de waarschuwing op de grond, de schaduw van een pilaar, het cirkelen, dat haar lijf nooit in een pilaar of muur komt (ook niet tijdens het rondje), het rondje zelf, het genezen en schieten van de cultisten en de ruiter van het draakje.
 
 ### Keuzes en afwijkingen
 

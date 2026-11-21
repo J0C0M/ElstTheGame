@@ -18,7 +18,7 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 9 | `Add-OBC-Fort-Dungeon` | Af, gemerged naar `Development` |
 | 10 | `Add-Bingo-Cave-Dungeon` | Af, gemerged naar `Development` |
 | 11 | `Add-Amber-Final-Battle` | Af, gemerged naar `Development` |
-| 12 | `Polish-And-Release-Build` | Gebouwd, wacht op akkoord; exporteren wacht op de export templates |
+| 12 | `Polish-And-Release-Build` | Af, gemerged naar `Development` (exporteren wacht op de export templates) |
 
 Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voor de kruisboog) wacht op akkoord. `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
 

@@ -253,6 +253,7 @@ func _start_hunt() -> void:
 
 ## Falls over, drops loot and sinks away after a while.
 func die() -> void:
+	AudioManager.play_sfx_at(&"enemy_death", global_position, self, -2.0)
 	attack_hitbox.deactivate()
 	hurtbox.set_enabled(false)
 	_collision.set_deferred("disabled", true)
@@ -317,6 +318,7 @@ func _on_hit_received(hit: HitData) -> void:
 	if health.is_dead():
 		return
 	health.take_damage(hit.damage)
+	AudioManager.play_sfx_at(&"hit", global_position, self, -3.0)
 	if health.is_dead():
 		return
 	if data.patience > 0.0:

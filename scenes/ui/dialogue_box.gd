@@ -9,6 +9,8 @@ signal action_chosen(action: StringName, value: String)
 signal closed
 
 const CHARACTERS_PER_SECOND: float = 45.0
+## A voice blip for every this many letters that appear.
+const LETTERS_PER_BLIP: int = 3
 ## Actions that open something else; the conversation closes first.
 const HANDOFF_ACTIONS: Array[StringName] = [&"open_shop", &"sleep"]
 
@@ -16,6 +18,7 @@ var _dialogue: DialogueData
 var _speaker: Node
 var _line: DialogueLine
 var _typing: Tween
+var _blipped: int = 0
 
 @onready var _speaker_label: Label = %SpeakerLabel
 @onready var _text_label: Label = %TextLabel
@@ -66,11 +69,25 @@ func _show_line(line: DialogueLine) -> void:
 		_speaker.call("play_model_action", line.model_action)
 	_text_label.text = line.text
 	_text_label.visible_ratio = 0.0
+	_blipped = 0
 	if _typing != null:
 		_typing.kill()
 	_typing = create_tween()
 	_typing.tween_property(_text_label, "visible_ratio", 1.0, line.text.length() / CHARACTERS_PER_SECOND)
 	_build_buttons()
+
+
+## While the text types, the speaker "talks": a short blip for every few
+## letters, at the pitch of their voice, as in Undertale.
+func _process(_delta: float) -> void:
+	if not visible or _line == null or _typing == null or not _typing.is_running():
+		return
+	var shown: int = int(_text_label.visible_ratio * _line.text.length())
+	if shown >= _blipped + LETTERS_PER_BLIP:
+		_blipped = shown
+		var letter: String = _line.text.substr(maxi(shown - 1, 0), 1)
+		if letter.strip_edges() != "" and not letter in [".", ",", "!", "?"]:
+			AudioManager.play_sfx(&"blip", -12.0, 0.06, _dialogue.voice_pitch)
 
 
 func _build_buttons() -> void:

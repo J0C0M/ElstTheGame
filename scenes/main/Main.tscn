@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/ShopMenu.tscn" id="12_shop_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/InventoryMenu.tscn" id="13_inventory_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Credits.tscn" id="30_credits"]
+[ext_resource type="PackedScene" path="res://scenes/ui/LoadingScreen.tscn" id="31_loading"]
 [ext_resource type="PackedScene" path="res://scenes/ui/QuestLog.tscn" id="14_quest_log"]
 
 [node name="Main" type="Node"]
@@ -90,3 +91,5 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
+
+[node name="LoadingScreen" parent="UI" instance=ExtResource("31_loading")]

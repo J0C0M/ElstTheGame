@@ -35,6 +35,8 @@ extends Resource
 @export var parry_stagger_duration: float = 0.0
 ## HumanoidModel action for the swing, such as swing_light_1 or punch.
 @export var attack_action: StringName = &"swing_light_1"
+## Sound of the attack (AudioManager sound name): a swing, a kick, a vape.
+@export var attack_sound: StringName = &"sword_swing"
 
 @export_group("Movement")
 @export var walk_speed: float = 0.0

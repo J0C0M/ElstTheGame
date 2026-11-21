@@ -44,6 +44,7 @@ var _overlay: Control
 @onready var _quest_log: QuestLog = $UI/Menus/QuestLog
 @onready var _credits: Credits = $UI/Menus/Credits
 @onready var _fade: ColorRect = $UI/Fade
+@onready var _loading: LoadingScreen = $UI/LoadingScreen
 
 
 func _ready() -> void:
@@ -129,7 +130,7 @@ func start_new_game() -> void:
 		return
 	GameState.reset()
 	QuestManager.reset()
-	await _enter_world(new_game_scene.instantiate() as GameWorld, new_game_spawn, {}, {})
+	await _enter_world(new_game_scene.resource_path, new_game_spawn, {}, {})
 	QuestManager.start_quest(first_quest)
 
 
@@ -138,13 +139,9 @@ func start_new_game() -> void:
 func change_world(scene_path: String, spawn_id: StringName) -> void:
 	if _changing_world or _app_state != AppState.PLAYING:
 		return
-	var scene: PackedScene = load(scene_path) as PackedScene
-	if scene == null:
-		push_error("Cannot change world: %s does not load." % scene_path)
-		return
 	var player: Player = _world.get_player()
 	var vitals: Dictionary = player.get_vitals() if player != null else {}
-	await _enter_world(scene.instantiate() as GameWorld, spawn_id, vitals, {})
+	await _enter_world(scene_path, spawn_id, vitals, {})
 
 
 ## Sleeps in a bed, or through Klaas: rest() with the message for sleeping.
@@ -191,10 +188,18 @@ func return_to_main_menu() -> void:
 	_changing_world = false
 
 
-func _enter_world(world: GameWorld, spawn_id: StringName, vitals: Dictionary, save: Dictionary) -> void:
+func _enter_world(scene_path: String, spawn_id: StringName, vitals: Dictionary, save: Dictionary) -> void:
 	_changing_world = true
 	GameState.block_saving(&"world_change")
 	await _fade_to(1.0)
+	var world: GameWorld = await _load_world(scene_path)
+	if world == null:
+		push_error("Cannot change world: %s does not load." % scene_path)
+		_loading.hide()
+		await _fade_to(0.0)
+		GameState.unblock_saving(&"world_change")
+		_changing_world = false
+		return
 	_close_menus()
 	get_tree().paused = false
 	if not save.is_empty():
@@ -218,6 +223,7 @@ func _enter_world(world: GameWorld, spawn_id: StringName, vitals: Dictionary, sa
 	EventBus.location_entered.emit(world.location_name)
 	if not world.location_id.is_empty():
 		EventBus.area_entered.emit(world.location_id)
+	_loading.hide()
 	await _fade_to(0.0)
 	GameState.unblock_saving(&"world_change")
 	_changing_world = false
@@ -321,11 +327,11 @@ func _on_dialogue_action(action: StringName, _value: String) -> void:
 func _on_save_load_requested(data: Dictionary) -> void:
 	if _changing_world:
 		return
-	var scene: PackedScene = load(str(data.get("scene", ""))) as PackedScene
-	if scene == null:
+	var scene_path: String = str(data.get("scene", ""))
+	if not ResourceLoader.exists(scene_path):
 		EventBus.message_requested.emit("De wereld van deze save bestaat niet meer.")
 		return
-	await _enter_world(scene.instantiate() as GameWorld, &"", {}, data)
+	await _enter_world(scene_path, &"", {}, data)
 
 
 func _on_player_died() -> void:
@@ -353,6 +359,32 @@ func _update_mouse() -> void:
 	else:
 		# Catching the mouse fails while the window has no focus, so wait for it.
 		_capture_on_focus = true
+
+
+## Loads the world in [param scene_path] in the background behind the black,
+## with the loading screen and its progress, and makes it.
+func _load_world(scene_path: String) -> GameWorld:
+	_loading.open(scene_path)
+	# Headless (the tests) frames run faster than real time, so a background
+	# load would look endless to them: load straight away there.
+	if DisplayServer.get_name() == "headless":
+		var direct: PackedScene = load(scene_path) as PackedScene
+		return direct.instantiate() as GameWorld if direct != null else null
+	if ResourceLoader.load_threaded_request(scene_path) != OK:
+		return null
+	var progress: Array = []
+	while true:
+		var status: ResourceLoader.ThreadLoadStatus = ResourceLoader.load_threaded_get_status(scene_path, progress)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			break
+		if status != ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			return null
+		if not progress.is_empty():
+			_loading.set_progress(float(progress[0]))
+		await get_tree().process_frame
+	_loading.set_progress(1.0)
+	var scene: PackedScene = ResourceLoader.load_threaded_get(scene_path) as PackedScene
+	return scene.instantiate() as GameWorld if scene != null else null
 
 
 func _fade_to(alpha: float) -> void:

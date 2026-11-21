@@ -304,6 +304,7 @@ func _on_hit_received(hit: HitData) -> void:
 			guard_broken = true
 	damage *= 1.0 - armor.damage_reduction
 	health.take_damage(maxi(roundi(damage), 1))
+	AudioManager.play_sfx(&"block" if guarded else &"hit", -2.0)
 	if health.is_dead() or guarded:
 		return
 	var away: Vector3 = global_position - hit.source.global_position
@@ -375,6 +376,8 @@ func try_shoot() -> void:
 	_crossbow_model.draw = 0.0
 	_shot_pose_left = RELOAD_TIME + 0.3
 	model.play_action(&"crossbow_shoot", RELOAD_TIME)
+	AudioManager.play_sfx(&"crossbow_shot")
+	get_tree().create_timer(RELOAD_TIME * 0.45, false).timeout.connect(AudioManager.play_sfx.bind(&"crossbow_reload", -6.0, 0.05))
 	EventBus.player_action.emit(&"shoot")
 
 

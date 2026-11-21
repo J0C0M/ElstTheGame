@@ -198,5 +198,13 @@ func _sfx(sound_name: StringName) -> AudioStream:
 	return _streams[sound_name] as AudioStream
 
 
+## Lets go of every sound when the game closes.
+func _exit_tree() -> void:
+	for player: AudioStreamPlayer in _music + _voices + [_wind]:
+		player.stop()
+		player.stream = null
+	_streams.clear()
+
+
 func _on_loot_collected(text: String) -> void:
 	play_sfx(&"coin" if text.contains("goud") else &"pickup", -3.0)

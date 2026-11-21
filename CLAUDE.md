@@ -8,7 +8,7 @@ Dit bestand geeft elke Claude Code-sessie de afspraken voor dit project. Lees he
 
 - **Engine:** Godot 4.7 (laatste stabiele 4.x), GDScript met statische types.
 - **Stijl:** low poly, platte kleuren, lichte retrofilter (PS1/N64-sfeer).
-- **Prototypes:** Fase 0 t/m 12 vormen samen Prototype 1, de oorspronkelijke visie (af). Nu loopt **Prototype 2** (fases P2-0 t/m P2-11, zie de tabel hieronder en `docs/PROTOTYPE_2.md`): eerst graphics en modellen in veel meer detail (nog steeds low poly), daarna de nieuwe hoofdpersoon Gyan, de Elstenaars Jules en Sven, en bijcontent zoals Klaas' oude motor.
+- **Prototypes:** Fase 0 t/m 12 vormen samen Prototype 1, de oorspronkelijke visie (af). Nu loopt **Prototype 2** (fases P2-0 t/m P2-11, zie de tabel hieronder en `docs/PROTOTYPE_2.md`): eerst modellen van veel hogere kwaliteit (nog steeds low poly; de retrofilter, het licht en de sfeer blijven zoals ze zijn), daarna de nieuwe hoofdpersoon Gyan, de Elstenaars Jules en Sven, en bijcontent zoals Klaas' oude motor.
 - **Bronnen van waarheid:**
   - `docs/PROTOTYPE_2.md`: het ontwerp van Prototype 2: personages (Gyan, Jules, Sven, Klaas), het nieuwe verloop, bijcontent, de vier stijlvoorstellen, techniek, de fases en de open beslissingen. Waar het afwijkt van het GDD, geldt dit document.
   - `docs/GDD.md`: het ontwerp van Prototype 1: verhaal, quests, vijanden, bazen, economie, opslaan, stijl, techniek en de 13 ontwikkelfases.
@@ -102,17 +102,17 @@ Controleer na elk onderdeel of het project nog laadt en start zonder fouten. Hea
 
 | Fase | Branch | Inhoud (details in `docs/PROTOTYPE_2.md`) |
 |---|---|---|
-| P2-0 | `Plan-Prototype-2` | Ontwerp van Prototype 2, vier stijlvoorstellen, de fases, bijgewerkte documenten |
-| P2-1 | `Build-Graphics-Style-Lab` | Testscène met de vier stijlen om te wisselen; de eigenaar kiest |
-| P2-2 | `Upgrade-Rendering-And-Shaders` | De gekozen stijl overal: materialen, shaders, licht, lucht, mist, retrofilter |
-| P2-3 | `Upgrade-Character-Rig-And-Models` | Rig met ellebogen en knieën, mesh-generator, Gyan, Klaas, dorpelingen, animaties |
-| P2-4 | `Upgrade-Enemy-And-Boss-Models` | Alle vijanden en bazen in de nieuwe stijl (fatbikers met rijhouding, eigen modellen voor oma's en opa's) |
-| P2-5 | `Upgrade-World-And-Roads` | Wegen als meshes, huizen, bomen, props, locaties, grond, tornado |
-| P2-6 | `Upgrade-Dungeons` | De vijf dungeons en het huis van Klaas in de nieuwe stijl |
-| P2-7 | `Add-Gyan-And-Story-Rework` | Gyan als hoofdpersoon, dialogen en scènes opnieuw, stemmen per personage |
-| P2-8 | `Add-Jules-Rescue` | Jules in een kooi in de Westeraam-dungeon, bevrijden, Jules in Elst |
-| P2-9 | `Add-Sven-Outpost-Miniboss` | OBC-voorpost bij het fort, Sven als miniboss, keuze overtuigen of vermoorden en de gevolgen |
-| P2-10 | `Add-Side-Quests-And-Klaas-Motorbike` | Bijquests in questlog en kompas, Klaas' oude motor bij de velden van het OBC Fort |
+| P2-0 | `Plan-Prototype-2` | Ontwerp van Prototype 2, beslissingen, vier modelvoorstellen, de fases, bijgewerkte documenten |
+| P2-1 | `Build-Model-Style-Lab` | Klaas, Gyan, een driller en een huis in de vier modelvoorstellen, in de filter van het spel; de eigenaar kiest |
+| P2-2 | `Build-Mesh-Toolkit-And-Rig` | Mesh-generator voor het gekozen voorstel, rig met ellebogen en knieën, nieuwe animaties |
+| P2-3 | `Upgrade-Character-Models` | Gyan, Klaas en de dorpelingen |
+| P2-4 | `Upgrade-Enemy-And-Boss-Models` | Alle vijanden en bazen (fatbikers met rijhouding, eigen modellen voor oma's en opa's) |
+| P2-5 | `Upgrade-World-And-Roads` | Bredere straten, wegen als meshes, huizen, bomen, props, locaties, grond |
+| P2-6 | `Upgrade-Dungeons` | De vijf dungeons en het huis van Klaas met de nieuwe modellen |
+| P2-7 | `Add-Gyan-And-Story-Rework` | Gyan als stille hoofdpersoon, dialogen en scènes opnieuw, stemmen per personage, save-formaat 2 |
+| P2-8 | `Add-Jules-Rescue` | Optioneel: Jules in een kooi in Westeraam, sleutel van de Vape-koning, daarna in de open wereld |
+| P2-9 | `Add-Sven-Outpost-Miniboss` | Bijquest: OBC-voorpost, Sven als miniboss, overtuigen (helper in de open wereld) of vermoorden |
+| P2-10 | `Add-Side-Quests-And-Klaas-Motorbike` | Bijquests in questlog en kompas, Klaas' oude motor vinden en erop rijden |
 | P2-11 | `Polish-Prototype-2` | Balans, geluid, bugfixes, laadschermen, export |
 
 Werk alleen aan de fase waar de eigenaar om vraagt. Begin pas aan een volgende fase als daarom gevraagd wordt. Lees bij een fase van Prototype 2 eerst `docs/PROTOTYPE_2.md` (de open beslissingen daarin kunnen intussen genomen zijn) en daarna `docs/PROGRESS.md`.

@@ -44,9 +44,9 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 | Fase | Branch | Status |
 |---|---|---|
 | P2-0 | `Plan-Prototype-2` | Gebouwd, wacht op akkoord |
-| P2-1 | `Build-Graphics-Style-Lab` | Nog niet begonnen |
-| P2-2 | `Upgrade-Rendering-And-Shaders` | Nog niet begonnen |
-| P2-3 | `Upgrade-Character-Rig-And-Models` | Nog niet begonnen |
+| P2-1 | `Build-Model-Style-Lab` | Nog niet begonnen |
+| P2-2 | `Build-Mesh-Toolkit-And-Rig` | Nog niet begonnen |
+| P2-3 | `Upgrade-Character-Models` | Nog niet begonnen |
 | P2-4 | `Upgrade-Enemy-And-Boss-Models` | Nog niet begonnen |
 | P2-5 | `Upgrade-World-And-Roads` | Nog niet begonnen |
 | P2-6 | `Upgrade-Dungeons` | Nog niet begonnen |
@@ -58,9 +58,11 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 
 ### P2-0 – Plan voor Prototype 2
 
-- `docs/PROTOTYPE_2.md`: het ontwerp. Gyan als hoofdpersoon, Jules (bevrijden uit een kooi in Westeraam) en Sven (miniboss in een OBC-voorpost, overtuigen of vermoorden) als tweede en derde Elstenaar, Klaas grafisch verbeterd, het nieuwe verloop van de quests, Klaas' oude motor als eerste bijquest, vier stijlvoorstellen (A strak low poly, B echte PS1-retro, C toon/cel-shaded met omlijning, D handgeschilderd; advies C), de techniek, de fases P2-0 t/m P2-11 en negen open beslissingen.
+- `docs/PROTOTYPE_2.md`: het ontwerp. Gyan als stille hoofdpersoon, Jules (optioneel, uit een kooi in Westeraam) en Sven (optionele bijquest, miniboss in een OBC-voorpost, overtuigen of vermoorden) als tweede en derde Elstenaar, Klaas grafisch verbeterd, het nieuwe verloop van de quests, Klaas' oude motor als eerste bijquest, vier modelvoorstellen (M1 verfijnde blokken, M2 gefacetteerde low poly, M3 gestileerd, M4 PS2-niveau; advies M2), de techniek, de fases P2-0 t/m P2-11 en de beslissingen van de eigenaar.
+- **Eerst vier render-stijlen getoond** (strak, PS1, toon, handgeschilderd, met renders). De eigenaar wil de filter en het licht houden zoals ze zijn en alleen betere modellen; die voorbeelden zijn daarom weer verwijderd.
 - `CLAUDE.md`, het GDD, de README en dit bestand verwijzen naar het nieuwe ontwerp. De referentiefoto's van Gyan, Jules en Sven staan lokaal in `docs/reference/` (niet in de repo).
-- **Open:** de negen beslissingen in `docs/PROTOTYPE_2.md` (stijl, of Gyan praat, Jules' rol, Svens gevolgen, de motor, oude saves, de schaal van Elst, controller, de spion).
+- **Beslist (21-11-2026):** filter en licht blijven, Gyan is stil, Jules en Sven zijn optioneel en helpen daarna in de open wereld, de motor is meteen te berijden, oude saves vervallen, bredere straten, controller en de spion later.
+- **Open:** welk modelvoorstel (M1 t/m M4); dat kiest de eigenaar in het modellab van P2-1.
 
 ## Fase 0 – Fundament
 

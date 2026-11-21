@@ -6,7 +6,7 @@ Prototype 1 (Fase 0 t/m 12) is de oorspronkelijke visie van *Elst*, van begin to
 
 ## Doel
 
-1. **Graphics en modellen** in veel meer detail, maar nog steeds low poly. Dit is het belangrijkste en komt in de eerste fases. De precieze stijl kiest de eigenaar uit vier voorstellen (zie *Graphics: vier stijlvoorstellen*).
+1. **Modellen** van veel hogere kwaliteit, maar nog steeds low poly. Dit is het belangrijkste en komt in de eerste fases. De filter, het licht en de sfeer van Prototype 1 blijven zoals ze zijn (besluit eigenaar). Het detailniveau van de modellen kiest de eigenaar uit vier voorstellen (zie *Modellen: vier voorstellen*).
 2. **Personages:** de hoofdpersoon wordt **Gyan**. **Jules** en **Sven** komen erbij als de tweede en derde Elstenaar. Klaas wordt grafisch verbeterd. Dit verandert ook het verhaal.
 3. **Bijcontent in de open wereld**, om Elst te vullen: als eerste Klaas' oude motor bij de lege velden naast het OBC Fort. Later volgt meer.
 
@@ -46,8 +46,8 @@ De eigenaar werkt de karakterontwikkeling van Gyan, Jules en Sven later verder u
 - **Uiterlijk** (referentie `docs/reference/Sven.png`): lichte huid, kort lichtbruin tot donkerblond haar met een zijscheiding, een brede kaak, een uitdagende, pruilende blik. Zwarte hoodie en een grote zwarte koptelefoon om zijn nek of op zijn hoofd.
 - **Optioneel** (besluit eigenaar, 21-11-2026): de voorpost is een bijquest; het OBC Fort kan ook zonder Sven.
 - **In het verhaal:** Sven leidt een **OBC-voorpost**, een kleiner kamp van het OBC in de buurt van het OBC Fort. Hij is daar een **miniboss** met zijn eigen aanvallen. Na zijn nederlaag ligt hij op de grond en kiest de speler:
-  - **Overtuigen:** Sven kiest de kant van Klaas en wordt de derde Elstenaar. Hij komt naar Elst en is later te zien (bij Klaas, op het feest; mogelijk helpt hij in het eindgevecht).
-  - **Vermoorden:** Sven is weg. Klaas reageert erop (teleurgesteld of hard), en het einde is iets donkerder: er staan maar twee Elstenaars op het plein.
+  - **Overtuigen:** Sven kiest de kant van Klaas en wordt de derde Elstenaar. Daarna kom je hem af en toe tegen in de open wereld, waar hij meevecht tegen vijanden, net als Jules (besluit eigenaar).
+  - **Vermoorden:** Sven is weg en komt verder niet in de game voor.
 - De keuze wordt een vlag (`sven_spared` of `sven_killed`) die dialogen, het einde en eventueel de Inwijding beïnvloedt.
 
 ### Klaas
@@ -67,7 +67,7 @@ Amber de Draak uit Zevenaar, de drie facties en hun bazen, het station, de kerk 
 | 3 | Westeraam Getho | De Vape-koning laat de sleutel van Jules' kooi vallen; Jules bevrijden is een optioneel doel. |
 | 4 | OBC Elst Fort | Geen verandering; de OBC-voorpost met Sven is een aparte bijquest in de buurt. |
 | 5 | Bingo Club | Geen grote verandering. |
-| 6 | Amber de Draak | De Elstenaars spelen mee in de scènes; het einde hangt af van Svens lot. |
+| 6 | Amber de Draak | De Elstenaars die je redde of overtuigde, staan op het feest aan het eind. |
 
 ## Bijcontent in de open wereld
 
@@ -77,63 +77,58 @@ Bijquests krijgen een eigen plek in het questlog (tabbladen *Hoofdquests* en *Bi
 
 - Naast de lege velden bij het OBC Fort (zuidwesten van Elst, zie `docs/kaart_elst_spel.png`) staat een roestige, oude motor onder een zeil.
 - Klaas herkent hem ("Mijn oude motor! Die dacht ik kwijt te zijn sinds Amber kwam.").
-- **Voorstel:** de speler zoekt twee onderdelen in de buurt (bijvoorbeeld een bougie in een kist van de OBC-voorpost en een ketting bij het station), Klaas maakt hem weer heel, en daarna kan Gyan erop rijden: sneller door Elst, met een eigen geluid. Of rijden er echt in komt, beslist de eigenaar.
+- **Besluit eigenaar:** vind de motor, breng hem naar Klaas, en daarna kan Gyan er meteen op rijden: sneller door Elst, met een eigen geluid. Geen onderdelen zoeken.
 
 ### Later
 
 De eigenaar voegt meer bijcontent toe. Het systeem van Fase P2-10 is daarvoor gemaakt: nieuwe bijquests zijn alleen data (`QuestData` met een vlag `side_quest`) plus een plek in de wereld.
 
-## Graphics: vier stijlvoorstellen
+## Modellen: vier voorstellen
 
-Alle vier blijven low poly en passen bij de humor van Elst. Ze verschillen in hoe materialen, licht en de nabewerking werken. Fase P2-1 bouwt een **stijllab**: één testscène (een stukje straat met het huis van Klaas, een paar huizen en bomen, Klaas, Gyan, een driller en een stukje van Amber) waarin je met een toets tussen de vier stijlen wisselt. Daarna kiest de eigenaar.
+**Besluit eigenaar (21-11-2026):** de retrofilter, het licht, de mist en de sfeer van Prototype 1 blijven. Het gaat om de modellen: die moeten van veel hogere kwaliteit worden en low poly blijven. (Een eerste ronde voorbeelden van vier render-stijlen is daarom vervallen.)
 
-**Voorbeelden:** `docs/style_proposals/` bevat dezelfde scène (Klaas, het huidige spelermodel als stand-in voor Gyan, een driller, een cultist, huizen, bomen, een weg en Amber) in elk van de vier stijlen: `style_a.png` t/m `style_d.png` en alles samen in `styles_sheet.png` (linksboven A, rechtsboven B, linksonder C, rechtsonder D). Gemaakt met `tools/style_preview/render_styles.gd` (`godot --path . -s res://tools/style_preview/render_styles.gd`, met venster). Let op: het zijn nog de modellen van Prototype 1; de voorbeelden laten de stijl zien (materialen, licht, nabewerking). De modellen zelf krijgen in P2-3 t/m P2-6 veel meer detail.
+De vier voorstellen hieronder verschillen in hoe de modellen gemaakt worden en hoeveel detail ze krijgen. Fase P2-1 bouwt een **modellab**: Klaas, Gyan, een driller en een huis in alle vier de varianten, in de echte filter van het spel naast elkaar, zodat de eigenaar kiest.
 
-![De vier stijlen](style_proposals/styles_sheet.png)
+### M1. Verfijnde blokken
 
-### A. Strak low poly
+- **Wat:** dezelfde aanpak als nu (losse dozen, prisma's en kegels per lichaamsdeel), maar met veel meer onderdelen: afgeschuinde randen, handen met een duim, schoenen met een zool, kragen, zakken, haarplukken, gezichten met neus, wenkbrauwen en mond als eigen blokjes. Personages zo'n 300 tot 600 driehoeken.
+- **Voor:** het snelst; past direct op de huidige generators en het huidige rig.
+- **Tegen:** blijft herkenbaar "blokkig"; ronde vormen (spieren van Klaas, gezichten) blijven hoekig.
+- **Werk:** klein.
 
-- **Wat:** vlakke kleuren per vlak (flat shading) op modellen met meer vlakken, schuine randen en ronde vormen. Zachte schaduwen, ambient occlusion (SSAO), een kleurverloop in de lucht, volumetrische mist en een warme zon. De retrofilter gaat standaard uit (blijft een optie).
-- **Gevoel:** rustig en modern, zoals *Townscaper* of de lowpoly-landschappen uit *Firewatch*-achtige concept art.
-- **Voor:** dicht bij wat we nu hebben; alles blijft zonder texturen, dus onze Python-generators werken door. Goed leesbaar.
-- **Tegen:** kan "netjes maar braaf" ogen; leunt zwaar op goed licht en goede kleuren.
+### M2. Gefacetteerde low poly (aanbevolen)
+
+- **Wat:** echte meshes per lichaamsdeel in plaats van dozen: getaperde armen en benen, een romp met borst en schouders, een hoofd met kaak, jukbeenderen, neus en oogkassen, haar als één gefacetteerde vorm met plukken. Vlak gekleurde facetten (geen texturen), zoals moderne low poly-personages. Personages zo'n 800 tot 1500 driehoeken, met ellebogen, knieën, polsen en enkels.
+- **Voor:** veel herkenbaarder (Klaas' kaak en spieren, Gyans haar en lach, Jules' pony, Svens koptelefoon), blijft duidelijk low poly, past bij de filter; de meshes ontstaan nog steeds in code, dus vervangbaar.
+- **Tegen:** een nieuwe mesh-generator en een nieuw rig nodig (P2-2).
 - **Werk:** gemiddeld.
 
-### B. Echte PS1-retro
+### M3. Gestileerd (grote koppen)
 
-- **Wat:** laag-resolutie texturen (64 tot 128 pixels, met een beperkt palet) op eenvoudige modellen, verspringende vertices (vertex snapping), affiene texturen, sterke mist en dithering. Detail komt uit de texturen, niet uit extra vlakken.
-- **Gevoel:** nostalgisch en een beetje vreemd, zoals indiegames die de PlayStation 1 nadoen.
-- **Voor:** bouwt voort op de retrofilter van Prototype 1; veel sfeer met weinig vlakken.
-- **Tegen:** we moeten veel texturen maken (met een script of met de hand); minder goed leesbaar in gevechten; de humor kan wegvallen in de "creepy" PS1-sfeer.
-- **Werk:** groot (texturen).
+- **Wat:** zoals M2, maar met overdreven verhoudingen: grotere hoofden en handen, kortere lijven, gezichten met grote ogen en wenkbrauwen voor uitdrukkingen.
+- **Voor:** heel expressief en grappig; gezichtsuitdrukkingen werken goed in scènes.
+- **Tegen:** lijkt minder op de echte personen van de referentiefoto's; verandert het gevoel van het spel meer.
+- **Werk:** gemiddeld.
 
-### C. Toon / cel-shaded low poly (aanbevolen)
+### M4. PS2-niveau
 
-- **Wat:** licht in twee of drie harde banden (cel shading), donkere omlijningen rond personages en gebouwen, verzadigde kleuren, een stripachtige lucht. Modellen krijgen meer vorm (spieren van Klaas, gezichten met ogen, wenkbrauwen en mond als eigen vlakken), maar geen texturen.
-- **Gevoel:** een speelbare strip, zoals *The Legend of Zelda: The Wind Waker* of *Hi-Fi Rush*, maar dan in blokjes.
-- **Voor:** past het best bij de droge humor; personages (Klaas, Gyan, Jules, Sven) worden direct herkenbaar door omlijning en gezichtsuitdrukkingen; eenvoudige vormen zien er bewust uit in plaats van onaf; geen texturen nodig, dus de generators werken door.
-- **Tegen:** omlijningen moeten goed afgesteld worden (niet te dik op afstand); de retrofilter moet aangepast worden zodat hij de lijnen niet wegdithert.
-- **Werk:** gemiddeld (twee shaders: toon en omlijning).
+- **Wat:** realistischer verhoudingen en meer detail: zo'n 2000 tot 4000 driehoeken per personage, vloeiendere vormen, kleding met plooien. Waarschijnlijk met Blender gemaakt in plaats van in code.
+- **Voor:** het meest gedetailleerd.
+- **Tegen:** het minst "low poly"; veel werk per model; moeilijker te maken en aan te passen vanuit scripts.
+- **Werk:** groot.
 
-### D. Handgeschilderd low poly
-
-- **Wat:** low poly modellen met geschilderde kleurverlopen en details in een texture-atlas (een paar grote texturen voor het hele spel), warm licht en weinig nabewerking.
-- **Gevoel:** sprookjesachtig en warm, zoals oudere fantasy-MMO's of *Sea of Thieves* in eenvoudiger vorm.
-- **Voor:** de meest "af" ogende stijl; veel detail met weinig vlakken.
-- **Tegen:** veel tekenwerk voor de texturen; moeilijk consequent te houden met door code gemaakte modellen; elke nieuwe prop vraagt nieuw tekenwerk.
-- **Werk:** het grootst.
-
-**Advies:** C, de toon-stijl. Die past bij de humor, maakt de nieuwe personages herkenbaar en werkt met onze manier van modellen maken (scripts, geen texturen). A is een goede tweede keuze als de eigenaar een rustiger beeld wil.
+**Advies:** M2. Het geeft de grootste stap in kwaliteit en herkenbaarheid zonder de low poly-stijl en de filter te verliezen, en we kunnen alles in code blijven maken.
 
 ## Techniek voor Prototype 2
 
-- **Modellen:** de Python-generators (`tools/models/model_builder.py`) worden uitgebreid met echte meshes in plaats van alleen dozen: afgeronde en afgeschuinde vormen, getaperde ledematen, gezichten. De meshes worden als `ArrayMesh` in `.tres` of `.res` weggeschreven, zodat ze nog steeds door code ontstaan en later door Blender-modellen vervangen kunnen worden.
+- **Modellen:** volgens het gekozen voorstel (zie hierboven). De Python-generators (`tools/models/model_builder.py`) worden uitgebreid met echte meshes in plaats van alleen dozen: afgeronde en afgeschuinde vormen, getaperde ledematen, gezichten. De meshes worden als `ArrayMesh` in `.tres` of `.res` weggeschreven, zodat ze nog steeds door code ontstaan en later door Blender-modellen vervangen kunnen worden.
 - **Rig:** personagemodellen krijgen meer gewrichten: ellebogen, knieën, polsen, enkels, nek en ruggengraat. `HumanoidModel` blijft de animaties in code spelen, met dezelfde actienamen, plus nieuwe (lachen, wijzen, zitten op een motor, in een kooi hangen).
-- **Materialen en shaders:** één set gedeelde materialen per stijl (bijvoorbeeld `res://materials/toon/`), een toon-shader en een omlijning (omgekeerde schil of een post-process randdetectie), afgestemd op de retrofilter.
+- **Rendering:** de retrofilter, het licht en de mist blijven zoals in Prototype 1 (besluit eigenaar). Materialen blijven vlakke kleuren.
 - **Wereld:** wegen worden echte meshes langs splines in plaats van een raster van 1 m; de grond krijgt zachtere overgangen; huizen krijgen types (rijtjeshuis, twee-onder-een-kap, flat, boerderij) en meer detail (ramen, deuren, dakgoten, schuurtjes, schuttingen).
 - **Scènes:** het scènesysteem (`Cutscene`) krijgt korte camerapaden, close-ups met gezichtsuitdrukkingen en "blokkades" (waar wie staat), zodat de scènes van Prototype 1 (Klaas valt, het einde, de spion) opnieuw en beter gemaakt kunnen worden.
 - **Stemmen:** iedere spreker krijgt een eigen stemblip (toonhoogte en klank), al begonnen in Fase 12 met `DialogueData.voice_pitch`.
-- **Saves:** het save-formaat gaat naar versie 2. Advies: saves van Prototype 1 hoeven niet te laden (een nieuw spel), want personages en quests veranderen.
+- **Saves:** het save-formaat gaat naar versie 2. Saves van Prototype 1 laden niet meer; Prototype 2 begint met een nieuw spel (besluit eigenaar).
+- **Schaal:** straten en wegen worden breder en de huizen iets hoger en ruimer geplaatst (besluit eigenaar). De zes locaties blijven op hun plek; het dorp eromheen schuift wat (in P2-5).
 
 ## Fases van Prototype 2
 
@@ -141,32 +136,36 @@ Werkwijze en git-regels blijven zoals in `CLAUDE.md`: één fase is één reques
 
 | Fase | Branch | Inhoud | Klaar als |
 | --- | --- | --- | --- |
-| P2-0 | `Plan-Prototype-2` | Dit document, de stijlvoorstellen, de fases en de bijgewerkte documenten | De eigenaar is akkoord met het plan |
-| P2-1 | `Build-Graphics-Style-Lab` | Een testscène met de vier stijlen naast elkaar (wisselen met een toets): materialen, licht, shaders en een paar voorbeeldmodellen per stijl | De eigenaar heeft een stijl gekozen |
-| P2-2 | `Upgrade-Rendering-And-Shaders` | De gekozen stijl overal: gedeelde materialen, shaders, licht, lucht, mist, nabewerking en de retrofilter daarop afgestemd | Elst, een dungeon en een baasgevecht ogen in de nieuwe stijl, zonder modellen te vervangen |
-| P2-3 | `Upgrade-Character-Rig-And-Models` | Nieuwe rig met ellebogen en knieën, de mesh-generator voor personages, Gyan, Klaas en de dorpelingen, nieuwe animaties | Gyan en Klaas zien eruit als hun referenties en bewegen beter |
-| P2-4 | `Upgrade-Enemy-And-Boss-Models` | Alle vijanden en bazen in de nieuwe stijl: drillers, vape-drillers, kakkers, fatbikers (echte rijhouding, draaiende wielen), opa's en oma's met eigen modellen, rolstoel-oma, cultisten, draakjes, de vier bazen | Elke vijand is van ver herkenbaar |
-| P2-5 | `Upgrade-World-And-Roads` | Wegen als meshes, nieuwe huizen en bomen, props, de zes locaties, de grond, de tornado | Elst oogt af, zonder blokkerige wegen |
-| P2-6 | `Upgrade-Dungeons` | De vijf dungeons en het huis van Klaas in de nieuwe stijl | Alle interieurs passen bij de rest |
-| P2-7 | `Add-Gyan-And-Story-Rework` | Gyan als hoofdpersoon, dialogen en scènes herschreven, de scènes van Prototype 1 opnieuw gemaakt (Klaas valt, het einde, de spion), stemmen per personage | Het hele verhaal klopt met Gyan, van begin tot eind |
-| P2-8 | `Add-Jules-Rescue` | Jules en zijn model, de kooi in de Westeraam-dungeon, de bevrijding, Jules in Elst | Jules is te bevrijden en daarna in Elst te vinden |
-| P2-9 | `Add-Sven-Outpost-Miniboss` | De OBC-voorpost (nieuwe locatie bij het fort), Sven en zijn model, het minibossgevecht, de keuze (overtuigen of vermoorden) en de gevolgen | Beide keuzes zijn te spelen en hebben gevolgen tot en met het einde |
-| P2-10 | `Add-Side-Quests-And-Klaas-Motorbike` | Bijquests in het questlog en op het kompas, Klaas' oude motor als eerste bijquest (en rijden, als de eigenaar dat wil) | De motor is te vinden, te maken en (eventueel) te berijden |
+| P2-0 | `Plan-Prototype-2` | Dit document, de beslissingen, de fases en de bijgewerkte documenten | De eigenaar is akkoord met het plan |
+| P2-1 | `Build-Model-Style-Lab` | Klaas, Gyan, een driller en een huis in de vier modelvoorstellen (M1 t/m M4), naast elkaar in de filter van het spel | De eigenaar heeft een voorstel gekozen |
+| P2-2 | `Build-Mesh-Toolkit-And-Rig` | De mesh-generator voor het gekozen voorstel, het nieuwe rig (ellebogen, knieën, polsen, enkels, nek, ruggengraat) en de nieuwe animaties in `HumanoidModel` | Een testpersonage loopt, vecht en flext met het nieuwe rig |
+| P2-3 | `Upgrade-Character-Models` | Gyan, Klaas en de dorpelingen | Gyan en Klaas lijken op hun referenties en bewegen beter |
+| P2-4 | `Upgrade-Enemy-And-Boss-Models` | Alle vijanden en bazen: drillers, vape-drillers, kakkers, fatbikers (rijhouding, draaiende wielen), opa's en oma's met eigen modellen, rolstoel-oma, cultisten, draakjes, de vier bazen | Elke vijand is van ver herkenbaar |
+| P2-5 | `Upgrade-World-And-Roads` | Bredere straten, wegen als meshes, nieuwe huizen en bomen, props, de zes locaties, de grond | Elst oogt af, zonder blokkerige wegen |
+| P2-6 | `Upgrade-Dungeons` | De vijf dungeons en het huis van Klaas met de nieuwe modellen en props | Alle interieurs passen bij de rest |
+| P2-7 | `Add-Gyan-And-Story-Rework` | Gyan als (stille) hoofdpersoon, dialogen en scènes herschreven, de scènes van Prototype 1 opnieuw gemaakt (Klaas valt, het einde, de spion), stemmen per personage, save-formaat 2 | Het hele verhaal klopt met Gyan, van begin tot eind |
+| P2-8 | `Add-Jules-Rescue` | Jules en zijn model, de kooi in de Westeraam-dungeon, de sleutel van de Vape-koning, Jules in de open wereld tegen drillers | Jules is te bevrijden en daarna in Elst te vinden; niet bevrijd zie je hem niet |
+| P2-9 | `Add-Sven-Outpost-Miniboss` | De OBC-voorpost (bijquest bij het fort), Sven en zijn model, het minibossgevecht, de keuze en de gevolgen | Overtuigd helpt Sven in de open wereld; vermoord is hij weg |
+| P2-10 | `Add-Side-Quests-And-Klaas-Motorbike` | Bijquests in het questlog en op het kompas, Klaas' oude motor vinden, naar Klaas brengen en erop rijden | De motor is te vinden en te berijden |
 | P2-11 | `Polish-Prototype-2` | Balans, geluid en muziek bijwerken, bugfixes, laadschermen, export | Prototype 2 is van begin tot eind speelbaar zonder blokkerende bugs |
 
-**Volgorde:** eerst de graphics (P2-1 t/m P2-6), zoals de eigenaar wil. Het verhaal (P2-7) komt daarna, omdat de nieuwe scènes de nieuwe modellen nodig hebben. Jules, Sven en de motor (P2-8 t/m P2-10) bouwen daarop voort.
+**Volgorde:** eerst de modellen (P2-1 t/m P2-6), zoals de eigenaar wil. Het verhaal (P2-7) komt daarna, omdat de nieuwe scènes de nieuwe modellen nodig hebben. Jules, Sven en de motor (P2-8 t/m P2-10) bouwen daarop voort.
 
-## Open beslissingen voor de eigenaar
+## Beslissingen
 
-1. **Stijl:** welke van de vier stijlen (na het stijllab in P2-1)? Advies: C, de toon-stijl.
-2. ~~Gyan~~: **besloten**, een stille hoofdpersoon.
-3. ~~Jules~~: **besloten**, optioneel; sleutel van de Vape-koning; daarna af en toe in de open wereld tegen drillers.
-4. **Sven:** **besloten** dat hij optioneel is (bijquest). Nog open: wat doen overtuigen en vermoorden precies (meevechten tegen Amber, op het feest, een ander einde)?
-5. **De motor:** alleen vinden en laten zien, of echt rijden? Met onderdelen zoeken? Advies: wel rijden, met twee onderdelen.
-6. **Saves:** saves van Prototype 1 vervallen (advies), of omzetten?
-7. **Schaal van Elst:** wegen breder en huizen hoger maken (dan schuift de wereld wat), of de schaal houden?
-8. **Controller:** in Prototype 2 of later?
-9. **De spion en plan B:** in Prototype 2 verder uitwerken of bewaren voor later?
+Genomen door de eigenaar op 21-11-2026:
+
+1. **Grafisch:** de filter, het licht en de sfeer blijven; de modellen worden van hogere kwaliteit en blijven low poly.
+2. **Gyan** is een stille hoofdpersoon.
+3. **Jules** is optioneel: een kooi in de Westeraam-dungeon, de sleutel van de Vape-koning; bevrijd vecht hij af en toe in de open wereld tegen drillers, anders zie je hem niet meer.
+4. **Sven** is optioneel (bijquest): overtuigd vecht hij af en toe mee in de open wereld (zoals Jules), vermoord is hij weg.
+5. **De motor:** vinden, naar Klaas brengen en meteen erop rijden, zonder onderdelen te zoeken.
+6. **Saves:** saves van Prototype 1 laden niet; Prototype 2 begint met een nieuw spel.
+7. **Schaal:** bredere straten, huizen iets hoger en ruimer.
+8. **Controller:** niet in Prototype 2, later.
+9. **De spion en plan B:** bewaren voor later; in Prototype 2 blijft het de haak in de (opnieuw gemaakte) eindscène.
+
+**Nog open:** welk modelvoorstel (M1 t/m M4)? Dat kiest de eigenaar in het modellab van P2-1. Advies: M2.
 
 ## Overgenomen punten uit Prototype 1
 
@@ -174,10 +173,10 @@ Uit `docs/PROGRESS.md` (*Verzamelde punten voor Prototype 2*), nu ingedeeld bij 
 
 - Huizen, bomen en props mooier → P2-5.
 - Blokkerige paden en wegen (raster van 1 m) → P2-5.
-- Smalle straten en lage huizen → P2-5 (zie beslissing 7).
+- Smalle straten en lage huizen → P2-5 (bredere straten, beslissing 7).
 - Fatbikers en het fatbike-kindje: rijhouding en draaiende wielen → P2-4.
 - Scènes opnieuw maken na de grafische overhaul, ook de eindscène met de spion → P2-7.
 - Stemgeluidjes per personage → P2-7.
-- Controller-ondersteuning → beslissing 8.
+- Controller-ondersteuning → later (beslissing 8).
 - Bijquests → P2-10.
 - Eigen modellen voor de opa's en oma's, en de rolstoel-oma met buigende benen en draaiende wielen → P2-4.

@@ -178,7 +178,9 @@ def sfx():
     s["hit"] = thud(110, 0.18, r(3), click=0.6)
     s["block"] = mix(clang([820, 1290, 2140], 0.45, 0.35), thud(150, 0.1, r(4)), gains=[0.8, 0.4])
     s["parry"] = mix(clang([1040, 1660, 2490, 3320], 0.7, 0.55), whoosh(r(5), 0.2, 2000, 6000), gains=[0.9, 0.3])
-    s["step"] = env(lowpass(noise(0.09, r(6)), 900), attack=0.002, decay=0.08)
+    # A soft, muffled step: mostly a low thump, hardly any hiss.
+    s["step"] = mix(env(lowpass(noise(0.1, r(6)), 320), attack=0.006, decay=0.09),
+                    env(osc("sine", 75, 0.1, sweep_to=55), attack=0.004, decay=0.09), gains=[0.7, 0.5])
     s["jump"] = env(osc("tri", 180, 0.16, sweep_to=360), attack=0.005, decay=0.15)
     s["land"] = thud(80, 0.16, r(7), click=0.5)
     s["dodge"] = whoosh(r(8), 0.3, 300, 1400, gain=0.8)
@@ -194,7 +196,15 @@ def sfx():
     s["pickup"] = arp
     creak = env(lowpass(tremolo(osc("saw", 90, 0.5, sweep_to=140), 30, 0.6), 1200), attack=0.05, decay=0.45)
     s["chest"] = place(creak, thud(120, 0.2, r(10)), 0.42, 0.8)
-    s["door"] = place(env(lowpass(tremolo(osc("saw", 70, 0.6, sweep_to=110), 24, 0.6), 900), attack=0.05, decay=0.55), thud(70, 0.3, r(11)), 0.5)
+    # A wooden door: the latch clicks, the hinge squeaks softly, air moves
+    # and it falls shut with a muffled thud.
+    door = silence(0.9)
+    place(door, env(highpass(noise(0.025, r(11)), 2500), attack=0.001, decay=0.022), 0.0, 0.7)
+    hinge = lowpass(tremolo(osc("sine", 540, 0.38, sweep_to=660), 16, 0.5), 2000)
+    place(door, env(hinge, attack=0.04, decay=0.34), 0.04, 0.22)
+    place(door, whoosh(r(31), 0.4, 200, 900, gain=0.5), 0.1)
+    place(door, thud(90, 0.25, r(32), click=0.25), 0.55, 0.8)
+    s["door"] = door
     crunch = env(lowpass(noise(0.5, r(12)), 3000, 600), attack=0.002, decay=0.5)
     buzz = env(lowpass(osc("saw", 120, 0.8, sweep_to=40), 800), attack=0.01, decay=0.8)
     s["generator_break"] = mix(crunch, buzz, gains=[0.8, 0.6])
@@ -225,6 +235,9 @@ def sfx():
     s["quest_done"] = jingle
     s["player_death"] = env(lowpass(osc("square", 330, 1.4, sweep_to=80), 1500, 300), attack=0.01, decay=1.4)
     s["bingo"] = mix(clang([660, 990], 0.6, 0.5), place(silence(0.6), clang([880, 1320], 0.5, 0.45), 0.12), gains=[0.6, 0.6])
+    # One "syllable" of a voice in dialogue, played for every few letters at
+    # the pitch of the speaker.
+    s["blip"] = env(lowpass(osc("square", 330, 0.06), 2400), attack=0.003, decay=0.05)
     s["heal"] = mix(*[place(silence(0.6), env(osc("sine", f, 0.3), attack=0.01, decay=0.28), k * 0.08, 0.4) for k, f in enumerate((523, 659, 784, 1047))])
     return {name: normalize(fade_edges(buf), 0.8) for name, buf in s.items()}
 

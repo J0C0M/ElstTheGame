@@ -70,7 +70,8 @@ func _ready() -> void:
 
 
 ## Plays the sound [param sound_name] everywhere (not at a place).
-func play_sfx(sound_name: StringName, volume_db: float = 0.0, pitch_spread: float = 0.08) -> void:
+## [param pitch] shifts the whole sound, such as the voice of a speaker.
+func play_sfx(sound_name: StringName, volume_db: float = 0.0, pitch_spread: float = 0.08, pitch: float = 1.0) -> void:
 	var stream: AudioStream = _sfx(sound_name)
 	if stream == null:
 		return
@@ -78,7 +79,7 @@ func play_sfx(sound_name: StringName, volume_db: float = 0.0, pitch_spread: floa
 	_next_voice = (_next_voice + 1) % _voices.size()
 	voice.stream = stream
 	voice.volume_db = volume_db
-	voice.pitch_scale = randf_range(1.0 - pitch_spread, 1.0 + pitch_spread)
+	voice.pitch_scale = pitch * randf_range(1.0 - pitch_spread, 1.0 + pitch_spread)
 	voice.play()
 
 

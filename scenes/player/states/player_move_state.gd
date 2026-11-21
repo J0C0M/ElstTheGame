@@ -89,6 +89,6 @@ func _play_steps(delta: float) -> void:
 	if not on_floor or speed < 0.5:
 		return
 	_step_distance += speed * delta
-	if _step_distance >= (2.4 if player.is_sprinting else 1.8):
+	if _step_distance >= (2.8 if player.is_sprinting else 2.2):
 		_step_distance = 0.0
-		AudioManager.play_sfx(&"step", -14.0, 0.15)
+		AudioManager.play_sfx(&"step", -24.0, 0.18)

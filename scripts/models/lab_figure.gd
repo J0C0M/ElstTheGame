@@ -75,11 +75,12 @@ static func _spec_for(character: StringName) -> Dictionary:
 			}
 		_:
 			return {
-				"height": 1.8, "width": 1.05, "chest": 1.05, "skin": SKIN_LIGHT,
-				"hair": BLACK, "hair_style": &"balaclava", "shirt": Color(0.17, 0.17, 0.19),
-				"shirt_alt": Color(0.95, 0.8, 0.2), "pattern": &"tracksuit", "sleeve": 1.0,
-				"pants": Color(0.17, 0.17, 0.19), "pants_stripe": WHITE, "shoes": WHITE, "jaw": 0.3,
-				"eyes": Color(0.2, 0.25, 0.3), "mouth": &"none", "belt": Color(0.17, 0.17, 0.19),
+				"height": 1.8, "width": 1.05, "chest": 1.05,
+				"hair": Color(0.08, 0.07, 0.08), "hair_style": &"beanie", "skin": Color(0.82, 0.64, 0.52),
+				"shirt": Color(0.12, 0.12, 0.13), "shirt_alt": Color(0.95, 0.8, 0.2), "pattern": &"puffer", "sleeve": 1.0,
+				"pants": Color(0.2, 0.2, 0.22), "pants_stripe": Color(0.32, 0.32, 0.34), "shoes": WHITE, "jaw": 0.3,
+				"eyes": Color(0.2, 0.17, 0.12), "mouth": &"frown", "belt": Color(0.2, 0.2, 0.22),
+				"gloves": Color(0.15, 0.15, 0.16),
 			}
 
 
@@ -197,21 +198,15 @@ func _build_torso() -> void:
 	for n: int in heights.size():
 		points.append(_p(0, heights[n]))
 		radii.append(widths[n] * _w())
-	_kit.loft(points, radii, _sides, color_fn, Vector2(1.0, 0.6))
-	if _spec["pattern"] == &"tracksuit":
-		# The yellow band of Westeraam across the chest.
-		_kit.limb(_p(0, 1.29), _p(0, 1.35), 0.158 * chest * _w() + 0.006, 0.162 * chest * _w() + 0.006, _sides, _spec["shirt_alt"],
-			Vector2(1.0, 0.6))
+	# Muscles show as a deeper chest, not as separate bumps.
+	var depth: float = 0.66 if _spec.has("muscles") else 0.6
+	if _spec["pattern"] == &"puffer":
+		_build_puffer(heights, widths, depth)
+	else:
+		_kit.loft(points, radii, _sides, color_fn, Vector2(1.0, depth))
 	# Shoulder line: a flattened ball as the top of the chest.
 	if _style == Style.M1:
 		_kit.box(_p(0, 1.47), Vector3(0.3 * chest, 0.05, 0.17) * _w(), shirt, Basis.IDENTITY, 0.02)
-	if _spec.has("muscles"):
-		for side: float in [-1.0, 1.0]:
-			var pec: Vector3 = _p(0.07 * side * chest, 1.35, 0.058 * chest)
-			if _style == Style.M1:
-				_kit.box(pec, Vector3(0.13, 0.08, 0.05) * _w(), shirt, Basis.IDENTITY, 0.015)
-			else:
-				_kit.ball(pec, Vector3(0.08, 0.055, 0.04) * _w(), _sides, 4, shirt)
 	# Collar and buttons.
 	if _detail or _style == Style.M1:
 		if _spec["pattern"] == &"plaid":
@@ -220,10 +215,48 @@ func _build_torso() -> void:
 					Vector3(0, 0, 0.012), _spec["shirt_dark"])
 			for n: int in 4:
 				_kit.box(_p(0, 1.38 - n * 0.09, 0.1), Vector3(0.014, 0.014, 0.01) * _w(), WHITE)
-		elif _spec["pattern"] == &"tracksuit":
-			_kit.box(_p(0, 1.25, 0.1), Vector3(0.008, 0.4, 0.01) * _w(), Color(0.55, 0.55, 0.55))
 	if _spec.has("chain"):
 		_build_chain()
+
+
+## A puffer jacket over the torso: quilted bands that bulge out between the
+## seams, a yellow zip (Westeraam) and a thick collar. [param heights] and
+## [param widths] are the body under it.
+func _build_puffer(heights: Array[float], widths: Array[float], depth: float) -> void:
+	var jacket: Color = _spec["shirt"]
+	var bands: int = 3 if _style == Style.M1 else 5
+	var bottom: float = 0.98
+	var top: float = 1.5
+	var points: Array[Vector3] = []
+	var radii: Array[float] = []
+	for n: int in bands * 2 + 1:
+		var y: float = lerpf(bottom, top, float(n) / (bands * 2))
+		var body: float = _profile(heights, widths, y)
+		var puff: float = 1.24 if n % 2 == 1 else 1.05
+		if n == bands * 2:
+			puff = 0.95
+		points.append(_p(0, y))
+		radii.append(body * puff * _w())
+	_kit.loft(points, radii, _sides, func(_k: int, _s: int) -> Color: return jacket, Vector2(1.0, depth))
+	# The zip runs down the front over the bulges.
+	var front: float = _profile(heights, widths, 1.3) * 1.2 * depth * _w()
+	_kit.box(_p(0, 1.24, 0) + Vector3(0, 0, front + 0.004), Vector3(0.014 * _w(), 0.5 * _spec["height"] / 1.8 * _body_y, 0.012),
+		_spec["shirt_alt"])
+	if _detail:
+		_kit.box(_p(0, 1.44, 0) + Vector3(0, 0, front * 0.8 + 0.01), Vector3(0.022, 0.035, 0.01) * _w(), _spec["shirt_alt"])
+	# Collar.
+	var collar_sides: int = 4 if _style == Style.M1 else _sides
+	_kit.limb(_p(0, 1.46), _p(0, 1.55), 0.085 * _w(), 0.075 * _w(), collar_sides, jacket.lightened(0.04), Vector2(1.0, 0.9))
+
+
+## The body radius at height [param y] along the torso profile.
+func _profile(heights: Array[float], widths: Array[float], y: float) -> float:
+	if y <= heights[0]:
+		return widths[0]
+	for n: int in heights.size() - 1:
+		if y <= heights[n + 1]:
+			return lerpf(widths[n], widths[n + 1], (y - heights[n]) / (heights[n + 1] - heights[n]))
+	return widths[widths.size() - 1]
 
 
 func _build_chain() -> void:
@@ -232,7 +265,7 @@ func _build_chain() -> void:
 		var angle: float = PI * (n + 0.5) / links
 		var chest: float = _spec["chest"]
 		var x: float = cos(angle) * 0.085
-		var z: float = 0.02 + sin(angle) * (0.155 * chest * 0.6 - 0.005)
+		var z: float = 0.02 + sin(angle) * (0.155 * chest * 0.66 - 0.005)
 		var y: float = 1.49 - sin(angle) * 0.11
 		var point: Vector3 = _p(x, y, z)
 		if _style == Style.M1:
@@ -240,7 +273,7 @@ func _build_chain() -> void:
 		else:
 			_kit.ball(point, Vector3.ONE * (0.017 if _detail else 0.021) * _w(), 6 if _detail else 4, 3, GOLD)
 	if _style != Style.M1:
-		_kit.ball(_p(0, 1.365, 0.155 * float(_spec["chest"]) * 0.6 + 0.02), Vector3(0.03, 0.036, 0.015) * _w(), 6, 4, GOLD)
+		_kit.ball(_p(0, 1.365, 0.155 * float(_spec["chest"]) * 0.66 + 0.02), Vector3(0.03, 0.036, 0.015) * _w(), 6, 4, GOLD)
 
 
 # --- Arms and hands -------------------------------------------------------
@@ -257,7 +290,9 @@ func _build_arms() -> void:
 		var elbow: Vector3 = _p((0.15 * chest + 0.06) * side, 1.16, -0.03)
 		var wrist: Vector3 = _p((0.15 * chest + 0.075) * side, 0.92, 0.04)
 		# Upper arm: sleeve to [param sleeve] of the way, then skin.
-		if sleeve >= 1.0:
+		if _spec["pattern"] == &"puffer":
+			_build_puffer_sleeve(shoulder, elbow, wrist)
+		elif sleeve >= 1.0:
 			_kit.limb_pattern(shoulder, elbow, 0.062 * _w() * bulk, 0.05 * _w() * bulk, _sides, 2, color_fn)
 			_kit.limb_pattern(elbow, wrist, 0.05 * _w() * bulk, 0.042 * _w(), _sides, 2, color_fn)
 			if _detail:
@@ -270,14 +305,33 @@ func _build_arms() -> void:
 			_kit.limb(elbow, wrist, 0.05 * _w() * bulk, 0.04 * _w(), _sides, skin)
 		if _style != Style.M1:
 			_kit.ball(shoulder + Vector3(0, 0.01, 0), Vector3(0.07, 0.06, 0.06) * _w() * sqrt(bulk), _sides, 4, shirt)
-			_kit.ball(elbow, Vector3.ONE * 0.05 * _w() * bulk, _sides, 4, shirt if sleeve >= 1.0 else skin)
+			if _spec["pattern"] != &"puffer":
+				_kit.ball(elbow, Vector3.ONE * 0.05 * _w() * bulk, _sides, 4, shirt if sleeve >= 1.0 else skin)
 		_build_hand(wrist, side)
+
+
+## A quilted puffer sleeve from the shoulder over the elbow to a cuff.
+func _build_puffer_sleeve(shoulder: Vector3, elbow: Vector3, wrist: Vector3) -> void:
+	var jacket: Color = _spec["shirt"]
+	var points: Array[Vector3] = []
+	var radii: Array[float] = []
+	var bands: int = 2 if _style == Style.M1 else 3
+	for part: int in 2:
+		var a: Vector3 = shoulder if part == 0 else elbow
+		var b: Vector3 = elbow if part == 0 else wrist.lerp(elbow, 0.12)
+		var thick: float = 0.082 if part == 0 else 0.07
+		for n: int in bands * 2 + (1 if part == 1 else 0):
+			points.append(a.lerp(b, float(n) / (bands * 2)))
+			radii.append(thick * (1.0 if n % 2 == 1 else 0.86) * _w())
+	_kit.loft(points, radii, _sides, func(_k: int, _s: int) -> Color: return jacket)
+	# Elastic cuff.
+	_kit.limb(wrist.lerp(elbow, 0.14), wrist.lerp(elbow, 0.02), 0.048 * _w(), 0.046 * _w(), _sides, jacket.darkened(0.3))
 
 
 func _build_hand(wrist: Vector3, side: float) -> void:
 	var skin: Color = _spec["skin"]
-	if _spec["hair_style"] == &"balaclava":
-		skin = BLACK  # Gloves.
+	if _spec.has("gloves"):
+		skin = _spec["gloves"]
 	var s: float = _hand_scale * _w()
 	var center: Vector3 = wrist + Vector3(0.005 * side, -0.065 * s, 0.0)
 	match _style:
@@ -396,6 +450,11 @@ func _build_face(c: Vector3, r: Vector3) -> void:
 			for side: float in [-1.0, 1.0]:
 				_kit.box(Vector3(c.x + r.x * 0.33 * side, mouth_y + r.y * 0.06, mouth_z), Vector3(r.x * 0.1, r.y * 0.08, r.z * 0.07),
 					Color(0.45, 0.15, 0.15))
+		&"frown":
+			_kit.box(Vector3(c.x, mouth_y, mouth_z), Vector3(r.x * 0.48, r.y * 0.05, r.z * 0.07), Color(0.42, 0.22, 0.2))
+			for side: float in [-1.0, 1.0]:
+				_kit.box(Vector3(c.x + r.x * 0.27 * side, mouth_y - r.y * 0.03, mouth_z), Vector3(r.x * 0.08, r.y * 0.05, r.z * 0.07),
+					Color(0.42, 0.22, 0.2))
 		&"smirk":
 			_kit.box(Vector3(c.x + r.x * 0.05, mouth_y, mouth_z), Vector3(r.x * 0.5, r.y * 0.06, r.z * 0.07), Color(0.5, 0.25, 0.22))
 			_kit.box(Vector3(c.x + r.x * 0.3, mouth_y + r.y * 0.04, mouth_z), Vector3(r.x * 0.12, r.y * 0.06, r.z * 0.07),
@@ -410,6 +469,9 @@ func _build_hair(c: Vector3, r: Vector3) -> void:
 			# A seam over the top.
 			_kit.limb(c + Vector3(0, r.y * 0.4, r.z * 0.9), c + Vector3(0, r.y * 1.02, 0), r.x * 0.05, r.x * 0.05, 4,
 				Color(0.14, 0.14, 0.15))
+		return
+	if hair_style == &"beanie":
+		_build_beanie(c, r)
 		return
 	var front_cut: float = 0.5 if hair_style == &"messy" else 0.62
 	if _style == Style.M1:
@@ -454,3 +516,25 @@ func _build_hair(c: Vector3, r: Vector3) -> void:
 		if _detail:
 			_kit.ball(c + Vector3(r.x * 0.15, r.y * 1.12, r.z * 0.6), r * Vector3(0.45, 0.2, 0.35), 10, 4,
 				hair.lightened(0.15), Basis(Vector3.RIGHT, -0.5))
+
+
+## A black beanie pulled low over the forehead, with a folded rim.
+func _build_beanie(c: Vector3, r: Vector3) -> void:
+	var beanie: Color = _spec["hair"]
+	var rim_y: float = r.y * 0.32
+	if _style == Style.M1:
+		_kit.box(c + Vector3(0, r.y * 0.75, -r.z * 0.02), Vector3(r.x * 2.08, r.y * 0.75, r.z * 2.08), beanie, Basis.IDENTITY, 0.03)
+		_kit.box(c + Vector3(0, rim_y + r.y * 0.08, -r.z * 0.02), Vector3(r.x * 2.14, r.y * 0.22, r.z * 2.14), beanie.lightened(0.08))
+		return
+	var cap: Callable = func(p: Vector3) -> Vector3:
+		return Vector3(p.x, maxf(p.y, 0.3), p.z)
+	var around: int = 16 if _detail else 8
+	_kit.ball(c + Vector3(0, r.y * 0.1, -r.z * 0.02), r * Vector3(1.08, 1.05, 1.08), around, 12 if _detail else 6, beanie,
+		Basis.IDENTITY, cap)
+	# The folded rim.
+	_kit.limb(c + Vector3(0, rim_y, -r.z * 0.02), c + Vector3(0, rim_y + r.y * 0.24, -r.z * 0.02), r.x * 1.1, r.x * 1.06, around,
+		beanie.lightened(0.08), Vector2(1.0, r.z / r.x))
+	if _detail:
+		# A small yellow tag on the rim (Westeraam).
+		_kit.box(c + Vector3(r.x * 0.35, rim_y + r.y * 0.12, r.z * 1.06), Vector3(r.x * 0.3, r.y * 0.12, r.z * 0.04),
+			_spec["shirt_alt"])

@@ -2,6 +2,8 @@
 
 Nov 18, 2026 · @Jocom
 
+> **Dit is het ontwerp van Prototype 1** (Fase 0 t/m 12). Voor Prototype 2 geldt `docs/PROTOTYPE_2.md`: daar is de hoofdpersoon **Gyan**, komen de Elstenaars **Jules** en **Sven** erbij, krijgt de game veel gedetailleerdere graphics en komt er bijcontent. Waar dat document afwijkt van dit GDD, geldt dat document.
+
 ## Overzicht
 
 *Elst* is een kleine, komische open-world actie-RPG in de stijl van Skyrim, die zich afspeelt in het dorp Elst (Gelderland). De speler bevrijdt Elst van Amber de Draak door drie kwaadaardige facties te verslaan en neemt het daarna samen met Klaas op tegen Amber in de kerk.
@@ -397,5 +399,5 @@ Keuzes waar de idee-notitie niets zei of zichzelf tegensprak, met het besluit va
 
 **Nog open**
 
-- [ ] Welke sidequests komen er? De eigenaar komt hierop terug als we Prototype 2 gaan ontwerpen.
+- [x] Welke sidequests komen er? In Prototype 2: als eerste Klaas' oude motor bij de velden van het OBC Fort; later meer (zie `docs/PROTOTYPE_2.md`).
 - [x] Eigen vijanden in de kerk, naast die van de andere dungeons: **Amber-cultisten** uit Zevenaar, drillers in een zwart pufferjack onder een amber-oranje gewaad, die Amber aanbidden. Ze vapen vuur met een rode vuurvape, en hun gezang maakt vijanden in de buurt woest en geneest ze. En **draakjes** met een driller op hun rug, die vuurballen spugen; daar oefen je de kruisboog op voordat Amber gaat vliegen. Valt een draakje, dan vecht de driller te voet verder (eigenaar, Fase 11).

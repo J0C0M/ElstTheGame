@@ -6,7 +6,7 @@ Een kleine, komische open-world actie-RPG in de stijl van Skyrim, die zich afspe
 - **Stijl:** low poly met platte kleuren en een lichte retrofilter
 - **Platform:** pc (Windows en Linux), muis en toetsenbord
 
-De game wordt in 13 fases gebouwd. Zie [`docs/GDD.md`](docs/GDD.md) voor het ontwerp en [`docs/PROGRESS.md`](docs/PROGRESS.md) voor de stand van zaken.
+Prototype 1 (13 fases) is af; nu loopt Prototype 2, met veel gedetailleerdere graphics, de hoofdpersoon Gyan, de Elstenaars Jules en Sven, en bijcontent. Zie [`docs/PROTOTYPE_2.md`](docs/PROTOTYPE_2.md) voor het ontwerp van Prototype 2, [`docs/GDD.md`](docs/GDD.md) voor dat van Prototype 1 en [`docs/PROGRESS.md`](docs/PROGRESS.md) voor de stand van zaken.
 
 ## Openen in Godot
 

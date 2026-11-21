@@ -18,15 +18,15 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 9 | `Add-OBC-Fort-Dungeon` | Af, gemerged naar `Development` |
 | 10 | `Add-Bingo-Cave-Dungeon` | Af, gemerged naar `Development` |
 | 11 | `Add-Amber-Final-Battle` | Af, gemerged naar `Development` |
-| 12 | `Polish-And-Release-Build` | Gebouwd, wacht op akkoord; exporteren wacht op de export templates |
+| 12 | `Polish-And-Release-Build` | Af, gemerged naar `Development` (exporteren wacht op de export templates) |
 
 Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voor de kruisboog) wacht op akkoord. `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
 
 ## Prototypes
 
-- **Prototype 1** bestaat uit Fase 0 t/m 12: de oorspronkelijke visie van de game, van begin tot eind speelbaar. Daar werken we nu aan.
-- **Prototype 2** begint pas als Prototype 1 af is. Wat erin komt, bepaalt de eigenaar dan. Een van de belangrijkste punten wordt graphics en details, waarschijnlijk met nog andere tweaks.
-- **Tot die tijd** blijven modellen en wegen placeholders. Steek er alleen tijd in als de gameplay of de leesbaarheid het nodig heeft. Visuele punten die we tegenkomen, komen in de lijst hieronder.
+- **Prototype 1** bestaat uit Fase 0 t/m 12: de oorspronkelijke visie van de game, van begin tot eind speelbaar. Af.
+- **Prototype 2** is begonnen (21-11-2026). Het ontwerp, de vier stijlvoorstellen en de fases P2-0 t/m P2-11 staan in `docs/PROTOTYPE_2.md`. Eerst graphics en modellen (nog steeds low poly), dan Gyan als hoofdpersoon, de Elstenaars Jules en Sven, en bijcontent.
+- De punten hieronder zijn verzameld tijdens Prototype 1; in `docs/PROTOTYPE_2.md` staan ze bij de fase waarin ze aan bod komen.
 
 ### Verzamelde punten voor Prototype 2
 
@@ -38,6 +38,31 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 - Dialoog met geluidjes op het ritme van de tekst, zoals in *Undertale* (eigenaar, 20-11-2026): in Prototype 1 al gedaan met één blip per spreker; in Prototype 2 eventueel eigen stemmen per personage.
 - Controller-ondersteuning komt in een later prototype; sidequests bespreken we bij het ontwerp van Prototype 2.
 - De oma's en opa's zijn aangepaste kopieën van het driller-model (met tasje, wandelstok of rolstoel). Een eigen model maakt ze beter herkenbaar. De benen van de rolstoel-oma zijn stijve balken en de wielen draaien niet.
+
+## Prototype 2
+
+| Fase | Branch | Status |
+|---|---|---|
+| P2-0 | `Plan-Prototype-2` | Gebouwd, wacht op akkoord |
+| P2-1 | `Build-Model-Style-Lab` | Nog niet begonnen |
+| P2-2 | `Build-Mesh-Toolkit-And-Rig` | Nog niet begonnen |
+| P2-3 | `Upgrade-Character-Models` | Nog niet begonnen |
+| P2-4 | `Upgrade-Enemy-And-Boss-Models` | Nog niet begonnen |
+| P2-5 | `Upgrade-World-And-Roads` | Nog niet begonnen |
+| P2-6 | `Upgrade-Dungeons` | Nog niet begonnen |
+| P2-7 | `Add-Gyan-And-Story-Rework` | Nog niet begonnen |
+| P2-8 | `Add-Jules-Rescue` | Nog niet begonnen |
+| P2-9 | `Add-Sven-Outpost-Miniboss` | Nog niet begonnen |
+| P2-10 | `Add-Side-Quests-And-Klaas-Motorbike` | Nog niet begonnen |
+| P2-11 | `Polish-Prototype-2` | Nog niet begonnen |
+
+### P2-0 – Plan voor Prototype 2
+
+- `docs/PROTOTYPE_2.md`: het ontwerp. Gyan als stille hoofdpersoon, Jules (optioneel, uit een kooi in Westeraam) en Sven (optionele bijquest, miniboss in een OBC-voorpost, overtuigen of vermoorden) als tweede en derde Elstenaar, Klaas grafisch verbeterd, het nieuwe verloop van de quests, Klaas' oude motor als eerste bijquest, vier modelvoorstellen (M1 verfijnde blokken, M2 gefacetteerde low poly, M3 gestileerd, M4 PS2-niveau; advies M2), de techniek, de fases P2-0 t/m P2-11 en de beslissingen van de eigenaar.
+- **Eerst vier render-stijlen getoond** (strak, PS1, toon, handgeschilderd, met renders). De eigenaar wil de filter en het licht houden zoals ze zijn en alleen betere modellen; die voorbeelden zijn daarom weer verwijderd.
+- `CLAUDE.md`, het GDD, de README en dit bestand verwijzen naar het nieuwe ontwerp. De referentiefoto's van Gyan, Jules en Sven staan lokaal in `docs/reference/` (niet in de repo).
+- **Beslist (21-11-2026):** filter en licht blijven, Gyan is stil, Jules en Sven zijn optioneel en helpen daarna in de open wereld, de motor is meteen te berijden, oude saves vervallen, bredere straten, controller en de spion later.
+- **Open:** welk modelvoorstel (M1 t/m M4); dat kiest de eigenaar in het modellab van P2-1.
 
 ## Fase 0 – Fundament
 

@@ -87,6 +87,10 @@ De eigenaar voegt meer bijcontent toe. Het systeem van Fase P2-10 is daarvoor ge
 
 Alle vier blijven low poly en passen bij de humor van Elst. Ze verschillen in hoe materialen, licht en de nabewerking werken. Fase P2-1 bouwt een **stijllab**: één testscène (een stukje straat met het huis van Klaas, een paar huizen en bomen, Klaas, Gyan, een driller en een stukje van Amber) waarin je met een toets tussen de vier stijlen wisselt. Daarna kiest de eigenaar.
 
+**Voorbeelden:** `docs/style_proposals/` bevat dezelfde scène (Klaas, het huidige spelermodel als stand-in voor Gyan, een driller, een cultist, huizen, bomen, een weg en Amber) in elk van de vier stijlen: `style_a.png` t/m `style_d.png` en alles samen in `styles_sheet.png` (linksboven A, rechtsboven B, linksonder C, rechtsonder D). Gemaakt met `tools/style_preview/render_styles.gd` (`godot --path . -s res://tools/style_preview/render_styles.gd`, met venster). Let op: het zijn nog de modellen van Prototype 1; de voorbeelden laten de stijl zien (materialen, licht, nabewerking). De modellen zelf krijgen in P2-3 t/m P2-6 veel meer detail.
+
+![De vier stijlen](style_proposals/styles_sheet.png)
+
 ### A. Strak low poly
 
 - **Wat:** vlakke kleuren per vlak (flat shading) op modellen met meer vlakken, schuine randen en ronde vormen. Zachte schaduwen, ambient occlusion (SSAO), een kleurverloop in de lucht, volumetrische mist en een warme zon. De retrofilter gaat standaard uit (blijft een optie).

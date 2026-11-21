@@ -43,8 +43,8 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 
 | Fase | Branch | Status |
 |---|---|---|
-| P2-0 | `Plan-Prototype-2` | Gebouwd, wacht op akkoord |
-| P2-1 | `Build-Model-Style-Lab` | Nog niet begonnen |
+| P2-0 | `Plan-Prototype-2` | Af (gemerged) |
+| P2-1 | `Build-Model-Style-Lab` | Af (gemerged), gekozen: M4 |
 | P2-2 | `Build-Mesh-Toolkit-And-Rig` | Nog niet begonnen |
 | P2-3 | `Upgrade-Character-Models` | Nog niet begonnen |
 | P2-4 | `Upgrade-Enemy-And-Boss-Models` | Nog niet begonnen |
@@ -62,7 +62,19 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 - **Eerst vier render-stijlen getoond** (strak, PS1, toon, handgeschilderd, met renders). De eigenaar wil de filter en het licht houden zoals ze zijn en alleen betere modellen; die voorbeelden zijn daarom weer verwijderd.
 - `CLAUDE.md`, het GDD, de README en dit bestand verwijzen naar het nieuwe ontwerp. De referentiefoto's van Gyan, Jules en Sven staan lokaal in `docs/reference/` (niet in de repo).
 - **Beslist (21-11-2026):** filter en licht blijven, Gyan is stil, Jules en Sven zijn optioneel en helpen daarna in de open wereld, de motor is meteen te berijden, oude saves vervallen, bredere straten, controller en de spion later.
-- **Open:** welk modelvoorstel (M1 t/m M4); dat kiest de eigenaar in het modellab van P2-1.
+- Het modelvoorstel kiest de eigenaar in het modellab van P2-1.
+
+### P2-1 – Modellab
+
+- **`MeshKit`** (`scripts/models/mesh_kit.gd`): bouwt low poly meshes in code met vertexkleuren en één gedeeld materiaal: `box()` (ook afgeschuind), `limb()` en `limb_pattern()` (getaperd, n zijden, per facet een kleur voor strepen en ruiten), `loft()` (een buis door punten met een straal per punt, zoals een romp met taille en borst), `ball()` (een bol met een vormfunctie voor kaken en spieren), `wedge()` en `tri()`/`quad()`. Gefacetteerd (vlakke normalen) of vloeiend (gedeelde normalen). Bedoeld als basis voor P2-2.
+- **`LabFigure`** (`scripts/models/lab_figure.gd`): Klaas (lang, breed, borstspieren, blonde kuif, zonnebril, paars shirt met korte mouwen, gouden ketting en gesp), Gyan (slank, donkerbruin rommelig haar met pony, bruine ogen, lach, blauw-wit geruit overhemd, spijkerbroek) en een driller (zwarte bivakmuts met ooggleuf, trainingspak met witte strepen, gele band van Westeraam, handschoenen) in M1 t/m M4. Statisch, zonder rig.
+- **`LabHouse`** (`scripts/models/lab_house.gd`): een Elster huis (bakstenen, puntgevel naar de straat, wit kozijnen, voordeur met stoep, schoorsteen) in M1 t/m M4: M1 afgeschuinde blokken, M2 strak met banden, dakgoten en regenpijp, M3 dik en een beetje scheef met luiken en een groot dak, M4 met stenen per rij, dakpannen, gordijnen en roeden.
+- **`ModelLab.tscn`** (`scenes/lab/`): de vier voorstellen naast elkaar in `RetroScreen`, met de lucht, het licht en de mist van `Elst.tscn` (in code nagebouwd). Toetsen 1-4/0/C/R, muis om rond te kijken; `-- --render <map>` maakt screenshots. De renders staan in `docs/model_lab/` (als JPEG, want de ruis van de filter maakt PNG's groot).
+- **Keuze:** het lab is een ontwikkeltool en leest daarom direct toetsen (`physical_keycode`) in plaats van acties uit de InputMap; het spel zelf gebruikt het niet.
+- **Driehoeken** per personage: M1 ~650-1050, M2 ~950-1400, M3 ~1000-1350, M4 ~2700-3650 (Prototype 1: ~150-300). Het huis: 600 tot 6300.
+- **Gekozen (21-11-2026): M4.** Gyan is goed. Na de eerste ronde: de driller heeft weer zijn pufferjas uit Prototype 1 (gewatteerde banden die opbollen, een gele rits van Westeraam, een dikke kraag, gewatteerde mouwen) en zijn zwarte muts met omgeslagen rand in plaats van een bivakmuts, met zijn gezicht zichtbaar. Klaas had losse bollen als borstspieren, die op tepels leken; die zijn weg, zijn borst is nu dieper en breder.
+- **Tweede ronde:** de M4-modellen hebben de kleine donkere ogen van M2 (die vond de eigenaar leuker dan de oogbollen met iris); de wenkbrauwen blijven. Gyan heeft nieuw haar: halflang en rommelig, een kap tot over de bovenkant van de oren en in de nek, plukken die vanaf de kruin langs het hoofd vallen (`MeshKit.loft()`), een pony die schuin over het voorhoofd valt en een paar losse plukjes bovenop. Klaas is goed zo (eigenaar: "perfect").
+- **Open:** Klaas en de driller worden stap voor stap beter in P2-2 (mesh-generator en rig voor M4) en P2-3.
 
 ## Fase 0 – Fundament
 

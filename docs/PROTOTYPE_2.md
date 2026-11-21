@@ -184,7 +184,7 @@ Genomen door de eigenaar op 21-11-2026:
 8. **Controller:** niet in Prototype 2, later.
 9. **De spion en plan B:** bewaren voor later; in Prototype 2 blijft het de haak in de (opnieuw gemaakte) eindscène.
 
-10. **Modellen (21-11-2026, in het modellab):** **M4, PS2-niveau**, gemaakt in code met `MeshKit` (vloeiende belichting, 12-zijdige ledematen, zo'n 2700 tot 3700 driehoeken per personage). Gyan is goed zo; Klaas en de driller worden stap voor stap verder verbeterd (P2-2 en P2-3). De driller houdt zijn pufferjas en muts uit Prototype 1. Spieren tonen als vorm van de romp, niet als losse bulten op de borst.
+10. **Modellen (21-11-2026, in het modellab):** **M4, PS2-niveau**, gemaakt in code met `MeshKit` (vloeiende belichting, 12-zijdige ledematen, zo'n 2700 tot 3700 driehoeken per personage). Klaas is goed zo. De ogen zijn de kleine donkere ogen van M2. Gyan kreeg nieuw, halflang rommelig haar; de driller wordt stap voor stap verder verbeterd (P2-2 en P2-3). De driller houdt zijn pufferjas en muts uit Prototype 1. Spieren tonen als vorm van de romp, niet als losse bulten op de borst.
 
 ## Overgenomen punten uit Prototype 1
 

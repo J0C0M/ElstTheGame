@@ -20,6 +20,8 @@ extends Node3D
 @onready var _door: MeshInstance3D = $Frame/Door
 
 
+var _opening: bool = false
+
 func _ready() -> void:
 	_interactable.prompt = prompt
 	_interactable.interacted.connect(_on_interacted)
@@ -35,6 +37,9 @@ func is_locked() -> bool:
 func _on_interacted(_player: Player) -> void:
 	if is_locked():
 		EventBus.message_requested.emit(locked_message)
-	else:
+	elif not _opening:
+		# Once per use: pressing E again while the screen fades does nothing.
+		_opening = true
 		AudioManager.play_sfx(&"door", -3.0)
 		EventBus.world_change_requested.emit(target_scene, target_spawn)
+		get_tree().create_timer(2.0).timeout.connect(func() -> void: _opening = false)

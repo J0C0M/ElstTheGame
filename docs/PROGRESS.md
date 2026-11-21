@@ -17,8 +17,8 @@ Hier staat per fase wat af is, welke keuzes zijn gemaakt, waar we van het GDD af
 | 8 | `Add-Westeraam-Dungeon` | Af, gemerged naar `Development` |
 | 9 | `Add-OBC-Fort-Dungeon` | Af, gemerged naar `Development` |
 | 10 | `Add-Bingo-Cave-Dungeon` | Af, gemerged naar `Development` |
-| 11 | `Add-Amber-Final-Battle` | Blok A, B en C af; blok C wacht op akkoord |
-| 12 | `Polish-And-Release-Build` | Nog niet begonnen |
+| 11 | `Add-Amber-Final-Battle` | Af, gemerged naar `Development` |
+| 12 | `Polish-And-Release-Build` | Gebouwd, wacht op akkoord; exporteren wacht op de export templates |
 
 Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voor de kruisboog) wacht op akkoord. `Align-Elst-With-Map` (de kaart verwerken) is af en gemerged naar `Development`. `Lock-Faction-Dungeons-And-Expand-Westeraam` (factie-dungeons op slot en een groter Westeraam) is af en gemerged naar `Development`. `Add-Dev-Powers-And-Enemy-Facing` (dev powers, vijanden in dungeons, nieuwe locaties) is gebouwd en wacht op akkoord.
 
@@ -419,6 +419,28 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 ### Aandachtspunten voor de volgende fases
 
 - Fase 10: de Bingo Club Boomer Cave wordt de zwaarste factie-dungeon (meer vijanden dan het OBC, Grumpy Oma sterker dan het fatbike-kindje), op dezelfde manier opgebouwd: groter dan het station, twee delen met een checkpoint, een `LiberatedArea` in `tools/map/gen_elst.py` en Quest 5 in `tools/data/gen_klaas_dialogue.py`. Daarna geeft Klaas de kruisboog (Quest 2 t/m 5 af).
+
+## Fase 12 – Afwerking & build
+
+### Wat is af
+
+- **Eigen geluid en muziek** (`tools/audio/gen_audio.py`, `assets/audio/`): alles gesynthetiseerd met oscillatoren, ruis, envelopes en filters, dus eigen werk. 37 geluidseffecten (zwaardslagen, treffers, blokkeren en pareren, voetstappen, springen en landen, ontwijken, drankje, munten en spullen, kist, deur, generator, kruisboog en pijl, vijanden, vape, voetbal, fatbike-motor, schokgolf, vuuradem, drakengebrul, vleugels, inslagen, BINGO, quest af, doodgaan), een tornadowind-loop en vijf muziekloops: dorp, bezet gebied, dungeon, baasgevecht en het einde. Opnieuw maken: `python3 tools/audio/gen_audio.py` (met ffmpeg).
+- **`AudioManager`:** kiest twee keer per seconde de muziek, met een crossfade: baasgevecht → `boss`; aftiteling, en het feest op het kerkplein na het einde → `ending`; in een dungeon → `dungeon`; in Elst binnen een locatie die nog bezet is → `occupied`; anders `village`. Dicht bij de tornado waait de wind, harder naarmate je dichter bij de ring komt. `play_sfx()` speelt een geluid overal, `play_sfx_at()` op een plek in de wereld (zachter op afstand).
+- **Geluiden in het spel:** bij de speler (zwaard, ontwijken, springen, landen, voetstappen, treffers en blokken, drankje, kruisboog met herlaadklik), vijanden (treffer, dood en hun aanval: `EnemyData.attack_sound`), kisten, deuren, generators, pijlen, en alle bazen (de Vape-koning, het fatbike-kindje, Grumpy Oma en Amber). Muntjes, spullen, pareren, quest af en doodgaan via de `EventBus`.
+- **Laadscherm** (`LoadingScreen.tscn`): bij elke wereldwissel, nieuw spel en het laden van een save verschijnt op het zwart de naam van de plek, een tip (15 tips) en een voortgangsbalk. De wereld laadt nu op de achtergrond, pas nadat het beeld zwart is (eerst haperde het beeld even vóór de overgang). In headless runs (de tests) laadt de wereld direct.
+- **Export presets** (`export_presets.cfg`) voor Windows (`export/windows/Elst.exe`) en Linux (`export/linux/Elst.x86_64`), met de pck ingebakken; `tests/`, `tools/` en `docs/` gaan niet mee. Dev powers zitten alleen in debug-builds.
+- **Tests:** alle 11 testsuites slagen.
+
+### Keuzes en afwijkingen
+
+- **Balans:** geen grote wijzigingen in deze fase; de balans is tijdens Fase 10 en 11 al met de eigenaar bijgesteld. Verdere punten volgen uit het speeltesten.
+- **Bij het afsluiten** meldt Godot dat er nog geluid in gebruik is (de muziek zit nog in de mixer). Dat is een melding van de engine zelf bij het afsluiten, niet tijdens het spelen.
+- **Geluiden voor dialoog** (zoals in Undertale) staan bij de punten voor Prototype 2.
+
+### Open punten
+
+- [ ] **Export templates:** Godot 4.7.2 heeft voor exporteren de export templates nodig (in `~/.local/share/godot/export_templates/4.7.2.stable/`). Die zijn nog niet geïnstalleerd; zonder kan er geen `.exe` of Linux-build gemaakt worden.
+- [ ] De geluiden en muziek moeten nog beluisterd worden door de eigenaar: harder, zachter of anders kan in `gen_audio.py`.
 
 ## Fase 11 – Quest 6: Amber de Draak
 

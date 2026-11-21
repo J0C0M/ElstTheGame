@@ -119,6 +119,23 @@ De vier voorstellen hieronder verschillen in hoe de modellen gemaakt worden en h
 
 **Advies:** M2. Het geeft de grootste stap in kwaliteit en herkenbaarheid zonder de low poly-stijl en de filter te verliezen, en we kunnen alles in code blijven maken.
 
+### Het modellab (P2-1)
+
+`scenes/lab/ModelLab.tscn` toont Klaas, Gyan, een driller en een huis in M1 t/m M4 naast elkaar, in de echte retrofilter (`RetroScreen`) met het licht en de mist van Elst. Starten: `godot --path . res://scenes/lab/ModelLab.tscn`. Toetsen: 1-4 een voorstel, 0 alles, C dichtbij of ver, R de figuren laten draaien, slepen met de linkermuisknop om rond te kijken, scrollen om te zoomen, F1/F2 de filter zoals in het spel. Met `-- --render <map>` slaat het van elke weergave een screenshot op.
+
+Alle modellen ontstaan in code met `MeshKit` (`scripts/models/mesh_kit.gd`: dozen met afgeschuinde randen, getaperde ledematen, een "loft" door punten met een straal per punt, vervormde bollen voor hoofden en spieren, wiggen voor neuzen), met vertexkleuren en één materiaal. `LabFigure` en `LabHouse` bouwen de vier varianten. Het zijn statische figuren: het rig komt in P2-2.
+
+| Voorstel | Klaas | Gyan | Driller | Huis |
+|---|---|---|---|---|
+| M1 verfijnde blokken | 1052 | 924 | 664 | 1528 |
+| M2 gefacetteerd | 1376 | 1208 | 932 | 628 |
+| M3 gestileerd | 1328 | 1232 | 980 | 1996 |
+| M4 PS2-niveau (vloeiend) | 3640 | 3424 | 2684 | 6268 |
+
+(aantal driehoeken; in Prototype 1 zijn het er zo'n 150 tot 300 per personage.) M4 is hier ook in code gemaakt, met 12-zijdige ledematen, vloeiende belichting, stenen per rij in de muur en dakpannen per rij.
+
+Renders staan in `docs/model_lab/`: `lab_alles.jpg`, `lab_M1_figuren.jpg` t/m `lab_M4_figuren.jpg`, `lab_M1_huis.jpg` t/m `lab_M4_huis.jpg` en `lab_gezichten.jpg` (gezichten van voren en schuin, per rij één voorstel).
+
 ## Techniek voor Prototype 2
 
 - **Modellen:** volgens het gekozen voorstel (zie hierboven). De Python-generators (`tools/models/model_builder.py`) worden uitgebreid met echte meshes in plaats van alleen dozen: afgeronde en afgeschuinde vormen, getaperde ledematen, gezichten. De meshes worden als `ArrayMesh` in `.tres` of `.res` weggeschreven, zodat ze nog steeds door code ontstaan en later door Blender-modellen vervangen kunnen worden.

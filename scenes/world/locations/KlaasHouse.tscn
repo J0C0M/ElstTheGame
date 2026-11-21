@@ -1,0 +1,216 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/props/House.tscn" id="1_res"]
+[ext_resource type="Script" path="res://scenes/world/location_area.gd" id="2_res"]
+[ext_resource type="PackedScene" path="res://scenes/world/props/DungeonEntrance.tscn" id="90_door"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/TrainingDummy.tscn" id="91_dummy"]
+[ext_resource type="Resource" path="res://data/enemies/sparring_dummy.tres" id="92_sparring"]
+[ext_resource type="Script" path="res://scripts/quests/quest_spawner.gd" id="93_spawner"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/LowDriller.tscn" id="94_low_driller"]
+[ext_resource type="Script" path="res://scripts/quests/quest_marker.gd" id="95_marker"]
+[ext_resource type="PackedScene" path="res://scenes/world/locations/KlaasHouseDecor.tscn" id="99_decor"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_color = Color(0.42, 0.64, 0.32, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_2"]
+material = SubResource("StandardMaterial3D_1")
+size = Vector3(30, 0.05, 26)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3"]
+albedo_color = Color(0.6, 0.58, 0.55, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
+material = SubResource("StandardMaterial3D_3")
+size = Vector3(2.5, 0.06, 12)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5"]
+albedo_color = Color(0.22, 0.42, 0.22, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_6"]
+material = SubResource("StandardMaterial3D_5")
+size = Vector3(12.5, 1.2, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7"]
+size = Vector3(12.5, 1.2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8"]
+material = SubResource("StandardMaterial3D_5")
+size = Vector3(1, 1.2, 26)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_9"]
+size = Vector3(1, 1.2, 26)
+
+[sub_resource type="BoxMesh" id="BoxMesh_10"]
+material = SubResource("StandardMaterial3D_5")
+size = Vector3(31, 1.2, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_11"]
+size = Vector3(31, 1.2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_12"]
+albedo_color = Color(0.35, 0.24, 0.14, 1)
+specular_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_13"]
+material = SubResource("StandardMaterial3D_12")
+size = Vector3(0.2, 1.8, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_14"]
+size = Vector3(34, 20, 30)
+
+[node name="KlaasHouse" type="Node3D"]
+
+[node name="Lawn" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.025, -3)
+mesh = SubResource("BoxMesh_2")
+
+[node name="House" parent="." instance=ExtResource("1_res")]
+position = Vector3(0, 0, 4)
+size = Vector3(14, 8, 11)
+roof_height = 4.5
+wall_color = Color(0.46, 0.29, 0.66, 1)
+roof_color = Color(0.86, 0.68, 0.26, 1)
+
+[node name="Path" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.04, -7.5)
+mesh = SubResource("BoxMesh_4")
+
+[node name="HedgeFrontLeft" type="StaticBody3D" parent="."]
+position = Vector3(-8.75, 0.6, -16)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HedgeFrontLeft"]
+shape = SubResource("BoxShape3D_7")
+
+[node name="Mesh" type="MeshInstance3D" parent="HedgeFrontLeft"]
+mesh = SubResource("BoxMesh_6")
+
+[node name="HedgeFrontRight" type="StaticBody3D" parent="."]
+position = Vector3(8.75, 0.6, -16)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HedgeFrontRight"]
+shape = SubResource("BoxShape3D_7")
+
+[node name="Mesh" type="MeshInstance3D" parent="HedgeFrontRight"]
+mesh = SubResource("BoxMesh_6")
+
+[node name="HedgeLeft" type="StaticBody3D" parent="."]
+position = Vector3(-15, 0.6, -3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HedgeLeft"]
+shape = SubResource("BoxShape3D_9")
+
+[node name="Mesh" type="MeshInstance3D" parent="HedgeLeft"]
+mesh = SubResource("BoxMesh_8")
+
+[node name="HedgeRight" type="StaticBody3D" parent="."]
+position = Vector3(15, 0.6, -3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HedgeRight"]
+shape = SubResource("BoxShape3D_9")
+
+[node name="Mesh" type="MeshInstance3D" parent="HedgeRight"]
+mesh = SubResource("BoxMesh_8")
+
+[node name="HedgeBack" type="StaticBody3D" parent="."]
+position = Vector3(0, 0.6, 10)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HedgeBack"]
+shape = SubResource("BoxShape3D_11")
+
+[node name="Mesh" type="MeshInstance3D" parent="HedgeBack"]
+mesh = SubResource("BoxMesh_10")
+
+[node name="SignPost" type="MeshInstance3D" parent="."]
+position = Vector3(3.2, 0.9, -16.8)
+mesh = SubResource("BoxMesh_13")
+
+[node name="Sign" type="Label3D" parent="."]
+position = Vector3(3.2, 2.1, -16.9)
+rotation = Vector3(0, 3.142, 0)
+pixel_size = 0.02
+double_sided = false
+modulate = Color(0.86, 0.68, 0.26, 1)
+outline_modulate = Color(0.05, 0.04, 0.05, 1)
+text = "Huis van Klaas"
+font_size = 48
+outline_size = 14
+
+[node name="Start" type="Marker3D" parent="." groups=["spawn_points"]]
+position = Vector3(0, 0, -11)
+
+[node name="LocationArea" type="Area3D" parent="."]
+script = ExtResource("2_res")
+id = &"klaas_house"
+display_name = "Huis van Klaas"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LocationArea"]
+position = Vector3(0, 10, -3)
+shape = SubResource("BoxShape3D_14")
+
+[node name="FrontDoor" parent="." instance=ExtResource("90_door")]
+position = Vector3(0, 0, -1.6)
+target_scene = "res://scenes/world/interiors/KlaasHouse.tscn"
+target_spawn = &"Entrance"
+prompt = "Huis van Klaas binnengaan"
+door_color = Color(0.3, 0.18, 0.4, 1)
+
+[node name="KlaasHouseExit" type="Marker3D" parent="." groups=["spawn_points"]]
+position = Vector3(0, 0, -4.2)
+
+[node name="TrainingDummy" parent="." instance=ExtResource("91_dummy")]
+position = Vector3(-8, 0, -6)
+rotation = Vector3(0, -1.5708, 0)
+
+[node name="SparringDummy" parent="." instance=ExtResource("91_dummy")]
+position = Vector3(8, 0, -6)
+rotation = Vector3(0, 1.5708, 0)
+data = ExtResource("92_sparring")
+attack_enabled = true
+band_color = Color(0.82, 0.18, 0.16, 1)
+
+[node name="PracticeFight" type="Node3D" parent="."]
+script = ExtResource("93_spawner")
+quest_id = &"q1_tutorial"
+step_id = &"fight"
+enemy_scene = ExtResource("94_low_driller")
+
+[node name="SpawnLeft" type="Marker3D" parent="PracticeFight"]
+position = Vector3(-4, 0, -13)
+rotation = Vector3(0, 3.14159, 0)
+
+[node name="SpawnRight" type="Marker3D" parent="PracticeFight"]
+position = Vector3(4, 0, -13)
+rotation = Vector3(0, 3.14159, 0)
+
+[node name="Markers" type="Node3D" parent="."]
+
+[node name="Klaas" type="Marker3D" parent="Markers"]
+position = Vector3(0, 0, -2.5)
+script = ExtResource("95_marker")
+ids = Array[StringName]([&"klaas"])
+
+[node name="Garden" type="Marker3D" parent="Markers"]
+position = Vector3(0, 0, -9)
+script = ExtResource("95_marker")
+ids = Array[StringName]([&"klaas_garden"])
+
+[node name="Dummy" type="Marker3D" parent="Markers"]
+position = Vector3(-8, 0, -6)
+script = ExtResource("95_marker")
+ids = Array[StringName]([&"training_dummy"])
+
+[node name="Sparring" type="Marker3D" parent="Markers"]
+position = Vector3(8, 0, -6)
+script = ExtResource("95_marker")
+ids = Array[StringName]([&"sparring_dummy"])
+
+[node name="Fight" type="Marker3D" parent="Markers"]
+position = Vector3(0, 0, -13)
+script = ExtResource("95_marker")
+ids = Array[StringName]([&"practice_fight"])
+
+[node name="Decor" parent="." instance=ExtResource("99_decor")]

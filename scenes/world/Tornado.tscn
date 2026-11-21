@@ -1,0 +1,63 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/world/tornado_border.gd" id="1_tornado"]
+[ext_resource type="Shader" path="res://shaders/tornado.gdshader" id="2_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_outer"]
+render_priority = -1
+shader = ExtResource("2_shader")
+shader_parameter/dust_color = Color(0.6, 0.5, 0.4, 1)
+shader_parameter/dark_color = Color(0.15, 0.13, 0.12, 1)
+shader_parameter/bands = 32.0
+shader_parameter/rows = 6.0
+shader_parameter/spin_speed = 0.006
+shader_parameter/rise_speed = 0.06
+shader_parameter/opacity = 0.9
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_inner"]
+shader = ExtResource("2_shader")
+shader_parameter/dust_color = Color(0.72, 0.63, 0.52, 1)
+shader_parameter/dark_color = Color(0.3, 0.26, 0.23, 1)
+shader_parameter/bands = 48.0
+shader_parameter/rows = 8.0
+shader_parameter/spin_speed = 0.012
+shader_parameter/rise_speed = 0.12
+shader_parameter/opacity = 0.55
+
+[sub_resource type="CylinderMesh" id="Mesh_outer"]
+material = SubResource("ShaderMaterial_outer")
+top_radius = 262.0
+bottom_radius = 247.0
+height = 190.0
+radial_segments = 48
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="CylinderMesh" id="Mesh_inner"]
+material = SubResource("ShaderMaterial_inner")
+top_radius = 252.0
+bottom_radius = 242.0
+height = 140.0
+radial_segments = 48
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[node name="Tornado" type="Node3D"]
+script = ExtResource("1_tornado")
+
+[node name="OuterWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 93, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_outer")
+
+[node name="InnerWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 68, 0)
+cast_shadow = 0
+mesh = SubResource("Mesh_inner")
+
+[node name="Debris" type="MultiMeshInstance3D" parent="."]
+cast_shadow = 0
+
+[node name="Wall" type="StaticBody3D" parent="."]

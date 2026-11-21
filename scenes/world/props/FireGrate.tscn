@@ -1,0 +1,72 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/world/props/fire_grate.gd" id="1_grate"]
+[ext_resource type="Script" path="res://scripts/components/hitbox.gd" id="2_hitbox"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_grate"]
+albedo_color = Color(0.15, 0.13, 0.12, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_glow"]
+shading_mode = 0
+albedo_color = Color(1, 0.4, 0.05, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_flame"]
+shading_mode = 0
+albedo_color = Color(1, 0.7, 0.15, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_grate"]
+material = SubResource("Mat_grate")
+size = Vector3(12, 0.06, 1.4)
+
+[sub_resource type="BoxMesh" id="Mesh_glow"]
+material = SubResource("Mat_glow")
+size = Vector3(11.6, 0.07, 0.6)
+
+[sub_resource type="BoxMesh" id="Mesh_flame"]
+material = SubResource("Mat_flame")
+size = Vector3(0.7, 1.8, 0.7)
+
+[sub_resource type="BoxShape3D" id="Shape_fire"]
+size = Vector3(12, 2, 1.4)
+
+[node name="FireGrate" type="Node3D"]
+script = ExtResource("1_grate")
+
+[node name="Grate" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.03, 0)
+mesh = SubResource("Mesh_grate")
+
+[node name="Glow" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.04, 0)
+mesh = SubResource("Mesh_glow")
+
+[node name="Flames" type="Node3D" parent="."]
+
+[node name="Flame1" type="MeshInstance3D" parent="Flames"]
+position = Vector3(-4.5, 0.9, 0)
+rotation = Vector3(0, 0.7, 0)
+mesh = SubResource("Mesh_flame")
+
+[node name="Flame2" type="MeshInstance3D" parent="Flames"]
+position = Vector3(-1.5, 0.9, 0)
+rotation = Vector3(0, 0.2, 0)
+mesh = SubResource("Mesh_flame")
+
+[node name="Flame3" type="MeshInstance3D" parent="Flames"]
+position = Vector3(1.5, 0.9, 0)
+rotation = Vector3(0, 0.9, 0)
+mesh = SubResource("Mesh_flame")
+
+[node name="Flame4" type="MeshInstance3D" parent="Flames"]
+position = Vector3(4.5, 0.9, 0)
+rotation = Vector3(0, 0.4, 0)
+mesh = SubResource("Mesh_flame")
+
+[node name="Hitbox" type="Area3D" parent="."]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("2_hitbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+position = Vector3(0, 1, 0)
+shape = SubResource("Shape_fire")

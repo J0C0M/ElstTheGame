@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/Enemy.tscn" id="1_enemy"]
+[ext_resource type="Resource" path="res://data/enemies/bingo_opa.tres" id="2_data"]
+[ext_resource type="Script" path="res://scenes/enemies/bingo_caller.gd" id="3_caller"]
+
+[node name="BingoOpa" instance=ExtResource("1_enemy")]
+data = ExtResource("2_data")
+
+[node name="BingoCaller" type="Node3D" parent="."]
+script = ExtResource("3_caller")
+
+[node name="Label" type="Label3D" parent="BingoCaller"]
+position = Vector3(0, 2.4, 0)
+pixel_size = 0.008
+billboard = 1
+modulate = Color(0.55, 0.8, 1, 1)
+outline_modulate = Color(0, 0, 0, 1)
+text = "B-12!"
+font_size = 44
+outline_size = 10

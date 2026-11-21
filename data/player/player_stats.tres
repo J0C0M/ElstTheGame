@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="PlayerStats" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/player_stats.gd" id="1_stats"]
+
+[resource]
+script = ExtResource("1_stats")
+max_health = 100
+max_stamina = 100.0
+stamina_regen_per_second = 30.0
+stamina_regen_delay = 1.0
+walk_speed = 4.5
+sprint_speed = 7.5
+sprint_stamina_per_second = 15.0
+acceleration = 30.0
+air_acceleration = 8.0
+turn_speed = 12.0
+jump_velocity = 6.0
+gravity_multiplier = 1.5
+dodge_stamina_cost = 20.0
+dodge_duration = 0.5
+dodge_distance = 4.5
+dodge_invulnerability = 0.3
+double_tap_window = 0.25
+light_attack_duration = 0.45
+light_attack_active_start = 0.12
+light_attack_active_end = 0.24
+combo_input_open = 0.1
+combo_chain_time = 0.3
+combo_damage_multiplier = 1.25
+heavy_hold_time = 0.25
+heavy_attack_duration = 0.85
+heavy_attack_active_start = 0.42
+heavy_attack_active_end = 0.56
+heavy_damage_multiplier = 1.8
+heavy_attack_stamina_cost = 25.0
+attack_lunge_speed = 2.5
+block_damage_reduction = 0.7
+block_stamina_cost = 15.0
+block_move_speed = 2.0
+block_angle_degrees = 75.0
+parry_window = 0.2
+hurt_duration = 0.35
+guard_break_duration = 0.8
+potion_drink_time = 0.8
+potion_move_speed = 1.5

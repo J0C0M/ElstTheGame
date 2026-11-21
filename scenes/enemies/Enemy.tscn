@@ -1,0 +1,104 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/enemies/enemy.gd" id="1_enemy"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="2_health"]
+[ext_resource type="Script" path="res://scripts/components/hurtbox.gd" id="3_hurtbox"]
+[ext_resource type="Script" path="res://scripts/components/hitbox.gd" id="4_hitbox"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HealthBar3D.tscn" id="5_bar"]
+[ext_resource type="Script" path="res://scripts/components/loot_dropper.gd" id="6_loot"]
+[ext_resource type="Script" path="res://scripts/components/state_machine.gd" id="7_machine"]
+[ext_resource type="Script" path="res://scenes/enemies/states/enemy_idle_state.gd" id="8_idle"]
+[ext_resource type="Script" path="res://scenes/enemies/states/enemy_patrol_state.gd" id="9_patrol"]
+[ext_resource type="Script" path="res://scenes/enemies/states/enemy_chase_state.gd" id="10_chase"]
+[ext_resource type="Script" path="res://scenes/enemies/states/enemy_attack_state.gd" id="11_attack"]
+[ext_resource type="Script" path="res://scenes/enemies/states/enemy_retreat_state.gd" id="12_retreat"]
+[ext_resource type="Script" path="res://scenes/enemies/states/enemy_stagger_state.gd" id="13_stagger"]
+[ext_resource type="Script" path="res://scenes/enemies/states/enemy_dead_state.gd" id="14_dead"]
+[ext_resource type="Script" path="res://scenes/enemies/states/enemy_leap_state.gd" id="15_leap"]
+
+[sub_resource type="CapsuleShape3D" id="Shape_body"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="Shape_hurtbox"]
+radius = 0.45
+height = 1.9
+
+[sub_resource type="BoxShape3D" id="Shape_attack"]
+size = Vector3(1.2, 1.4, 1.6)
+
+[node name="Enemy" type="CharacterBody3D" groups=["enemies"]]
+collision_layer = 4
+collision_mask = 71
+script = ExtResource("1_enemy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("Shape_body")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2_health")
+
+[node name="Hurtbox" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("3_hurtbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+position = Vector3(0, 0.95, 0)
+shape = SubResource("Shape_hurtbox")
+
+[node name="AttackHitbox" type="Area3D" parent="."]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("4_hitbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AttackHitbox"]
+position = Vector3(0, 1, -1)
+shape = SubResource("Shape_attack")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.7
+target_desired_distance = 1.0
+path_max_distance = 3.0
+avoidance_enabled = true
+height = 1.8
+radius = 0.45
+neighbor_distance = 8.0
+max_neighbors = 6
+max_speed = 5.0
+
+[node name="HealthBar" parent="." instance=ExtResource("5_bar")]
+position = Vector3(0, 2.25, 0)
+
+[node name="LootDropper" type="Node3D" parent="."]
+position = Vector3(0, 0.05, 0)
+script = ExtResource("6_loot")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("7_machine")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("8_idle")
+
+[node name="Patrol" type="Node" parent="StateMachine"]
+script = ExtResource("9_patrol")
+
+[node name="Chase" type="Node" parent="StateMachine"]
+script = ExtResource("10_chase")
+
+[node name="Attack" type="Node" parent="StateMachine"]
+script = ExtResource("11_attack")
+
+[node name="Retreat" type="Node" parent="StateMachine"]
+script = ExtResource("12_retreat")
+
+[node name="Stagger" type="Node" parent="StateMachine"]
+script = ExtResource("13_stagger")
+
+[node name="Dead" type="Node" parent="StateMachine"]
+script = ExtResource("14_dead")
+
+[node name="Leap" type="Node" parent="StateMachine"]
+script = ExtResource("15_leap")

@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/models/RolstoelOmaModel.tscn" id="2_model"]
+[ext_resource type="Resource" path="res://data/loot/enemy_common.tres" id="3_loot"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/projectiles/BingoCard.tscn" id="4_card"]
+
+[resource]
+script = ExtResource("1_enemy")
+id = &"rolstoel_oma"
+display_name = "Rolstoel-oma"
+faction = &"bingo"
+model_scene = ExtResource("2_model")
+loot = ExtResource("3_loot")
+max_health = 50
+damage = 7
+attack_range = 14.0
+attack_windup = 0.7
+strike_time = 0.1
+attack_cooldown = 2.4
+parry_stagger_duration = 1.2
+attack_action = &"punch"
+attack_sound = &"kick"
+walk_speed = 1.0
+run_speed = 1.6
+sight_range = 18.0
+sight_angle_degrees = 140.0
+hearing_range = 6.0
+alert_radius = 12.0
+leash_range = 25.0
+patrol_radius = 3.0
+flanks = false
+projectile_scene = ExtResource("4_card")
+keep_distance = 6.0
+accuracy = 0.7
+miss_angle = 12.0
+burst_count = 3
+burst_spread = 24.0
+recoil = 3.0
+alert_chain = true

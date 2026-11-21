@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/npcs/villager.gd" id="1_villager"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/VillagerModel.tscn" id="2_model"]
+
+[sub_resource type="CapsuleShape3D" id="Shape_body"]
+radius = 0.3
+height = 1.7
+
+[node name="Villager" type="CharacterBody3D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_villager")
+lines = PackedStringArray("Dank je wel!", "Elst is weer van ons!", "Zonder Amber is het hier een stuk gezelliger.", "Ik dacht dat ik die drillers nooit meer kwijt zou raken.")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.85, 0)
+shape = SubResource("Shape_body")
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+
+[node name="Speech" type="Label3D" parent="."]
+position = Vector3(0, 2.3, 0)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.95, 0.8, 1)
+outline_modulate = Color(0.1, 0.07, 0.04, 1)
+text = "Hallo!"
+font_size = 48
+outline_size = 10

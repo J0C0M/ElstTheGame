@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/bosses/fire_patch.gd" id="1_patch"]
+[ext_resource type="Script" path="res://scripts/components/hitbox.gd" id="2_hitbox"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_scorch"]
+albedo_color = Color(0.12, 0.08, 0.06, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_flame"]
+shading_mode = 0
+albedo_color = Color(1, 0.55, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_scorch"]
+material = SubResource("Mat_scorch")
+size = Vector3(1.8, 0.03, 1.8)
+
+[sub_resource type="PrismMesh" id="Mesh_flame"]
+material = SubResource("Mat_flame")
+size = Vector3(0.5, 0.8, 0.5)
+
+[sub_resource type="BoxShape3D" id="Shape_hit"]
+size = Vector3(1.8, 1.2, 1.8)
+
+[node name="FirePatch" type="Node3D"]
+script = ExtResource("1_patch")
+
+[node name="Scorch" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.02, 0)
+mesh = SubResource("Mesh_scorch")
+
+[node name="Flames" type="Node3D" parent="."]
+
+[node name="Flame1" type="MeshInstance3D" parent="Flames"]
+position = Vector3(-0.4, 0.4, 0.3)
+mesh = SubResource("Mesh_flame")
+
+[node name="Flame2" type="MeshInstance3D" parent="Flames"]
+position = Vector3(0.35, 0.4, -0.25)
+mesh = SubResource("Mesh_flame")
+
+[node name="Flame3" type="MeshInstance3D" parent="Flames"]
+position = Vector3(0, 0.4, 0.45)
+mesh = SubResource("Mesh_flame")
+
+[node name="Light" type="OmniLight3D" parent="."]
+position = Vector3(0, 0.8, 0)
+light_color = Color(1, 0.55, 0.2, 1)
+light_energy = 1.5
+omni_range = 4.0
+
+[node name="Hitbox" type="Area3D" parent="."]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("2_hitbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+position = Vector3(0, 0.6, 0)
+shape = SubResource("Shape_hit")

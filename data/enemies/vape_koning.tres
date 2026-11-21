@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_enemy"]
+[ext_resource type="Resource" path="res://data/loot/boss.tres" id="2_loot"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/projectiles/VapePuff.tscn" id="3_puff"]
+
+[resource]
+script = ExtResource("1_enemy")
+id = &"vape_koning"
+display_name = "De Vape-koning"
+faction = &"westeraam"
+loot = ExtResource("2_loot")
+max_health = 400
+damage = 15
+projectile_scene = ExtResource("3_puff")

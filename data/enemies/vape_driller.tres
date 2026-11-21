@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/models/VapeDrillerModel.tscn" id="2_model"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/projectiles/VapePuff.tscn" id="4_puff"]
+[ext_resource type="Resource" path="res://data/loot/enemy_common.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_enemy")
+id = &"vape_driller"
+display_name = "Vape-driller"
+faction = &"westeraam"
+model_scene = ExtResource("2_model")
+loot = ExtResource("3_loot")
+max_health = 30
+weakened_by_flag = &"station_cleared"
+weakened_health_factor = 0.8
+damage = 10
+attack_range = 11.0
+attack_windup = 0.8
+strike_time = 0.18
+attack_cooldown = 2.6
+parry_stagger_duration = 1.2
+attack_action = &"drink"
+attack_sound = &"vape_puff"
+walk_speed = 1.8
+run_speed = 3.6
+sight_range = 18.0
+sight_angle_degrees = 120.0
+hearing_range = 6.0
+alert_radius = 7.0
+leash_range = 30.0
+patrol_radius = 10.0
+flanks = false
+projectile_scene = ExtResource("4_puff")
+keep_distance = 6.0

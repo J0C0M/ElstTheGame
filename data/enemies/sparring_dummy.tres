@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_enemy"]
+
+[resource]
+script = ExtResource("1_enemy")
+id = &"sparring_dummy"
+display_name = "Sparringpop"
+max_health = 150
+damage = 10
+attack_range = 2.8
+attack_windup = 0.7
+attack_cooldown = 2.0
+parry_stagger_duration = 1.6

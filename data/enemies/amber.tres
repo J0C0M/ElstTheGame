@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/models/CultistModel.tscn" id="2_model"]
+[ext_resource type="Resource" path="res://data/loot/boss.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_enemy")
+id = &"amber"
+display_name = "Amber de Draak"
+faction = &"amber"
+model_scene = ExtResource("2_model")
+loot = ExtResource("3_loot")
+max_health = 1050
+damage = 20

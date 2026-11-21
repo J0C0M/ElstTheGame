@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="QuestData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_quest"]
+[ext_resource type="Script" path="res://scripts/data/quest_step.gd" id="2_step"]
+
+[sub_resource type="Resource" id="Step_boss"]
+script = ExtResource("2_step")
+id = &"boss"
+description = "Ga naar Westeraam Getho en versla de Vape-koning. De ingang zit in de flats aan de overkant van het spoor."
+flag = &"boss_vape_koning"
+target = &"vape_koning"
+
+[sub_resource type="Resource" id="Step_report"]
+script = ExtResource("2_step")
+id = &"report"
+description = "Ga terug naar Klaas."
+flag = &"q3_reported"
+target = &"klaas"
+
+[resource]
+script = ExtResource("1_quest")
+id = &"q3_westeraam"
+number = 3
+title = "Westeraam Getho"
+description = "De drillers hebben Westeraam bezet. Hun baas, de Vape-koning, verstopt zich in zijn vapewolken. Vecht je door de flats en versla hem."
+steps = Array[ExtResource("2_step")]([SubResource("Step_boss"), SubResource("Step_report")])
+completion_flag = &"boss_vape_koning"
+reward_gold = 150

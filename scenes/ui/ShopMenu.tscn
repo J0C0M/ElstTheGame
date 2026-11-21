@@ -1,0 +1,114 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/shop_menu.gd" id="1_menu"]
+
+[node name="ShopMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(1000, 600)
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Center/Panel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.75, 0.35, 1)
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+text = "Winkel van Klaas"
+
+[node name="Info" type="HBoxContainer" parent="Center/Panel/Content"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 40
+
+[node name="GoldLabel" type="Label" parent="Center/Panel/Content/Info"]
+layout_mode = 2
+unique_name_in_owner = true
+theme_override_colors/font_color = Color(1, 0.84, 0.32, 1)
+text = "0 goud"
+
+[node name="InwijdingLabel" type="Label" parent="Center/Panel/Content/Info"]
+layout_mode = 2
+unique_name_in_owner = true
+text = "Inwijding 0/6"
+
+[node name="Columns" type="HBoxContainer" parent="Center/Panel/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="Buy" type="VBoxContainer" parent="Center/Panel/Content/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Center/Panel/Content/Columns/Buy"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.55, 1)
+theme_override_font_sizes/font_size = 22
+text = "Kopen"
+
+[node name="Scroll" type="ScrollContainer" parent="Center/Panel/Content/Columns/Buy"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="BuyList" type="VBoxContainer" parent="Center/Panel/Content/Columns/Buy/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Sell" type="VBoxContainer" parent="Center/Panel/Content/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="Center/Panel/Content/Columns/Sell"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.55, 1)
+theme_override_font_sizes/font_size = 22
+text = "Verkopen"
+
+[node name="Scroll" type="ScrollContainer" parent="Center/Panel/Content/Columns/Sell"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SellList" type="VBoxContainer" parent="Center/Panel/Content/Columns/Sell/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="BackButton" type="Button" parent="Center/Panel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Terug"

@@ -1,0 +1,62 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/world/props/tren_spuit.gd" id="1_spuit"]
+[ext_resource type="Script" path="res://scripts/components/interactable.gd" id="2_interactable"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_gold"]
+albedo_color = Color(1, 0.8, 0.25, 1)
+metallic = 0.8
+roughness = 0.25
+emission_enabled = true
+emission = Color(1, 0.7, 0.2, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="StandardMaterial3D" id="Mat_needle"]
+albedo_color = Color(0.85, 0.85, 0.9, 1)
+metallic = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_barrel"]
+material = SubResource("Mat_gold")
+size = Vector3(0.16, 0.16, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_plunger"]
+material = SubResource("Mat_gold")
+size = Vector3(0.3, 0.3, 0.06)
+
+[sub_resource type="BoxMesh" id="Mesh_needle"]
+material = SubResource("Mat_needle")
+size = Vector3(0.03, 0.03, 0.35)
+
+[sub_resource type="SphereShape3D" id="Shape_interact"]
+radius = 1.4
+
+[node name="TrenSpuit" type="Node3D"]
+script = ExtResource("1_spuit")
+
+[node name="Visual" type="Node3D" parent="."]
+position = Vector3(0, 0.5, 0)
+
+[node name="Barrel" type="MeshInstance3D" parent="Visual"]
+mesh = SubResource("Mesh_barrel")
+
+[node name="Plunger" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 0, 0.4)
+mesh = SubResource("Mesh_plunger")
+
+[node name="Needle" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 0, -0.52)
+mesh = SubResource("Mesh_needle")
+
+[node name="Light" type="OmniLight3D" parent="."]
+position = Vector3(0, 0.8, 0)
+light_color = Color(1, 0.8, 0.3, 1)
+light_energy = 1.5
+omni_range = 4.0
+
+[node name="Interactable" type="Area3D" parent="."]
+script = ExtResource("2_interactable")
+prompt = "Gouden Tren-spuit oppakken"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable"]
+position = Vector3(0, 0.6, 0)
+shape = SubResource("Shape_interact")

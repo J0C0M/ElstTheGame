@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"small_potion"
+display_name = "Kleine healing potion"
+type = 3
+heal_amount = 40
+price = 20
+required_inwijding = 1
+model_color = Color(0.86, 0.14, 0.2, 1)

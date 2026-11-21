@@ -374,11 +374,13 @@ func _stalk(player: Player, delta: float, speed_factor: float) -> void:
 	var target_angle: float = rad_to_deg(_forward().angle_to(to_target))
 	if target == player and player_angle > 100.0 and to_player.length() < tail_range and _cooldowns[&"tail"] <= 0.0:
 		mode = Mode.TAIL_WINDUP
+		AudioManager.play_sfx_at(&"sword_heavy", global_position, self, 3.0, 0.1)
 		_timer = tail_windup
 		model.pose = AmberModel.Pose.TAIL
 		_cooldowns[&"tail"] = tail_cooldown
 	elif distance < 7.5 and target_angle < 50.0 and _cooldowns[&"wings"] <= 0.0 and _room_for_wings():
 		mode = Mode.WINGS
+		AudioManager.play_sfx_at(&"wing_flap", global_position, self, 3.0, 0.2)
 		_timer = wing_time
 		model.pose = AmberModel.Pose.WINGS
 		_cooldowns[&"wings"] = wing_cooldown
@@ -442,6 +444,7 @@ func _inhale(player: Player, delta: float, speed_factor: float) -> void:
 	if _timer <= 0.0:
 		mode = Mode.BREATH
 		breaths += 1
+		AudioManager.play_sfx_at(&"fire_breath", global_position, self, 2.0)
 		_timer = breath_time
 		_tick = 0.0
 		_breath_yaw = rotation.y
@@ -545,6 +548,7 @@ func _wings_spread() -> bool:
 
 func _take_off() -> void:
 	mode = Mode.TAKEOFF
+	AudioManager.play_sfx_at(&"wing_flap", global_position, self, 4.0)
 	_timer = TAKEOFF_TIME
 	_flight_from = global_position
 	_flight_damage = 0
@@ -629,6 +633,7 @@ func _stamp(player: Player, delta: float) -> void:
 		model.pose = AmberModel.Pose.PANT
 	_waves_left -= 1
 	_timer = 0.55 if _waves_left > 0 else 0.9
+	AudioManager.play_sfx_at(&"shockwave", global_position, self, 4.0)
 	if fire_wave_scene != null:
 		var wave: Node3D = fire_wave_scene.instantiate() as Node3D
 		get_parent().add_child(wave)
@@ -641,6 +646,7 @@ func _stamp(player: Player, delta: float) -> void:
 
 func _roar() -> void:
 	mode = Mode.ROAR
+	AudioManager.play_sfx_at(&"dragon_roar", global_position, self, 4.0)
 	_timer = roar_time
 	_hit_times.clear()
 	_cooldowns[&"lap"] = lap_cooldown
@@ -825,6 +831,7 @@ func _spawn_fire(at: Vector3) -> void:
 func _start_fight(player: Player) -> void:
 	GameState.block_saving(SAVE_BLOCK)
 	EventBus.boss_started.emit("%s – 1/2" % data.display_name, health.max_health)
+	AudioManager.play_sfx_at(&"dragon_roar", global_position, self, 4.0)
 	EventBus.subtitle_requested.emit("Amber", "Kijk eens wie daar is. Het niemandje en zijn bodybuilder.", 3.0)
 	if _gate != null:
 		_gate.set_open(false)

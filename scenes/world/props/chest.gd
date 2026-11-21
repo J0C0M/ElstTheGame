@@ -47,6 +47,7 @@ func _open(animate: bool) -> void:
 	_interactable.enabled = false
 	var open_angle: float = deg_to_rad(110.0)
 	if animate:
+		AudioManager.play_sfx_at(&"chest", global_position, self)
 		create_tween().tween_property(_lid, "rotation:x", open_angle, 0.5).set_trans(Tween.TRANS_BACK)
 	else:
 		_lid.rotation.x = open_angle

@@ -195,6 +195,7 @@ func _shoot(player: Player) -> void:
 	var origin: Vector3 = ($Model/Body/Neck/Head/Mouth as Node3D).global_position
 	fireball.call(&"launch", origin, player.global_position + Vector3.UP * 1.1 - origin, data.damage, self)
 	_jaw_open = 1.0
+	AudioManager.play_sfx_at(&"vape_puff", global_position, self, -4.0, 0.2)
 
 
 func _on_hit_received(hit: HitData) -> void:

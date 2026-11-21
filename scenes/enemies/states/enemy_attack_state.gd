@@ -27,6 +27,7 @@ func physics_update(delta: float) -> void:
 		enemy.face_player(delta, 6.0)
 		if _time >= data.attack_windup:
 			_swung = true
+			AudioManager.play_sfx_at(data.attack_sound, enemy.global_position, enemy, -4.0)
 			if data.is_ranged():
 				for shot: int in data.burst_count:
 					var offset: float = 0.0 if data.burst_count < 2 else lerpf(-0.5, 0.5, float(shot) / (data.burst_count - 1))

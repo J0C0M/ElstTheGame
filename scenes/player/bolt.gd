@@ -86,6 +86,7 @@ func _physics_process(delta: float) -> void:
 func _stick(point: Vector3, holder: Node3D) -> void:
 	_stuck_at = _time
 	_streak.visible = false
+	AudioManager.play_sfx_at(&"bolt_impact", point, self, -3.0)
 	global_position = point + _direction * SINK
 	reset_physics_interpolation()
 	if holder != null and is_instance_valid(holder):

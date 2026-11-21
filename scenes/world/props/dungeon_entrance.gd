@@ -36,4 +36,5 @@ func _on_interacted(_player: Player) -> void:
 	if is_locked():
 		EventBus.message_requested.emit(locked_message)
 	else:
+		AudioManager.play_sfx(&"door", -3.0)
 		EventBus.world_change_requested.emit(target_scene, target_spawn)

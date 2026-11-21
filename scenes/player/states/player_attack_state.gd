@@ -75,6 +75,7 @@ func _start_swing(swing: Swing) -> void:
 	player.sword_hitbox.deactivate()
 	player.face_camera_direction()
 	player.model.play_action(SWING_ACTIONS[swing], _duration())
+	AudioManager.play_sfx(&"sword_heavy" if String(SWING_ACTIONS[swing]).contains("heavy") else &"sword_swing", -2.0)
 
 
 func _duration() -> float:

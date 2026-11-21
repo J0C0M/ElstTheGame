@@ -48,6 +48,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _strike() -> void:
+	AudioManager.play_sfx_at(&"meteor", _to, self)
 	_flying = false
 	var player: Player = get_tree().get_first_node_in_group(&"player") as Player
 	if player != null and player.global_position.distance_to(_to) <= radius:

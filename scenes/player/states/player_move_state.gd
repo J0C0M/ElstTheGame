@@ -3,6 +3,9 @@ extends PlayerState
 
 ## After stamina runs out, sprint stays off until Shift is released.
 var _sprint_locked: bool = false
+var _step_distance: float = 0.0
+var _was_on_floor: bool = true
+var _fall_speed: float = 0.0
 
 
 func enter(_data: Dictionary) -> void:
@@ -17,6 +20,7 @@ func exit() -> void:
 func handle_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"jump") and player.is_on_floor():
 		player.velocity.y = player.stats.jump_velocity
+		AudioManager.play_sfx(&"jump", -8.0)
 		EventBus.player_action.emit(&"jump")
 	elif event.is_action_pressed(&"interact"):
 		player.interact()
@@ -43,6 +47,7 @@ func handle_input(event: InputEvent) -> void:
 
 
 func physics_update(delta: float) -> void:
+	_play_steps(delta)
 	player.set_aiming(player.weapon == &"crossbow" and Input.is_action_pressed(&"block_aim"))
 	if player.aiming:
 		player.face_camera_direction()
@@ -70,3 +75,20 @@ func physics_update(delta: float) -> void:
 	var acceleration: float = stats.acceleration if player.is_on_floor() else stats.air_acceleration
 	player.move_horizontally(direction, speed, acceleration, delta)
 	player.turn_towards(direction, delta)
+
+
+## Footsteps on the ground, closer together when sprinting, and a thud on
+## landing after a fall.
+func _play_steps(delta: float) -> void:
+	var on_floor: bool = player.is_on_floor()
+	if on_floor and not _was_on_floor and _fall_speed > 4.0:
+		AudioManager.play_sfx(&"land", -6.0)
+	_fall_speed = maxf(-player.velocity.y, 0.0) if not on_floor else 0.0
+	_was_on_floor = on_floor
+	var speed: float = Vector2(player.velocity.x, player.velocity.z).length()
+	if not on_floor or speed < 0.5:
+		return
+	_step_distance += speed * delta
+	if _step_distance >= (2.4 if player.is_sprinting else 1.8):
+		_step_distance = 0.0
+		AudioManager.play_sfx(&"step", -14.0, 0.15)

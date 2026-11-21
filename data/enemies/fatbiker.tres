@@ -22,6 +22,7 @@ strike_time = 0.5
 attack_cooldown = 2.2
 parry_stagger_duration = 1.2
 attack_action = &"punch"
+attack_sound = &"engine_rev"
 walk_speed = 2.5
 run_speed = 6.5
 sight_range = 16.0

@@ -35,7 +35,7 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 - Straten zijn op deze schaal maar 2 tot 3 m breed; daardoor zijn de huizen laag gehouden (zie *Kaart verwerken*).
 - Fatbikers en het fatbike-kindje zitten op hun fiets met lopende benen; een echte rijhouding en draaiende wielen ontbreken nog.
 - Scènes (Klaas die sneuvelt, de tornado die verdwijnt, de eindscène) worden in Prototype 1 eenvoudig maar compleet, en na de grafische overhaul opnieuw gemaakt (eigenaar, 20-11-2026). De eindscène met het figuur in de mantel en "plan B" moet in Prototype 2 sowieso opnieuw, omdat er personages bijkomen of veranderen.
-- Dialoog met geluidjes op het ritme van de tekst, zoals in *Undertale* (eigenaar, 20-11-2026).
+- Dialoog met geluidjes op het ritme van de tekst, zoals in *Undertale* (eigenaar, 20-11-2026): in Prototype 1 al gedaan met één blip per spreker; in Prototype 2 eventueel eigen stemmen per personage.
 - Controller-ondersteuning komt in een later prototype; sidequests bespreken we bij het ontwerp van Prototype 2.
 - De oma's en opa's zijn aangepaste kopieën van het driller-model (met tasje, wandelstok of rolstoel). Een eigen model maakt ze beter herkenbaar. De benen van de rolstoel-oma zijn stijve balken en de wielen draaien niet.
 
@@ -429,13 +429,14 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 - **Geluiden in het spel:** bij de speler (zwaard, ontwijken, springen, landen, voetstappen, treffers en blokken, drankje, kruisboog met herlaadklik), vijanden (treffer, dood en hun aanval: `EnemyData.attack_sound`), kisten, deuren, generators, pijlen, en alle bazen (de Vape-koning, het fatbike-kindje, Grumpy Oma en Amber). Muntjes, spullen, pareren, quest af en doodgaan via de `EventBus`.
 - **Laadscherm** (`LoadingScreen.tscn`): bij elke wereldwissel, nieuw spel en het laden van een save verschijnt op het zwart de naam van de plek, een tip (15 tips) en een voortgangsbalk. De wereld laadt nu op de achtergrond, pas nadat het beeld zwart is (eerst haperde het beeld even vóór de overgang). In headless runs (de tests) laadt de wereld direct.
 - **Export presets** (`export_presets.cfg`) voor Windows (`export/windows/Elst.exe`) en Linux (`export/linux/Elst.x86_64`), met de pck ingebakken; `tests/`, `tools/` en `docs/` gaan niet mee. Dev powers zitten alleen in debug-builds.
+- **Na de eerste luisterbeurt van de eigenaar:** voetstappen zijn zachter, lager en dumper (een zachte plof in plaats van geruis) en klinken minder vaak; de deur is nu een klink, een zacht piepend scharnier, een zuchtje lucht en een gedempte dreun bij het dichtvallen; E spammen bij een deur speelt het geluid nog maar één keer (de deur wacht tot de overgang loopt).
+- **Stemgeluidjes in gesprekken:** terwijl de tekst verschijnt, "praat" de spreker met een korte blip per paar letters, op de toonhoogte van zijn stem (`DialogueData.voice_pitch`; Klaas klinkt lekker diep), zoals in Undertale. Leestekens en spaties blijven stil.
 - **Tests:** alle 11 testsuites slagen.
 
 ### Keuzes en afwijkingen
 
 - **Balans:** geen grote wijzigingen in deze fase; de balans is tijdens Fase 10 en 11 al met de eigenaar bijgesteld. Verdere punten volgen uit het speeltesten.
 - **Bij het afsluiten** meldt Godot dat er nog geluid in gebruik is (de muziek zit nog in de mixer). Dat is een melding van de engine zelf bij het afsluiten, niet tijdens het spelen.
-- **Geluiden voor dialoog** (zoals in Undertale) staan bij de punten voor Prototype 2.
 
 ### Open punten
 

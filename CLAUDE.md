@@ -8,11 +8,12 @@ Dit bestand geeft elke Claude Code-sessie de afspraken voor dit project. Lees he
 
 - **Engine:** Godot 4.7 (laatste stabiele 4.x), GDScript met statische types.
 - **Stijl:** low poly, platte kleuren, lichte retrofilter (PS1/N64-sfeer).
-- **Prototypes:** Fase 0 t/m 12 vormen samen Prototype 1, de oorspronkelijke visie. Daarna volgt Prototype 2, onder andere met betere graphics en details; wat erin komt, bepaalt de eigenaar pas als Prototype 1 af is. Steek in Prototype 1 geen tijd in mooiere modellen of wegen, tenzij gameplay of leesbaarheid erom vraagt. Noteer visuele punten in `docs/PROGRESS.md` onder *Verzamelde punten voor Prototype 2*.
+- **Prototypes:** Fase 0 t/m 12 vormen samen Prototype 1, de oorspronkelijke visie (af). Nu loopt **Prototype 2** (fases P2-0 t/m P2-11, zie de tabel hieronder en `docs/PROTOTYPE_2.md`): eerst graphics en modellen in veel meer detail (nog steeds low poly), daarna de nieuwe hoofdpersoon Gyan, de Elstenaars Jules en Sven, en bijcontent zoals Klaas' oude motor.
 - **Bronnen van waarheid:**
-  - `docs/GDD.md`: verhaal, quests, vijanden, bazen, economie, opslaan, stijl, techniek en de 13 ontwikkelfases.
+  - `docs/PROTOTYPE_2.md`: het ontwerp van Prototype 2: personages (Gyan, Jules, Sven, Klaas), het nieuwe verloop, bijcontent, de vier stijlvoorstellen, techniek, de fases en de open beslissingen. Waar het afwijkt van het GDD, geldt dit document.
+  - `docs/GDD.md`: het ontwerp van Prototype 1: verhaal, quests, vijanden, bazen, economie, opslaan, stijl, techniek en de 13 ontwikkelfases.
   - `docs/PROGRESS.md`: wat af is, gemaakte keuzes, afwijkingen van het GDD en open punten. Lees dit aan het begin van elke sessie.
-  - `docs/reference/`: `kaart_elst.png` (de kaart die de eigenaar aanleverde, met een kleur per locatie) en `Klaas_sigma.png` (hoe Klaas eruitziet). Beide staan alleen lokaal en niet in de repo; commit ze alleen als de eigenaar daarom vraagt.
+  - `docs/reference/`: `kaart_elst.png` (de kaart die de eigenaar aanleverde, met een kleur per locatie) en foto's van hoe de personages eruitzien: `Klaas_sigma.png`, `Gyan.png`, `Jules.png` en `Sven.png`. Ze staan alleen lokaal en niet in de repo, omdat het foto's van echte mensen zijn; commit ze alleen als de eigenaar daarom vraagt. `docs/kaart_elst_spel.png` is de kaart van Elst zoals in het spel (wel in de repo).
 
 ## Godot draaien
 
@@ -97,7 +98,24 @@ Controleer na elk onderdeel of het project nog laadt en start zonder fouten. Hea
 | 11 | `Add-Amber-Final-Battle` | Quest 6: kerk-dungeon (begint boven in het kerkgebouw met een echt kerkinterieur, dan trappen en gangen steeds dieper ondergronds met doodlopende kamers, vijanden van alle facties door elkaar), Klaas voor de arena (laatste gesprek, kopen en verkopen), ronde arena met 5 lange pilaren, Amber met 2 levensbalken, Klaas vecht mee tot hij sneuvelt, gouden Tren-spuit, tornado verdwijnt, eindscène |
 | 12 | `Polish-And-Release-Build` | Audio, balans, bugfixes, laadschermen, export presets voor Windows en Linux |
 
-Werk alleen aan de fase waar de eigenaar om vraagt. Begin pas aan een volgende fase als daarom gevraagd wordt.
+## Fases van Prototype 2 (zelfde regels: één fase = één request = één branch)
+
+| Fase | Branch | Inhoud (details in `docs/PROTOTYPE_2.md`) |
+|---|---|---|
+| P2-0 | `Plan-Prototype-2` | Ontwerp van Prototype 2, vier stijlvoorstellen, de fases, bijgewerkte documenten |
+| P2-1 | `Build-Graphics-Style-Lab` | Testscène met de vier stijlen om te wisselen; de eigenaar kiest |
+| P2-2 | `Upgrade-Rendering-And-Shaders` | De gekozen stijl overal: materialen, shaders, licht, lucht, mist, retrofilter |
+| P2-3 | `Upgrade-Character-Rig-And-Models` | Rig met ellebogen en knieën, mesh-generator, Gyan, Klaas, dorpelingen, animaties |
+| P2-4 | `Upgrade-Enemy-And-Boss-Models` | Alle vijanden en bazen in de nieuwe stijl (fatbikers met rijhouding, eigen modellen voor oma's en opa's) |
+| P2-5 | `Upgrade-World-And-Roads` | Wegen als meshes, huizen, bomen, props, locaties, grond, tornado |
+| P2-6 | `Upgrade-Dungeons` | De vijf dungeons en het huis van Klaas in de nieuwe stijl |
+| P2-7 | `Add-Gyan-And-Story-Rework` | Gyan als hoofdpersoon, dialogen en scènes opnieuw, stemmen per personage |
+| P2-8 | `Add-Jules-Rescue` | Jules in een kooi in de Westeraam-dungeon, bevrijden, Jules in Elst |
+| P2-9 | `Add-Sven-Outpost-Miniboss` | OBC-voorpost bij het fort, Sven als miniboss, keuze overtuigen of vermoorden en de gevolgen |
+| P2-10 | `Add-Side-Quests-And-Klaas-Motorbike` | Bijquests in questlog en kompas, Klaas' oude motor bij de velden van het OBC Fort |
+| P2-11 | `Polish-Prototype-2` | Balans, geluid, bugfixes, laadschermen, export |
+
+Werk alleen aan de fase waar de eigenaar om vraagt. Begin pas aan een volgende fase als daarom gevraagd wordt. Lees bij een fase van Prototype 2 eerst `docs/PROTOTYPE_2.md` (de open beslissingen daarin kunnen intussen genomen zijn) en daarna `docs/PROGRESS.md`.
 
 ## Werkwijze per fase
 

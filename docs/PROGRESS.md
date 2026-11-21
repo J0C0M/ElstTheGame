@@ -24,9 +24,9 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 
 ## Prototypes
 
-- **Prototype 1** bestaat uit Fase 0 t/m 12: de oorspronkelijke visie van de game, van begin tot eind speelbaar. Daar werken we nu aan.
-- **Prototype 2** begint pas als Prototype 1 af is. Wat erin komt, bepaalt de eigenaar dan. Een van de belangrijkste punten wordt graphics en details, waarschijnlijk met nog andere tweaks.
-- **Tot die tijd** blijven modellen en wegen placeholders. Steek er alleen tijd in als de gameplay of de leesbaarheid het nodig heeft. Visuele punten die we tegenkomen, komen in de lijst hieronder.
+- **Prototype 1** bestaat uit Fase 0 t/m 12: de oorspronkelijke visie van de game, van begin tot eind speelbaar. Af.
+- **Prototype 2** is begonnen (21-11-2026). Het ontwerp, de vier stijlvoorstellen en de fases P2-0 t/m P2-11 staan in `docs/PROTOTYPE_2.md`. Eerst graphics en modellen (nog steeds low poly), dan Gyan als hoofdpersoon, de Elstenaars Jules en Sven, en bijcontent.
+- De punten hieronder zijn verzameld tijdens Prototype 1; in `docs/PROTOTYPE_2.md` staan ze bij de fase waarin ze aan bod komen.
 
 ### Verzamelde punten voor Prototype 2
 
@@ -38,6 +38,29 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 - Dialoog met geluidjes op het ritme van de tekst, zoals in *Undertale* (eigenaar, 20-11-2026).
 - Controller-ondersteuning komt in een later prototype; sidequests bespreken we bij het ontwerp van Prototype 2.
 - De oma's en opa's zijn aangepaste kopieën van het driller-model (met tasje, wandelstok of rolstoel). Een eigen model maakt ze beter herkenbaar. De benen van de rolstoel-oma zijn stijve balken en de wielen draaien niet.
+
+## Prototype 2
+
+| Fase | Branch | Status |
+|---|---|---|
+| P2-0 | `Plan-Prototype-2` | Gebouwd, wacht op akkoord |
+| P2-1 | `Build-Graphics-Style-Lab` | Nog niet begonnen |
+| P2-2 | `Upgrade-Rendering-And-Shaders` | Nog niet begonnen |
+| P2-3 | `Upgrade-Character-Rig-And-Models` | Nog niet begonnen |
+| P2-4 | `Upgrade-Enemy-And-Boss-Models` | Nog niet begonnen |
+| P2-5 | `Upgrade-World-And-Roads` | Nog niet begonnen |
+| P2-6 | `Upgrade-Dungeons` | Nog niet begonnen |
+| P2-7 | `Add-Gyan-And-Story-Rework` | Nog niet begonnen |
+| P2-8 | `Add-Jules-Rescue` | Nog niet begonnen |
+| P2-9 | `Add-Sven-Outpost-Miniboss` | Nog niet begonnen |
+| P2-10 | `Add-Side-Quests-And-Klaas-Motorbike` | Nog niet begonnen |
+| P2-11 | `Polish-Prototype-2` | Nog niet begonnen |
+
+### P2-0 – Plan voor Prototype 2
+
+- `docs/PROTOTYPE_2.md`: het ontwerp. Gyan als hoofdpersoon, Jules (bevrijden uit een kooi in Westeraam) en Sven (miniboss in een OBC-voorpost, overtuigen of vermoorden) als tweede en derde Elstenaar, Klaas grafisch verbeterd, het nieuwe verloop van de quests, Klaas' oude motor als eerste bijquest, vier stijlvoorstellen (A strak low poly, B echte PS1-retro, C toon/cel-shaded met omlijning, D handgeschilderd; advies C), de techniek, de fases P2-0 t/m P2-11 en negen open beslissingen.
+- `CLAUDE.md`, het GDD, de README en dit bestand verwijzen naar het nieuwe ontwerp. De referentiefoto's van Gyan, Jules en Sven staan lokaal in `docs/reference/` (niet in de repo).
+- **Open:** de negen beslissingen in `docs/PROTOTYPE_2.md` (stijl, of Gyan praat, Jules' rol, Svens gevolgen, de motor, oude saves, de schaal van Elst, controller, de spion).
 
 ## Fase 0 – Fundament
 

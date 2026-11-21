@@ -21,26 +21,30 @@ In Prototype 1 is de speler "een niemand" die aan het eind van Klaas hoort dat h
 | # | Elstenaar | Hoe hij erbij komt |
 | --- | --- | --- |
 | 1 | **Gyan** | De hoofdpersoon. Hij komt in Elst terecht, Klaas neemt hem onder zijn hoede (Quest 1). |
-| 2 | **Jules** | Zit opgesloten in een kooi in de Westeraam-dungeon. Gyan bevrijdt hem (Quest 3). |
-| 3 | **Sven** | Leidt een OBC-voorpost in de buurt van het OBC Fort en is daar een miniboss. Na zijn nederlaag kies je: overtuig hem om de kant van Klaas te kiezen, of vermoord hem (Quest 4). |
+| 2 | **Jules** | Zit opgesloten in een kooi in de Westeraam-dungeon. Met de sleutel van de Vape-koning kan Gyan hem bevrijden. **Optioneel.** |
+| 3 | **Sven** | Leidt een OBC-voorpost in de buurt van het OBC Fort en is daar een miniboss. Na zijn nederlaag kies je: overtuig hem om de kant van Klaas te kiezen, of vermoord hem. **Optioneel** (bijquest). |
+
+Jules en Sven zijn allebei optioneel (besluit eigenaar, 21-11-2026): wie ze niet redt of overtuigt, ziet ze verder niet in de game.
 
 De eigenaar werkt de karakterontwikkeling van Gyan, Jules en Sven later verder uit. De teksten hieronder zijn een startpunt.
 
 ### Gyan (hoofdpersoon)
 
 - **Uiterlijk** (referentie `docs/reference/Gyan.png`, alleen lokaal): jong, slank, licht getinte huid, donkerbruin, warrig haar van gemiddelde lengte met een pony over het voorhoofd, bruine ogen, een grote, open lach. Een geruit overhemd (blauw-wit) als basiskleding; uitrusting blijft zichtbaar op het model, zoals nu.
-- **Rol:** speelbaar personage, vervangt "de speler, een niemand". Klaas en de andere personages noemen hem bij naam; ondertitels en scènes tonen "Gyan" in plaats van "Jij".
-- **Te beslissen:** praat Gyan in gesprekken (keuzes in zijn eigen woorden, eigen stemblip), of blijft hij een stille hoofdpersoon? Zie *Open beslissingen*.
+- **Rol:** speelbaar personage, vervangt "de speler, een niemand". Klaas en de andere personages noemen hem bij naam.
+- **Stille hoofdpersoon** (besluit eigenaar, 21-11-2026): Gyan zegt zelf niets. Anderen praten tegen hem; de keuzes in gesprekken blijven korte opties zonder eigen stem. Ook de zin bij de rand van Elst na het einde ("Waar ga ik heen?...") wordt een gedachte in beeld of een reactie van een ander.
 
 ### Jules (tweede Elstenaar)
 
 - **Uiterlijk** (referentie `docs/reference/Jules.png`): lichte huid met sproeten, blond tot rossig, warrig haar met een lange pony, blauwgroene ogen, een sceptische, wat argwanende blik. Een donker groenbruine jas of hoodie.
-- **In het verhaal:** de Vape-koning houdt Jules gevangen in een kooi diep in de Westeraam-dungeon. Gyan bevrijdt hem: een korte scène, Jules bedankt hem op zijn eigen droge manier en gaat terug naar Elst.
-- **Daarna (voorstel):** Jules woont in Elst en is een vast personage: hij helpt Klaas (bijvoorbeeld als handelaar of met tips over Westeraam), en hij staat bij de bevrijde wijken en op het feest aan het eind. Of hij ook meevecht, beslist de eigenaar.
+- **In het verhaal** (besluit eigenaar, 21-11-2026): Jules zit in een kooi in de Westeraam-dungeon. De sleutel krijg je van de Vape-koning (hij laat hem vallen als je hem verslaat). Bevrijden is optioneel.
+- **Bevrijd:** een korte scène waarin Jules Gyan op zijn eigen droge manier bedankt. Daarna kom je hem af en toe tegen in de open wereld, waar hij vecht tegen een paar drillers; je kunt hem helpen. Hij staat ook op het feest aan het eind.
+- **Niet bevrijd:** Jules komt verder niet in de game voor.
 
 ### Sven (derde Elstenaar)
 
 - **Uiterlijk** (referentie `docs/reference/Sven.png`): lichte huid, kort lichtbruin tot donkerblond haar met een zijscheiding, een brede kaak, een uitdagende, pruilende blik. Zwarte hoodie en een grote zwarte koptelefoon om zijn nek of op zijn hoofd.
+- **Optioneel** (besluit eigenaar, 21-11-2026): de voorpost is een bijquest; het OBC Fort kan ook zonder Sven.
 - **In het verhaal:** Sven leidt een **OBC-voorpost**, een kleiner kamp van het OBC in de buurt van het OBC Fort. Hij is daar een **miniboss** met zijn eigen aanvallen. Na zijn nederlaag ligt hij op de grond en kiest de speler:
   - **Overtuigen:** Sven kiest de kant van Klaas en wordt de derde Elstenaar. Hij komt naar Elst en is later te zien (bij Klaas, op het feest; mogelijk helpt hij in het eindgevecht).
   - **Vermoorden:** Sven is weg. Klaas reageert erop (teleurgesteld of hard), en het einde is iets donkerder: er staan maar twee Elstenaars op het plein.
@@ -60,8 +64,8 @@ Amber de Draak uit Zevenaar, de drie facties en hun bazen, het station, de kerk 
 | --- | --- | --- |
 | 1 | Inleiding | Gyan heeft een naam; Klaas noemt hem "de eerste Elstenaar" zodra de tutorial af is. |
 | 2 | Station Elst | Geen grote verandering. |
-| 3 | Westeraam Getho | Nieuw doel: bevrijd Jules uit de kooi (voor of na de Vape-koning, zie *Open beslissingen*). |
-| 4 | OBC Elst Fort | Nieuw: eerst de OBC-voorpost met Sven als miniboss en de keuze, daarna het fort met het fatbike-kindje. |
+| 3 | Westeraam Getho | De Vape-koning laat de sleutel van Jules' kooi vallen; Jules bevrijden is een optioneel doel. |
+| 4 | OBC Elst Fort | Geen verandering; de OBC-voorpost met Sven is een aparte bijquest in de buurt. |
 | 5 | Bingo Club | Geen grote verandering. |
 | 6 | Amber de Draak | De Elstenaars spelen mee in de scènes; het einde hangt af van Svens lot. |
 
@@ -151,9 +155,9 @@ Werkwijze en git-regels blijven zoals in `CLAUDE.md`: één fase is één reques
 ## Open beslissingen voor de eigenaar
 
 1. **Stijl:** welke van de vier stijlen (na het stijllab in P2-1)? Advies: C, de toon-stijl.
-2. **Gyan:** praat hij in gesprekken (eigen keuzes en stem), of blijft hij een stille hoofdpersoon? Advies: hij praat kort in keuzes, met een eigen stemblip.
-3. **Jules:** wanneer in Quest 3 (voor de Vape-koning, als tussendoel, of erna, als beloning)? En wat doet hij daarna in Elst (handelaar, tips, meevechten)? Advies: bevrijden vlak voor het Vape-paleis; daarna een handelaar met eigen spullen.
-4. **Sven:** hoort de voorpost bij Quest 4 (verplicht) of is hij optioneel? Wat zijn de gevolgen van overtuigen of vermoorden (meevechten tegen Amber, een ander einde, Inwijding)? Advies: verplicht deel van Quest 4; overtuigen geeft een helper in het eindgevecht, vermoorden een korter, donkerder einde.
+2. ~~Gyan~~: **besloten**, een stille hoofdpersoon.
+3. ~~Jules~~: **besloten**, optioneel; sleutel van de Vape-koning; daarna af en toe in de open wereld tegen drillers.
+4. **Sven:** **besloten** dat hij optioneel is (bijquest). Nog open: wat doen overtuigen en vermoorden precies (meevechten tegen Amber, op het feest, een ander einde)?
 5. **De motor:** alleen vinden en laten zien, of echt rijden? Met onderdelen zoeken? Advies: wel rijden, met twee onderdelen.
 6. **Saves:** saves van Prototype 1 vervallen (advies), of omzetten?
 7. **Schaal van Elst:** wegen breder en huizen hoger maken (dan schuift de wereld wat), of de schaal houden?

@@ -71,7 +71,10 @@ Controleer na elk onderdeel of het project nog laadt en start zonder fouten. Hea
   git switch Development && git pull
   git merge --no-ff <Branch-Naam>    # merge-commit wordt ook gesigned
   git push origin Development
+  git branch -d <Branch-Naam>                # daarna de branch weg, lokaal
+  git push origin --delete <Branch-Naam>     # en op GitHub
   ```
+- **Verwijder een feature- of fix-branch zodra hij gemerged is**, lokaal én op GitHub. Blijvend zijn alleen `main`, `Development` en backupbranches zoals `Prototype-1-Backup`; die verwijder je nooit.
   Als `gh` beschikbaar is, mag je eerst een PR openen met **base `Development`** (nooit `main`). De PR noemt Claude niet.
 
 ### Commits

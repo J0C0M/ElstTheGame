@@ -22,6 +22,7 @@ func physics_update(delta: float) -> void:
 		_healed = true
 		if GameState.remove_item(_potion.id):
 			player.health.heal(_potion.heal_amount)
+			AudioManager.play_sfx(&"heal", -4.0)
 			EventBus.loot_collected.emit("+%d HP" % _potion.heal_amount)
 			EventBus.player_action.emit(&"drink")
 	if _time >= stats.potion_drink_time:

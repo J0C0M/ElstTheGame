@@ -209,7 +209,7 @@ def write(path, starts):
            '[ext_resource type="Script" path="res://scripts/data/dialogue_line.gd" id="4_line"]', '']
     for block in subs:
         out += block + [""]
-    out += ['[resource]', 'script = ExtResource("1_data")', 'speaker = "Klaas"',
+    out += ['[resource]', 'script = ExtResource("1_data")', 'speaker = "Klaas"', 'voice_pitch = 0.62',
             "starts = Array[StringName]([" + ", ".join(f'&"{s}"' for s in starts) + "])",
             'lines = Array[ExtResource("4_line")]([' + ", ".join(f'SubResource("{l}")' for l in line_ids) + "])"]
     pathlib.Path(path).write_text("\n".join(out) + "\n")

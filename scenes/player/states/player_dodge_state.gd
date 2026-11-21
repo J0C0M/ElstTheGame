@@ -13,6 +13,7 @@ func enter(data: Dictionary) -> void:
 	if not backwards:
 		player.face_direction_now(_direction)
 	player.model.play_action(&"roll_back" if backwards else &"roll_forward", player.stats.dodge_duration)
+	AudioManager.play_sfx(&"dodge", -4.0)
 
 
 func exit() -> void:

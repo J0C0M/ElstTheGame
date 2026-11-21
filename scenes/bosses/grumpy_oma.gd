@@ -219,6 +219,7 @@ func _slap(to_player: Vector3, delta: float) -> void:
 			_swung = true
 			_hitbox.activate(data.damage)
 			model.play_action(&"punch", 0.4)
+			AudioManager.play_sfx_at(&"sword_heavy", global_position, self)
 		return
 	if _timer >= slap_windup + 0.25:
 		_hitbox.deactivate()
@@ -280,6 +281,7 @@ func _begin_jump(target: Vector3) -> void:
 
 func _land() -> void:
 	global_position = _jump_to
+	AudioManager.play_sfx_at(&"shockwave", global_position, self, 2.0)
 	if shockwave_scene != null:
 		var wave: Node3D = shockwave_scene.instantiate() as Node3D
 		get_parent().add_child(wave)
@@ -313,6 +315,7 @@ func _throw(to_player: Vector3, player: Player, delta: float) -> void:
 		if _timer >= throw_windup:
 			_swung = true
 			throws += 1
+			AudioManager.play_sfx_at(&"kick", global_position, self)
 			model.play_action(&"punch", 0.4)
 			var origin: Vector3 = global_position + Vector3.UP * 2.0 - global_basis.z * 1.0
 			var aim: Vector3 = player.global_position + Vector3.UP * 1.1 - origin
@@ -348,6 +351,7 @@ func _roar() -> void:
 	mode = Mode.ROAR
 	_timer = roar_time
 	_shout_label.text = "BINGO!!"
+	AudioManager.play_sfx_at(&"bingo", global_position, self, 2.0)
 	_shout_label.visible = true
 	model.play_action(&"flex", roar_time)
 	EventBus.message_requested.emit(roar_message)

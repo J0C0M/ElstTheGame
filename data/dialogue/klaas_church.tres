@@ -138,5 +138,6 @@ condition = SubResource("Condition_2")
 [resource]
 script = ExtResource("1_data")
 speaker = "Klaas"
+voice_pitch = 0.62
 starts = Array[StringName]([&"church_hello", &"church_ready"])
 lines = Array[ExtResource("4_line")]([SubResource("Line_church_hello"), SubResource("Line_church_zevenaar"), SubResource("Line_church_zevenaar_2"), SubResource("Line_church_tips"), SubResource("Line_church_tips_2"), SubResource("Line_church_go"), SubResource("Line_church_wait"), SubResource("Line_church_ready")])

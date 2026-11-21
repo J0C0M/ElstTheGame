@@ -4,6 +4,9 @@ extends Resource
 ## first line in [member starts] whose condition holds.
 
 @export var speaker: String = ""
+## Pitch of the speaker's voice blips while the text types (1 is normal,
+## lower is deeper).
+@export var voice_pitch: float = 1.0
 ## Ids of possible opening lines, most specific first.
 @export var starts: Array[StringName] = []
 @export var lines: Array[DialogueLine] = []

@@ -35,7 +35,9 @@ Alle animaties zijn in code geschreven (`scripts/characters/humanoid_model.gd`).
 
 ## Audio
 
-Nog geen audio.
+| Wat | Bron | Licentie |
+| --- | --- | --- |
+| Alle geluidseffecten en muziek in `assets/audio/` | Zelf gesynthetiseerd met `tools/audio/gen_audio.py` | Eigen werk |
 
 ## Lettertypen
 

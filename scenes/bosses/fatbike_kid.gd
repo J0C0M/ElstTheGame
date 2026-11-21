@@ -147,6 +147,7 @@ func _start_fight() -> void:
 
 
 func _aim(duration: float) -> void:
+	AudioManager.play_sfx_at(&"engine_rev", global_position, self, 2.0)
 	mode = Mode.AIMING
 	_timer = duration
 	_aim_line.visible = true
@@ -173,6 +174,7 @@ func _charge() -> void:
 
 
 func _crash() -> void:
+	AudioManager.play_sfx_at(&"meteor", global_position, self)
 	velocity = Vector3.ZERO
 	_hitbox.deactivate()
 	_exhaust.visible = false

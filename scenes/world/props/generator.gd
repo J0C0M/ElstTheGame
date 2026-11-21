@@ -67,6 +67,7 @@ func _on_died() -> void:
 	_set_broken()
 	_smoke.emitting = true
 	broken.emit()
+	AudioManager.play_sfx_at(&"generator_break", global_position, self)
 
 
 func _set_broken() -> void:

@@ -135,6 +135,7 @@ func _shoot(player: Player) -> void:
 	for spread: float in spreads:
 		var puff: Node3D = data.projectile_scene.instantiate() as Node3D
 		get_parent().add_child(puff)
+		AudioManager.play_sfx_at(&"vape_puff", global_position, self, -2.0)
 		puff.call(&"launch", origin, direction.rotated(Vector3.UP, deg_to_rad(spread)), data.damage, self)
 
 

@@ -416,15 +416,13 @@ func _build_face(c: Vector3, r: Vector3) -> void:
 		for side: float in [-1.0, 1.0]:
 			var eye: Vector3 = Vector3(c.x + eye_x * side, eye_y, face_z)
 			match _style:
-				Style.M1, Style.M2:
+				Style.M1, Style.M2, Style.M4:
+					# Small dark eyes (the owner liked these from M2 best).
 					_kit.box(eye, Vector3(r.x * 0.2, r.y * 0.16, r.z * 0.1), BLACK)
 				Style.M3:
 					_kit.box(eye, Vector3(r.x * 0.3, r.y * 0.3, r.z * 0.06), WHITE)
 					_kit.box(eye + Vector3(0, -r.y * 0.03, r.z * 0.03), Vector3(r.x * 0.17, r.y * 0.22, r.z * 0.04), iris)
 					_kit.box(eye + Vector3(0, -r.y * 0.03, r.z * 0.05), Vector3(r.x * 0.08, r.y * 0.1, r.z * 0.03), BLACK)
-				Style.M4:
-					_kit.ball(eye + Vector3(0, 0, -r.z * 0.04), Vector3(r.x * 0.17, r.y * 0.1, r.z * 0.08), 8, 4, WHITE)
-					_kit.ball(eye + Vector3(0, 0, r.z * 0.02), Vector3(r.x * 0.08, r.y * 0.08, r.z * 0.04), 6, 4, iris)
 			# Eyebrows.
 			if hair_style != &"balaclava" and _style != Style.M2:
 				var brow: Color = _spec["hair"]
@@ -488,6 +486,9 @@ func _build_hair(c: Vector3, r: Vector3) -> void:
 			_kit.box(c + Vector3(0, r.y * 1.05, r.z * 0.55), Vector3(r.x * 1.5, r.y * 0.35, r.z * 0.8), hair, Basis(Vector3.RIGHT, -0.3),
 				0.01)
 		return
+	if hair_style == &"messy" and _detail:
+		_build_messy_hair(c, r)
+		return
 	var cap_shape: Callable = func(p: Vector3) -> Vector3:
 		var cut: float = lerpf(-0.35, front_cut, clampf((p.z + 0.2) / 1.0, 0.0, 1.0))
 		return Vector3(p.x, maxf(p.y, cut), p.z)
@@ -516,6 +517,60 @@ func _build_hair(c: Vector3, r: Vector3) -> void:
 		if _detail:
 			_kit.ball(c + Vector3(r.x * 0.15, r.y * 1.12, r.z * 0.6), r * Vector3(0.45, 0.2, 0.35), 10, 4,
 				hair.lightened(0.15), Basis(Vector3.RIGHT, -0.5))
+
+
+## Gyan's hair in M4: medium long, messy, dark brown. A cap over the skull
+## (down over the top of the ears and into the neck) with clumps that lie
+## along the head from the crown, a fringe swept over the forehead to one
+## side and a few loose tufts on top.
+func _build_messy_hair(c: Vector3, r: Vector3) -> void:
+	var hair: Color = _spec["hair"]
+	var tones: Array[Color] = [hair, hair.lightened(0.08), hair.darkened(0.12)]
+	var cap_shape: Callable = func(p: Vector3) -> Vector3:
+		# Forehead high at the front, over the ears at the side, low in the neck.
+		var front: float = clampf(p.z, 0.0, 1.0)
+		var back: float = clampf(-p.z, 0.0, 1.0)
+		var cut: float = 0.05 + front * 0.42 - back * 0.6
+		return Vector3(p.x, maxf(p.y, cut), p.z)
+	var center: Vector3 = c + Vector3(0, r.y * 0.04, -r.z * 0.03)
+	_kit.ball(center, r * Vector3(1.1, 1.08, 1.1), 16, 12, hair, Basis.IDENTITY, cap_shape)
+	var surface: Callable = func(direction: Vector3, lift: float) -> Vector3:
+		return center + direction.normalized() * r * (1.08 + lift)
+	# Clumps from the crown down over the sides and back.
+	var clumps: int = 12
+	for n: int in clumps:
+		var phi: float = deg_to_rad(lerpf(55.0, 305.0, float(n) / (clumps - 1))) + 0.08 * sin(n * 2.3)
+		var behind: float = 1.0 - absf(cos(phi * 0.5))  # 0 at the sides... 1 at the back.
+		var end_y: float = lerpf(0.0, -0.5, clampf((absf(wrapf(phi, -PI, PI)) - 1.0) / 2.1, 0.0, 1.0))
+		var start: Vector3 = Vector3(sin(phi) * 0.2, 1.0, cos(phi) * 0.2 - 0.15)
+		var end: Vector3 = Vector3(sin(phi), end_y, cos(phi))
+		var points: Array[Vector3] = []
+		var radii: Array[float] = []
+		for k: int in 4:
+			var t: float = k / 3.0
+			points.append(surface.call(start.slerp(end.normalized(), t), 0.05 + 0.07 * sin(t * PI) + 0.02 * behind))
+			radii.append(r.x * lerpf(0.26, 0.07, t))
+		var tone: Color = tones[n % 3]
+		_kit.loft(points, radii, 7, func(_k: int, _s: int) -> Color: return tone)
+	# The fringe: swept from the top over the forehead to his right.
+	var fringe: int = 5
+	for n: int in fringe:
+		var x: float = (n - (fringe - 1) * 0.5) * 0.36
+		var start: Vector3 = Vector3(x * 0.6, 0.95, 0.3)
+		var end: Vector3 = Vector3(x * 0.75 - 0.22, 0.34 - 0.04 * (n % 2), 0.95)
+		var points: Array[Vector3] = []
+		var radii: Array[float] = []
+		for k: int in 4:
+			var t: float = k / 3.0
+			points.append(surface.call(start.slerp(end.normalized(), t), 0.06 + 0.08 * sin(t * PI)))
+			radii.append(r.x * lerpf(0.24, 0.06, t))
+		var tone: Color = tones[(n + 1) % 3]
+		_kit.loft(points, radii, 7, func(_k: int, _s: int) -> Color: return tone)
+	# A few loose tufts on top.
+	for tuft: Vector3 in [Vector3(-0.25, 1.0, -0.05), Vector3(0.2, 1.0, 0.15), Vector3(0.05, 0.95, -0.35)]:
+		var base: Vector3 = surface.call(tuft, 0.05)
+		var tip: Vector3 = base + Vector3(tuft.x * 0.5, 0.75, tuft.z * 0.8 - 0.25) * r * 0.45
+		_kit.limb(base, tip, r.x * 0.16, r.x * 0.02, 6, hair.lightened(0.04))
 
 
 ## A black beanie pulled low over the forehead, with a folded rim.

@@ -16,7 +16,7 @@ Wat in Prototype 1 werkt (combat, quests, opslaan, dungeons, bazen, geluid), bli
 
 ### De Elstenaars
 
-In Prototype 1 is de speler "een niemand" die aan het eind van Klaas hoort dat hij "een echte Elstenaar" is. In Prototype 2 wordt dat de rode draad: rond Klaas vormt zich een groepje **Elstenaars**, mensen uit Elst die het tegen Amber opnemen.
+In Prototype 1 is de speler "een niemand" die aan het eind van Klaas hoort dat hij "een echte Elstenaar" is. Dat blijft zo: Klaas noemt Gyan pas aan het einde van de game een echte Elstenaar. Daaromheen wordt het een rode draad: rond Klaas vormt zich een groepje **Elstenaars**, mensen uit Elst die het tegen Amber opnemen. De nummering hieronder is alleen de volgorde waarin ze erbij komen, geen titel in het spel.
 
 | # | Elstenaar | Hoe hij erbij komt |
 | --- | --- | --- |
@@ -62,7 +62,7 @@ Amber de Draak uit Zevenaar, de drie facties en hun bazen, het station, de kerk 
 
 | # | Quest | Verandering in Prototype 2 |
 | --- | --- | --- |
-| 1 | Inleiding | Gyan heeft een naam; Klaas noemt hem "de eerste Elstenaar" zodra de tutorial af is. |
+| 1 | Inleiding | Gyan heeft een naam en Klaas spreekt hem daarmee aan. Pas aan het einde van de game noemt Klaas hem "een echte Elstenaar", net als in Prototype 1. |
 | 2 | Station Elst | Geen grote verandering. |
 | 3 | Westeraam Getho | De Vape-koning laat de sleutel van Jules' kooi vallen; Jules bevrijden is een optioneel doel. |
 | 4 | OBC Elst Fort | Geen verandering; de OBC-voorpost met Sven is een aparte bijquest in de buurt. |

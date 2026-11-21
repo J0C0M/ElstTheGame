@@ -44,7 +44,7 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 | Fase | Branch | Status |
 |---|---|---|
 | P2-0 | `Plan-Prototype-2` | Af (gemerged) |
-| P2-1 | `Build-Model-Style-Lab` | Gebouwd, wacht op de keuze en akkoord |
+| P2-1 | `Build-Model-Style-Lab` | Af (gemerged), gekozen: M4 |
 | P2-2 | `Build-Mesh-Toolkit-And-Rig` | Nog niet begonnen |
 | P2-3 | `Upgrade-Character-Models` | Nog niet begonnen |
 | P2-4 | `Upgrade-Enemy-And-Boss-Models` | Nog niet begonnen |

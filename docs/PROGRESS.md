@@ -72,7 +72,8 @@ Tussendoor: `Rebalance-Grumpy-Oma-And-Crossbow` (Grumpy Oma zwaarder, pijlen voo
 - **`ModelLab.tscn`** (`scenes/lab/`): de vier voorstellen naast elkaar in `RetroScreen`, met de lucht, het licht en de mist van `Elst.tscn` (in code nagebouwd). Toetsen 1-4/0/C/R, muis om rond te kijken; `-- --render <map>` maakt screenshots. De renders staan in `docs/model_lab/` (als JPEG, want de ruis van de filter maakt PNG's groot).
 - **Keuze:** het lab is een ontwikkeltool en leest daarom direct toetsen (`physical_keycode`) in plaats van acties uit de InputMap; het spel zelf gebruikt het niet.
 - **Driehoeken** per personage: M1 ~650-1050, M2 ~950-1400, M3 ~1000-1350, M4 ~2700-3650 (Prototype 1: ~150-300). Het huis: 600 tot 6300.
-- **Open:** de eigenaar kiest een voorstel (of een mix, bijvoorbeeld de lijven van M2 met de gezichten van M3). Dat voorstel wordt in P2-2 de mesh-generator met rig.
+- **Gekozen (21-11-2026): M4.** Gyan is goed. Na de eerste ronde: de driller heeft weer zijn pufferjas uit Prototype 1 (gewatteerde banden die opbollen, een gele rits van Westeraam, een dikke kraag, gewatteerde mouwen) en zijn zwarte muts met omgeslagen rand in plaats van een bivakmuts, met zijn gezicht zichtbaar. Klaas had losse bollen als borstspieren, die op tepels leken; die zijn weg, zijn borst is nu dieper en breder.
+- **Open:** Klaas en de driller worden stap voor stap beter in P2-2 (mesh-generator en rig voor M4) en P2-3.
 
 ## Fase 0 – Fundament
 

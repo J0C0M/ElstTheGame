@@ -119,6 +119,8 @@ De vier voorstellen hieronder verschillen in hoe de modellen gemaakt worden en h
 
 **Advies:** M2. Het geeft de grootste stap in kwaliteit en herkenbaarheid zonder de low poly-stijl en de filter te verliezen, en we kunnen alles in code blijven maken.
 
+**Gekozen:** M4 (zie Beslissingen, punt 10). Anders dan hierboven verwacht maken we M4 niet in Blender maar ook in code, met `MeshKit`.
+
 ### Het modellab (P2-1)
 
 `scenes/lab/ModelLab.tscn` toont Klaas, Gyan, een driller en een huis in M1 t/m M4 naast elkaar, in de echte retrofilter (`RetroScreen`) met het licht en de mist van Elst. Starten: `godot --path . res://scenes/lab/ModelLab.tscn`. Toetsen: 1-4 een voorstel, 0 alles, C dichtbij of ver, R de figuren laten draaien, slepen met de linkermuisknop om rond te kijken, scrollen om te zoomen, F1/F2 de filter zoals in het spel. Met `-- --render <map>` slaat het van elke weergave een screenshot op.
@@ -182,7 +184,7 @@ Genomen door de eigenaar op 21-11-2026:
 8. **Controller:** niet in Prototype 2, later.
 9. **De spion en plan B:** bewaren voor later; in Prototype 2 blijft het de haak in de (opnieuw gemaakte) eindscène.
 
-**Nog open:** welk modelvoorstel (M1 t/m M4)? Dat kiest de eigenaar in het modellab van P2-1. Advies: M2.
+10. **Modellen (21-11-2026, in het modellab):** **M4, PS2-niveau**, gemaakt in code met `MeshKit` (vloeiende belichting, 12-zijdige ledematen, zo'n 2700 tot 3700 driehoeken per personage). Gyan is goed zo; Klaas en de driller worden stap voor stap verder verbeterd (P2-2 en P2-3). De driller houdt zijn pufferjas en muts uit Prototype 1. Spieren tonen als vorm van de romp, niet als losse bulten op de borst.
 
 ## Overgenomen punten uit Prototype 1
 
